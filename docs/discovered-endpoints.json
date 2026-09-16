@@ -1,0 +1,2107 @@
+{
+  "frontend": [
+    {
+      "operation": "listDirectory",
+      "method": "GET",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 544679,
+      "definition": "listDirectory:{method:\"get\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\"],noRequired:[\"page\",\"page_size\",\"order_by\",\"order_by_type\",\"filter\",\"sort_type\",\"space_org_id\",\"marker\",\"limit\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{dirPath:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getDirectoryInfo",
+      "method": "GET",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 544995,
+      "definition": "getDirectoryInfo:{method:\"get\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",actionKey:\"info\",queryKeys:{required:[\"access_token\"],noRequired:[\"purpose\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{dirPath:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "inspectDirectory",
+      "method": "HEAD",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 545242,
+      "definition": "inspectDirectory:{method:\"head\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"syncId\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{dirPath:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 545493,
+      "definition": "createDirectory:{method:\"put\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"conflict_resolution_strategy\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{conflict_resolution_strategy:\"ask\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteDirectory",
+      "method": "DELETE",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 545788,
+      "definition": "deleteDirectory:{method:\"delete\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\",\"permanent\"],noRequired:[\"space_org_id\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{permanent:0}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "renameOrMoveDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 546038,
+      "definition": "renameOrMoveDirectory:{method:\"put\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\"],noRequired:[\"conflict_resolution_strategy\",\"space_org_id\",\"move_authority\"]},bodyKeys:{required:[\"from\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{conflict_resolution_strategy:\"ask\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "copyDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{libraryId}/{spaceId}/{dirPath}",
+      "offset": 546379,
+      "definition": "copyDirectory:{method:\"put\",path:\"/api/v1/directory/{libraryId}/{spaceId}/{dirPath}\",queryKeys:{required:[\"access_token\"],noRequired:[\"conflict_resolution_strategy\"]},bodyKeys:{required:[\"copyFrom\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{conflict_resolution_strategy:\"ask\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "inspectFile",
+      "method": "HEAD",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{path}",
+      "offset": 547062,
+      "definition": "inspectFile:{method:\"head\",path:\"/api/v1/file/{libraryId}/{spaceId}/{path}\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"syncId\"]},autoParams:{spaceId:\"\",libraryId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{path:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getDownloadFileInfo",
+      "method": "GET",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 547297,
+      "definition": "getDownloadFileInfo:{method:\"get\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",actionKey:\"info\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"history_id\",\"content_disposition\",\"watermark_text\",\"purpose\",\"space_org_id\",\"preview\",\"share_previewer_organization_id\",\"docPreviewMode\",\"pre_check\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",content_disposition:\"inline\",pre_check:!0}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getDownloadCosUrl",
+      "method": "GET",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 547747,
+      "definition": "getDownloadCosUrl:{method:\"get\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",actionKey:\"info\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"history_id\",\"content_disposition\",\"purpose\",\"space_org_id\",\"preview\",\"share_previewer_organization_id\",\"docPreviewMode\",\"domainTag\",\"height_size\",\"width_size\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",content_disposition:\"inline\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "uploadFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 548407,
+      "definition": "uploadFile:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"conflict_resolution_strategy\",\"filesize\",\"syncId\"]},bodyKeys:{noRequired:[\"fullHash\",\"beginningHash\",\"size\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",conflict_resolution_strategy:\"rename\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "uploadMultiPartFile",
+      "method": "POST",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 548786,
+      "definition": "uploadMultiPartFile:{method:\"post\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",actionKey:\"multipart\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"conflict_resolution_strategy\",\"filesize\",\"syncId\"]},bodyKeys:{noRequired:[\"partNumberRange\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",conflict_resolution_strategy:\"rename\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateMultiPartFileInfo",
+      "method": "POST",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 549181,
+      "definition": "updateMultiPartFileInfo:{method:\"post\",path:\"/api/v1/file/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"renew\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"syncId\"]},bodyKeys:{noRequired:[\"partNumberRange\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "confirmUploadFile",
+      "method": "POST",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 549500,
+      "definition": "confirmUploadFile:{method:\"post\",path:\"/api/v1/file/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"confirm\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"conflict_resolution_strategy\",\"syncId\"]},bodyKeys:{noRequired:[\"crc64\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileUploadStatus",
+      "method": "GET",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 549836,
+      "definition": "getFileUploadStatus:{method:\"get\",path:\"/api/v1/file/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"upload\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"syncId\",\"no_upload_part_info\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "cancelFileUpload",
+      "method": "DELETE",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 550131,
+      "definition": "cancelFileUpload:{method:\"delete\",path:\"/api/v1/file/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"upload\",queryKeys:{required:[\"access_token\",\"user_id\"],noRequired:[\"syncId\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createDoc",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 550404,
+      "definition": "createDoc:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\"]},bodyKeys:{required:[\"fromTemplate\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createStencilFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 550621,
+      "definition": "createStencilFile:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\"]},bodyKeys:{required:[\"templateIds\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteFile",
+      "method": "DELETE",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 550845,
+      "definition": "deleteFile:{method:\"delete\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\",\"permanent\"],noRequired:[\"space_org_id\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",permanent:0}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "renameOrMoveFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 551109,
+      "definition": "renameOrMoveFile:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\",\"conflict_resolution_strategy\"],noRequired:[\"space_org_id\"]},bodyKeys:{required:[\"from\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",conflict_resolution_strategy:\"rename\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "copyFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 551450,
+      "definition": "copyFile:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\",\"conflict_resolution_strategy\"]},bodyKeys:{required:[\"copyFrom\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\",conflict_resolution_strategy:\"ask\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "checkPreviewAndDownloadTime",
+      "method": "GET",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 551970,
+      "definition": "checkPreviewAndDownloadTime:{method:\"get\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",actionKey:\"preview\",queryKeys:{required:[\"access_token\",\"user_id\",\"check_preview_and_download_times\",\"space_org_id\"],noRequired:[\"history_id\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},defaultParams:{filePath:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "asyncTaskQuery",
+      "method": "GET",
+      "path": "/api/v1/task/{libraryId}/{spaceId}/{taskIdList}",
+      "offset": 553834,
+      "definition": "asyncTaskQuery:{method:\"get\",path:\"/api/v1/task/{libraryId}/{spaceId}/{taskIdList}\",queryKeys:{required:[\"access_token\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "setLatestVersion",
+      "method": "POST",
+      "path": "/api/v1/directory-history/{libraryId}/{spaceId}/latest-version/{historyId}",
+      "offset": 555227,
+      "definition": "setLatestVersion:{method:\"post\",path:\"/api/v1/directory-history/{libraryId}/{spaceId}/latest-version/{historyId}\",queryKeys:{required:[\"access_token\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteHistory",
+      "method": "POST",
+      "path": "/api/v1/directory-history/{libraryId}/{spaceId}/delete",
+      "offset": 555433,
+      "definition": "deleteHistory:{method:\"post\",path:\"/api/v1/directory-history/{libraryId}/{spaceId}/delete\",queryKeys:{required:[\"access_token\"]},bodyKeys:\"custom\",autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileByTemplateId",
+      "method": "PUT",
+      "path": "/api/v1/file/{libraryId}/{spaceId}/{filePath}",
+      "offset": 555638,
+      "definition": "getFileByTemplateId:{method:\"put\",path:\"/api/v1/file/{libraryId}/{spaceId}/{filePath}\",queryKeys:{required:[\"access_token\",\"user_id\",\"spaceId\",\"filePath\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",user_id:\"\"},bodyKeys:{required:[\"fromTemplate\"]}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listRecycled",
+      "method": "POST",
+      "path": "/user/v1/recycled/{organizationId}/list",
+      "offset": 562956,
+      "definition": "listRecycled:{method:\"post\",path:\"/user/v1/recycled/{organizationId}/list\",queryKeys:{required:[\"user_token\"],noRequired:[\"marker\",\"limit\",\"page\",\"pageSize\",\"order_by\",\"order_by_type\",\"removed_by\"]},bodyKeys:{noRequired:[\"spaceItems\",\"withAllTeamSpace\",\"withAllGroupSpace\"]},autoParams:{organizationId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "restoreRecycled",
+      "method": "POST",
+      "path": "/user/v1/recycled/{organizationId}",
+      "offset": 563277,
+      "definition": "restoreRecycled:{method:\"post\",path:\"/user/v1/recycled/{organizationId}\",queryKeys:{required:[\"user_token\"]},bodyKeys:{required:[\"recycledItems\"]},actionKey:\"restore\",autoParams:{organizationId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteRecycled",
+      "method": "POST",
+      "path": "/user/v1/recycled/{organizationId}",
+      "offset": 563490,
+      "definition": "deleteRecycled:{method:\"post\",path:\"/user/v1/recycled/{organizationId}\",queryKeys:{required:[\"user_token\"]},bodyKeys:{required:[\"recycledItems\"],noRequired:[\"withAllGroups\"]},actionKey:\"delete\",autoParams:{organizationId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getRecycledItemInfo",
+      "method": "GET",
+      "path": "/user/v1/recycled/{organizationId}/{spaceId}/{recycledItemId}",
+      "offset": 563730,
+      "definition": "getRecycledItemInfo:{method:\"get\",path:\"/user/v1/recycled/{organizationId}/{spaceId}/{recycledItemId}\",actionKey:\"info\",queryKeys:{required:[\"user_token\",\"recycledItemId\",\"spaceId\",\"spaceOrgId\"]},autoParams:{organizationId:\"\",user_token:\"\",spaceId:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getHistoryList",
+      "method": "GET",
+      "path": "/user/v1/history/{organizationId}/{spaceId}/history-list/{dirPath}",
+      "offset": 587909,
+      "definition": "getHistoryList:{method:\"get\",path:\"/user/v1/history/{organizationId}/{spaceId}/history-list/{dirPath}\",queryKeys:{required:[\"page\",\"user_token\",\"space_org_id\"],noRequired:[\"page_size\",\"order_by\",\"order_by_type\"]},autoParams:{organizationId:\"\",spaceId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getJournal",
+      "method": "GET",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}",
+      "offset": 609322,
+      "definition": "getJournal:{method:\"get\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"ssn_marker\",\"journal_marker\",\"journal_limit\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{journal_limit:1e3}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "checkPathAvailabel",
+      "method": "HEAD",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 609604,
+      "definition": "checkPathAvailabel:{method:\"head\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",queryKeys:{required:[\"access_token\",\"ssn\",\"syncId\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getPathInfo",
+      "method": "GET",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 609821,
+      "definition": "getPathInfo:{method:\"get\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",actionKey:\"info\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"ssn\",\"pre_check\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{pre_check:!0}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getPathCosUrl",
+      "method": "GET",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 610101,
+      "definition": "getPathCosUrl:{method:\"get\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",actionKey:\"info\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"ssn\",\"domainTag\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listPath",
+      "method": "GET",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 610354,
+      "definition": "listPath:{method:\"get\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",queryKeys:{required:[\"access_token\",\"ssn_deletion\",\"syncId\"],noRequired:[\"marker\",\"limit\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\",limit:1e3}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "uploadFile",
+      "method": "PUT",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 610609,
+      "definition": "uploadFile:{method:\"put\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"conflict_resolution_strategy\",\"fileSize\",\"ssn\"]},bodyKeys:{noRequired:[\"fullHash\",\"beginningHash\",\"size\",\"modificationTime\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{relativePath:\"\",conflict_resolution_strategy:\"rename\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "uploadMultiPartFile",
+      "method": "POST",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}",
+      "offset": 611019,
+      "definition": "uploadMultiPartFile:{method:\"post\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs/{relativePath}\",actionKey:\"multipart\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"conflict_resolution_strategy\",\"fileSize\",\"ssn\"]},bodyKeys:{noRequired:[\"partNumberRange\",\"modificationTime\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{relativePath:\"\",conflict_resolution_strategy:\"rename\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateMultiPartFileInfo",
+      "method": "POST",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 611445,
+      "definition": "updateMultiPartFileInfo:{method:\"post\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"renew\",queryKeys:{required:[\"access_token\",\"syncId\"]},bodyKeys:{noRequired:[\"partNumberRange\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "confirmUploadFile",
+      "method": "POST",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 611736,
+      "definition": "confirmUploadFile:{method:\"post\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"confirm\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"conflict_resolution_strategy\"]},bodyKeys:{noRequired:[\"crc64\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileUploadStatus",
+      "method": "GET",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 612057,
+      "definition": "getFileUploadStatus:{method:\"get\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"upload\",queryKeys:{required:[\"access_token\",\"syncId\"],noRequired:[\"no_upload_part_info\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "cancelFileUpload",
+      "method": "DELETE",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}",
+      "offset": 612337,
+      "definition": "cancelFileUpload:{method:\"delete\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{confirmKey}\",actionKey:\"upload\",queryKeys:{required:[\"access_token\",\"syncId\"]},autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"},defaultParams:{confirmKey:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    },
+    {
+      "operation": "batchOperate",
+      "method": "POST",
+      "path": "/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs",
+      "offset": 612582,
+      "definition": "batchOperate:{method:\"post\",path:\"/api/v1/fs-journal/{libraryId}/{spaceId}/{dirNode}/fs\",queryKeys:{required:[\"access_token\",\"syncId\"]},bodyKeys:\"custom\",autoParams:{libraryId:\"\",spaceId:\"\",access_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": false
+    }
+  ],
+  "sdk": [
+    {
+      "operation": "batchCopy",
+      "method": "POST",
+      "path": "/api/v1/batch/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/batch/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "copy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/batch-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "batchDelete",
+      "method": "POST",
+      "path": "/api/v1/batch/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/batch/{LibraryId}/{SpaceId}#2",
+      "query_keys": [
+        "delete",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/batch-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "batchMove",
+      "method": "POST",
+      "path": "/api/v1/batch/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/batch/{LibraryId}/{SpaceId}#1",
+      "query_keys": [
+        "move",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/batch-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "calibrateDirectoryStats",
+      "method": "PUT",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#3",
+      "query_keys": [
+        "calibrate",
+        "stats_type",
+        "recycled_id",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "checkDirectoryStatus",
+      "method": "HEAD",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "copyDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_inode"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteDirectory",
+      "method": "DELETE",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "permanent",
+        "directory_only",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getDirectoryStats",
+      "method": "GET",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#3",
+      "query_keys": [
+        "stats",
+        "stats_type",
+        "recycled_id",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "infoFileOrDirectory",
+      "method": "GET",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "info",
+        "with_inode",
+        "access_token",
+        "library_secret",
+        "with_favorite_status",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listDirectory",
+      "method": "GET",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "by-marker",
+        "marker",
+        "limit",
+        "order_by",
+        "order_by_type",
+        "filter",
+        "prefix",
+        "start_name",
+        "sort_type",
+        "with_inode",
+        "with_favorite_status",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listDirectoryByPage",
+      "method": "GET",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#2",
+      "query_keys": [
+        "by-page",
+        "page",
+        "page_size",
+        "order_by",
+        "order_by_type",
+        "filter",
+        "sort_type",
+        "with_inode",
+        "with_favorite_status",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "moveDirectory",
+      "method": "PUT",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#2",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateDirectoryLabels",
+      "method": "POST",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "update",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateFileLabels",
+      "method": "POST",
+      "path": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "update",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/directory-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createFavorite",
+      "method": "POST",
+      "path": "/api/v1/favorite/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/favorite/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/favorite-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteFavorite",
+      "method": "POST",
+      "path": "/api/v1/favorite/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/favorite/{LibraryId}/{SpaceId}#1",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "cancel"
+      ],
+      "source": "dist/apis/favorite-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listFavorite",
+      "method": "GET",
+      "path": "/api/v1/favorite/{LibraryId}/{SpaceId}/list",
+      "sdk_path_literal": "/api/v1/favorite/{LibraryId}/{SpaceId}/list",
+      "query_keys": [
+        "marker",
+        "limit",
+        "page",
+        "page_size",
+        "order_by",
+        "order_by_type",
+        "with_path",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/favorite-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "abortFileUpload",
+      "method": "DELETE",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "query_keys": [
+        "upload",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "checkFileDeletion",
+      "method": "GET",
+      "path": "/api/v1/file-deletion-check/{LibraryId}/{SpaceId}/{Inode}",
+      "sdk_path_literal": "/api/v1/file-deletion-check/{LibraryId}/{SpaceId}/{Inode}",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "checkFileStatus",
+      "method": "HEAD",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "history_id",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "completeFileUpload",
+      "method": "POST",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}#1",
+      "query_keys": [
+        "confirm",
+        "conflict_resolution_strategy",
+        "content_cas",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_inode",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "convertFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#2",
+      "query_keys": [
+        "convert",
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "copyFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#3",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "content_cas",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createSymlink",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createVirtualFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#5",
+      "query_keys": [
+        "virtual_file",
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteFile",
+      "method": "DELETE",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "permanent",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "content_cas"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "downloadFile",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#2",
+      "query_keys": [
+        "history_id",
+        "content_disposition",
+        "purpose",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "content_cas",
+        "with_content_cas",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "downloadTranscodedVideo",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#4",
+      "query_keys": [
+        "transcoding_template_id",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "formUploadFile",
+      "method": "POST",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "content_cas",
+        "filesize",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "prefer_same_origin",
+        "with_content_cas",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getCover",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "preview",
+        "size",
+        "scale",
+        "width_size",
+        "height_size",
+        "frame_number",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getDeltaCursor",
+      "method": "GET",
+      "path": "/api/v1/fs-delta/{LibraryId}/{SpaceId}/cursor",
+      "sdk_path_literal": "/api/v1/fs-delta/{LibraryId}/{SpaceId}/cursor",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileInfoByInode",
+      "method": "GET",
+      "path": "/api/v1/inode/{LibraryId}/{SpaceId}/{Inode}",
+      "sdk_path_literal": "/api/v1/inode/{LibraryId}/{SpaceId}/{Inode}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileUpload",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "query_keys": [
+        "upload",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "infoFile",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "info",
+        "history_id",
+        "content_disposition",
+        "purpose",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "pre_check",
+        "content_cas",
+        "with_content_cas",
+        "internal_domain",
+        "with_short_link",
+        "period",
+        "preview",
+        "with_favorite_status"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "moveFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#4",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "content_cas",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "with_content_cas"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "multipartUploadFile",
+      "method": "POST",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "multipart",
+        "conflict_resolution_strategy",
+        "content_cas",
+        "filesize",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "prefer_same_origin",
+        "with_content_cas",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "officeEdit",
+      "method": "GET",
+      "path": "/api/v1/office/{LibraryId}/{SpaceId}/edit/{FilePath}",
+      "sdk_path_literal": "/api/v1/office/{LibraryId}/{SpaceId}/edit/{FilePath}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "lang"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "previewFile",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#3",
+      "query_keys": [
+        "preview",
+        "history_id",
+        "type",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "previewZipFile",
+      "method": "GET",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#5",
+      "query_keys": [
+        "zip-preview",
+        "format",
+        "password",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "queryDeltaLog",
+      "method": "GET",
+      "path": "/api/v1/fs-delta/{LibraryId}/{SpaceId}/delta",
+      "sdk_path_literal": "/api/v1/fs-delta/{LibraryId}/{SpaceId}/delta",
+      "query_keys": [
+        "cursor",
+        "limit",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "renewMultipartUpload",
+      "method": "POST",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "query_keys": [
+        "renew",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "simpleUploadFile",
+      "method": "PUT",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "conflict_resolution_strategy",
+        "content_cas",
+        "filesize",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "traffic_limit",
+        "prefer_same_origin",
+        "with_content_cas",
+        "internal_domain"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "uncompressFile",
+      "method": "POST",
+      "path": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/file/{LibraryId}/{SpaceId}/{FilePath}#5",
+      "query_keys": [
+        "uncompress",
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/file-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteHistory",
+      "method": "POST",
+      "path": "/api/v1/directory-history/{LibraryId}/{SpaceId}/delete",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/{SpaceId}/delete",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "emptyHistory",
+      "method": "DELETE",
+      "path": "/api/v1/directory-history/{LibraryId}/library-history",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/library-history",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getHistoryConfig",
+      "method": "GET",
+      "path": "/api/v1/directory-history/{LibraryId}/library-history",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/library-history",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listHistory",
+      "method": "GET",
+      "path": "/api/v1/directory-history/{LibraryId}/{SpaceId}/history-list/{FilePath}",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/{SpaceId}/history-list/{FilePath}",
+      "query_keys": [
+        "marker",
+        "limit",
+        "page",
+        "page_size",
+        "order_by",
+        "order_by_type",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "setHistoryConfig",
+      "method": "POST",
+      "path": "/api/v1/directory-history/{LibraryId}/library-history",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/library-history",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "setHistoryLatest",
+      "method": "POST",
+      "path": "/api/v1/directory-history/{LibraryId}/{SpaceId}/latest-version/{HistoryId}",
+      "sdk_path_literal": "/api/v1/directory-history/{LibraryId}/{SpaceId}/latest-version/{HistoryId}",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/history-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "confirmM3u8Upload",
+      "method": "POST",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "query_keys": [
+        "confirm",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createTranscodeTask",
+      "method": "POST",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "transcode",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getMediaFileInfo",
+      "method": "GET",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "info",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "liveTranscodeMediaFile",
+      "method": "GET",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}#1",
+      "query_keys": [
+        "live_transcode",
+        "transcoding_template_id",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "modifyM3u8Segments",
+      "method": "POST",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}#2",
+      "query_keys": [
+        "modify",
+        "access_token",
+        "library_secret",
+        "traffic_limit"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "prepareM3u8Upload",
+      "method": "PUT",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{FilePath}",
+      "query_keys": [
+        "access_token",
+        "conflict_resolution_strategy",
+        "traffic_limit"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "renewM3u8Upload",
+      "method": "POST",
+      "path": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}",
+      "sdk_path_literal": "/api/v1/hls/{LibraryId}/{SpaceId}/{ConfirmKey}#1",
+      "query_keys": [
+        "renew",
+        "access_token",
+        "library_secret",
+        "traffic_limit"
+      ],
+      "source": "dist/apis/hls-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createQuota",
+      "method": "POST",
+      "path": "/api/v1/quota/{LibraryId}",
+      "sdk_path_literal": "/api/v1/quota/{LibraryId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getQuota",
+      "method": "GET",
+      "path": "/api/v1/quota/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/quota/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getQuotaInfo",
+      "method": "GET",
+      "path": "/api/v1/quota/{LibraryId}/{QuotaId}",
+      "sdk_path_literal": "/api/v1/quota/{LibraryId}/{QuotaId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getSpaceQuota",
+      "method": "GET",
+      "path": "/api/v1/space-quota/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/space-quota/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateQuota",
+      "method": "PUT",
+      "path": "/api/v1/quota/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/quota/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateQuotaById",
+      "method": "PUT",
+      "path": "/api/v1/quota/{LibraryId}/{QuotaId}",
+      "sdk_path_literal": "/api/v1/quota/{LibraryId}/{QuotaId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/quota-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listRecentlyUsedFile",
+      "method": "POST",
+      "path": "/api/v1/recent/{LibraryId}/{SpaceId}/recently-used-file",
+      "sdk_path_literal": "/api/v1/recent/{LibraryId}/{SpaceId}/recently-used-file",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/recent-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleEmpty",
+      "method": "DELETE",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleInfo",
+      "method": "GET",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "query_keys": [
+        "info",
+        "access_token",
+        "library_secret",
+        "internal_domain"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleList",
+      "method": "GET",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "by-marker",
+        "marker",
+        "limit",
+        "order_by",
+        "order_by_type",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleListByPage",
+      "method": "GET",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}#3",
+      "query_keys": [
+        "by-page",
+        "page",
+        "page_size",
+        "order_by",
+        "order_by_type",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recyclePreview",
+      "method": "GET",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}#1",
+      "query_keys": [
+        "preview",
+        "type",
+        "size",
+        "scale",
+        "width_size",
+        "height_size",
+        "frame_number",
+        "access_token",
+        "library_secret",
+        "internal_domain"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recyclePurge",
+      "method": "DELETE",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recyclePurgeBatch",
+      "method": "POST",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}#1",
+      "query_keys": [
+        "delete",
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleRestore",
+      "method": "POST",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}/{RecycledItemId}",
+      "query_keys": [
+        "restore",
+        "conflict_resolution_strategy",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "restore_path_strategy"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleRestoreBatch",
+      "method": "POST",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "restore",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "restore_path_strategy"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "recycleSetLifecycle",
+      "method": "POST",
+      "path": "/api/v1/recycled/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/recycled/{LibraryId}/{SpaceId}#2",
+      "query_keys": [
+        "lifecycle",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/recycled-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "searchAI",
+      "method": "POST",
+      "path": "/api/v1/search/{LibraryId}/{SpaceId}/search-ai",
+      "sdk_path_literal": "/api/v1/search/{LibraryId}/{SpaceId}/search-ai",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "limit"
+      ],
+      "source": "dist/apis/search-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "searchFs",
+      "method": "POST",
+      "path": "/api/v1/search/{LibraryId}/{SpaceId}/search-fs",
+      "sdk_path_literal": "/api/v1/search/{LibraryId}/{SpaceId}/search-fs",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "marker",
+        "limit",
+        "with_favorite_status",
+        "with_inode"
+      ],
+      "source": "dist/apis/search-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "searchFsStats",
+      "method": "POST",
+      "path": "/api/v1/search/{LibraryId}/{SpaceId}/search-fs-stats",
+      "sdk_path_literal": "/api/v1/search/{LibraryId}/{SpaceId}/search-fs-stats",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/search-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createShare",
+      "method": "POST",
+      "path": "/api/v1/share/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteShare",
+      "method": "DELETE",
+      "path": "/api/v1/share/{LibraryId}/{ShareId}",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/{ShareId}",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "downloadShareFile",
+      "method": "GET",
+      "path": "/api/v1/share/file/{ShareCode}/{Inodes}",
+      "sdk_path_literal": "/api/v1/share/file/{ShareCode}/{Inodes}#1",
+      "query_keys": [
+        "download",
+        "internal_domain",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getShareDetail",
+      "method": "GET",
+      "path": "/api/v1/share/{LibraryId}/{ShareId}",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/{ShareId}",
+      "query_keys": [
+        "detail",
+        "with_file_info",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getShareUrlDetail",
+      "method": "GET",
+      "path": "/api/v1/share/url-detail/{ShareToken}",
+      "sdk_path_literal": "/api/v1/share/url-detail/{ShareToken}",
+      "query_keys": [],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listShareFiles",
+      "method": "GET",
+      "path": "/api/v1/share/file/{ShareCode}/{Inodes}",
+      "sdk_path_literal": "/api/v1/share/file/{ShareCode}/{Inodes}#2",
+      "query_keys": [
+        "list",
+        "limit",
+        "marker",
+        "orderBy",
+        "orderByType",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listShares",
+      "method": "GET",
+      "path": "/api/v1/share/{LibraryId}/list",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/list",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "limit",
+        "marker",
+        "orderBy",
+        "orderByType",
+        "creatorId",
+        "with_file_info"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "previewShareFile",
+      "method": "GET",
+      "path": "/api/v1/share/file/{ShareCode}/{Inodes}",
+      "sdk_path_literal": "/api/v1/share/file/{ShareCode}/{Inodes}",
+      "query_keys": [
+        "preview",
+        "internal_domain",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "saveShareFile",
+      "method": "POST",
+      "path": "/api/v1/share/file/{ShareCode}",
+      "sdk_path_literal": "/api/v1/share/file/{ShareCode}",
+      "query_keys": [
+        "save",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "searchShares",
+      "method": "POST",
+      "path": "/api/v1/share/{LibraryId}/search",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/search",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "limit",
+        "marker"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "setShareEnabled",
+      "method": "POST",
+      "path": "/api/v1/share/{LibraryId}/{ShareId}",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/{ShareId}",
+      "query_keys": [
+        "setEnabled",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateShare",
+      "method": "POST",
+      "path": "/api/v1/share/{LibraryId}/{ShareId}",
+      "sdk_path_literal": "/api/v1/share/{LibraryId}/{ShareId}#1",
+      "query_keys": [
+        "update",
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "verifyExtractionCode",
+      "method": "POST",
+      "path": "/api/v1/share/verify/{ShareCode}",
+      "sdk_path_literal": "/api/v1/share/verify/{ShareCode}",
+      "query_keys": [],
+      "source": "dist/apis/share-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createSpace",
+      "method": "POST",
+      "path": "/api/v1/space/{LibraryId}",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "space_id"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteSpace",
+      "method": "DELETE",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "force"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getContentsView",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/contents-view",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/contents-view",
+      "query_keys": [
+        "marker",
+        "limit",
+        "order_by",
+        "order_by_type",
+        "filter",
+        "with_path",
+        "access_token",
+        "library_secret",
+        "user_id",
+        "category"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getFileCountInSpace",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/file-count",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/file-count",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getLibrarySpaceCount",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/count",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/count",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getSpaceExtension",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/extension",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/extension",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getSpaceSize",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/size",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/size",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "listSpace",
+      "method": "GET",
+      "path": "/api/v1/space/{LibraryId}/list",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/list",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id",
+        "marker",
+        "limit",
+        "ordered",
+        "prefix",
+        "start_name"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "setSpaceTrafficLimit",
+      "method": "POST",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/traffic-limit",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/traffic-limit",
+      "query_keys": [
+        "access_token",
+        "library_secret"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "updateSpaceExtension",
+      "method": "POST",
+      "path": "/api/v1/space/{LibraryId}/{SpaceId}/extension",
+      "sdk_path_literal": "/api/v1/space/{LibraryId}/{SpaceId}/extension",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/space-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "queryLibraryTask",
+      "method": "GET",
+      "path": "/api/v1/task/{LibraryId}/{TaskIdList}",
+      "sdk_path_literal": "/api/v1/task/{LibraryId}/{TaskIdList}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/task-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "queryLibraryTaskV2",
+      "method": "GET",
+      "path": "/api/v1/task-result/{LibraryId}/{TaskId}",
+      "sdk_path_literal": "/api/v1/task-result/{LibraryId}/{TaskId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/task-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "queryTask",
+      "method": "GET",
+      "path": "/api/v1/task/{LibraryId}/{SpaceId}/{TaskIdList}",
+      "sdk_path_literal": "/api/v1/task/{LibraryId}/{SpaceId}/{TaskIdList}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/task-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "queryTaskV2",
+      "method": "GET",
+      "path": "/api/v1/task-result/{LibraryId}/{SpaceId}/{TaskId}",
+      "sdk_path_literal": "/api/v1/task-result/{LibraryId}/{SpaceId}/{TaskId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/task-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "createToken",
+      "method": "GET",
+      "path": "/api/v1/token",
+      "sdk_path_literal": "/api/v1/token",
+      "query_keys": [
+        "library_id",
+        "library_secret",
+        "space_id",
+        "user_id",
+        "client_id",
+        "session_id",
+        "period",
+        "grant"
+      ],
+      "source": "dist/apis/token-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteToken",
+      "method": "DELETE",
+      "path": "/api/v1/token/{LibraryId}/{AccessToken}",
+      "sdk_path_literal": "/api/v1/token/{LibraryId}/{AccessToken}",
+      "query_keys": [],
+      "source": "dist/apis/token-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "deleteUserTokens",
+      "method": "DELETE",
+      "path": "/api/v1/token/{LibraryId}",
+      "sdk_path_literal": "/api/v1/token/{LibraryId}",
+      "query_keys": [
+        "user_id",
+        "library_secret",
+        "client_id",
+        "session_id"
+      ],
+      "source": "dist/apis/token-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "renewToken",
+      "method": "POST",
+      "path": "/api/v1/token/{LibraryId}/{AccessToken}",
+      "sdk_path_literal": "/api/v1/token/{LibraryId}/{AccessToken}",
+      "query_keys": [],
+      "source": "dist/apis/token-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getLibraryUsage",
+      "method": "GET",
+      "path": "/api/v1/usage/{LibraryId}",
+      "sdk_path_literal": "/api/v1/usage/{LibraryId}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/usage-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    },
+    {
+      "operation": "getUsage",
+      "method": "GET",
+      "path": "/api/v1/usage/{LibraryId}/{SpaceIds}",
+      "sdk_path_literal": "/api/v1/usage/{LibraryId}/{SpaceIds}",
+      "query_keys": [
+        "access_token",
+        "library_secret",
+        "user_id"
+      ],
+      "source": "dist/apis/usage-api.js",
+      "evidence": "S",
+      "runtime_verified": false
+    }
+  ]
+}

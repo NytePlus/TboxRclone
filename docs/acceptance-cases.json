@@ -1,0 +1,159 @@
+{
+  "ST-001-T": [
+    "normal_upload"
+  ],
+  "ST-001-F": [
+    "disconnect_first_part",
+    "disconnect_middle_part",
+    "disconnect_last_part"
+  ],
+  "ST-002-T": [
+    "cancel_before_confirm"
+  ],
+  "ST-002-F": [
+    "cancel_after_confirm_response_loss"
+  ],
+  "ST-003-T": [
+    "sigterm"
+  ],
+  "ST-003-F": [
+    "sigkill",
+    "host_crash_or_power_loss"
+  ],
+  "ST-004-T": [
+    "file_move_acknowledged",
+    "directory_move_acknowledged"
+  ],
+  "ST-004-F": [
+    "file_move_response_lost_ctrl_c_retry",
+    "directory_move_response_lost_ctrl_c_retry"
+  ],
+  "ST-005-T": [
+    "cloud_commit_before_source_removal"
+  ],
+  "ST-005-F": [
+    "cached_only_disconnect",
+    "cached_only_kill"
+  ],
+  "ST-006-T": [
+    "matching_version"
+  ],
+  "ST-006-F": [
+    "web_client_update",
+    "second_client_update",
+    "aba_recreation"
+  ],
+  "ST-007-T": [
+    "resume_valid_session"
+  ],
+  "ST-007-F": [
+    "signature_expired",
+    "session_expired",
+    "replay_identical_part"
+  ],
+  "ST-008-T": [
+    "zero_bytes",
+    "known_length",
+    "unknown_length"
+  ],
+  "ST-008-F": [
+    "short_eof",
+    "excess_bytes",
+    "reader_failure"
+  ],
+  "ST-009-T": [
+    "stable_version_range"
+  ],
+  "ST-009-F": [
+    "ignored_range",
+    "range_416",
+    "replace_during_read"
+  ],
+  "ST-010-T": [
+    "list_0",
+    "list_1",
+    "list_50",
+    "list_51",
+    "list_1000"
+  ],
+  "ST-010-F": [
+    "add_during_pagination",
+    "delete_during_pagination",
+    "rename_during_pagination",
+    "repeated_cursor"
+  ],
+  "ST-011-T": [
+    "empty_directory"
+  ],
+  "ST-011-F": [
+    "nonempty_directory",
+    "create_after_empty_check"
+  ],
+  "ST-012-T": [
+    "valid_lock_token"
+  ],
+  "ST-012-F": [
+    "missing_token",
+    "wrong_token",
+    "expired_token",
+    "service_restart",
+    "parent_lock"
+  ],
+  "ST-013-T": [
+    "file_destination_absent",
+    "directory_destination_absent"
+  ],
+  "ST-013-F": [
+    "overwrite_default",
+    "overwrite_T",
+    "overwrite_F",
+    "file_directory_conflict"
+  ],
+  "ST-014-T": [
+    "ordinary_name"
+  ],
+  "ST-014-F": [
+    "chinese",
+    "emoji",
+    "quotes",
+    "percent_hash_question_plus",
+    "nfc_nfd",
+    "case_collision",
+    "appledouble"
+  ],
+  "ST-015-T": [
+    "normal_resources"
+  ],
+  "ST-015-F": [
+    "http_401",
+    "http_403",
+    "http_429",
+    "http_5xx",
+    "cloud_quota",
+    "cache_full"
+  ],
+  "ST-016-T": [
+    "all_tasks_completed"
+  ],
+  "ST-016-F": [
+    "accepted_only",
+    "partial_failure",
+    "task_query_timeout"
+  ],
+  "ST-017-T": [
+    "delete_without_recreation"
+  ],
+  "ST-017-F": [
+    "delete_response_lost_then_recreated"
+  ],
+  "ST-018-T": [
+    "single_file_low_latency"
+  ],
+  "ST-018-F": [
+    "multiple_files",
+    "high_rtt",
+    "rate_limit",
+    "packet_loss",
+    "concurrent_recovery"
+  ]
+}

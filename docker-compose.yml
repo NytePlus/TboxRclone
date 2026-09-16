@@ -1,0 +1,27 @@
+services:
+  go-tests:
+    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
+    working_dir: /src
+    volumes:
+      - .:/src
+      - go-modules:/go/pkg/mod
+      - go-build:/root/.cache/go-build
+    environment:
+      RCLONE_CONFIG: /nonexistent
+    command: [go, test, -race, ./...]
+  webdav:
+    profiles: [live]
+    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
+    working_dir: /src
+    volumes:
+      - .:/src:ro
+      - go-modules:/go/pkg/mod
+      - go-build:/root/.cache/go-build
+      - ./.secrets:/secrets:ro
+      - ./.state:/state
+    ports:
+      - 127.0.0.1:8686:8686
+    command: [go, run, ./cmd/tboxrclone, serve, webdav, 'sjtu:', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --cache-dir, /state/vfs]
+volumes:
+  go-modules:
+  go-build:

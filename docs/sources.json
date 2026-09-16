@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-17",
+  "tbox_commit": "4537e22adf241158783fe26661b8081f9bc45e94",
+  "rclone": "v1.75.1",
+  "smh_js_sdk": "1.0.16",
+  "sources": [
+    {
+      "url": "https://pan.sjtu.edu.cn/",
+      "sha256": "934fc8441a548289a80fe027e04b7ea8c5cd530a02779c44765a7ef3c2d4c9b3"
+    },
+    {
+      "url": "https://pan.sjtu.edu.cn/js/index.41e36dd0.js",
+      "sha256": "22dc09c6cc3a14c50bac05850d63ae3a76d7d8f6bd60b8d06339fcad3f46598a"
+    },
+    {
+      "url": "https://pan.sjtu.edu.cn/js/chunk-vendors.0e4620ba.js",
+      "sha256": "aae5a86dfb97eebaf4a2da92b8a1b02e8c6ec85e720af84b034f52a951ed1e34"
+    },
+    {
+      "url": "https://registry.npmjs.org/smh-js-sdk/-/smh-js-sdk-1.0.16.tgz",
+      "sha256": "249b0a52db37a3aaed22aeff3b13e930d8087d6866960068cd001e407448241d"
+    },
+    {
+      "url": "https://codeload.github.com/rclone/rclone/tar.gz/refs/tags/v1.75.1",
+      "sha256": "fcc9351ab3976c73b4824cf7919f98f911f2442a606e2910fc2bd562111da220"
+    }
+  ],
+  "frontend_definitions": 43,
+  "sdk_operations": 110,
+  "authenticated_probes_run": false
+}
