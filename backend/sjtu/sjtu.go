@@ -266,7 +266,7 @@ func (f *Fs) mkdirCloudPath(ctx context.Context, p string) error {
 	return nil
 }
 
-func (f *Fs) mkdirComponent(ctx context.Context, current string) error {
+func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
 	check := func() (bool, error) {
 		if err := journal.CheckPending(f.opt.StateDir, scope, current); err != nil {

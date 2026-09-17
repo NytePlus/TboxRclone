@@ -17,7 +17,22 @@ import (
 )
 
 func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
+	for _, newParent := range []bool{false, true} {
+		name := "existing_parent"
+		if newParent {
+			name = "new_parent"
+		}
+		t.Run(name, func(t *testing.T) { testDistinctUploads(t, newParent) })
+	}
+}
+
+func testDistinctUploads(t *testing.T, newParent bool) {
 	f, _ := newSimulator(t, false)
+	if newParent {
+		f.root += "/new-parent"
+	}
+	parentExists := !newParent
+	parentCreates := 0
 	type state struct {
 		data      []byte
 		published bool
@@ -55,6 +70,18 @@ func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
 		name = strings.TrimPrefix(name, "K-")
 		item, exists := files[name]
 		if strings.Contains(r.URL.Path, "/directory/") {
+			if name == "new-parent" {
+				if r.Method == "PUT" {
+					parentExists = true
+					parentCreates++
+					w.WriteHeader(201)
+					return
+				}
+				if !parentExists {
+					w.WriteHeader(404)
+					return
+				}
+			}
 			if !exists {
 				json.NewEncoder(w).Encode(smh.Item{Type: "dir"})
 				return
@@ -71,7 +98,7 @@ func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
 			return
 		}
 		if r.Method == "GET" && r.URL.Query().Get("upload") == "1" {
-			json.NewEncoder(w).Encode(smh.UploadStatus{Confirmed: item.published, UploadID: name, Path: []string{"codex-api-lab", "run", name}})
+			json.NewEncoder(w).Encode(smh.UploadStatus{Confirmed: item.published, UploadID: name, Path: strings.Split(f.root+"/"+name, "/")})
 			return
 		}
 		if r.Method == "POST" && r.URL.Query().Has("multipart") {
@@ -80,7 +107,7 @@ func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
 		}
 		if r.Method == "POST" {
 			item.published = true
-			json.NewEncoder(w).Encode(smh.Item{Type: "file", Path: []string{"codex-api-lab", "run", name}, Size: smh.Int64(len(item.data)), ETag: "v1"})
+			json.NewEncoder(w).Encode(smh.Item{Type: "file", Path: strings.Split(f.root+"/"+name, "/"), Size: smh.Int64(len(item.data)), ETag: "v1"})
 			return
 		}
 		if r.Method == "GET" {
@@ -133,6 +160,9 @@ func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
 	}
 	mu.Lock()
 	defer mu.Unlock()
+	if newParent && parentCreates != 1 {
+		t.Fatalf("parent creates: %d", parentCreates)
+	}
 	for name, item := range files {
 		if !item.published || string(item.data) != "distinct payload "+name {
 			t.Fatal("wrong independent content", name)

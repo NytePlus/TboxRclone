@@ -111,8 +111,11 @@ func TestLiveDistinctUploads(t *testing.T) {
 		t.Fatal(err)
 	}
 	prefix := "parallel-" + hex.EncodeToString(nonce)
-	if err = f.Mkdir(ctx, prefix); err != nil {
-		t.Fatal(err)
+	newParent := os.Getenv("TBOX_PARALLEL_NEW_PARENT") == "1"
+	if !newParent {
+		if err = f.Mkdir(ctx, prefix); err != nil {
+			t.Fatal(err)
+		}
 	}
 	type result struct {
 		Path    string  `json:"path"`
@@ -192,7 +195,7 @@ func TestLiveDistinctUploads(t *testing.T) {
 	if committed != 2 {
 		t.Fatal("wrong journal count", committed)
 	}
-	report := map[string]any{"status": "PASS", "scope": "real backend with synchronized data-request entry; not Finder acceptance or an uninstrumented throughput benchmark", "fixture": prefix, "files": results, "elapsed_seconds": elapsed, "distinct_sessions": sessions, "max_overlapping_sessions": maximum, "committed_records": committed}
+	report := map[string]any{"status": "PASS", "scope": "real backend with synchronized data-request entry; not Finder acceptance or an uninstrumented throughput benchmark", "fixture": prefix, "parent_initially_missing": newParent, "files": results, "elapsed_seconds": elapsed, "distinct_sessions": sessions, "max_overlapping_sessions": maximum, "committed_records": committed}
 	output, err := json.MarshalIndent(report, "", "  ")
 	if err != nil {
 		t.Fatal(err)
