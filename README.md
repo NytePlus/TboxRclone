@@ -2,7 +2,7 @@
 
 Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；无需修改或复制上游源码。
 
-**尚未达到 macOS 网盘发布标准。** 真实云盘、Finder、宿主机崩溃验收未执行。36 个系统验收分支没有任何一个被标记为通过。当前禁止覆盖、删除和目录删除；只在隔离实验目录开放显式启用的创建操作。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
+**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。当前禁止覆盖、删除和目录删除；只在隔离实验目录开放显式启用的创建操作。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
 
 ## 构建与离线测试
 
@@ -75,4 +75,4 @@ docker compose run --rm go-tests go test github.com/rclone/rclone/cmd/serve/webd
 docker compose run --rm go-tests go run ./cmd/verify
 ```
 
-完整 SJTU `fstests` 使用 `backend/sjtu/integration_test.go`。必须显式提供 `TBOX_LIVE_REMOTE=TestSjtu:codex-api-lab/<run-id>` 及私有配置。未提供时显示 SKIP/BLOCKED，不能当成通过。当前缺失的删除/覆盖等能力会使真实全套测试失败，不能通过筛掉这些子测试来改变结果。
+完整 SJTU `fstests` 使用 `backend/sjtu/integration_test.go`。必须显式提供 `TBOX_LIVE_REMOTE=TestSjtu:codex-api-lab/<run-id>` 及私有配置。未提供时显示 SKIP/BLOCKED，不能当成通过。真实全套入口已执行并观察到删除/清理相关失败，240 秒处超时，尚未覆盖全部子测试；不能通过筛掉失败项来改变结果。见 [真实接口实验](docs/live-api-findings.md)。

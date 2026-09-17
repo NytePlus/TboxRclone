@@ -46,6 +46,11 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		defer sim.mu.Unlock()
 		p := r.URL.Path
 		if r.Method == "GET" && r.URL.Query().Get("upload") == "1" {
+			if r.URL.Query().Get("no_upload_part_info") != "1" {
+				w.WriteHeader(400)
+				io.WriteString(w, `{"code":"ParamInvalid","message":"uploadPartInfo is unsupported under current deployment"}`)
+				return
+			}
 			json.NewEncoder(w).Encode(smh.UploadStatus{Confirmed: sim.published, Path: []string{"codex-api-lab", "run", "file"}})
 			return
 		}

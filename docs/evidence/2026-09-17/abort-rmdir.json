@@ -1,0 +1,25 @@
+[
+  {
+    "operation": "abort",
+    "attempt": 1,
+    "http": 204,
+    "code": null
+  },
+  {
+    "operation": "abort",
+    "attempt": 2,
+    "http": 404,
+    "code": "UploadNotFound"
+  },
+  {
+    "operation": "aborted_path_info",
+    "http": 404
+  },
+  {
+    "operation": "nonempty_directory_only_delete",
+    "http": 200,
+    "code": null,
+    "parent_after_http": 404,
+    "child_after_http": 404
+  }
+]

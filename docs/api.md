@@ -5,7 +5,7 @@
 - **C**：当前 Tbox 源码存在调用/DTO，不表示本次已实测。
 - **F**：交大当前公开网页 JS 中存在接口定义，不表示当前账户有权限，或该功能开关已启用。
 - **S**：公开 `smh-js-sdk@1.0.16` 定义；可能比交大部署更新。
-- **V**：登录后在隔离空间验证。本次无 V 级证据。
+- **V**：登录后在隔离空间验证。本次已取得部分 V 级证据及明确不支持的行为，见 [真实接口实验](live-api-findings.md)。
 
 Tbox 基线为 `4537e22adf241158783fe26661b8081f9bc45e94`。C 主要来源：原 Tbox 项目的 `Modules/Tbox/Services/TboxService.cs` 和 `Modules/Tbox/Models`（源码未包含在此仓库）。F 来源：[交大前端](https://pan.sjtu.edu.cn/js/index.41e36dd0.js)。S 来源：[npm 包](https://www.npmjs.com/package/smh-js-sdk) 与 [SDK 仓库](https://cnb.cool/tencent/cloud/smh/smh-javascript-sdk)。精确摘要在 `sources.json`；前端定义原文、偏移及 SDK operation 名在 `discovered-endpoints.json`。
 
@@ -31,7 +31,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 
 ## 3. 当前 Tbox 数据接口
 
-下表省略共同的 `access_token`。所有写操作的原子性、持久性和重放行为均待 V 验证。
+下表省略共同的 `access_token`。部分调用与重放已有有限 V 实验；完整原子性、持久性和幂等性契约仍未证明，见真实接口实验。
 
 | 方法与路径 | 参数/请求体 | 响应重点 | 来源/注意 |
 |---|---|---|---|
@@ -122,4 +122,4 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 - `complete-file-upload-request.d.ts` 支持 `localCreationTime/localModificationTime`；这些是本地时间元数据，不等同于服务端 modificationTime，不应直接宣称支持 rclone SetModTime。
 - `complete-file-upload200-response.d.ts` 的覆盖标识为 `isOverwritten`，与已有研究记录的 DTO 拼写不同；实际解析应以交大响应为准。
 
-上述均来自 sources.json 锁定的 SDK 包，未升级为 V 证据。
+上述描述来自 sources.json 锁定的 SDK 包。后续交大实例探测已确认签名分片映射、上传状态参数要求，以及部分条件字段不起作用；以 [真实接口实验](live-api-findings.md) 的具体证据为准。

@@ -1,0 +1,10 @@
+{
+  "create_sync_http": 201,
+  "query_by_id_list_http": 200,
+  "query_status": "ok",
+  "single_get_http": 404,
+  "list_by_client_id_http": 400,
+  "delete_own_sync_http": 204,
+  "cloud_directory_after_unregister_http": 200,
+  "fs_journal_node_established": false
+}

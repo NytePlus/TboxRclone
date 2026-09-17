@@ -1,0 +1,66 @@
+{
+  "run_id": "run-20260917T020318Z-f0339b72",
+  "at": "2026-09-17T02:06:00.343032+00:00",
+  "events": [
+    {
+      "operation": "part_put",
+      "part": 1,
+      "http": 200,
+      "etag": "\"631b2c76267e568ccb221193ab23e134\"",
+      "bytes": 4194304
+    },
+    {
+      "operation": "part_put",
+      "part": 1,
+      "http": 200,
+      "etag": "\"631b2c76267e568ccb221193ab23e134\"",
+      "bytes": 4194304
+    },
+    {
+      "operation": "part_put",
+      "part": 2,
+      "http": 200,
+      "etag": "\"ed1b0cb898d3a8aee809982b88da8aa7\"",
+      "bytes": 4194304
+    },
+    {
+      "operation": "status_before_confirm",
+      "http": 200,
+      "confirmed": false,
+      "parts": [
+        {
+          "PartNumber": 1,
+          "Size": 4194304,
+          "ETag": "\"631b2c76267e568ccb221193ab23e134\"",
+          "LastModified": "2026-09-17T02:06:01.224Z"
+        },
+        {
+          "PartNumber": 2,
+          "Size": 4194304,
+          "ETag": "\"ed1b0cb898d3a8aee809982b88da8aa7\"",
+          "LastModified": "2026-09-17T02:06:01.624Z"
+        }
+      ]
+    },
+    {
+      "operation": "confirm",
+      "http": 200,
+      "path": [
+        "codex-api-lab",
+        "run-20260917T020318Z-f0339b72",
+        "multi-range.bin"
+      ],
+      "size": "8388608",
+      "etag": "\"b46bee9a7cb8b1402715097339777420-2\"",
+      "code": null
+    },
+    {
+      "operation": "independent_read",
+      "http": 200,
+      "bytes": 8388608,
+      "expected_sha256": "2fd5821844dd0b4bc708edec4ba1f730b3dd9f403c1b849bdf37af91388b39ca",
+      "actual_sha256": "2fd5821844dd0b4bc708edec4ba1f730b3dd9f403c1b849bdf37af91388b39ca",
+      "match": true
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "operation": "info_with_condition_fields",
+    "http": 200,
+    "has_inode": false,
+    "has_contentCas": false,
+    "has_versionId": true,
+    "etag": "\"2bcd3c4de20c918e19fab5c36249c70d\""
+  },
+  {
+    "operation": "delete_with_wrong_content_cas",
+    "http": 200,
+    "error_code": null,
+    "exists_after": false,
+    "after_http": 404,
+    "recycled_item_returned": true
+  },
+  {
+    "operation": "delete_with_wrong_if_match",
+    "http": 200,
+    "error_code": null,
+    "exists_after": false,
+    "after_http": 404,
+    "recycled_item_returned": true
+  }
+]

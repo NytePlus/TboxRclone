@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "status": "design_only_not_executed",
+  "status": "implementation_in_progress_not_accepted",
   "frameworks": {
-    "unit": "Go testing + httptest (planned)",
-    "backend": "rclone fstests v1.75.1 (planned)",
-    "protocol": "HTTP/WebDAV harness (planned)",
+    "unit": "Go testing + httptest (implemented; race tests executed)",
+    "backend": "rclone fstests v1.75.1 (connected; initial live run failed and timed out)",
+    "protocol": "HTTP/WebDAV harness + HTTPS fault proxy (partial; live response-loss experiment executed)",
     "system": "native macOS Finder UI and terminal (planned)"
   },
   "tests": [

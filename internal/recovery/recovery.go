@@ -35,7 +35,9 @@ func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.
 	}
 	data.Close()
 	var status smh.UploadStatus
-	if e = c.JSON(ctx, "GET", "file", r.ConfirmKey, url.Values{"upload": {"1"}}, nil, &status); e != nil {
+	// SJTU rejects uploadPartInfo generation, but still includes uploaded parts
+	// when no_upload_part_info=1. Omitting this flag returns ParamInvalid (400).
+	if e = c.JSON(ctx, "GET", "file", r.ConfirmKey, url.Values{"upload": {"1"}, "no_upload_part_info": {"1"}}, nil, &status); e != nil {
 		return e
 	}
 	if !status.Confirmed || strings.Join(status.Path, "/") != r.Path {

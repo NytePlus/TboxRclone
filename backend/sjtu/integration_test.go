@@ -26,6 +26,9 @@ func TestIntegration(t *testing.T) {
 		t.Fatal("use TBOX_LIVE_REMOTE, not -remote, to preserve isolation checks")
 	}
 	name, _, _ := strings.Cut(remote, ":")
+	// Upstream fstests discovers testserver fixtures relative to the rclone
+	// source tree, even when the selected remote needs no local test server.
+	t.Chdir("../../third_party/rclone")
 	fstest.Initialise()
 	typ, found := config.FileGetValue(name, "type")
 	if !found || typ != "sjtu" {

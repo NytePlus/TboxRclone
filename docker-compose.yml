@@ -58,6 +58,25 @@ services:
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem
     command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --cache-dir, /state/vfs]
+  fault-client:
+    profiles: [faults]
+    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
+    working_dir: /src
+    network_mode: service:fault-proxy
+    depends_on:
+      fault-proxy:
+        condition: service_healthy
+    volumes:
+      - .:/src:ro
+      - go-modules:/go/pkg/mod
+      - go-build:/root/.cache/go-build
+      - ./.secrets:/secrets:ro
+      - ./.state:/state
+    environment:
+      HTTPS_PROXY: http://127.0.0.1:8787
+      NO_PROXY: ''
+      SSL_CERT_FILE: /state/faultproxy-ca.pem
+    command: [go, test, -race, ./...]
 volumes:
   go-modules:
   go-build:
