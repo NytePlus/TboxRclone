@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-17T04:05:28.222828+00:00",
+  "go_version": "go1.26.0",
+  "go_archive_sha256": "b1640525dfe68f066d56f200bef7bf4dce955a1a893bd061de6754c211431023",
+  "macfuse_headers_commit": "7a6cdd2b6e11071a706f4295aa931c65223ba953",
+  "macfuse_headers_archive_sha256": "3d6c946d3775a7915f2c974b75612dc509e9f094864b9c1d729afd85c73936c8",
+  "build_tags": [
+    "cmount"
+  ],
+  "cgo_enabled": true,
+  "native_binary_sha256": "e60dee4ce76ab35ac1f958e5e85506a27cc1971c40e94f74739d6db05591c979",
+  "mount_help_exit": 0,
+  "local_readonly_fuse_probe_exit": 1,
+  "runtime_error": "cgofuse: cannot find FUSE",
+  "driver_installed_by_task": false,
+  "finder_ui": "getApp returned cgWindowNotFound; user asked to open Finder window"
+}

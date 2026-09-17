@@ -129,3 +129,11 @@ Compose 服务指向隔离实验目录，Mac 原生 `davcheck` 通过 loopback �
 **不能将 abort 204 等同于取消成功，也不能仅依据 K 404 判断未发布。** 当前实现会保留“会话消失但正式路径存在”的 AbortUnknown；已进入 CommitSent/Unknown 的任务先对账，不发送中止。所有分支均保留本地数据。
 
 这是 CLI/API 证据；未完成 Finder 取消操作、所有时序、历史/回收站数量增量或暂存对象物理回收核验，系统场景状态不变。
+
+## macOS 实际文件系统路径
+
+macOS 26.5.2 使用系统 mount_webdav 连接本机 Compose 服务。只读挂载后通过文件系统读取：4096 字节完整内容 SHA-256、pread 偏移内容、空文件、51 个目录条目均符合预期。[读取证据](evidence/2026-09-17/macos-webdav-read.json)。
+
+可写挂载的新文件实验暴露不同于单次 HTTP PUT 的流程：macOS 先创建云端空文件，再提交实际内容和 AppleDouble。open/write 返回成功，fsync 为 EPERM，close 仍成功；独立直接云端读取为 0 字节。61 字节正文和 4096 字节 AppleDouble 均在本地 Prepared spool 中完整保留。[写入失败证据](evidence/2026-09-17/macos-webdav-write.json)。这属于发布缺陷，不能因为 HTTP 检查 13/13 而将 macOS 写入标为通过。
+
+原生 FUSE 另一条路径已完成 cmount/CGO 接线和本机构建，但缺少运行库而无法挂载。[构建证据](evidence/2026-09-17/macos-native-build.json)。所有上述测试均不是 Finder UI 录屏或完整系统验收。

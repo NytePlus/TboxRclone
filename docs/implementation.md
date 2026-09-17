@@ -35,10 +35,11 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | B06：性能、空间管理不足 | C-018/015 | 上传先 spool、单日志目录串行、完成后全量下载验证；暂无自动 GC，总缓存会增长。 |
 | B07：读与目录协议仍需实例确认 | C-009/010/014 | 强制要求返回 ETag；marker 分页异常直接失败。未验证服务端忽略参数及元数据/数据 ETag 是否相同。 |
 | B08：宿主机掉电持久边界未验证 | C-003 | fsync 与日志重开测试不等于宿主机掉电测试；不能宣称掉电零丢失。 |
-| B09：macOS 原生 mount 尚未接入 | 原生 mount 验收路径 | 已提供 macOS CLI 构建；Finder/WebDAV 和原生 mount 是不同路径。 |
+| B09：macOS 原生 mount 运行环境和验收未完成 | 原生 mount 验收路径 | 已接入 cmount 并成功原生 CGO 构建；本机缺少 FUSE 运行库，实际挂载失败。macOS 内置 webdavfs 已成功挂载读取，但与原生 FUSE、Finder UI 是不同验证路径。 |
 | B10：上游静态 overview 未包含外部 backend | CLI 启动信息 | rclone 注册时输出 `no overview data found for "sjtu"`，随后能列出并配置 sjtu；需后续可复现的上游元数据接线，不能将此错误日志隐藏。 |
 | B11：WebDAV 重复 MKCOL（已修复已测路径） | C-010/014，WebDAV MKCOL | 补丁在 WebDAV 层区分已有资源；上游回归及真实重复 MKCOL 均返回 405。其他客户端并发创建仍待验收。 |
 | B12：WebDAV 完整条件写尚未验收 | C-006/014，If-None-Match/If-Match | 已修复 VFS 可见目标的 PUT If-None-Match:*，真实返回 412 且不产生上传日志；其他条件头、陈旧 VFS 缓存、网页端竞争和云端 CAS 仍未解决。 |
+| B13：macOS webdavfs 新文件写入失败 | C-001/005/008/012/014 | open 创建空文件后，write 数据的后续覆盖被拒绝。fsync 为 EPERM、close 成功，独立云端仍 0 字节；完整数据在 Prepared 日志。须解决安全覆盖及 macOS 提交语义后才能发布。 |
 
 API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子目录”，并未承诺非空目录拒绝；不得用它直接实现 rmdir。SDK 1.0.16 multipart 响应描述是顶层 headers，但真实实例已确认使用逐片签名映射；`partNumberRange` 是明确片号列表，并非区间端点。
 
@@ -61,3 +62,7 @@ WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离�
 显式 `tbox-state -abort` 已实现：Prepared 只做本地状态转换；Uploading 验证账户、路径和 uploadId 后持久化 AbortSent，再对 K 发 upload DELETE。CommitSent/Unknown 只对账，Committed 拒绝撤销；所有路径均保留 spool。Aborted 表示已观察会话不存在且正式路径不存在，不宣称对象存储所有暂存字节已经物理回收。中止后路径仍存在时保留 AbortUnknown。
 
 七项离线测试覆盖幂等中止、丢应答、confirm 竞争、身份/状态不匹配、会话消失但目标存在和本地 Prepared 取消。真实代理中止后丢应答从 AbortUnknown 核对至 Aborted，独立确认 K 和路径均 404，spool 保留。并发探测还确认：confirm 200 后 abort 可以 204 并删除会话记录，而正式文件仍完整存在；该分支必须保留未知状态，不能以 204 判定撤销成功。见 [中止丢应答](evidence/2026-09-17/abort-response-loss.json) 和 [提交/中止竞争](evidence/2026-09-17/confirm-abort-race.json)。不是 Finder 取消、完整历史/回收站增量或宿主机掉电验收。
+
+已使用官方 Go 1.26.0 和固定 macFUSE 头文件构建原生 macOS ARM64 cmount 二进制，mount help 成功；实际 FUSE 探针因运行库缺失失败。没有安装驱动或修改系统安全设置。macOS 26.5.2 内置 webdavfs 只读挂载成功，完整读取、pread、空文件和 51 项目录正确；不是 Finder UI 验收。
+
+随后用 webdavfs 创建隔离文件并写入 61 字节：open/write 成功、fsync errno=1、close 成功；独立云端仍 0 字节。状态日志同时存在 0 字节 Committed 和 61 字节 Prepared，后者 SHA-256 与测试源一致；AppleDouble 同样留下 0 字节提交和 4096 字节 Prepared，全部 spool 校验通过。普通卸载被系统进程只读句柄占用阻挡；在确认所有生成数据已持久化后，仅对此实验卷强制卸载成功，服务随后停止。证据见 [原生构建](evidence/2026-09-17/macos-native-build.json)、[webdavfs 读取](evidence/2026-09-17/macos-webdav-read.json)、[webdavfs 写入失败](evidence/2026-09-17/macos-webdav-write.json)。Finder 仍无法取得窗口，已异步请求用户打开窗口，不以系统调用替代 UI 验收。

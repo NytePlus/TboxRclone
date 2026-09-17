@@ -1,0 +1,67 @@
+{
+  "at": "2026-09-17T04:03:57.412362+00:00",
+  "scope": "macOS webdavfs syscall write, not Finder UI",
+  "fixture": "macos-write-cbde2663",
+  "events": [
+    {
+      "operation": "open_create",
+      "ok": true
+    },
+    {
+      "operation": "write",
+      "bytes": 61,
+      "ok": true
+    },
+    {
+      "operation": "fsync",
+      "ok": false,
+      "errno": 1
+    },
+    {
+      "operation": "close",
+      "ok": true
+    }
+  ],
+  "independent_cloud_http": 200,
+  "independent_cloud_size": 0,
+  "independent_cloud_matches": false,
+  "expected_sha256": "7022f403c2144f97a1f4a1d6bc28ba72c38612322f328edccb402c13710dfba4",
+  "local_source_retained": true,
+  "matching_upload_records": [
+    {
+      "state": "Committed",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "state": "Prepared",
+      "size": 61,
+      "sha256": "7022f403c2144f97a1f4a1d6bc28ba72c38612322f328edccb402c13710dfba4"
+    }
+  ],
+  "all_fixture_journals": [
+    {
+      "state": "Prepared",
+      "size": 4096,
+      "spool_verified": true
+    },
+    {
+      "state": "Committed",
+      "size": 0,
+      "spool_verified": true
+    },
+    {
+      "state": "Prepared",
+      "size": 61,
+      "spool_verified": true
+    },
+    {
+      "state": "Committed",
+      "size": 0,
+      "spool_verified": true
+    }
+  ],
+  "normal_unmount_exit": 1,
+  "diskutil_unmount_exit": 1,
+  "force_unmount_exit": 0
+}

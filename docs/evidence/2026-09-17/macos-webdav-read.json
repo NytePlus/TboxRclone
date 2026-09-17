@@ -1,0 +1,18 @@
+{
+  "at": "2026-09-17T04:02:31.883109+00:00",
+  "scope": "macOS built-in webdavfs read-only CLI mount; not Finder UI",
+  "macos": "26.5.2",
+  "mount_command_exit": 0,
+  "baseline_bytes": 4096,
+  "baseline_sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+  "baseline_match": true,
+  "pread_match": true,
+  "directory_entries": 51,
+  "directory_51_complete": true,
+  "empty_files": [
+    {
+      "size": 0,
+      "read_empty": true
+    }
+  ]
+}

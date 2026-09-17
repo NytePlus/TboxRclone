@@ -17,7 +17,20 @@ docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go b
 
 子模块 gitlink 保持上游固定提交，工作区带有可重放补丁；不要把这部分差异误当成未保存代码。补丁和对应回归测试由主仓库跟踪。Compose 构建及服务启动会先检查补丁是否就绪，不会修改只读服务卷。升级子模块前必须显式重做补丁及回归。
 
-Linux 二进制架构取决于 Docker 主机架构。macOS Intel 构建用 `GOARCH=amd64`。当前 CLI 提供 `copy/copyto/cat/check/lsf/lsjson/mkdir/config/serve webdav`；原生 mount 尚未接入。
+Linux 二进制架构取决于 Docker 主机架构。macOS Intel 构建用 `GOARCH=amd64`。当前 CLI 提供 `copy/copyto/cat/check/lsf/lsjson/mkdir/config/serve webdav`，并接入上游挂载命令。Linux 常规构建含 mount；macOS Apple Silicon 的 mount 需要下述原生 CGO 构建，纯 Go 交叉编译版本不含该命令。
+
+## macOS 原生 mount 构建
+
+```sh
+sh scripts/build-macos-mount.sh
+bin/tboxrclone-macos-mount mount --help
+```
+
+脚本需要本机 Xcode/Command Line Tools SDK。若没有 Go，会在项目 `.state/native-build` 下载并校验官方 Go 1.26.0；使用固定版本 macFUSE 头文件，以 `CGO_ENABLED=1 -tags cmount` 构建。缓存及下载不会修改全局 Go 环境。已有其他路径的 Go 可用 `TBOX_GO` 指定。
+
+构建成功不代表运行时可挂载：本机实测缺少 FUSE 运行库，返回 `cgofuse: cannot find FUSE`；脚本不安装驱动、不修改系统安全设置。
+
+**macOS 自带 WebDAV 文件系统当前只读路径已有实测，写入尚不可用。** 新文件操作会先在云端创建空文件，后续内容上传因后端禁止覆盖而失败。实测 `fsync` 报错但 `close` 成功、云端仍为空文件；完整内容保留在 Prepared 日志。不要将此实验版本用于需要“关闭即云端保存”的工作流。
 
 ## 配置实验环境
 
