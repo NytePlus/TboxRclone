@@ -3,7 +3,7 @@
   "status": "implementation_in_progress_not_accepted",
   "frameworks": {
     "unit": "Go testing + httptest (implemented; race tests executed)",
-    "backend": "rclone fstests v1.75.1 (connected; initial live run failed and timed out)",
+    "backend": "rclone fstests v1.75.1 (complete live lifecycle passed: 87 PASS, 33 SKIP; optional skips are not acceptance passes)",
     "protocol": "HTTP/WebDAV harness + HTTPS fault proxy (partial; live response-loss experiment executed)",
     "system": "native macOS Finder UI and terminal (planned)"
   },
@@ -40,8 +40,8 @@
         "U04",
         "U07"
       ],
-      "known_gap": "api.md#6-崩溃一致性设计契约",
-      "status": "not_run"
+      "known_gap": "Native UI preflight blocked by macOS Apple Events authorization -1743; no Finder drag action or recording. See docs/evidence/2026-09-17/finder-automation-blocked.json; original safety contract: api.md#6-崩溃一致性设计契约",
+      "status": "blocked"
     },
     {
       "id": "ST-001-F",

@@ -1,6 +1,7 @@
 package sjtu
 
 import (
+	"context"
 	"errors"
 	"io"
 	"strings"
@@ -67,4 +68,26 @@ func (r *ownedReader) Close() error {
 		r.release()
 	})
 	return r.err
+}
+
+// Bound complete mutation lifetimes (spool/backup through reconciliation), not
+// individual parts. Four uploads each use at most four data-plane workers.
+const maxActiveMutations = 4
+
+var mutationSlots sync.Map
+
+func (f *Fs) acquireMutation(ctx context.Context) (func(), error) {
+	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
+	value, _ := mutationSlots.LoadOrStore(scope, make(chan struct{}, maxActiveMutations))
+	slots := value.(chan struct{})
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	select {
+	case slots <- struct{}{}:
+		var once sync.Once
+		return func() { once.Do(func() { <-slots }) }, nil
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
 }

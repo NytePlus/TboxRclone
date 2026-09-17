@@ -52,7 +52,12 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 		return nil, err
 	}
 	defer release()
-	s, err := journal.OpenContext(ctx, f.opt.StateDir)
+	releaseSlot, err := f.acquireMutation(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer releaseSlot()
+	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
 	if err != nil {
 		return nil, err
 	}

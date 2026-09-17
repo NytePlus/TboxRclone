@@ -47,7 +47,8 @@ type Part struct {
 	ETag   string `json:"etag,omitempty"`
 }
 
-// Store serializes access to the journal directory across processes.
+// Store holds a journal lock. Recovery uses an exclusive lock; backend operations
+// may use shared locks while the service owns all relevant paths exclusively.
 type Store struct {
 	Dir           string
 	lock          *os.File
@@ -83,11 +84,23 @@ func CheckPending(dir, scope, p string) error {
 
 // OpenContext waits for an available store or context cancellation.
 func OpenContext(ctx context.Context, dir string) (*Store, error) {
+	return openContext(ctx, dir, syscall.LOCK_EX)
+}
+
+// OpenConcurrentContext permits disjoint backend operations to publish separate
+// records concurrently. The caller MUST hold process-lifetime instance ownership
+// and all affected path leases, including subtrees for directory mutations.
+// A record has exactly one writer. Standalone recovery must still use Open.
+func OpenConcurrentContext(ctx context.Context, dir string) (*Store, error) {
+	return openContext(ctx, dir, syscall.LOCK_SH)
+}
+
+func openContext(ctx context.Context, dir string, mode int) (*Store, error) {
 	for {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
-		s, err := Open(dir)
+		s, err := openMode(dir, mode)
 		if !errors.Is(err, ErrBusy) {
 			return s, err
 		}
@@ -102,7 +115,9 @@ func OpenContext(ctx context.Context, dir string) (*Store, error) {
 }
 
 // Open takes a nonblocking process lock; callers must Close it.
-func Open(dir string) (*Store, error) {
+func Open(dir string) (*Store, error) { return openMode(dir, syscall.LOCK_EX) }
+
+func openMode(dir string, mode int) (*Store, error) {
 	if !filepath.IsAbs(dir) {
 		return nil, errors.New("state directory must be absolute")
 	}
@@ -120,7 +135,7 @@ func Open(dir string) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = syscall.Flock(int(f.Fd()), syscall.LOCK_EX|syscall.LOCK_NB); err != nil {
+	if err = syscall.Flock(int(f.Fd()), mode|syscall.LOCK_NB); err != nil {
 		f.Close()
 		if errors.Is(err, syscall.EWOULDBLOCK) || errors.Is(err, syscall.EAGAIN) {
 			return nil, ErrBusy

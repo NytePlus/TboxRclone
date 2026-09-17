@@ -31,7 +31,12 @@ func (o *Object) remove(ctx context.Context) error {
 		return err
 	}
 	defer release()
-	s, err := journal.OpenContext(ctx, f.opt.StateDir)
+	releaseSlot, err := f.acquireMutation(ctx)
+	if err != nil {
+		return err
+	}
+	defer releaseSlot()
+	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
 	if err != nil {
 		return err
 	}
@@ -108,7 +113,12 @@ func (f *Fs) rmdir(ctx context.Context, dir string) error {
 		return err
 	}
 	defer release()
-	s, err := journal.OpenContext(ctx, f.opt.StateDir)
+	releaseSlot, err := f.acquireMutation(ctx)
+	if err != nil {
+		return err
+	}
+	defer releaseSlot()
+	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
 	if err != nil {
 		return err
 	}

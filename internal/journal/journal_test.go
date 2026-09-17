@@ -307,3 +307,44 @@ func TestMutationFirstPublicationKeepsKindAndSubtrees(t *testing.T) {
 		})
 	}
 }
+
+func TestConcurrentStoresExcludeRecovery(t *testing.T) {
+	dir := filepath.Join(t.TempDir(), "state")
+	first, err := OpenConcurrentContext(context.Background(), dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer first.Close()
+	second, err := OpenConcurrentContext(context.Background(), dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer second.Close()
+	if recovery, err := Open(dir); !errors.Is(err, ErrBusy) {
+		if recovery != nil {
+			recovery.Close()
+		}
+		t.Fatalf("exclusive recovery not excluded: %v", err)
+	}
+	first.Close()
+	if recovery, err := Open(dir); !errors.Is(err, ErrBusy) {
+		if recovery != nil {
+			recovery.Close()
+		}
+		t.Fatalf("remaining shared holder not protected: %v", err)
+	}
+	second.Close()
+	exclusive, err := Open(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer exclusive.Close()
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Millisecond)
+	defer cancel()
+	if shared, err := OpenConcurrentContext(ctx, dir); !errors.Is(err, context.DeadlineExceeded) {
+		if shared != nil {
+			shared.Close()
+		}
+		t.Fatalf("exclusive recovery bypassed: %v", err)
+	}
+}

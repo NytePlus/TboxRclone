@@ -1,0 +1,12 @@
+{
+  "status": "BLOCKED",
+  "scenario_attempted": "ST-001-T",
+  "scope": "preflight only; no Finder drag/copy action executed and no acceptance recording produced",
+  "observations": [
+    "WebDAV container healthy and native /private/tmp/tboxrclone-webdav-501 mount verified before attempting UI access",
+    "Finder opening succeeded through host open command",
+    "System Events request for Finder window names was denied by macOS with Apple event authorization error -1743"
+  ],
+  "next_requirement": "A working authorized native UI automation channel and genuine recording are required before executing and marking the Finder scenario PASS",
+  "backend_tests_are_not_substitutes": true
+}

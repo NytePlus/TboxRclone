@@ -400,7 +400,12 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		return fserrors.NoRetryError(e)
 	}
 	defer release()
-	s, e := journal.OpenContext(ctx, f.opt.StateDir)
+	releaseSlot, e := f.acquireMutation(ctx)
+	if e != nil {
+		return fserrors.NoRetryError(e)
+	}
+	defer releaseSlot()
+	s, e := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
 	if e != nil {
 		return fserrors.NoRetryError(e)
 	}

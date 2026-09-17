@@ -229,3 +229,13 @@ docker compose run --rm \
 后续完整运行依次暴露并修复两个上游接口契约问题：`Object.String()` 必须接受 nil 对象并返回 `<nil>`；配置实验写入开关不应阻止账户根对象的只读构造。对应失败摘要保留为 [nil 对象崩溃](evidence/2026-09-17/fstests-rootmove.json) 与 [FromRoot](evidence/2026-09-17/fstests-fromroot.json)。完整上游 FromRoot 还会上传/删除隔离目录内的文件，因此最终写入校验统一依据解析后的完整云端路径。账户根别名可访问同一个实验路径；Put、Mkdir、Remove、Rmdir、Move、DirMove 的实验区外路径仍在访问网络/日志前拒绝，移动源和目标分别检查；越界路径和实验区顶层也拒绝，有专门回归验证。
 
 最终完整生命周期运行 **PASS：120 run、87 PASS、33 SKIP、0 FAIL**，见 [完整测试清单及摘要](evidence/2026-09-17/fstests-encoding-success.json)。覆盖可逆名称、标准嵌套 fixture、文件/目录移动、根别名读写、对象读取及清理；未提供的可选能力按上游 SKIP 原样列出，不能当通过。完整 Go race 和 vet 通过，rclone 补丁检查通过。该结果不使 36 个系统分支自动 PASS，也不证明 Finder、整机掉电、长期锁和效率指标已达标。失败历史（含 [根别名 Put](evidence/2026-09-17/fstests-rootput.json)）及未决日志保留。
+
+## 不同文件真实并行（2026-09-17）
+
+共享日志锁、路径独占和空间级 4 操作容量控制见 [并发契约](concurrency-contract.md#不同文件并行与容量限制)。双文件实际云盘实验通过：每个 9,900,000 字节，两个不同上传会话重叠，上传及对账总计 7.1156 秒；两个独立下载 SHA-256 与输入相同，两份完整 spool 和 Committed 日志核对通过。见 [脱敏结果](evidence/2026-09-17/parallel-uploads.json)。运行带数据请求入口同步屏障，不能将耗时当作无干预效率对比。
+
+离线回归证明确实去除了全生命周期独占锁的串行瓶颈：相同测试恢复旧锁时因双文件无法同时到达数据面而失败，当前共享锁通过。同路径仍立即冲突；恢复独占锁与所有共享持有者互斥。race 测试还发现已有 multipart 故障 fixture 在服务器处理未结束时读取计数 map 的测试竞态，已用 fixture 原有 mutex 保护读取。
+
+本轮 Finder 正常上传尝试仅到环境预检，macOS 拒绝 Apple Events 到 System Events（-1743），没有执行拖放，也没有录屏；见 [阻塞记录](evidence/2026-09-17/finder-automation-blocked.json)。不得以本轮后端并行测试替代 Finder 系统验收。
+
+并行改动后完整上游生命周期复跑仍 PASS：120 run、87 PASS、33 SKIP、0 FAIL，见 [结果](evidence/2026-09-17/fstests-parallel.json)。验收检查器生成全量条件覆盖矩阵，仍为 0/36 PASS，符合当前缺少原生用户路径验收证据的实际状态。

@@ -62,7 +62,12 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 		return err
 	}
 	defer release()
-	s, err := journal.OpenContext(ctx, f.opt.StateDir)
+	releaseSlot, err := f.acquireMutation(ctx)
+	if err != nil {
+		return err
+	}
+	defer releaseSlot()
+	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
 	if err != nil {
 		return err
 	}

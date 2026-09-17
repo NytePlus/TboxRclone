@@ -190,15 +190,19 @@ func TestMultipartLostPartAckSurvivesRestart(t *testing.T) {
 		t.Fatal(e)
 	}
 	r = &records[0]
+	m.mu.Lock()
 	acknowledged := map[int]int{}
 	for _, part := range r.Parts {
 		if part.ETag != "" {
 			acknowledged[part.Number] = m.puts[part.Number]
 		}
 	}
+	m.mu.Unlock()
 	if e = Resume(context.Background(), s, c, r); e != nil {
 		t.Fatal(e)
 	}
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	for n, before := range acknowledged {
 		if m.puts[n] != before {
 			t.Errorf("acknowledged part %d was retransmitted", n)
