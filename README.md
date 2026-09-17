@@ -39,7 +39,7 @@ max_upload = 64Mi
 docker compose run --rm -v "$PWD/.secrets:/secrets:ro" go-tests go run ./cmd/tboxrclone lsjson sjtu: --config /secrets/rclone.conf
 ```
 
-开启写实验时，将 `lab_writes` 改为 `true`，并使用 `sjtu:codex-api-lab/<run-id>` 作为远端，挂载持久的 `/state` 卷。默认简单上传上限为 64 MiB；分片上传与自动续传尚未实现。所有上传先完整 spool，校验输入长度并 fsync，然后初始化会话、上传、确认、独立读取 SHA-256。失败后保留完整数据；不会先删除旧文件。
+开启写实验时，将 `lab_writes` 改为 `true`，并使用 `sjtu:codex-api-lab/<run-id>` 作为远端，挂载持久的 `/state` 卷。默认 spool 上限为 64 MiB，可配置；8 MiB 起采用 4 MiB 分片、最多 4 片并发，最多 10000 片。已支持原会话显式续传，自动恢复尚未实现。所有上传先完整 spool，校验输入长度并 fsync，然后初始化会话、上传、确认、独立读取 SHA-256。失败后保留完整数据；不会先删除旧文件。
 
 WebDAV 只读入口（本机 8686）：
 
@@ -61,7 +61,7 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
   -token-file /absolute/private/access-token -reconcile '<operation-id>'
 ```
 
-主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。过期会话、InitSent 丢响应、未提交上传和内容冲突仍保留本地数据，尚不支持自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
+主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
 
 ## 验收
 

@@ -254,3 +254,47 @@ func TestUnitU06WeakValidatorRejected(t *testing.T) {
 		t.Fatal("weak validator accepted")
 	}
 }
+
+func TestMultipartPartNumbersAreExplicit(t *testing.T) {
+	c := clientAt(t, func(w http.ResponseWriter, r *http.Request) {
+		var body struct {
+			Numbers []int `json:"partNumberRange"`
+		}
+		if e := json.NewDecoder(r.Body).Decode(&body); e != nil {
+			t.Fatal(e)
+		}
+		if len(body.Numbers) != 50 || body.Numbers[0] != 51 || body.Numbers[49] != 100 {
+			t.Errorf("wrong numbers %v", body.Numbers)
+		}
+		for i, n := range body.Numbers {
+			if n != i+51 {
+				t.Error("noncontiguous authorization request")
+			}
+		}
+		io.WriteString(w, `{}`)
+	})
+	if _, e := c.Renew(context.Background(), "K", 51, 100); e != nil {
+		t.Fatal(e)
+	}
+	for _, span := range [][2]int{{0, 1}, {3, 2}, {1, 51}, {9999, 10001}} {
+		if _, e := c.Renew(context.Background(), "K", span[0], span[1]); e == nil {
+			t.Fatal("invalid authorization batch accepted")
+		}
+	}
+}
+func TestMultipartPartRequiresDefinitiveAck(t *testing.T) {
+	for _, status := range []int{200, 202, 204, 302, 403, 503} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			c := clientAt(t, func(w http.ResponseWriter, r *http.Request) {
+				io.Copy(io.Discard, r.Body)
+				w.Header().Set("ETag", `"opaque"`)
+				w.WriteHeader(status)
+			})
+			u := Upload{Domain: c.Endpoint, Path: "/data", UploadID: "id+?/", Parts: map[string]PartSignature{"1": {Headers: map[string]string{"Authorization": "signed"}}}}
+			_, e := c.PutPart(context.Background(), u, 1, strings.NewReader("data"), 4)
+			if (e == nil) != (status == 200 || status == 204) {
+				t.Fatalf("HTTP %d error=%v", status, e)
+			}
+		})
+	}
+}

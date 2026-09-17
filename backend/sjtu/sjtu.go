@@ -15,6 +15,7 @@ import (
 
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/smh"
+	"github.com/nyte/TboxRclone/internal/transfer"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/config/configmap"
 	"github.com/rclone/rclone/fs/config/configstruct"
@@ -30,7 +31,7 @@ func init() {
 		{Name: "token_file", Required: true, Help: "Absolute path to a private access token file; reread on each request."},
 		{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
 		{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
-		{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum simple-upload spool size; multipart not yet implemented."},
+		{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. Files of 8 MiB or larger use multipart."},
 	}})
 }
 
@@ -261,7 +262,7 @@ func (o *Object) Remove(context.Context) error {
 	return fserrors.NoRetryError(errors.New("object-conditional deletion is not verified"))
 }
 
-// Update implements durable, create-only simple uploads for isolated experiments.
+// Update implements durable, create-only uploads for isolated experiments.
 func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) error {
 	f := o.f
 	if e := f.writeAllowed(); e != nil {
@@ -295,6 +296,16 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	}
 	if e = f.Mkdir(ctx, parent); e != nil {
 		return fail(e)
+	}
+	if r.Size >= 2*transfer.PartSize {
+		if e = transfer.Start(ctx, s, f.c, r); e != nil {
+			return fail(e)
+		}
+		o.item, e = f.c.Info(ctx, p)
+		if e != nil {
+			return fail(e)
+		}
+		return nil
 	}
 	// Persist intent before sending an operation whose response might be lost.
 	r.State = "InitSent"

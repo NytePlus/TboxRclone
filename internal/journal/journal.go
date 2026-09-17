@@ -25,6 +25,18 @@ type Record struct {
 	State      string `json:"state"`
 	ConfirmKey string `json:"confirm_key,omitempty"`
 	OldCAS     string `json:"old_cas,omitempty"`
+	UploadID   string `json:"upload_id,omitempty"`
+	UploadPath string `json:"upload_path,omitempty"`
+	PartSize   int64  `json:"part_size,omitempty"`
+	Parts      []Part `json:"parts,omitempty"`
+}
+
+// Part records immutable spool identity and acknowledged remote content.
+type Part struct {
+	Number int    `json:"number"`
+	Size   int64  `json:"size"`
+	SHA256 string `json:"sha256"`
+	ETag   string `json:"etag,omitempty"`
 }
 
 // Store serializes access to the journal directory across processes.

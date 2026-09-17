@@ -40,9 +40,9 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | PUT `/api/v1/directory/{L}/{S}/{P}` | conflict_resolution_strategy=ask | 状态/错误 | C；重复建目录不等于新建成功 |
 | GET `/api/v1/file/{L}/{S}/{P}` | Range: bytes=start-end | 内容流；验证 200/206/416、Content-Range | C；可重试但必须固定版本 |
 | PUT `/api/v1/file/{L}/{S}/{P}` | strategy=overwrite，JSON `{}` | domain/path/headers/confirmKey 等上传参数 | C；简单上传初始化，不是直接上传内容 |
-| POST `/api/v1/file/{L}/{S}/{P}?multipart` | strategy=rename；`{"partNumberRange":[1,2]}` | confirmKey、uploadId、domain/path、expiration、parts 的签名 headers | C；当前一次申请最多 50 个 part |
+| POST `/api/v1/file/{L}/{S}/{P}?multipart` | strategy=rename；`{"partNumberRange":[1,2]}` | confirmKey、uploadId、domain/path、expiration、parts 的签名 headers | C+实测；片号是明确列表（[1,3] 不包含 2），客户端每批最多 50 片；服务端上限未证实 |
 | PUT `https://{domain}{path}?uploadId=...&partNumber=N` | 返回的签名 headers + 分片字节 | HTTP 状态；应记录分片 ETag/大小 | C；数据面 URL 来自服务端，不自行猜测 |
-| POST `/api/v1/file/{L}/{S}/{K}?renew` | `{"partNumberRange":[...]}` | 新的分片授权 | C；续期不等于已传内容持久化 |
+| POST `/api/v1/file/{L}/{S}/{K}?renew` | `{"partNumberRange":[...]}` | 新的分片授权 | C+实测；返回相同 K/uploadId/path 的逐片新授权；续期不等于已传内容持久化 |
 | GET `/api/v1/file/{L}/{S}/{K}?upload` | 现有代码额外 no_upload_part_info=1 | confirmed/path/type/uploadId/parts 等 DTO | C+F；DTO 有字段不代表该参数下实际返回 |
 | POST `/api/v1/file/{L}/{S}/{K}?confirm` | strategy=overwrite；可选 `{"crc64":"十进制字符串"}` | path/name/size/eTag/crc64/时间/isOverwrittened | C；初始化 rename 与确认 overwrite 要验证最终路径 |
 | DELETE `/api/v1/file/{L}/{S}/{P}` | permanent=0 | 204 或 recycledItemId | C；删除到回收站 |
@@ -56,7 +56,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | 优先级 | 接口 | 参数/意义 | 证据 |
 |---|---|---|---|
 | P0 | DELETE `/api/v1/file/{L}/{S}/{K}?upload` | 取消上传；S 说明分块任务同时放弃 COS multipart；重复取消、确认竞争待测 | F+S |
-| P0 | GET `/api/v1/file/{L}/{S}/{K}?upload` | F 的 no_upload_part_info 可选；尝试省略后读取分片列表 | C+F+S |
+| P0 | GET `/api/v1/file/{L}/{S}/{K}?upload` | 实测必须 no_upload_part_info=1；仍返回已上传分片列表 | C+F+S |
 | P0 | GET `/api/v1/task/{L}/{S}/{taskIdList}` | 查询异步状态，不把受理当完成 | F+S |
 | P0 | PUT `/api/v1/directory/{L}/{S}/{目标P}` | copyFrom + strategy；目录专用复制 | F+S |
 | P0 | PUT 同上 | from + strategy；目录专用移动 | S；F 普通移动定义走 file 路径 |
@@ -117,7 +117,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 ## 7. 实施阶段补充核对（S 级，未实测）
 
 - SDK 1.0.16 `directory-api.js` 对 `directory_only=1/true` 的解释是“只删除目录对象本身，不级联删除子文件和子目录”。这不是“非空目录返回错误”的保证；仍须验证子项可达性与并发创建竞态。当前后端拒绝 Rmdir。
-- `multipart-upload-file201-response.d.ts` 声明顶层 `headers`、`uploadId`，没有分片签名 `parts` 字段；而已有 Tbox 研究使用分片授权列表。部署协议差异尚未确定。
+- `multipart-upload-file201-response.d.ts` 声明顶层 `headers`、`uploadId`，没有分片签名 `parts` 字段；而已有 Tbox 研究使用分片授权列表。真实交大实例已确认使用逐片 parts 映射，不能直接照搬该 SDK。
 - `get-file-upload200-response-parts-inner.d.ts` 定义已上传分片字段为 `PartNumber/LastModified/ETag/Size`（注意大小写）。不能与初始化返回的签名字段混用。
 - `complete-file-upload-request.d.ts` 支持 `localCreationTime/localModificationTime`；这些是本地时间元数据，不等同于服务端 modificationTime，不应直接宣称支持 rclone SetModTime。
 - `complete-file-upload200-response.d.ts` 的覆盖标识为 `isOverwritten`，与已有研究记录的 DTO 拼写不同；实际解析应以交大响应为准。

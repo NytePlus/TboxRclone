@@ -65,16 +65,30 @@ type Item struct {
 
 // Upload contains short-lived data-plane credentials; never persist or log it.
 type Upload struct {
-	Domain  string            `json:"domain"`
-	Path    string            `json:"path"`
+	Domain   string                   `json:"domain"`
+	Path     string                   `json:"path"`
+	Headers  map[string]string        `json:"headers"`
+	Key      string                   `json:"confirmKey"`
+	UploadID string                   `json:"uploadId"`
+	Parts    map[string]PartSignature `json:"parts"`
+}
+
+type PartSignature struct {
 	Headers map[string]string `json:"headers"`
-	Key     string            `json:"confirmKey"`
+}
+
+type UploadedPart struct {
+	Number int    `json:"PartNumber"`
+	Size   Int64  `json:"Size"`
+	ETag   string `json:"ETag"`
 }
 
 // UploadStatus identifies the final path after confirmation.
 type UploadStatus struct {
-	Confirmed bool     `json:"confirmed"`
-	Path      []string `json:"path"`
+	Confirmed bool           `json:"confirmed"`
+	UploadID  string         `json:"uploadId"`
+	Parts     []UploadedPart `json:"parts"`
+	Path      []string       `json:"path"`
 }
 
 // Client is bound to a single library and space. Token is read for every request.
@@ -414,17 +428,22 @@ func (r *checkedReader) Read(p []byte) (int, error) {
 
 // PutData streams a spool file to the signed endpoint without sending the SMH token.
 func (c *Client) PutData(ctx context.Context, u Upload, r io.Reader, size int64) error {
+	_, err := c.putData(ctx, u, r, size)
+	return err
+}
+
+func (c *Client) putData(ctx context.Context, u Upload, r io.Reader, size int64) (string, error) {
 	endpoint := u.Domain
 	if !strings.Contains(endpoint, "://") {
 		endpoint = "https://" + endpoint
 	}
 	parsed, err := url.Parse(endpoint)
 	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" || parsed.Path != "" || !strings.HasPrefix(u.Path, "/") || strings.HasPrefix(u.Path, "//") {
-		return errors.New("invalid signed upload endpoint")
+		return "", errors.New("invalid signed upload endpoint")
 	}
 	req, err := http.NewRequestWithContext(ctx, "PUT", endpoint+u.Path, r)
 	if err != nil {
-		return ErrProtocol
+		return "", ErrProtocol
 	}
 	req.ContentLength = size
 	req.GetBody = nil
@@ -437,12 +456,12 @@ func (c *Client) PutData(ctx context.Context, u Upload, r io.Reader, size int64)
 	}
 	resp, err := c.HTTP.Do(req)
 	if err != nil {
-		return safeTransportError(ctx, err)
+		return "", safeTransportError(ctx, err)
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return &Error{resp.StatusCode}
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
+		return "", &Error{resp.StatusCode}
 	}
 	_, err = io.Copy(io.Discard, io.LimitReader(resp.Body, 65536))
-	return err
+	return resp.Header.Get("ETag"), err
 }

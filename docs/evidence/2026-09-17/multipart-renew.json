@@ -1,0 +1,80 @@
+{
+  "at": "2026-09-17T02:38:17.923936+00:00",
+  "events": [
+    {
+      "operation": "init",
+      "http": 201
+    },
+    {
+      "operation": "renew",
+      "range": [
+        2,
+        2
+      ],
+      "http": 200,
+      "fields": [
+        "availableDomainNum",
+        "confirmKey",
+        "domain",
+        "expiration",
+        "parts",
+        "path",
+        "uploadId"
+      ],
+      "part_count": 1,
+      "same_upload_id": true,
+      "same_key": true,
+      "same_path": true,
+      "same_domain": true
+    },
+    {
+      "operation": "renew",
+      "range": [
+        1,
+        50
+      ],
+      "http": 200,
+      "fields": [
+        "availableDomainNum",
+        "confirmKey",
+        "domain",
+        "expiration",
+        "parts",
+        "path",
+        "uploadId"
+      ],
+      "part_count": 2,
+      "same_upload_id": true,
+      "same_key": true,
+      "same_path": true,
+      "same_domain": true
+    },
+    {
+      "operation": "renew",
+      "range": [
+        1,
+        51
+      ],
+      "http": 200,
+      "fields": [
+        "availableDomainNum",
+        "confirmKey",
+        "domain",
+        "expiration",
+        "parts",
+        "path",
+        "uploadId"
+      ],
+      "part_count": 2,
+      "same_upload_id": true,
+      "same_key": true,
+      "same_path": true,
+      "same_domain": true
+    },
+    {
+      "operation": "abort_own_probe",
+      "http": 204
+    }
+  ],
+  "interpretation": "partNumberRange is an explicit list; [1,50] requests only parts 1 and 50. These probes do not establish a 50/51 batch limit."
+}

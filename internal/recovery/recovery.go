@@ -40,7 +40,7 @@ func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.
 	if e = c.JSON(ctx, "GET", "file", r.ConfirmKey, url.Values{"upload": {"1"}, "no_upload_part_info": {"1"}}, nil, &status); e != nil {
 		return e
 	}
-	if !status.Confirmed || strings.Join(status.Path, "/") != r.Path {
+	if !status.Confirmed || strings.Join(status.Path, "/") != r.Path || (r.UploadID != "" && status.UploadID != "" && status.UploadID != r.UploadID) {
 		return errors.New("upload is not confirmed at expected path")
 	}
 	info, e := c.Info(ctx, r.Path)

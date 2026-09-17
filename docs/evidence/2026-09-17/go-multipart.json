@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-17T02:44:27.710486+00:00",
+  "bytes": 8388621,
+  "sha256": "c7ad5a5b0eb36e0fa2460637035513484ef0ea1c16b54720c15bef760297b414",
+  "independent_match": true,
+  "journal_state": "Committed",
+  "part_sizes": [
+    4194304,
+    4194304,
+    13
+  ],
+  "reused_original_session": true,
+  "initial_failure": "partNumberRange is explicit part numbers, not inclusive range",
+  "confirmed_status_upload_id": "cleared by server",
+  "resume_exit": 0
+}

@@ -13,6 +13,7 @@ import (
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/recovery"
 	"github.com/nyte/TboxRclone/internal/smh"
+	"github.com/nyte/TboxRclone/internal/transfer"
 )
 
 func run() error {
@@ -22,7 +23,11 @@ func run() error {
 	space := flag.String("space-id", "", "space ID")
 	token := flag.String("token-file", "", "access token file")
 	id := flag.String("reconcile", "", "operation ID to reconcile with read-only requests")
+	resume := flag.String("resume", "", "resume an existing isolated multipart upload; never reinitialize or repeat confirmation")
 	flag.Parse()
+	if *id != "" && *resume != "" {
+		return fmt.Errorf("choose reconcile or resume")
+	}
 	s, e := journal.Open(*dir)
 	if e != nil {
 		return e
@@ -32,7 +37,7 @@ func run() error {
 	if e != nil {
 		return e
 	}
-	if *id == "" {
+	if *id == "" && *resume == "" {
 		type summary struct {
 			ID, State, Path, SHA256 string
 			Size                    int64
@@ -50,8 +55,13 @@ func run() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 	for _, r := range records {
-		if r.ID == *id {
-			if e = recovery.Reconcile(ctx, s, c, &r); e != nil {
+		if r.ID == *id || r.ID == *resume {
+			if *resume != "" {
+				e = transfer.Resume(ctx, s, c, &r)
+			} else {
+				e = recovery.Reconcile(ctx, s, c, &r)
+			}
+			if e != nil {
 				return e
 			}
 			fmt.Printf("%s %s; local spool retained\n", r.ID, r.State)
