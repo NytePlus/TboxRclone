@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-17T07:58:58.458490+00:00",
+  "docker_server_version": "28.5.1",
+  "mountpoint": "/private/tmp/tboxrclone-webdav-501",
+  "outside_active_project_container_binds": true,
+  "observed_error": "service fs failed: injecting event blocked for 60s",
+  "error_utc": "2026-09-17T07:49:30Z",
+  "diagnosis": "Suspected recursive dependency from webdavfs mount under project bind source; not proven unique root cause",
+  "recovery": "Old mount absent; reopened existing Docker.app without reset; restarted original isolated service; mounted outside project",
+  "native_test": "macos-webdav-move-outside-bind.json",
+  "data_reset": false,
+  "reinstalled": false
+}

@@ -1,0 +1,30 @@
+{
+  "at": "2026-09-17T07:57:51.548088+00:00",
+  "committed_moves": 2,
+  "events": [
+    {
+      "operation": "create native-move-6204c0987879-source",
+      "pass": true
+    },
+    {
+      "operation": "create native-move-6204c0987879-target",
+      "pass": true
+    },
+    {
+      "operation": "replace existing destination",
+      "pass": true
+    },
+    {
+      "operation": "rename to absent destination",
+      "pass": true
+    }
+  ],
+  "fixture": "native-move-6204c0987879",
+  "independent_cloud_hash_matches": true,
+  "independent_source_and_intermediate_absent": true,
+  "mount_outside_docker_binds": true,
+  "mountpoint": "/private/tmp/tboxrclone-webdav-501",
+  "native_mount_verified": true,
+  "scope": "native macOS webdavfs syscalls, not Finder",
+  "sha256": "75fc76f8f2f737f050efd7e7c7d85a95bfb1a1584da32622722db5f46996dfee"
+}

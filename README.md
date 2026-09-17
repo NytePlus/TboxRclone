@@ -70,6 +70,16 @@ WebDAV 实验入口（本机 8686）：
 TBOX_LAB_REMOTE='sjtu:codex-api-lab/<run-id>' docker compose --profile live up -d --wait webdav
 ```
 
+macOS 挂载必须放在项目及 Docker bind mount 之外，避免将服务自己的网盘再暴露给容器文件共享：
+
+```sh
+python3 scripts/mount-webdav-macos.py mount
+python3 scripts/mount-webdav-macos.py check
+# 完成后：python3 scripts/mount-webdav-macos.py unmount
+```
+
+默认位置为 `/private/tmp/tboxrclone-webdav-<uid>`。可用 `TBOX_WEBDAV_MOUNT` 指定其他项目外路径，但不能位于任何额外的 Docker bind mount 内。入口拒绝项目内及与项目重叠的路径；不再使用 `.state/webdav-mount`。临时目录仅用作挂载点，恢复日志仍位于原 `.state`，不会迁移或清除。每次测试先运行 check，不能只检查目录存在。
+
 Compose 使用 `--vfs-cache-mode off`。这只是实验配置，不代表已经满足 Finder 的随机写、安全保存或跨盘移动契约。不要用正式数据试验跨盘移动。
 
 ## 中断与对账

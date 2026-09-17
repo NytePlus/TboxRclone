@@ -172,3 +172,12 @@ rclone operations.Move 和 WebDAV 协议层原有两处目标预删除已分别�
 Docker完整Go race/vet、上游完整WebDAV race以及operations移动回归通过。隔离服务真实文件覆盖移动204、移到空目标201、Overwrite:F拒绝412，独立云端内容一致、源缺失，两条移动日志Committed，见 [协议证据](evidence/2026-09-17/webdav-file-move.json)。原生测试在创建目标时超时，Docker API同时故障、随后daemon不可连接，未执行rename；[失败证据](evidence/2026-09-17/native-move-blocked.json)已保留。Finder工具窗口不可用，未执行Finder移动；所有系统分支仍未标PASS。
 
 运行环境补充：故障后尝试打开现有 /Applications/Docker.app，LaunchServices返回 kLSNoExecutableErr（可执行文件缺失）；未重新安装或重置Docker，也未重试未知结果的原生操作。当前恢复Docker运行环境后才能继续服务级验证。
+
+
+## Docker 文件共享故障排查与挂载隔离
+
+用户报告的 `service fs failed: injecting event blocked for 60s` 已在 Docker host 日志07:49:30 UTC确认。原 webdavfs 挂载点位于项目 `.state/webdav-mount`，同时整个项目与 `.state` 分别 bind mount 给服务，存在文件共享回调依赖同一服务的循环路径。该拓扑是可疑触发因素，尚非已证明的唯一根因。
+
+崩溃后旧挂载已消失。检查 Info.plist 显示 Docker 实际入口是存在的 com.docker.backend，先前 LaunchServices 的 kLSNoExecutableErr不能作为安装损坏证据；在允许启动应用的环境重新打开原 Docker.app 后 daemon恢复（28.5.1），未重置、清理或重装。新入口 scripts/mount-webdav-macos.py 使用项目外的 /private/tmp/tboxrclone-webdav-<uid>，拒绝与项目重叠的路径并逐次核对mount表，保留原状态目录。额外的用户自定义bind mount也不得包含该路径。
+
+项目外重新挂载后，原生新建两个文件、覆盖rename及rename到空目标均成功；独立云端完整SHA一致，源和中间路径404，两条move日志Committed。Docker info/exec/Compose查询恢复正常，实际容器bind来源与新挂载点不包含重叠关系。[原生复测](evidence/2026-09-17/macos-webdav-move-outside-bind.json)、[环境恢复记录](evidence/2026-09-17/docker-filesharing-recovery.json)。这支持消除循环依赖的修复方向，但不证明故障唯一根因；Finder和中断场景仍未验收。
