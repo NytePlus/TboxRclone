@@ -91,3 +91,27 @@ docker compose exec fault-proxy curl --fail --silent \
 | 凭据保护 | TestHoldConfirmUntilIndependentFactCheck、TestSignedDataPlaneUsesSameFaultProxy | 日志中不出现测试 token、confirmKey 或签名值 |
 
 全部这些是设施测试。ST-xxx 的系统场景状态不因此改变。
+
+## 可重复的真实文件 MOVE 实验
+
+后端实时测试自带仅绑定 loopback 的临时代理，允许域名来自本次真实上传/读取观察，临时 CA 只加入该测试客户端。先卸载本任务的宿主挂载并停止 WebDAV，确保测试独占原状态目录：
+
+```sh
+python3 scripts/mount-webdav-macos.py unmount
+docker compose --profile live stop webdav
+docker compose run --rm \
+  -v "$PWD/.state:/state" -v "$PWD/.secrets:/secrets:ro" \
+  -e TBOX_LIVE_MOVE_FAULT=1 \
+  -e TBOX_AUTH_PATH='codex-api-lab/<existing-run-id>' \
+  -e TBOX_SPACE_FILE=/secrets/space.json \
+  -e TBOX_USER_TOKEN_FILE=/secrets/user-token \
+  -e TBOX_STATE_DIR=/state/sjtu -e TBOX_OWNERSHIP_DIR=/state/owners \
+  -e TBOX_MOVE_FAULT_REPORT=/state/move-response-loss.json \
+  go-tests go test -race ./backend/sjtu -run '^TestLiveMoveResponseLoss$' -count=1 -v
+```
+
+该测试执行四种真实组合：空目标/覆盖目标 × 仅丢响应/同时取消。必须先独立确认源404和目标完整内容，才允许丢弃held响应；检查完整备份、双路径未决占用、只读恢复及仅一个移动请求。
+
+真正SIGKILL实验使用相同卷和身份环境，把开关改为 `TBOX_LIVE_MOVE_DEATH=1`、报告变量改为 `TBOX_MOVE_DEATH_REPORT=/state/move-process-death.json`、测试名改为 `^TestLiveMoveProcessDeath$`。另加 `TBOX_MOVE_DEATH_OVERWRITE=1` 测已有目标；两种应分别启动测试进程，因为接管后的实例锁保持至进程退出。父进程独立核对后杀死持锁子进程，再接管原目录；恢复HTTP传输拒绝API非GET请求，不能用重发移动蒙混通过。
+
+生成的fixtures、备份及日志保留，不自动删除。测试完成并确认无未决操作后，用原来的TBOX_LAB_REMOTE和实验开关恢复服务，再运行挂载入口。上述均为真实后端实验，不能代替Finder、目录移动或整机掉电验收。

@@ -181,3 +181,14 @@ Docker完整Go race/vet、上游完整WebDAV race以及operations移动回归通
 崩溃后旧挂载已消失。检查 Info.plist 显示 Docker 实际入口是存在的 com.docker.backend，先前 LaunchServices 的 kLSNoExecutableErr不能作为安装损坏证据；在允许启动应用的环境重新打开原 Docker.app 后 daemon恢复（28.5.1），未重置、清理或重装。新入口 scripts/mount-webdav-macos.py 使用项目外的 /private/tmp/tboxrclone-webdav-<uid>，拒绝与项目重叠的路径并逐次核对mount表，保留原状态目录。额外的用户自定义bind mount也不得包含该路径。
 
 项目外重新挂载后，原生新建两个文件、覆盖rename及rename到空目标均成功；独立云端完整SHA一致，源和中间路径404，两条move日志Committed。Docker info/exec/Compose查询恢复正常，实际容器bind来源与新挂载点不包含重叠关系。[原生复测](evidence/2026-09-17/macos-webdav-move-outside-bind.json)、[环境恢复记录](evidence/2026-09-17/docker-filesharing-recovery.json)。这支持消除循环依赖的修复方向，但不证明故障唯一根因；Finder和中断场景仍未验收。
+
+
+## 真实 MOVE 响应丢失、取消与进程强杀
+
+新增显式 opt-in 的 TestLiveMoveResponseLoss：针对空目标/已有目标分别测试丢响应和取消，共4种。隔离后端先通过真实传输收集允许的authority，再用临时CA代理扣住云端200响应；绕过代理独立确认源404和完整目标内容后才丢弃响应。无取消时一次移动后只读对账到Committed；取消时MoveUnknown和源/目标两份持久占用保留，完整源备份仍可读，显式只读对账后Committed。每种均仅1个移动请求。[四种实测证据](evidence/2026-09-17/move-response-loss.json)。
+
+TestLiveMoveProcessDeath 用独立子进程持有后端状态，父子均独立确认云端完成、代理仍hold响应后，父进程发送SIGKILL。内核释放实例锁后，另一进程成功接管原注册目录及state_dir；日志仍为MoveSent，两个路径pending、源备份正确。恢复Transport拒绝任何API非GET请求，reconcile仍到Committed，修改尝试为0。[强杀证据](evidence/2026-09-17/move-process-death.json)。这是真实Linux容器内进程强杀，不是仅context取消；仍不等于宿主掉电、Finder、目录移动或全部故障阶段验收。系统清单状态不因此标PASS。
+
+两项实验期间先卸载宿主实验挂载、停止原WebDAV实例，使用同一/state/sjtu和/state/owners，未另建目录绕过实例排他。结束后恢复原隔离服务。Docker全量Go race/vet通过。
+
+已有目标覆盖的独立SIGKILL进程实验随后也通过：云端已覆盖而响应未送达时杀进程，MoveSent与双路径占用保留，新进程读取源备份并只读对账到Committed，修改尝试0。[覆盖强杀证据](evidence/2026-09-17/move-process-death-overwrite.json)。空目标与覆盖目标分别使用独立测试进程，未提前释放实例锁。
