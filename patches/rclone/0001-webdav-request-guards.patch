@@ -1,5 +1,5 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..3091292 100644
+index d3420bb..20b4232 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
 @@ -4,14 +4,18 @@ package webdav
@@ -76,15 +76,21 @@ index d3420bb..3091292 100644
  	w = &WebDAV{
  		f:            f,
  		ctx:          ctx,
-@@ -395,7 +414,54 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+@@ -395,7 +414,64 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
  	}
  }
  
 +type moveRequestKey struct{}
 +type putBodyKey struct{}
++type copyRequestKey struct{}
 +
-+// putBody tracks the request stream separately from the VFS upload stream.
-+// x/net/webdav closes the file even when copying the request body failed.
++type copyRequest struct {
++	source string
++	input  *putBody
++}
++
++// putBody tracks source completion separately from the VFS upload stream.
++// x/net/webdav closes destinations even after PUT or COPY input failed.
 +type putBody struct {
 +	io.ReadCloser
 +	expected, received int64
@@ -96,7 +102,7 @@ index d3420bb..3091292 100644
 +	n, err := b.ReadCloser.Read(p)
 +	b.received += int64(n)
 +	if b.expected >= 0 && b.received > b.expected {
-+		err = errors.New("PUT body exceeds Content-Length")
++		err = errors.New("upload input exceeds declared size")
 +	}
 +	if err == io.EOF {
 +		if b.expected >= 0 && b.received != b.expected {
@@ -112,6 +118,10 @@ index d3420bb..3091292 100644
 +}
 +
  func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
++	if w.opt.ExclusiveAccess && r.Method == "COPY" {
++		source := strings.Trim(r.URL.Path, "/")
++		r = r.WithContext(context.WithValue(r.Context(), copyRequestKey{}, &copyRequest{source: source}))
++	}
 +	if w.opt.ExclusiveAccess && r.Method == "PUT" {
 +		body := &putBody{ReadCloser: r.Body, expected: r.ContentLength}
 +		r = r.WithContext(context.WithValue(r.Context(), putBodyKey{}, body))
@@ -131,7 +141,7 @@ index d3420bb..3091292 100644
  	urlPath := r.URL.Path
  	isDir := strings.HasSuffix(urlPath, "/")
  	remote := strings.Trim(urlPath, "/")
-@@ -403,6 +469,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -403,6 +479,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
@@ -178,7 +188,7 @@ index d3420bb..3091292 100644
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -521,6 +627,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +637,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -192,11 +202,44 @@ index d3420bb..3091292 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
-@@ -554,7 +667,20 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
+@@ -540,7 +663,18 @@ func (w *WebDAV) OpenFile(ctx context.Context, name string, flags int, perm os.F
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	return Handle{Handle: f, w: w, ctx: ctx}, nil
++	h := Handle{Handle: f, w: w, ctx: ctx}
++	if copying, ok := ctx.Value(copyRequestKey{}).(*copyRequest); ok {
++		if flags&(os.O_WRONLY|os.O_RDWR) != 0 {
++			h.copyInput = copying.input
++		} else if !f.Node().IsDir() {
++			// x/net/webdav copies each file sequentially, opening the source
++			// before its destination. Keep each pair's stream state together.
++			copying.input = &putBody{ReadCloser: f, expected: f.Node().Size()}
++			h.copyReader = copying.input
++		}
++	}
++	return h, nil
+ }
+ 
+ // RemoveAll removes a file or a directory and its contents
+@@ -554,7 +688,33 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
  	if err != nil {
  		return err
  	}
 -	err = node.RemoveAll()
++	if copying, ok := ctx.Value(copyRequestKey{}).(*copyRequest); ok {
++		sourceNode, err := VFS.Stat(copying.source)
++		if err != nil {
++			return err
++		}
++		// x/net/webdav deletes a COPY target before opening its write handle.
++		// Existing files must instead be replaced through the backend upload.
++		// Directory replacement needs a separate whole-tree transaction.
++		if node.IsDir() || sourceNode.IsDir() {
++			return os.ErrExist
++		}
++		return nil
++	}
 +	if moving, _ := ctx.Value(moveRequestKey{}).(bool); moving && VFS.Fs().Features().MoveOverwrites {
 +		// x/net/webdav removes an existing destination before Rename. For
 +		// file moves this backend performs replacement inside Move instead.
@@ -214,13 +257,33 @@ index d3420bb..3091292 100644
  	if err != nil {
  		return err
  	}
-@@ -592,6 +718,25 @@ type Handle struct {
- 	ctx context.Context
- }
- 
-+// Close rejects interrupted PUT bodies before allowing the VFS to publish them.
+@@ -588,8 +748,41 @@ func (w *WebDAV) Stat(ctx context.Context, name string) (fi os.FileInfo, err err
+ // Handle represents an open file
+ type Handle struct {
+ 	vfs.Handle
+-	w   *WebDAV
+-	ctx context.Context
++	w          *WebDAV
++	ctx        context.Context
++	copyReader *putBody
++	copyInput  *putBody
++}
++
++// Read tracks COPY source failures for the corresponding destination handle.
++func (h Handle) Read(p []byte) (int, error) {
++	if h.copyReader != nil {
++		return h.copyReader.Read(p)
++	}
++	return h.Handle.Read(p)
++}
++
++// Close rejects interrupted PUT and COPY input before allowing VFS publication.
 +func (h Handle) Close() error {
-+	if body, ok := h.ctx.Value(putBodyKey{}).(*putBody); ok {
++	body := h.copyInput
++	if body == nil {
++		body, _ = h.ctx.Value(putBodyKey{}).(*putBody)
++	}
++	if body != nil {
 +		reason := body.err
 +		if reason == nil {
 +			reason = h.ctx.Err()
@@ -235,12 +298,10 @@ index d3420bb..3091292 100644
 +		}
 +	}
 +	return h.Handle.Close()
-+}
-+
+ }
+ 
  // Readdir reads directory entries from the handle
- func (h Handle) Readdir(count int) (fis []os.FileInfo, err error) {
- 	fis, err = h.Handle.Readdir(count)
-@@ -723,3 +868,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -723,3 +916,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -345,27 +406,29 @@ index d3420bb..3091292 100644
 +	return func() { once.Do(func() { w.accessMu.Lock(); defer w.accessMu.Unlock(); delete(w.requests, r) }) }, 0
 +}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..4cd17f7 100644
+index bd14826..21c4bcf 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
-@@ -10,12 +10,16 @@ package webdav
+@@ -10,12 +10,18 @@ package webdav
  import (
  	"compress/gzip"
  	"context"
 +	"errors"
  	"flag"
++	"fmt"
  	"io"
  	"net/http"
 +	"net/http/httptest"
  	"os"
  	"strings"
 +	"sync"
++	"sync/atomic"
  	"testing"
 +	"time"
  
  	_ "github.com/rclone/rclone/backend/local"
  	"github.com/rclone/rclone/cmd/serve/proxy"
-@@ -438,3 +442,389 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -438,3 +444,583 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -752,6 +815,200 @@ index bd14826..4cd17f7 100644
 +			b, err := os.ReadFile(root + "/target")
 +			require.NoError(t, err)
 +			require.Equal(t, tc.body, string(b))
++		})
++	}
++}
++
++// COPY must let the backend replace a file, without removing the old target
++// before an upload that can be rejected.
++func TestExclusiveCopyPreservesTargetUntilPut(t *testing.T) {
++	for _, reject := range []bool{false, true} {
++		t.Run(fmt.Sprint(reject), func(t *testing.T) {
++			root := t.TempDir()
++			require.NoError(t, os.WriteFile(root+"/source", []byte("replacement"), 0600))
++			require.NoError(t, os.WriteFile(root+"/target", []byte("original"), 0600))
++			f, err := fs.NewFs(context.Background(), root)
++			require.NoError(t, err)
++			wrapped := &copyCheckingFs{Fs: f, root: root, reject: reject}
++			opt := Opt
++			opt.ExclusiveAccess = true
++			opt.HTTP.ListenAddr = []string{testBindAddress}
++			w, err := newWebDAV(context.Background(), wrapped, &opt, &vfscommon.Opt, &proxy.Opt)
++			require.NoError(t, err)
++			defer w.Shutdown()
++			request := func(overwrite string) *httptest.ResponseRecorder {
++				r := httptest.NewRequest("COPY", "http://fixture/source", nil)
++				r.Header.Set("Destination", "http://fixture/target")
++				if overwrite != "" {
++					r.Header.Set("Overwrite", overwrite)
++				}
++				out := httptest.NewRecorder()
++				w.ServeHTTP(out, r)
++				return out
++			}
++			require.Equal(t, 412, request("F").Code)
++			require.Zero(t, wrapped.calls)
++			out := request("")
++			require.Positive(t, wrapped.calls)
++			require.False(t, wrapped.targetMissing, "target was deleted before backend upload")
++			b, err := os.ReadFile(root + "/target")
++			require.NoError(t, err)
++			if reject {
++				require.GreaterOrEqual(t, out.Code, 400)
++				require.Equal(t, "original", string(b))
++			} else {
++				require.Equal(t, 204, out.Code)
++				require.Equal(t, "replacement", string(b))
++			}
++			b, err = os.ReadFile(root + "/source")
++			require.NoError(t, err)
++			require.Equal(t, "replacement", string(b))
++		})
++	}
++}
++
++type copyCheckingFs struct {
++	fs.Fs
++	root          string
++	reject        bool
++	calls         int
++	targetMissing bool
++}
++
++func (f *copyCheckingFs) Put(ctx context.Context, in io.Reader, src fs.ObjectInfo, opts ...fs.OpenOption) (fs.Object, error) {
++	f.calls++
++	b, err := os.ReadFile(f.root + "/target")
++	if err != nil || string(b) != "original" {
++		f.targetMissing = true
++	}
++	if f.reject {
++		return nil, errors.New("injected upload rejection")
++	}
++	return f.Fs.Put(ctx, in, src, opts...)
++}
++
++func TestExclusiveCopySourceFailurePreservesTarget(t *testing.T) {
++	for _, short := range []bool{false, true} {
++		t.Run(fmt.Sprint(short), func(t *testing.T) {
++			root := t.TempDir()
++			require.NoError(t, os.WriteFile(root+"/source", []byte("replacement"), 0600))
++			require.NoError(t, os.WriteFile(root+"/target", []byte("original"), 0600))
++			f, err := fs.NewFs(context.Background(), root)
++			require.NoError(t, err)
++			wrapped := &copyFaultFs{Fs: f, short: short}
++			opt := Opt
++			opt.ExclusiveAccess = true
++			opt.HTTP.ListenAddr = []string{testBindAddress}
++			opt.HTTP.BaseURL = "/prefix"
++			w, err := newWebDAV(context.Background(), wrapped, &opt, &vfscommon.Opt, &proxy.Opt)
++			require.NoError(t, err)
++			defer w.Shutdown()
++			for _, target := range []string{"target", "missing"} {
++				req := httptest.NewRequest("COPY", "http://fixture/source", nil)
++				req.Header.Set("Destination", "http://fixture/prefix/"+target)
++				out := httptest.NewRecorder()
++				w.ServeHTTP(out, req)
++				require.Positive(t, wrapped.opens.Load())
++				require.GreaterOrEqual(t, out.Code, 400)
++				b, err := os.ReadFile(root + "/target")
++				require.NoError(t, err)
++				require.Equal(t, "original", string(b))
++				_, err = os.Stat(root + "/missing")
++				require.True(t, os.IsNotExist(err))
++			}
++		})
++	}
++}
++
++type copyFaultFs struct {
++	fs.Fs
++	short bool
++	opens atomic.Int32
++}
++
++func (f *copyFaultFs) wrap(o fs.Object) fs.Object {
++	if o.Remote() == "source" {
++		return &copyFaultObject{Object: o, short: f.short, owner: f}
++	}
++	return o
++}
++func (f *copyFaultFs) NewObject(ctx context.Context, name string) (fs.Object, error) {
++	o, e := f.Fs.NewObject(ctx, name)
++	if e != nil {
++		return nil, e
++	}
++	return f.wrap(o), nil
++}
++func (f *copyFaultFs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
++	entries, e := f.Fs.List(ctx, dir)
++	for i, x := range entries {
++		if o, ok := x.(fs.Object); ok {
++			entries[i] = f.wrap(o)
++		}
++	}
++	return entries, e
++}
++
++type copyFaultObject struct {
++	fs.Object
++	short bool
++	owner *copyFaultFs
++}
++
++func (o *copyFaultObject) Open(context.Context, ...fs.OpenOption) (io.ReadCloser, error) {
++	o.owner.opens.Add(1)
++	if o.short {
++		return io.NopCloser(strings.NewReader("part")), nil
++	}
++	return io.NopCloser(io.MultiReader(strings.NewReader("part"), failedDAVBody{})), nil
++}
++
++func TestExclusiveCopyDirectoryBoundaries(t *testing.T) {
++	for _, kind := range []string{"new-tree", "file-to-dir", "dir-to-file", "dir-to-dir"} {
++		t.Run(kind, func(t *testing.T) {
++			root := t.TempDir()
++			require.NoError(t, os.MkdirAll(root+"/tree/nested", 0700))
++			require.NoError(t, os.MkdirAll(root+"/target-dir", 0700))
++			for name, content := range map[string]string{"tree/nested/file": "content", "tree/empty": "", "file": "source", "target-file": "old-file", "target-dir/child": "old-child"} {
++				require.NoError(t, os.WriteFile(root+"/"+name, []byte(content), 0600))
++			}
++			f, err := fs.NewFs(context.Background(), root)
++			require.NoError(t, err)
++			opt := Opt
++			opt.ExclusiveAccess = true
++			opt.HTTP.ListenAddr = []string{testBindAddress}
++			w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++			require.NoError(t, err)
++			defer w.Shutdown()
++			source, target := "tree", "new-tree"
++			switch kind {
++			case "file-to-dir":
++				source, target = "file", "target-dir"
++			case "dir-to-file":
++				target = "target-file"
++			case "dir-to-dir":
++				target = "target-dir"
++			}
++			req := httptest.NewRequest("COPY", "http://fixture/"+source, nil)
++			req.Header.Set("Destination", "http://fixture/"+target)
++			req.Header.Set("Overwrite", "T")
++			out := httptest.NewRecorder()
++			w.ServeHTTP(out, req)
++			if kind == "new-tree" {
++				require.Equal(t, 201, out.Code)
++				for name, want := range map[string]string{"new-tree/nested/file": "content", "new-tree/empty": ""} {
++					b, e := os.ReadFile(root + "/" + name)
++					require.NoError(t, e)
++					require.Equal(t, want, string(b))
++				}
++			} else {
++				require.Equal(t, 403, out.Code)
++			}
++			for name, want := range map[string]string{"tree/nested/file": "content", "tree/empty": "", "file": "source", "target-file": "old-file", "target-dir/child": "old-child"} {
++				b, e := os.ReadFile(root + "/" + name)
++				require.NoError(t, e)
++				require.Equal(t, want, string(b))
++			}
 +		})
 +	}
 +}

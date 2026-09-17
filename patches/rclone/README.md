@@ -40,3 +40,9 @@ sh scripts/rclone-patches.sh --check
 上游 `operations.Rcat` 在探测输入大小时曾忽略非 EOF 读取错误，将未填满的缓冲区继续送往 PutStream；即使取消上传，local backend 也可能先截断并删除旧目标。补丁0003在开始上传前返回该输入错误。HTTP 回归先复现短流返回201、断流把旧内容替换成前缀，以及仅改 Close 后旧目标被删除，再验证两处联动修复。另有 Rcat 回归验证源读取失败时不调用 PutStream、旧内容保留、新目标不存在。
 
 完整上游 WebDAV race 测试和 Rcat 测试通过，7 个上游修改文件已从固定 HEAD 重放全部补丁并逐字节比较。这不宣称所有后端的大流上传具备原子覆盖；SJTU 仍依赖完整本地 spool 后才上传的后端契约。也不解决 Finder 成功发送独立零字节 PUT 后再上传内容的问题，ST-001-T 仍为 FAIL。
+
+## COPY 失败保护
+
+`--exclusive-access` 下，文件覆盖 COPY 不再先 RemoveAll 目标，而是让 VFS/backend 的写入处理替换。Overwrite:F、WebDAV 锁检查仍由原处理器执行；默认未启用严格模式时行为不变。COPY 输入的读取错误、提前 EOF 或长度不符会传到目标 CloseWithError，不能把前缀当正常完成。文件/目录类型冲突和已有目录替换明确拒绝；新目录递归复制仍支持，但尚不具备整树事务和失败回滚，不能把拒绝已有目录当成该验收场景已完成。
+
+回归分别先复现“上传被拒绝前旧目标已删”和“源读取失败后目标变成前缀”；修复后覆盖成功、Overwrite:F、上传拒绝、源断流/短流、空文件、新目录及类型冲突均测试通过。源读取故障 fixture 额外断言确实调用了源 Open，避免用早期路由错误冒充故障覆盖。完整上游 WebDAV race 与项目 race/vet 通过。

@@ -1,0 +1,204 @@
+{
+  "invalid_visible_version": false,
+  "new_full_reads": 2,
+  "observations": [
+    {
+      "at": "2026-09-17T13:05:34.35076497Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:37.469200472Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:38.573375458Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:46.767337379Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:48.195504254Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:49.569425588Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:54.647171466Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:55.8212963Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:56.9699088Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:05:58.729224884Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:04.08067097Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:06.264935055Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:07.647537847Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:09.102557Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:10.224731042Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:11.529244126Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:12.722595002Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:13.844238377Z",
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "size": 15,
+      "status": "old"
+    },
+    {
+      "at": "2026-09-17T13:06:15.100429294Z",
+      "sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+      "size": 5200000,
+      "status": "new"
+    },
+    {
+      "at": "2026-09-17T13:06:16.804924462Z",
+      "sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+      "size": 5200000,
+      "status": "new"
+    }
+  ],
+  "old_full_reads": 18,
+  "pass": true,
+  "read_errors": 0,
+  "run_id": "copy-check-b065fdff5ea8",
+  "scope": "real WebDAV COPY and independent SMH reads; not Finder acceptance",
+  "source_sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+  "source_size": 5200000,
+  "source_unchanged": true,
+  "setup": {
+    "run_id": "copy-check-b065fdff5ea8",
+    "cloud_parent": "codex-api-lab/run-20260917T020318Z-f0339b72/copy-check-b065fdff5ea8",
+    "size": 5200000,
+    "sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+    "old_size": 15,
+    "old_sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+    "at": "2026-09-17T13:04:16.000136+00:00",
+    "requests": [
+      {
+        "method": "MKCOL",
+        "path": "",
+        "status": 201
+      },
+      {
+        "method": "PUT",
+        "path": "/source.bin",
+        "status": 201
+      },
+      {
+        "method": "PUT",
+        "path": "/target.bin",
+        "status": 201
+      },
+      {
+        "method": "COPY",
+        "path": "/source.bin",
+        "status": 412
+      }
+    ]
+  },
+  "copy_action": {
+    "started_at": "2026-09-17T13:06:09.040678+00:00",
+    "status": 204,
+    "body": "",
+    "finished_at": "2026-09-17T13:06:17.068587+00:00"
+  },
+  "journal": [
+    {
+      "id": "0ff7fd4593efbfda0c6b4ca0422c6209",
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/copy-check-b065fdff5ea8/target.bin",
+      "size": 15,
+      "sha256": "cafaa86bf065c193c524401364d866affd6b59e10c701189a6bd00deb5c09550",
+      "state": "Committed"
+    },
+    {
+      "id": "ffddbb0cfd9e259ce7049fbc9d149e7d",
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/copy-check-b065fdff5ea8/source.bin",
+      "size": 5200000,
+      "sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+      "state": "Committed"
+    },
+    {
+      "id": "f1f26d3b4d4c55af3f5227c80ded6994",
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/copy-check-b065fdff5ea8/target.bin",
+      "size": 5200000,
+      "sha256": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+      "state": "Committed",
+      "overwrite": true
+    }
+  ],
+  "backend_base_commit": "f9f668d",
+  "rclone_base": "687d264b689b8c49a67e2e52a8a5e0caa01c04ce",
+  "working_change": "strict WebDAV COPY retains old file until backend Put; aborts on source errors",
+  "patch_sha256": {
+    "0003-backend-move-overwrite.patch": "12199a93808d5bee11ba1c9d535fc939b74ca8b221f08d8db8e76818196718cb",
+    "0002-external-backend-overview.patch": "15e1f32bc48d70964dbb25501428dda40a43e4e1f1c31f28a79ca83f6e16e14d",
+    "0001-webdav-request-guards.patch": "50739529267b67da6bbe932a8e82786ab801609878e74434f01602a3e85bd953"
+  },
+  "service_binary_sha256": "5f2c00083f33efaaa3c2b7393c706ed40ac76f8664ee693516159e9cf7efce2d"
+}
