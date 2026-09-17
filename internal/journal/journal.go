@@ -21,6 +21,7 @@ import (
 type Record struct {
 	ID         string `json:"id"`
 	Kind       string `json:"kind,omitempty"`
+	SourcePath string `json:"source_path,omitempty"`
 	RecycledID string `json:"recycled_item_id,omitempty"`
 	Scope      string `json:"scope"`
 	Path       string `json:"path"`
@@ -207,7 +208,7 @@ func (s *Store) pending(scope, p string, tree bool) error {
 		return e
 	}
 	for _, r := range records {
-		overlap := r.Path == p || (r.Kind == "rmdir" && strings.HasPrefix(p, r.Path+"/")) || (tree && strings.HasPrefix(r.Path, p+"/"))
+		overlap := r.Path == p || (r.SourcePath != "" && (r.SourcePath == p || (tree && strings.HasPrefix(r.SourcePath, p+"/")))) || (r.Kind == "rmdir" && strings.HasPrefix(p, r.Path+"/")) || (tree && strings.HasPrefix(r.Path, p+"/"))
 		if r.Scope == scope && overlap && r.State != "Committed" && r.State != "Aborted" {
 			return fmt.Errorf("%w: operation %s is %s; reconcile before retrying", ErrPending, r.ID, r.State)
 		}
@@ -217,6 +218,22 @@ func (s *Store) pending(scope, p string, tree bool) error {
 
 // Prepare persists exact input bytes before any remote operation.
 func (s *Store) Prepare(ctx context.Context, scope, p string, in io.Reader, size, max int64) (*Record, error) {
+	return s.prepare(ctx, scope, p, in, size, max, "", "", false)
+}
+
+// PrepareMove publishes the operation identity with the first durable record.
+// A crash must never turn a move backup into a resumable upload.
+func (s *Store) PrepareMove(ctx context.Context, scope, source, target string, in io.Reader, size, max int64, overwrite bool) (*Record, error) {
+	if source == "" || source == target {
+		return nil, errors.New("move requires distinct source and destination")
+	}
+	if err := s.Pending(scope, source); err != nil {
+		return nil, err
+	}
+	return s.prepare(ctx, scope, target, in, size, max, "move", source, overwrite)
+}
+
+func (s *Store) prepare(ctx context.Context, scope, p string, in io.Reader, size, max int64, kind, source string, overwrite bool) (*Record, error) {
 	if max < 0 || size > max {
 		return nil, errors.New("upload exceeds configured spool limit")
 	}
@@ -227,7 +244,7 @@ func (s *Store) Prepare(ctx context.Context, scope, p string, in io.Reader, size
 	if _, e := rand.Read(id[:]); e != nil {
 		return nil, e
 	}
-	r := &Record{ID: hex.EncodeToString(id[:]), Scope: scope, Path: p, State: "Prepared"}
+	r := &Record{ID: hex.EncodeToString(id[:]), Scope: scope, Path: p, State: "Prepared", Kind: kind, SourcePath: source, Overwrite: overwrite}
 	file := filepath.Join(s.Dir, r.ID+".data")
 	f, e := os.OpenFile(file, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 	if e != nil {

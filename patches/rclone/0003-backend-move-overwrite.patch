@@ -1,0 +1,90 @@
+diff --git a/fs/features.go b/fs/features.go
+index 1563dc4..fd3a674 100644
+--- a/fs/features.go
++++ b/fs/features.go
+@@ -35,6 +35,7 @@ type Features struct {
+ 	UserDirMetadata          bool // can read/write general purpose metadata to/from directories
+ 	DirModTimeUpdatesOnWrite bool // indicate writing files to a directory updates its modtime
+ 	FilterAware              bool // can make use of filters if provided for listing
++	MoveOverwrites           bool // Move replaces existing files without a separate destination delete
+ 	PartialUploads           bool // uploaded file can appear incomplete on the fs while it's being uploaded
+ 	NoMultiThreading         bool // set if can't have multiplethreads on one download open
+ 	Overlay                  bool // this wraps one or more backends to add functionality
+@@ -399,6 +400,7 @@ func (ft *Features) Mask(ctx context.Context, f Fs) *Features {
+ 	ft.SlowModTime = ft.SlowModTime && mask.SlowModTime
+ 	ft.SlowHash = ft.SlowHash && mask.SlowHash
+ 	ft.FilterAware = ft.FilterAware && mask.FilterAware
++	ft.MoveOverwrites = ft.MoveOverwrites && mask.MoveOverwrites
+ 	ft.PartialUploads = ft.PartialUploads && mask.PartialUploads
+ 	ft.NoMultiThreading = ft.NoMultiThreading && mask.NoMultiThreading
+ 	// ft.Overlay = ft.Overlay && mask.Overlay don't propagate Overlay
+diff --git a/fs/operations/operations.go b/fs/operations/operations.go
+index fb2049e..125da19 100644
+--- a/fs/operations/operations.go
++++ b/fs/operations/operations.go
+@@ -463,13 +463,16 @@ func move(ctx context.Context, fdst fs.Fs, dst fs.Object, remote string, src fs.
+ 	}
+ 	// See if we have Move available
+ 	if doMove := fdst.Features().Move; doMove != nil && (SameConfig(src.Fs(), fdst) || (SameRemoteType(src.Fs(), fdst) && (fdst.Features().ServerSideAcrossConfigs || ci.ServerSideAcrossConfigs))) {
+-		// Delete destination if it exists and is not the same file as src (could be same file while seemingly different if the remote is case insensitive)
++		// Let backends with MoveOverwrites replace the destination themselves.
++		// Others require deletion first, except when both names identify the same file.
+ 		if dst != nil {
+ 			remote = transform.Path(ctx, dst.Remote(), false)
+ 			if !SameObject(src, dst) {
+-				err = DeleteFile(ctx, dst)
+-				if err != nil {
+-					return newDst, err
++				if !fdst.Features().MoveOverwrites {
++					err = DeleteFile(ctx, dst)
++					if err != nil {
++						return newDst, err
++					}
+ 				}
+ 			} else if src.Remote() == remote {
+ 				return newDst, nil
+diff --git a/fs/operations/operations_test.go b/fs/operations/operations_test.go
+index 8c2bc86..53235c1 100644
+--- a/fs/operations/operations_test.go
++++ b/fs/operations/operations_test.go
+@@ -2039,3 +2039,40 @@ func TestRemoveExisting(t *testing.T) {
+ 	cleanup(&returnedError)
+ 	r.CheckRemoteItems(t)
+ }
++
++func TestMoveBackendOverwritePreservesDestinationOnFailure(t *testing.T) {
++	for _, supported := range []bool{false, true} {
++		t.Run(fmt.Sprint(supported), func(t *testing.T) {
++			ctx := context.Background()
++			root := t.TempDir()
++			require.NoError(t, os.WriteFile(root+"/source", []byte("new"), 0600))
++			require.NoError(t, os.WriteFile(root+"/target", []byte("old"), 0600))
++			f, err := fs.NewFs(ctx, root)
++			require.NoError(t, err)
++			src, err := f.NewObject(ctx, "source")
++			require.NoError(t, err)
++			dst, err := f.NewObject(ctx, "target")
++			require.NoError(t, err)
++			f.Features().MoveOverwrites = supported
++			failed := errors.New("move rejected before mutation")
++			calls := 0
++			f.Features().Move = func(context.Context, fs.Object, string) (fs.Object, error) {
++				calls++
++				return nil, failed
++			}
++			_, err = operations.Move(ctx, f, dst, "target", src)
++			require.ErrorIs(t, err, failed)
++			require.Equal(t, 1, calls)
++			content, err := os.ReadFile(root + "/target")
++			if supported {
++				require.NoError(t, err)
++				require.Equal(t, "old", string(content))
++			} else {
++				require.True(t, os.IsNotExist(err), "legacy pre-delete behavior changed: %v", err)
++			}
++			content, err = os.ReadFile(root + "/source")
++			require.NoError(t, err)
++			require.Equal(t, "new", string(content))
++		})
++	}
++}

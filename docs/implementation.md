@@ -161,3 +161,14 @@ Rmdir 已在 lab_delete 下实现：取得后端子树写占用，检查所有�
 回归覆盖空/非空、删除丢响应、未知结果、已有未决子项、空检查期间创建子项、后续子树上传/Mkdir 被阻止。全量 Docker race/vet、上游 WebDAV race（32.113s）及补丁重放比较通过。真实 HTTP 非空删除405且子内容不变，移除子项后空目录删除204；重新验证挂载表并挂载后，原生 macOS mkdir/rmdir 成功，两个目录均独立查询404、两条 rmdir 日志 Committed 且有回收站凭据，见 [空目录删除](evidence/2026-09-17/empty-directory-delete.json)。
 
 首次本机尝试时旧挂载已消失，仅操作到本地挂载点目录；日志计数不符揭示该问题，证据已标无效并保留在 [首次尝试](evidence/2026-09-17/empty-directory-delete-attempt.json)。验证规格补充每次重新核对挂载表，不能沿用旧挂载状态。没有将这次无效本地操作计为网盘验收，Finder 与完整竞态场景仍未通过。
+
+
+## 文件移动：双路径占用、备份与避免提前删除
+
+新增默认关闭 lab_move，完整源备份与移动类型/源目标在首份 Prepared 日志一起持久化，消除崩溃后将备份误当上传续传的窗口。一次取得源/目标写占用；MoveSent落盘后只发送一次移动。对账要求源404与目标完整SHA匹配；未知结果保留两路径占用，不重放。Prepared 尚未发送时显式 reconcile 可终止并保留备份。
+
+rclone operations.Move 和 WebDAV 协议层原有两处目标预删除已分别用失败测试复现，并以默认关闭的通用 MoveOverwrites 能力修复。SJTU 仅在 lab_move开启时声明。目录移动暂以非回退错误拒绝，不能退化为部分文件搬运，也尚不能通过目录移动验收。
+
+Docker完整Go race/vet、上游完整WebDAV race以及operations移动回归通过。隔离服务真实文件覆盖移动204、移到空目标201、Overwrite:F拒绝412，独立云端内容一致、源缺失，两条移动日志Committed，见 [协议证据](evidence/2026-09-17/webdav-file-move.json)。原生测试在创建目标时超时，Docker API同时故障、随后daemon不可连接，未执行rename；[失败证据](evidence/2026-09-17/native-move-blocked.json)已保留。Finder工具窗口不可用，未执行Finder移动；所有系统分支仍未标PASS。
+
+运行环境补充：故障后尝试打开现有 /Applications/Docker.app，LaunchServices返回 kLSNoExecutableErr（可执行文件缺失）；未重新安装或重置Docker，也未重试未知结果的原生操作。当前恢复Docker运行环境后才能继续服务级验证。

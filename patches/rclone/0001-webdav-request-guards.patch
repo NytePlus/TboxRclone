@@ -1,5 +1,5 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..88458f2 100644
+index d3420bb..e39d2e3 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
 @@ -8,10 +8,12 @@ import (
@@ -70,10 +70,16 @@ index d3420bb..88458f2 100644
  	w = &WebDAV{
  		f:            f,
  		ctx:          ctx,
-@@ -396,6 +413,14 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+@@ -395,7 +412,20 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+ 	}
  }
  
++type moveRequestKey struct{}
++
  func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
++	if r.Method == "MOVE" {
++		r = r.WithContext(context.WithValue(r.Context(), moveRequestKey{}, true))
++	}
 +	if w.opt.ExclusiveAccess {
 +		release, status := w.acquireRequest(r)
 +		if status != 0 {
@@ -85,7 +91,7 @@ index d3420bb..88458f2 100644
  	urlPath := r.URL.Path
  	isDir := strings.HasSuffix(urlPath, "/")
  	remote := strings.Trim(urlPath, "/")
-@@ -403,6 +428,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -403,6 +433,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
@@ -132,7 +138,7 @@ index d3420bb..88458f2 100644
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -521,6 +586,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +591,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -146,11 +152,20 @@ index d3420bb..88458f2 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
-@@ -554,7 +626,11 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
+@@ -554,7 +631,20 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
  	if err != nil {
  		return err
  	}
 -	err = node.RemoveAll()
++	if moving, _ := ctx.Value(moveRequestKey{}).(bool); moving && VFS.Fs().Features().MoveOverwrites {
++		// x/net/webdav removes an existing destination before Rename. For
++		// file moves this backend performs replacement inside Move instead.
++		// Directory replacement is not covered by the file capability.
++		if node.IsDir() {
++			return os.ErrExist
++		}
++		return nil
++	}
 +	if w.opt.NoRecursiveDelete && node.IsDir() {
 +		err = node.Remove()
 +	} else {
@@ -159,7 +174,7 @@ index d3420bb..88458f2 100644
  	if err != nil {
  		return err
  	}
-@@ -723,3 +799,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -723,3 +813,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -264,10 +279,14 @@ index d3420bb..88458f2 100644
 +	return func() { once.Do(func() { w.accessMu.Lock(); defer w.accessMu.Unlock(); delete(w.requests, r) }) }, 0
 +}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..2333f43 100644
+index bd14826..7b2951e 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
-@@ -13,9 +13,12 @@ import (
+@@ -10,12 +10,16 @@ package webdav
+ import (
+ 	"compress/gzip"
+ 	"context"
++	"errors"
  	"flag"
  	"io"
  	"net/http"
@@ -280,7 +299,7 @@ index bd14826..2333f43 100644
  
  	_ "github.com/rclone/rclone/backend/local"
  	"github.com/rclone/rclone/cmd/serve/proxy"
-@@ -438,3 +441,257 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -438,3 +442,319 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -537,4 +556,66 @@ index bd14826..2333f43 100644
 +	require.Equal(t, "keep", child.Body.String())
 +	require.Equal(t, 204, request("DELETE", "/dir/child", "").Code)
 +	require.Equal(t, 204, request("DELETE", "/dir", "").Code)
++}
++
++func TestMoveBackendOverwriteKeepsTargetUntilRename(t *testing.T) {
++	for _, reject := range []bool{false, true} {
++		name := "success"
++		if reject {
++			name = "reject"
++		}
++		t.Run(name, func(t *testing.T) {
++			root := t.TempDir()
++			require.NoError(t, os.WriteFile(root+"/source", []byte("new"), 0600))
++			require.NoError(t, os.WriteFile(root+"/target", []byte("old"), 0600))
++			f, err := fs.NewFs(context.Background(), root)
++			require.NoError(t, err)
++			move := f.Features().Move
++			f.Features().MoveOverwrites = true
++			calls := 0
++			f.Features().Move = func(ctx context.Context, src fs.Object, remote string) (fs.Object, error) {
++				calls++
++				b, err := os.ReadFile(root + "/target")
++				if err != nil || string(b) != "old" {
++					return nil, errors.New("target deleted before backend move")
++				}
++				if reject {
++					return nil, errors.New("move rejected")
++				}
++				return move(ctx, src, remote)
++			}
++			opt := Opt
++			opt.ExclusiveAccess = true
++			opt.HTTP.ListenAddr = []string{testBindAddress}
++			w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++			require.NoError(t, err)
++			defer w.Shutdown()
++			req := httptest.NewRequest("MOVE", "http://fixture/source", nil)
++			req.Header.Set("Destination", "http://fixture/target")
++			req.Header.Set("Overwrite", "F")
++			out := httptest.NewRecorder()
++			w.ServeHTTP(out, req)
++			require.Equal(t, 412, out.Code)
++			require.Zero(t, calls)
++			req = httptest.NewRequest("MOVE", "http://fixture/source", nil)
++			req.Header.Set("Destination", "http://fixture/target")
++			out = httptest.NewRecorder()
++			w.ServeHTTP(out, req)
++			require.Equal(t, 1, calls)
++			b, err := os.ReadFile(root + "/target")
++			require.NoError(t, err)
++			if reject {
++				require.Equal(t, 403, out.Code)
++				require.Equal(t, "old", string(b))
++				b, err = os.ReadFile(root + "/source")
++				require.NoError(t, err)
++				require.Equal(t, "new", string(b))
++			} else {
++				require.Equal(t, 204, out.Code)
++				require.Equal(t, "new", string(b))
++				_, err = os.Stat(root + "/source")
++				require.True(t, os.IsNotExist(err))
++			}
++		})
++	}
 +}

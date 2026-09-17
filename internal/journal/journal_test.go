@@ -226,3 +226,41 @@ func TestPendingSnapshotDuringUnrelatedTransfer(t *testing.T) {
 		t.Fatal("corrupt journal accepted")
 	}
 }
+
+func TestMoveFirstPublicationKeepsIdentity(t *testing.T) {
+	s := store(t)
+	calls := 0
+	s.syncDirectory = func(string) error {
+		calls++
+		if calls == 2 {
+			return errors.New("record directory sync failed")
+		}
+		return nil
+	}
+	_, err := s.PrepareMove(context.Background(), "scope", "source", "target", strings.NewReader("backup"), 6, 10, true)
+	if err == nil {
+		t.Fatal("expected publication failure")
+	}
+	records, err := s.Records()
+	if err != nil || len(records) != 1 {
+		t.Fatal(records, err)
+	}
+	r := records[0]
+	if r.Kind != "move" || r.SourcePath != "source" || r.Path != "target" || r.State != "Prepared" || !r.Overwrite {
+		t.Fatalf("unsafe first record: %+v", r)
+	}
+	for _, p := range []string{"source", "target"} {
+		if err := s.Pending("scope", p); !errors.Is(err, ErrPending) {
+			t.Fatal(p, err)
+		}
+	}
+	data, err := s.Data(&r)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer data.Close()
+	b, err := io.ReadAll(data)
+	if err != nil || string(b) != "backup" {
+		t.Fatal("backup lost", err)
+	}
+}

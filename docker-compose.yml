@@ -25,6 +25,7 @@ services:
       RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
       RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
       RCLONE_SJTU_LAB_DELETE: '${TBOX_LAB_DELETE:-false}'
+      RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
     ports:
       - 127.0.0.1:8686:8686
     command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --exclusive-access, --no-recursive-delete, --cache-dir, /state/vfs]

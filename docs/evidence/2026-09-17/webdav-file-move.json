@@ -1,0 +1,101 @@
+{
+  "at": "2026-09-17T07:44:32Z",
+  "scope": "real WebDAV and independent cloud reads; not Finder acceptance",
+  "root": "codex-api-lab/run-20260917T020318Z-f0339b72",
+  "fixture": "move-0de635525a66163e",
+  "events": [
+    {
+      "name": "create source",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "create target",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "overwrite F preserves both",
+      "pass": true,
+      "http": 412
+    },
+    {
+      "name": "independent content -source",
+      "pass": true
+    },
+    {
+      "name": "independent content -target",
+      "pass": true
+    },
+    {
+      "name": "move overwrite existing",
+      "pass": true,
+      "http": 204
+    },
+    {
+      "name": "independent absence -source",
+      "pass": true
+    },
+    {
+      "name": "independent content -target",
+      "pass": true
+    },
+    {
+      "name": "move to absent target",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "independent absence -target",
+      "pass": true
+    },
+    {
+      "name": "independent content -final",
+      "pass": true
+    },
+    {
+      "name": "create directory",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "create directory child",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "directory fallback rejected",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "name": "independent content -dir/child",
+      "pass": true
+    },
+    {
+      "name": "independent absence -dir-next",
+      "pass": true
+    },
+    {
+      "name": "move committed with source identity",
+      "pass": true
+    },
+    {
+      "name": "move backup hash",
+      "pass": true
+    },
+    {
+      "name": "move committed with source identity",
+      "pass": true
+    },
+    {
+      "name": "move backup hash",
+      "pass": true
+    },
+    {
+      "name": "exactly two move records",
+      "pass": true
+    }
+  ],
+  "committed_moves": 2
+}

@@ -10,62 +10,47 @@ import (
 // ErrPathBusy is a conflict, not an invitation to queue a later overwrite.
 var ErrPathBusy = errors.New("path busy: conflicting file access")
 
-type accessKey struct{ scope, path string }
-type accessCount struct {
-	readers int
-	writer  bool
-	tree    bool
+type accessRequest struct {
+	path        string
+	write, tree bool
+}
+type accessLease struct {
+	scope    string
+	requests []accessRequest
 }
 
-// Shared across Fs instances: remote names and state-directory choices must not
-// bypass in-process ownership. Directory mutations additionally own descendants.
-// This table does not replace process-instance or durable journal protection.
+// A lease installs all source/destination claims atomically. Distinct reader
+// leases remain independent even if their path ranges overlap.
 var fileAccess = struct {
 	sync.Mutex
-	paths map[accessKey]accessCount
-}{paths: make(map[accessKey]accessCount)}
+	leases map[*accessLease]bool
+}{leases: make(map[*accessLease]bool)}
 
 func (f *Fs) acquireFile(p string, write bool) (func(), error) { return f.acquirePath(p, write, false) }
 func (f *Fs) acquirePath(p string, write, tree bool) (func(), error) {
-	key := accessKey{f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space, p}
+	return f.acquirePaths(accessRequest{p, write, tree})
+}
+func (f *Fs) acquirePaths(requests ...accessRequest) (func(), error) {
+	lease := &accessLease{scope: f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space, requests: append([]accessRequest(nil), requests...)}
 	fileAccess.Lock()
-	for active, count := range fileAccess.paths {
-		if active.scope != key.scope {
+	defer fileAccess.Unlock()
+	for active := range fileAccess.leases {
+		if active.scope != lease.scope {
 			continue
 		}
-		overlap := active.path == p || (count.tree && strings.HasPrefix(p, active.path+"/")) || (tree && strings.HasPrefix(active.path, p+"/"))
-		if overlap && (count.writer || (write && count.readers != 0)) {
-			fileAccess.Unlock()
-			return nil, ErrPathBusy
+		for _, a := range active.requests {
+			for _, b := range lease.requests {
+				overlap := a.path == b.path || (a.tree && strings.HasPrefix(b.path, a.path+"/")) || (b.tree && strings.HasPrefix(a.path, b.path+"/"))
+				if overlap && (a.write || b.write) {
+					return nil, ErrPathBusy
+				}
+			}
 		}
 	}
-	n := fileAccess.paths[key]
-	if write {
-		n.writer = true
-		n.tree = tree
-	} else {
-		n.readers++
-	}
-	fileAccess.paths[key] = n
-	fileAccess.Unlock()
+	fileAccess.leases[lease] = true
 	var once sync.Once
 	return func() {
-		once.Do(func() {
-			fileAccess.Lock()
-			defer fileAccess.Unlock()
-			n := fileAccess.paths[key]
-			if write {
-				n.writer = false
-				n.tree = false
-			} else {
-				n.readers--
-			}
-			if !n.writer && n.readers == 0 {
-				delete(fileAccess.paths, key)
-			} else {
-				fileAccess.paths[key] = n
-			}
-		})
+		once.Do(func() { fileAccess.Lock(); defer fileAccess.Unlock(); delete(fileAccess.leases, lease) })
 	}, nil
 }
 

@@ -1,0 +1,41 @@
+{
+  "at": "2026-09-17T07:49:05.875457+00:00",
+  "scope": "native macOS webdavfs attempt; not Finder",
+  "status": "FAIL: native target creation timed out before MOVE",
+  "native_mount_verified": true,
+  "process_pid": 2311,
+  "docker_engine_observation": "container list and exec API returned HTTP 500",
+  "records_observed": [
+    {
+      "id": "cb3a93166108e1e2fd1771c1712250bd",
+      "kind": null,
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/native-move-f8b89fc9bed2-source",
+      "source_path": null,
+      "state": "Committed",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "ecca25875ee4d94325bccfcfc8cbb3e8",
+      "kind": null,
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/native-move-f8b89fc9bed2-source",
+      "source_path": null,
+      "state": "Committed",
+      "size": 47,
+      "sha256": "75fc76f8f2f737f050efd7e7c7d85a95bfb1a1584da32622722db5f46996dfee"
+    },
+    {
+      "id": "347176624065d507dcca5616ce593a51",
+      "kind": null,
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/native-move-f8b89fc9bed2-target",
+      "source_path": null,
+      "state": "Committed",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "process_terminal": true,
+  "final_error_type": "TimeoutError",
+  "final_errno": 60,
+  "docker_final_observation": "Cannot connect to Docker daemon"
+}

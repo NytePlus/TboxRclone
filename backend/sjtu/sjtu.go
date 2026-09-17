@@ -40,6 +40,7 @@ func init() {
 			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
 			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
 			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
+			{Name: "lab_move", Default: false, Help: "Experimental journaled file moves under the single-controlled-client contract; requires lab_writes."},
 			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
 			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
 		}})
@@ -58,6 +59,7 @@ type Options struct {
 	LabWrites     bool          `config:"lab_writes"`
 	LabOverwrite  bool          `config:"lab_overwrite"`
 	LabDelete     bool          `config:"lab_delete"`
+	LabMove       bool          `config:"lab_move"`
 	MaxUpload     fs.SizeSuffix `config:"max_upload"`
 }
 
@@ -109,7 +111,10 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		return nil, err
 	}
 	f := &Fs{name: name, root: root, opt: opt, c: c}
-	f.features = (&fs.Features{CanHaveEmptyDirectories: true}).Fill(ctx, f)
+	f.features = (&fs.Features{CanHaveEmptyDirectories: true, MoveOverwrites: opt.LabMove}).Fill(ctx, f)
+	if !opt.LabMove {
+		f.features.Move = nil
+	}
 	if root != "" {
 		i, e := c.Info(ctx, root)
 		if e != nil && !smh.IsStatus(e, 404) {

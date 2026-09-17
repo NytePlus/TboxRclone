@@ -20,6 +20,9 @@ func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.
 	if r.Scope != c.Endpoint+"/"+c.Library+"/"+c.Space {
 		return errors.New("account or space does not match journal")
 	}
+	if r.Kind == "move" {
+		return reconcileMove(ctx, s, c, r)
+	}
 	if r.Kind == "delete" || r.Kind == "rmdir" {
 		return reconcileDelete(ctx, s, c, r)
 	}
