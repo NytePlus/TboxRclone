@@ -223,11 +223,15 @@ func (c *Client) JSON(ctx context.Context, method, kind, p string, q url.Values,
 		return errors.Join(ErrUnknown, errors.New("asynchronous task requires reconciliation"))
 	}
 	b, err := io.ReadAll(io.LimitReader(resp.Body, 4<<20+1))
-	if err != nil || len(b) > 4<<20 {
+	if err != nil {
+		e := safeTransportError(ctx, err)
 		if mutation {
-			return errors.Join(ErrUnknown, ErrProtocol)
+			return errors.Join(ErrUnknown, e)
 		}
-		return ErrProtocol
+		return e
+	}
+	if len(b) > 4<<20 {
+		return unknownProtocol(mutation)
 	}
 	if len(b) == 0 {
 		if out != nil {

@@ -298,3 +298,22 @@ func TestMultipartPartRequiresDefinitiveAck(t *testing.T) {
 		})
 	}
 }
+
+func TestInterruptedResponseBodyIsTransportFailure(t *testing.T) {
+	for _, method := range []string{"GET", "POST"} {
+		t.Run(method, func(t *testing.T) {
+			c := clientAt(t, func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Length", "100")
+				w.WriteHeader(200)
+				io.WriteString(w, `{}`)
+			})
+			err := c.JSON(context.Background(), method, "file", "K", nil, struct{}{}, nil)
+			if !errors.Is(err, ErrTransport) {
+				t.Fatalf("interrupted response not classified as transport: %v", err)
+			}
+			if errors.Is(err, ErrUnknown) != (method == "POST") {
+				t.Fatalf("incorrect mutation outcome: %v", err)
+			}
+		})
+	}
+}

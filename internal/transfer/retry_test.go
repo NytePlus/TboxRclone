@@ -102,3 +102,25 @@ func TestAutomaticRecoveryBoundaries(t *testing.T) {
 		}
 	})
 }
+
+type interruptedBody struct{ io.ReadCloser }
+
+func (b interruptedBody) Read([]byte) (int, error) { return 0, io.ErrUnexpectedEOF }
+
+func TestAutomaticRecoveryInterruptedConfirmBody(t *testing.T) {
+	m, c, s, r, _ := fixture(t)
+	defer s.Close()
+	transport := c.HTTP.Transport
+	c.HTTP.Transport = retryTransport(func(req *http.Request) (*http.Response, error) {
+		resp, err := transport.RoundTrip(req)
+		if err == nil && req.URL.Query().Has("confirm") {
+			resp.Body = interruptedBody{resp.Body}
+		}
+		return resp, err
+	})
+	waits := 0
+	err := startWithRecovery(context.Background(), s, c, r, func(context.Context, time.Duration) error { waits++; return nil })
+	if err != nil || waits != 1 || m.init != 1 || m.confirm != 1 || r.State != "Committed" {
+		t.Fatalf("err=%v waits=%d init=%d confirm=%d state=%s", err, waits, m.init, m.confirm, r.State)
+	}
+}
