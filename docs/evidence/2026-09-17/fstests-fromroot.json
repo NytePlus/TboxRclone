@@ -1,0 +1,20 @@
+{
+  "test": "full upstream TestIntegration",
+  "status": "FAIL",
+  "counts": {
+    "run": 115,
+    "skip": 32,
+    "pass": 79,
+    "fail": 4
+  },
+  "failures": [
+    "TestIntegration/FsMkdir/FsPutFiles/FromRoot",
+    "TestIntegration/FsMkdir/FsPutFiles",
+    "TestIntegration/FsMkdir",
+    "TestIntegration"
+  ],
+  "notes": [
+    "Only direct failed subtest FromRoot: constructor rejected account root with lab_writes configured, even for reads. Independent mutation guards retained; constructor restriction removed subsequently.",
+    "Not system acceptance."
+  ]
+}

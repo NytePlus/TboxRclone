@@ -1,0 +1,20 @@
+{
+  "test": "full upstream TestIntegration",
+  "status": "FAIL",
+  "counts": {
+    "run": 67,
+    "skip": 16,
+    "pass": 47,
+    "fail": 4
+  },
+  "failures": [
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectString",
+    "TestIntegration/FsMkdir/FsPutFiles",
+    "TestIntegration/FsMkdir",
+    "TestIntegration"
+  ],
+  "notes": [
+    "FsMove and FsDirMove passed. ObjectString panicked on the upstream explicit nil-object contract; fixed subsequently.",
+    "Not a completed lifecycle or system acceptance pass."
+  ]
+}

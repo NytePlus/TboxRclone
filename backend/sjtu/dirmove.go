@@ -29,7 +29,7 @@ func (f *Fs) DirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	return nil
 }
 func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string) error {
-	if err := f.writeAllowed(); err != nil {
+	if err := f.writeAllowed(dstRemote); err != nil {
 		return err
 	}
 	if !f.opt.LabMove {
@@ -39,7 +39,7 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	if !ok {
 		return errors.New("directory move requires the same backend")
 	}
-	if err := old.writeAllowed(); err != nil {
+	if err := old.writeAllowed(srcRemote); err != nil {
 		return err
 	}
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
@@ -105,11 +105,9 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	if backupErr != nil {
 		return backupErr
 	}
-	parent := path.Dir(dstRemote)
-	if parent == "." {
-		parent = ""
-	}
-	if err = f.Mkdir(ctx, parent); err != nil {
+	// Ensure only cloud ancestors: dstRemote may be empty when moving to the
+	// Fs root, which is already exclusively reserved by this operation.
+	if err = f.mkdirCloudPath(ctx, path.Dir(target)); err != nil {
 		return err
 	}
 	r.State = "MoveSent"

@@ -21,7 +21,10 @@ import (
 	"github.com/rclone/rclone/fs/config/configstruct"
 	"github.com/rclone/rclone/fs/fserrors"
 	"github.com/rclone/rclone/fs/hash"
+	"github.com/rclone/rclone/lib/encoder"
 )
+
+const defaultEncoding = encoder.Display | encoder.EncodeWin | encoder.EncodeBackSlash | encoder.EncodeInvalidUtf8
 
 func init() {
 	fs.Register(&fs.RegInfo{Name: "sjtu", Description: "SJTU cloud drive (experimental)", NewFs: NewFs,
@@ -30,6 +33,7 @@ func init() {
 			IntegrationTests: "Incomplete; destructive operations disabled",
 			DataIntegrity:    "Experimental; conditional overwrite not established",
 		}, Options: []fs.Option{
+			{Name: "encoding", Default: defaultEncoding, Advanced: true, Help: "Reversible cloud filename encoding. Keep fixed for an existing managed root."},
 			{Name: "endpoint", Default: "https://pan.sjtu.edu.cn", Help: "SMH HTTPS origin."},
 			{Name: "library_id", Required: true, Help: "Library ID from personal space credentials."},
 			{Name: "space_id", Required: true, Help: "Space ID from personal space credentials."},
@@ -48,19 +52,20 @@ func init() {
 
 // Options configures one account and the persistent journal.
 type Options struct {
-	Endpoint      string        `config:"endpoint"`
-	Library       string        `config:"library_id"`
-	Space         string        `config:"space_id"`
-	TokenFile     string        `config:"token_file"`
-	UserTokenFile string        `config:"user_token_file"`
-	Organization  string        `config:"organization_id"`
-	StateDir      string        `config:"state_dir"`
-	OwnershipDir  string        `config:"ownership_dir"`
-	LabWrites     bool          `config:"lab_writes"`
-	LabOverwrite  bool          `config:"lab_overwrite"`
-	LabDelete     bool          `config:"lab_delete"`
-	LabMove       bool          `config:"lab_move"`
-	MaxUpload     fs.SizeSuffix `config:"max_upload"`
+	Enc           encoder.MultiEncoder `config:"encoding"`
+	Endpoint      string               `config:"endpoint"`
+	Library       string               `config:"library_id"`
+	Space         string               `config:"space_id"`
+	TokenFile     string               `config:"token_file"`
+	UserTokenFile string               `config:"user_token_file"`
+	Organization  string               `config:"organization_id"`
+	StateDir      string               `config:"state_dir"`
+	OwnershipDir  string               `config:"ownership_dir"`
+	LabWrites     bool                 `config:"lab_writes"`
+	LabOverwrite  bool                 `config:"lab_overwrite"`
+	LabDelete     bool                 `config:"lab_delete"`
+	LabMove       bool                 `config:"lab_move"`
+	MaxUpload     fs.SizeSuffix        `config:"max_upload"`
 }
 
 // Fs represents one SJTU directory.
@@ -80,19 +85,16 @@ type Object struct {
 
 // NewFs creates a backend. Destructive capabilities remain disabled until validated.
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
-	opt := Options{Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, Organization: "1"}
+	opt := Options{Enc: defaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, Organization: "1"}
 	if err := configstruct.Set(m, &opt); err != nil {
 		return nil, err
 	}
 	root = strings.Trim(root, "/")
-	if err := smh.ValidatePath(root); err != nil {
+	if err := validateStandardPath(root, opt.Enc); err != nil {
 		return nil, err
 	}
 	if opt.MaxUpload <= 0 || opt.MaxUpload > 1<<40 {
 		return nil, errors.New("max_upload must be between 1 byte and 1 TiB")
-	}
-	if opt.LabWrites && !strings.HasPrefix(root, "codex-api-lab/") {
-		return nil, errors.New("lab_writes requires an isolated codex-api-lab/<run-id> root")
 	}
 	c, err := smh.New(opt.Endpoint, opt.Library, opt.Space, opt.TokenFile)
 	if err != nil {
@@ -116,7 +118,7 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		f.features.Move = nil
 	}
 	if root != "" {
-		i, e := c.Info(ctx, root)
+		i, e := c.Info(ctx, opt.Enc.FromStandardPath(root))
 		if e != nil && !smh.IsStatus(e, 404) {
 			return nil, e
 		}
@@ -136,17 +138,33 @@ func (f *Fs) String() string           { return "SJTU cloud drive " + f.root }
 func (f *Fs) Precision() time.Duration { return fs.ModTimeNotSupported }
 func (f *Fs) Hashes() hash.Set         { return hash.NewHashSet() }
 func (f *Fs) Features() *fs.Features   { return f.features }
+
+// Validate before joining: path.Join would silently erase traversal and empty segments.
+func validateStandardPath(p string, enc encoder.MultiEncoder) error {
+	if p != "" {
+		for _, part := range strings.Split(p, "/") {
+			if part == "" || part == "." || part == ".." {
+				return errors.New("invalid path segment")
+			}
+		}
+	}
+	return smh.ValidatePath(enc.FromStandardPath(p))
+}
 func (f *Fs) full(p string) (string, error) {
-	if e := smh.ValidatePath(p); e != nil {
-		return "", e
+	if err := validateStandardPath(p, f.opt.Enc); err != nil {
+		return "", err
 	}
-	if p == "" {
-		return f.root, nil
+	if err := validateStandardPath(f.root, f.opt.Enc); err != nil {
+		return "", err
 	}
-	if f.root == "" {
-		return p, nil
+	joined := f.root
+	if p != "" {
+		if joined != "" {
+			joined += "/"
+		}
+		joined += p
 	}
-	return f.root + "/" + p, nil
+	return f.opt.Enc.FromStandardPath(joined), nil
 }
 func mapped(err, missing error) error {
 	if smh.IsStatus(err, 404) {
@@ -178,7 +196,7 @@ func (f *Fs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
 	}
 	out := make(fs.DirEntries, 0, len(items))
 	for _, i := range items {
-		remote := path.Join(dir, i.Name)
+		remote := path.Join(dir, f.opt.Enc.ToStandardName(i.Name))
 		if i.Type == "dir" {
 			out = append(out, fs.NewDir(remote, i.Modified).SetID(i.Inode))
 		} else if i.Type == "file" || i.Type == "image" || i.Type == "video" {
@@ -208,11 +226,15 @@ func (f *Fs) NewObject(ctx context.Context, remote string) (fs.Object, error) {
 	}
 	return &Object{f, remote, i}, nil
 }
-func (f *Fs) writeAllowed() error {
+func (f *Fs) writeAllowed(remote string) error {
 	if !f.opt.LabWrites {
 		return fs.ErrorPermissionDenied
 	}
-	if !strings.HasPrefix(f.root, "codex-api-lab/") {
+	full, err := f.full(remote)
+	if err != nil {
+		return err
+	}
+	if !strings.HasPrefix(full, "codex-api-lab/") || full == "codex-api-lab/" {
 		return errors.New("write root is outside the isolated lab")
 	}
 	return nil
@@ -220,12 +242,20 @@ func (f *Fs) writeAllowed() error {
 
 // Mkdir creates missing ancestors without overwriting existing files.
 func (f *Fs) Mkdir(ctx context.Context, dir string) error {
-	if e := f.writeAllowed(); e != nil {
+	if e := f.writeAllowed(dir); e != nil {
 		return e
 	}
 	p, e := f.full(dir)
 	if e != nil {
 		return e
+	}
+	return f.mkdirCloudPath(ctx, p)
+}
+
+// mkdirCloudPath accepts an already encoded cloud path.
+func (f *Fs) mkdirCloudPath(ctx context.Context, p string) error {
+	if p == "" || p == "." {
+		return nil
 	}
 	parts := strings.Split(p, "/")
 	for n := 1; n <= len(parts); n++ {
@@ -304,9 +334,14 @@ func (f *Fs) Put(ctx context.Context, in io.Reader, src fs.ObjectInfo, options .
 func (f *Fs) PutStream(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) (fs.Object, error) {
 	return f.Put(ctx, in, src, options...)
 }
-func (o *Object) Fs() fs.Info                                     { return o.f }
-func (o *Object) Remote() string                                  { return o.remote }
-func (o *Object) String() string                                  { return o.remote }
+func (o *Object) Fs() fs.Info    { return o.f }
+func (o *Object) Remote() string { return o.remote }
+func (o *Object) String() string {
+	if o == nil {
+		return "<nil>"
+	}
+	return o.remote
+}
 func (o *Object) Size() int64                                     { return int64(o.item.Size) }
 func (o *Object) ModTime(context.Context) time.Time               { return o.item.Modified }
 func (o *Object) Storable() bool                                  { return true }
@@ -351,7 +386,7 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (io.ReadClo
 // Update implements durable uploads and opt-in sequential overwrite in the lab.
 func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) error {
 	f := o.f
-	if e := f.writeAllowed(); e != nil {
+	if e := f.writeAllowed(o.remote); e != nil {
 		return e
 	}
 	p, e := f.full(o.remote)

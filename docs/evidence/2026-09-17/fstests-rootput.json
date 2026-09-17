@@ -1,0 +1,20 @@
+{
+  "test": "full upstream TestIntegration",
+  "status": "FAIL",
+  "counts": {
+    "run": 119,
+    "skip": 33,
+    "pass": 81,
+    "fail": 5
+  },
+  "failures": [
+    "TestIntegration/FsMkdir/FsPutFiles/FromRoot/Put",
+    "TestIntegration/FsMkdir/FsPutFiles/FromRoot",
+    "TestIntegration/FsMkdir/FsPutFiles",
+    "TestIntegration/FsMkdir",
+    "TestIntegration"
+  ],
+  "notes": [
+    "FromRoot/Put correctly addressed the isolated generated fixture, but old Fs-root-only guard rejected it. Replaced with resolved cloud-path guard for each mutation and both move endpoints; non-lab mutations remain denied."
+  ]
+}

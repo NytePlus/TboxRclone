@@ -24,7 +24,7 @@ type dirMoveNode struct {
 }
 
 func TestDirectoryMoveSnapshotAndNoPartialFallback(t *testing.T) {
-	for _, mode := range []string{"normal", "empty", "lost_response", "source_recreated", "wrong_content", "extra_child", "missing_empty", "denied", "existing_target", "backup_failure", "backup_limit", "pending_child", "overlap"} {
+	for _, mode := range []string{"root_target", "normal", "empty", "lost_response", "source_recreated", "wrong_content", "extra_child", "missing_empty", "denied", "existing_target", "backup_failure", "backup_limit", "pending_child", "overlap"} {
 		t.Run(mode, func(t *testing.T) {
 			f, _ := newSimulator(t, false)
 			f.opt.LabMove = true
@@ -153,8 +153,15 @@ func TestDirectoryMoveSnapshotAndNoPartialFallback(t *testing.T) {
 			if mode == "overlap" {
 				remote = "source/target"
 			}
-			err := operations.DirMove(context.Background(), f, "source", remote)
-			success := mode == "normal" || mode == "empty" || mode == "lost_response"
+			var err error
+			if mode == "root_target" {
+				destination := *f
+				destination.root = target
+				err = destination.DirMove(context.Background(), f, "source", "")
+			} else {
+				err = operations.DirMove(context.Background(), f, "source", remote)
+			}
+			success := mode == "root_target" || mode == "normal" || mode == "empty" || mode == "lost_response"
 			if (err == nil) != success {
 				t.Fatal("unexpected outcome", err)
 			}

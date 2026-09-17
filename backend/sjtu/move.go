@@ -22,7 +22,7 @@ func (f *Fs) Move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	return o, nil
 }
 func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object, error) {
-	if err := f.writeAllowed(); err != nil {
+	if err := f.writeAllowed(remote); err != nil {
 		return nil, err
 	}
 	if !f.opt.LabMove {
@@ -32,7 +32,7 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	if !ok {
 		return nil, fs.ErrorCantMove
 	}
-	if err := old.f.writeAllowed(); err != nil {
+	if err := old.f.writeAllowed(old.remote); err != nil {
 		return nil, err
 	}
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space

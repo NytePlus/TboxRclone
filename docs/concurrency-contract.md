@@ -104,3 +104,5 @@ MoveSent落盘后只发送一次PUT directory，策略ask。结果未知只读�
 新增通用NoDirMoveFallback能力，SJTU显式设置；默认后端仍保持上游行为。已有目标（包括同一路径）返回标准ErrorDirExists，operations.DirMove直接返回错误。目录覆盖/合并尚未实现；跨空间移动也不支持。归档保留源内容，但完整系统验收还需要元数据、回收策略、效率和所有故障点验证。
 
 真实WebDAV正常移动、目录移动后丢响应、取消及独立后端进程SIGKILL接管均通过；后两者分别保留MoveUnknown/MoveSent和双子树占用，对账后Committed。源备份包含文件内容、零字节文件和空目录。证据见[正常移动](evidence/2026-09-17/webdav-directory-move.json)、[丢响应与取消](evidence/2026-09-17/directory-move-response-loss.json)、[SIGKILL](evidence/2026-09-17/directory-move-process-death.json)。这些不是整机掉电或Finder系统PASS。
+
+目录移到目标 Fs 的根（dstRemote 为空）时，只创建编码后目标路径的父目录；不能调用 Mkdir("") 再次获取已由该移动持有的目标子树锁。上游完整套件暴露了此自冲突，新增跨 Fs 根目标回归先复现失败再修复。它不放宽其他操作的冲突拒绝规则。

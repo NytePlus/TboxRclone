@@ -157,3 +157,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 仅对已匹配的本次测试条目调用 `POST /api/v1/recycled/{L}/{S}/{ID}?restore=1&conflict_resolution_strategy=ask&restore_path_strategy=originalPath`，body `{}`：原路径已有重建文件时返回 409，重建文件不变。随后改为 `rename` 返回 200 和最终 path，恢复在原实验目录下自动改名；独立下载的旧内容 SHA-256 正确，原路径的新内容仍完整。没有使用 overwrite 或 fallbackToRoot，也没有操作其他回收站条目。见 [恢复证据](evidence/2026-09-17/recycle-restore.json)。
 
 恢复属于修改操作，响应丢失不得盲目重放 rename，否则可能产生重复副本；本次尚未验证恢复丢响应/异步任务。客户端未提供产品级自动恢复命令，接口实验不代替 Finder 删除/撤销验收。
+
+### 路径名称编码补充
+
+URL percent-encoding 不能让服务端接受禁止的名称。真实目录探测拒绝 `? " < > : * |`；后端使用独立的可逆名称编码后才逐段 URL 编码，详见 [名称实测与兼容边界](live-api-findings.md#文件名实测与可逆编码2026-09-17)。恢复日志保持云端编码路径，不能按当前配置再次编码。原始 SDK 拒绝无效 UTF-8，避免 JSON 静默替换名称字节。

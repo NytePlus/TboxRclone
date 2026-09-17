@@ -1,0 +1,130 @@
+{
+  "test": "full upstream TestIntegration",
+  "status": "FAIL",
+  "counts": {
+    "run": 109,
+    "skip": 28,
+    "pass": 49,
+    "fail": 32
+  },
+  "failures": [
+    "TestIntegration/FsMkdir/FsPutFiles/FsMove",
+    "TestIntegration/FsMkdir/FsPutFiles/FsDirMove",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectString",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectFs",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectRemote",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectHashes",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectModTime",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectMimeType",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectMetadata",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectSetMetadata",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectSetModTime",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectSize",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectOpen",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectOpenSeek",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectOpenRange",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectPartialRead",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectOpenFingerprint",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectUpdate",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectStorable",
+    "TestIntegration/FsMkdir/FsPutFiles/FsIsFile/FsRoot",
+    "TestIntegration/FsMkdir/FsPutFiles/FsIsFile",
+    "TestIntegration/FsMkdir/FsPutFiles/FsIsFileNotFound",
+    "TestIntegration/FsMkdir/FsPutFiles/FromRoot",
+    "TestIntegration/FsMkdir/FsPutFiles/ObjectRemove",
+    "TestIntegration/FsMkdir/FsPutFiles/FsPutStream/0",
+    "TestIntegration/FsMkdir/FsPutFiles/FsPutStream/100",
+    "TestIntegration/FsMkdir/FsPutFiles/FsPutStream",
+    "TestIntegration/FsMkdir/FsPutFiles",
+    "TestIntegration/FsMkdir/FsUploadUnknownSize/FsUpdateUnknownSize",
+    "TestIntegration/FsMkdir/FsUploadUnknownSize",
+    "TestIntegration/FsMkdir",
+    "TestIntegration"
+  ],
+  "encoding_tests": [
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/control_chars",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/dot",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/dot_dot",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/punctuation",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_space",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_tilde",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_CR",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_LF",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_HT",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_VT",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/leading_dot",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_space",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_CR",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_LF",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_HT",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_VT",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/trailing_dot",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/invalid_UTF-8",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding/URL_encoding",
+      "status": "pass"
+    },
+    {
+      "test": "TestIntegration/FsMkdir/FsEncoding",
+      "status": "pass"
+    }
+  ],
+  "notes": [
+    "File MOVE transport failure followed by fixture-dependent failures. Root-target directory MOVE self-conflict reproduced offline and subsequently fixed.",
+    "Not system/Finder acceptance evidence."
+  ]
+}

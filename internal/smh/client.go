@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 // ErrUnknown means a mutation may have executed and must not be replayed.
@@ -134,7 +135,7 @@ func ValidatePath(p string) error {
 	if p == "" {
 		return nil
 	}
-	if strings.ContainsAny(p, "\x00\\") {
+	if !utf8.ValidString(p) || strings.ContainsAny(p, "\x00\\") {
 		return errors.New("invalid path")
 	}
 	for _, s := range strings.Split(p, "/") {

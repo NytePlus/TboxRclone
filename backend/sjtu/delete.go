@@ -16,7 +16,7 @@ import (
 // caller's object version is checked under local ownership, not server CAS.
 func (o *Object) remove(ctx context.Context) error {
 	f := o.f
-	if err := f.writeAllowed(); err != nil {
+	if err := f.writeAllowed(o.remote); err != nil {
 		return err
 	}
 	if !f.opt.LabDelete {
@@ -93,7 +93,7 @@ func (o *Object) Remove(ctx context.Context) error {
 }
 
 func (f *Fs) rmdir(ctx context.Context, dir string) error {
-	if err := f.writeAllowed(); err != nil {
+	if err := f.writeAllowed(dir); err != nil {
 		return err
 	}
 	if !f.opt.LabDelete {
