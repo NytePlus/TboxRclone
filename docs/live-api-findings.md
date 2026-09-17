@@ -201,3 +201,9 @@ docker compose run --rm \
 复现使用前述私有挂载和身份环境，设置 `TBOX_LIVE_LIST=1`，运行 `go test -json ./internal/smh -run '^TestLiveDirectoryBoundaries$' -count=1 -timeout=6m`。默认 SKIP；测试只创建自身随机实验目录的子项，最终目录保留。变化中的目录分页和 Finder 大目录浏览仍未通过验收。
 
 补充运行覆盖 1001 项：生产 List 默认 limit1000 跨页得到完整精确集合；显式 limit50 共 21 页，也无丢项或重复。测试保留之前全部规模要求，最终 6 个规模均通过。见 [1001 项生产跨页证据](evidence/2026-09-17/directory-1001.json)。
+
+## 双向同步登记补查
+
+前端 `checkRemotePath` 将 UI 的 BOTH 策略映射为 `SyncMode.TwoWay`；后者实际字符串为 `two_way`，不能将 UI 字符串 `both` 直接作为接口 mode。对新的空实验目录登记 two_way 返回 201，仅返回 syncId。随后两种 local_sync_id（本地 ID/服务端 ID）与两个令牌接口的四种组合均 200，但仍无 inode/ssn；目录 localSync 均为 null。自己的登记列表可读 200，单条详情仍 404，最后仅删除本次登记 204，目录保留。
+
+证据：[双向登记补查](evidence/2026-09-17/sync-two-way-probe.json)。这排除了此前只测 cloud_to_local 的模式差异，仍未得到 fs-journal 所需目录身份或安全覆盖能力。没有启动同步引擎或更改其他用户目录/同步设置。

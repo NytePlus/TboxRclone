@@ -1,0 +1,10 @@
+{
+  "operation": "cua.getApp(com.apple.finder)",
+  "result": "ERROR",
+  "tool_error_code": -10005,
+  "domain": "com.apple.ScreenCaptureKit.SCStreamErrorDomain",
+  "capture_error_code": -3811,
+  "message": "音频/视频捕捉失败，无法开始流播放",
+  "finder_copy_executed": false,
+  "scope": "Native UI environment blocker; no system acceptance PASS"
+}
