@@ -15,7 +15,7 @@ docker compose --profile faults up -d --wait fault-proxy
 docker compose --profile faults up -d webdav-faults
 ```
 
-`webdav-faults` 与代理共享网络命名空间，通过 `HTTPS_PROXY=http://127.0.0.1:8787` 和 `SSL_CERT_FILE=/state/faultproxy-ca.pem` 显式接入代理。Finder 入口是本机 `http://127.0.0.1:8687/`。代理控制端口 8788 不发布到宿主机，用 `docker compose exec fault-proxy` 操作。与无故障的 `webdav` 服务（8686）分开。
+`webdav-faults` 与代理共享网络命名空间，通过 `HTTPS_PROXY=http://127.0.0.1:8787` 和 `SSL_CERT_FILE=/state/faultproxy-ca.pem` 显式接入代理。Finder 入口是本机 `http://127.0.0.1:8687/`。Compose 通过 `scripts/run-go-service.sh` 编译并 exec 服务二进制，使 SIGTERM 直接到达服务的退出处理器。代理控制端口 8788 不发布到宿主机，用 `docker compose exec fault-proxy` 操作。与无故障的 `webdav` 服务（8686）分开。
 
 缺少签名数据域名时代理会拒绝该连接，不能当作“数据面故障覆盖通过”。更改 allowlist 或重启代理后 CA 会变化，必须重启 `webdav-faults`，避免继续使用旧进程缓存的证书池。Docker 默认代理环境不等于接线证明；必须在 `/events` 中看到控制面及数据面两类 authority 的请求。
 
