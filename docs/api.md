@@ -141,3 +141,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 ### 空间令牌 local_sync_id 补充
 
 前端声明 personal 和 token/{spaceId} 两个 POST 空间令牌接口支持 `local_sync_id`。隔离登记实验中，本地 ID 和服务端 syncId 两组输入均可获得令牌，但均未产生 inode/ssn，目录 localSync 为 null。此参数的同步语义未验证，不能用于宣称 CAS。见 [令牌实验](live-api-findings.md#local_sync_id-令牌补充实验)。
+
+### 目录游标类型
+
+当前部署的 `nextMarker` 在跨页时为 JSON 非负整数，不能只按字符串解码，也不能经过 float64 中转。客户端保留其精确十进制表示作为下一次 marker，并兼容 SDK 描述的不透明字符串游标。稳定 0/1/50/51/1000 项和每页 50 项的实测见 [目录规模实验](live-api-findings.md#整数目录游标与稳定目录规模)。

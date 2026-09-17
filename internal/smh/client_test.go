@@ -317,3 +317,40 @@ func TestInterruptedResponseBodyIsTransportFailure(t *testing.T) {
 		})
 	}
 }
+
+func TestListNumericCursorPreservesPrecision(t *testing.T) {
+	calls := 0
+	c := clientAt(t, func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if calls == 1 {
+			io.WriteString(w, `{"contents":[{"name":"first","type":"dir"}],"nextMarker":9007199254740993}`)
+			return
+		}
+		if r.URL.Query().Get("marker") != "9007199254740993" {
+			t.Errorf("cursor changed: %q", r.URL.Query().Get("marker"))
+		}
+		io.WriteString(w, `{"contents":[{"name":"second","type":"dir"}]}`)
+	})
+	items, err := c.List(context.Background(), "lab")
+	if err != nil || len(items) != 2 || calls != 2 {
+		t.Fatalf("items=%v calls=%d err=%v", items, calls, err)
+	}
+}
+
+func TestPageMarkerTypes(t *testing.T) {
+	for _, tc := range []struct {
+		raw, want string
+		valid     bool
+	}{
+		{`"opaque+/="`, "opaque+/=", true}, {`0`, "0", true}, {`9007199254740993`, "9007199254740993", true}, {`null`, "", true}, {`""`, "", true},
+		{`-1`, "", false}, {`1.5`, "", false}, {`1e3`, "", false}, {`true`, "", false}, {`{}`, "", false}, {`[]`, "", false},
+	} {
+		t.Run(tc.raw, func(t *testing.T) {
+			var m pageMarker
+			err := json.Unmarshal([]byte(tc.raw), &m)
+			if (err == nil) != tc.valid || (err == nil && string(m) != tc.want) {
+				t.Fatalf("marker=%q err=%v", m, err)
+			}
+		})
+	}
+}

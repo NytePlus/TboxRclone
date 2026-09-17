@@ -1,0 +1,181 @@
+{
+  "scope": "Stable generated directory API enumeration, not Finder acceptance",
+  "counts": [
+    0,
+    1,
+    50,
+    51,
+    1000
+  ],
+  "source": "internal/smh/list_live_test.go",
+  "source_sha256": "ee35c52c751e3648fb40e51b37345641d2bf20dfe39d98608004559df9eafff6",
+  "runs": {
+    "before": [
+      {
+        "Time": "2026-09-17T05:22:27.53615721Z",
+        "Action": "start",
+        "Package": "github.com/nyte/TboxRclone/internal/smh"
+      },
+      {
+        "Time": "2026-09-17T05:22:27.537478752Z",
+        "Action": "run",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries"
+      },
+      {
+        "Time": "2026-09-17T05:22:27.537488252Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "=== RUN   TestLiveDirectoryBoundaries\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:27.637915752Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-8c16e079ca6d884b76f9ff8135b29338 entries=0 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:27.699597627Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-8c16e079ca6d884b76f9ff8135b29338 entries=1 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.872107086Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-8c16e079ca6d884b76f9ff8135b29338 entries=50 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.941550919Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:97: invalid or unsupported SMH response\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.941638753Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "--- FAIL: TestLiveDirectoryBoundaries (1.40s)\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.941645503Z",
+        "Action": "fail",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Elapsed": 1.4
+      },
+      {
+        "Time": "2026-09-17T05:22:28.941674919Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Output": "FAIL\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.942976461Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Output": "FAIL\tgithub.com/nyte/TboxRclone/internal/smh\t1.407s\n"
+      },
+      {
+        "Time": "2026-09-17T05:22:28.943017211Z",
+        "Action": "fail",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Elapsed": 1.407
+      }
+    ],
+    "after": [
+      {
+        "Time": "2026-09-17T05:24:25.163332334Z",
+        "Action": "start",
+        "Package": "github.com/nyte/TboxRclone/internal/smh"
+      },
+      {
+        "Time": "2026-09-17T05:24:25.164640001Z",
+        "Action": "run",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries"
+      },
+      {
+        "Time": "2026-09-17T05:24:25.164649709Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "=== RUN   TestLiveDirectoryBoundaries\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:25.261879376Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-c187cbe251b40387d20d8b724fea2a36 entries=0 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:25.314233001Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-c187cbe251b40387d20d8b724fea2a36 entries=1 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:26.503308376Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-c187cbe251b40387d20d8b724fea2a36 entries=50 exact_set=true limit50_pages=1\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:26.590402543Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-c187cbe251b40387d20d8b724fea2a36 entries=51 exact_set=true limit50_pages=2\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:51.608228638Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-c187cbe251b40387d20d8b724fea2a36 entries=1000 exact_set=true limit50_pages=20\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:51.60833268Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Output": "--- PASS: TestLiveDirectoryBoundaries (26.44s)\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:51.60833843Z",
+        "Action": "pass",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Test": "TestLiveDirectoryBoundaries",
+        "Elapsed": 26.44
+      },
+      {
+        "Time": "2026-09-17T05:24:51.60834518Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Output": "PASS\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:51.610003222Z",
+        "Action": "output",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Output": "ok  \tgithub.com/nyte/TboxRclone/internal/smh\t26.446s\n"
+      },
+      {
+        "Time": "2026-09-17T05:24:51.610086597Z",
+        "Action": "pass",
+        "Package": "github.com/nyte/TboxRclone/internal/smh",
+        "Elapsed": 26.447
+      }
+    ]
+  }
+}

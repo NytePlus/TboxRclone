@@ -280,6 +280,35 @@ func (c *Client) Info(ctx context.Context, p string) (Item, error) {
 	return i, err
 }
 
+// pageMarker preserves opaque string cursors and exact nonnegative integer cursors.
+// The deployed service returns JSON numbers for paginated directory offsets.
+type pageMarker string
+
+func (m *pageMarker) UnmarshalJSON(b []byte) error {
+	if string(b) == "null" {
+		*m = ""
+		return nil
+	}
+	if len(b) > 0 && b[0] == '"' {
+		var value string
+		if err := json.Unmarshal(b, &value); err != nil {
+			return ErrProtocol
+		}
+		*m = pageMarker(value)
+		return nil
+	}
+	if len(b) == 0 || !json.Valid(b) {
+		return ErrProtocol
+	}
+	for _, ch := range b {
+		if ch < '0' || ch > '9' {
+			return ErrProtocol
+		}
+	}
+	*m = pageMarker(string(b))
+	return nil
+}
+
 // List walks marker pages, failing on repeated names or markers instead of losing entries.
 func (c *Client) List(ctx context.Context, p string) ([]Item, error) {
 	var result []Item
@@ -288,8 +317,8 @@ func (c *Client) List(ctx context.Context, p string) ([]Item, error) {
 	marker := ""
 	for page := 0; page < 100000; page++ {
 		var data struct {
-			Contents []Item `json:"contents"`
-			Next     string `json:"nextMarker"`
+			Contents []Item     `json:"contents"`
+			Next     pageMarker `json:"nextMarker"`
 		}
 		err := c.JSON(ctx, "GET", "directory", p, url.Values{"limit": {"1000"}, "marker": {marker}, "with_content_cas": {"1"}, "with_inode": {"1"}}, nil, &data)
 		if err != nil {
@@ -308,11 +337,11 @@ func (c *Client) List(ctx context.Context, p string) ([]Item, error) {
 		if data.Next == "" {
 			return result, nil
 		}
-		if markers[data.Next] {
+		if markers[string(data.Next)] {
 			return nil, errors.New("repeated directory cursor")
 		}
-		markers[data.Next] = true
-		marker = data.Next
+		markers[string(data.Next)] = true
+		marker = string(data.Next)
 	}
 	return nil, errors.New("directory page limit exceeded")
 }
