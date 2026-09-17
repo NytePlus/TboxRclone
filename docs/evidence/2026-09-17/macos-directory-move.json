@@ -1,0 +1,101 @@
+{
+  "at": "2026-09-17T08:55:22.973020+00:00",
+  "commands": [
+    {
+      "argv": [
+        "/bin/mv",
+        "/private/tmp/tboxrclone-webdav-501/native-dir-9405317f34f2/from/file.txt",
+        "/private/tmp/tboxrclone-webdav-501/native-dir-9405317f34f2/to/file.txt"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/bin/mv",
+        "/private/tmp/tboxrclone-webdav-501/native-dir-9405317f34f2/from/tree",
+        "/private/tmp/tboxrclone-webdav-501/native-dir-9405317f34f2/to/tree"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "committed_appledouble_moves": 2,
+  "committed_directory_moves": 1,
+  "committed_file_moves": 1,
+  "directory_backup_entry_count": 11,
+  "expected_appledouble": {
+    "._from": {
+      "baseline": "original generated fixture upload journal",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "._to": {
+      "baseline": "original generated fixture upload journal",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/._file.txt": {
+      "baseline": "original generated fixture upload journal",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/._tree": {
+      "baseline": "original generated fixture upload journal",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/tree/._.hidden": {
+      "baseline": "pre-move directory backup",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/tree/._nested": {
+      "baseline": "pre-move directory backup",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/tree/._zero": {
+      "baseline": "pre-move directory backup",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/tree/nested/._empty": {
+      "baseline": "pre-move directory backup",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    },
+    "to/tree/nested/._汉字.txt": {
+      "baseline": "pre-move directory backup",
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "size": 4096
+    }
+  },
+  "expected_empty_directories": [
+    "to/tree/nested/empty"
+  ],
+  "expected_files": {
+    "to/file.txt": {
+      "sha256": "7eed112b367b6ed5fa13ed6b2e3fef59c11df7ba55056184d5ca3adf61b4c8f5",
+      "size": 23
+    },
+    "to/tree/.hidden": {
+      "sha256": "f63b81cdf17fec918bb17b80e4067d2539576fec05650c3fba433d3d6b408f42",
+      "size": 15
+    },
+    "to/tree/nested/汉字.txt": {
+      "sha256": "012b248762c5c3704862b92e5fc8c53a3c3ba61a88e24c856504b94c5f3f8d41",
+      "size": 25
+    },
+    "to/tree/zero": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "fixture": "native-dir-9405317f34f2",
+  "independent_cloud_tree_and_hashes_match": true,
+  "independent_source_paths_absent": true,
+  "mount_outside_docker_binds": true,
+  "native_mount_verified": true,
+  "native_readback_matches": true,
+  "retained_backups_verified": true,
+  "scope": "native macOS /bin/mv across directories in webdavfs; not recorded system acceptance"
+}

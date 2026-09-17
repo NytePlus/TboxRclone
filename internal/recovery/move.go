@@ -10,6 +10,7 @@ import (
 
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/smh"
+	"github.com/nyte/TboxRclone/internal/treebackup"
 )
 
 func reconcileMove(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
@@ -41,12 +42,25 @@ func reconcileMove(ctx context.Context, s *journal.Store, c *smh.Client, r *jour
 	if err != nil {
 		return err
 	}
-	data.Close()
+	defer data.Close()
 	if _, err = c.Info(ctx, r.SourcePath); !smh.IsStatus(err, 404) {
 		if err != nil {
 			return err
 		}
 		return errors.New("move source still exists or was recreated; refusing replay")
+	}
+	if r.Kind == "dirmove" {
+		if strings.HasPrefix(r.Path, r.SourcePath+"/") || strings.HasPrefix(r.SourcePath, r.Path+"/") {
+			return errors.New("directory move paths overlap")
+		}
+		manifest, err := treebackup.Manifest(data)
+		if err != nil {
+			return err
+		}
+		if err = treebackup.Verify(ctx, c, r.Path, manifest); err != nil {
+			return err
+		}
+		return commitMove(s, r)
 	}
 	info, err := c.Info(ctx, r.Path)
 	if err != nil {
@@ -71,9 +85,13 @@ func reconcileMove(ctx context.Context, s *journal.Store, c *smh.Client, r *jour
 	if n != r.Size || hex.EncodeToString(h.Sum(nil)) != r.SHA256 {
 		return errors.New("move destination content differs; backup retained")
 	}
+	return commitMove(s, r)
+}
+
+func commitMove(s *journal.Store, r *journal.Record) error {
 	old := r.State
 	r.State = "Committed"
-	if err = s.Save(r); err != nil {
+	if err := s.Save(r); err != nil {
 		r.State = old
 		return err
 	}

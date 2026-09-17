@@ -90,6 +90,17 @@ MoveSent 持久化后只发送一次请求。无论应答是否送达，均要�
 
 rclone 通用层与 x/net/webdav 原先均在调用后端 Move 前删除已有目标，回归已复现此丢失窗口。新增默认 false 的通用 MoveOverwrites 能力：声明此能力时，operations.Move 和 WebDAV 的 MOVE 目标处理均交由后端直接替换，不先删除；其他后端维持原行为。Overwrite:F 仍拒绝已有目标，目录覆盖不借用文件能力。SJTU 在 lab_move 开启时声明此能力。
 
-当前目录移动返回明确的非回退错误，避免 rclone 转为逐文件移动。它仍是未实现的必要功能，不能靠拒绝来通过目录移动验收。Compose 新增 TBOX_LAB_MOVE 显式开关；隔离服务已用于真实文件移动实验。覆盖移动204、移到空目标201、Overwrite:F拒绝412以及独立云端内容/源缺失核对均通过，两个移动日志 Committed，见 [文件移动证据](evidence/2026-09-17/webdav-file-move.json)。
+目录移动已补上整树备份与单次请求，见下节。已有目标拒绝合并/覆盖；通用 NoDirMoveFallback 标记阻止错误后逐文件回退，保留标准 ErrorDirExists。Compose 新增 TBOX_LAB_MOVE 显式开关；隔离服务已用于真实文件移动实验。覆盖移动204、移到空目标201、Overwrite:F拒绝412以及独立云端内容/源缺失核对均通过，两个移动日志 Committed，见 [文件移动证据](evidence/2026-09-17/webdav-file-move.json)。
 
 原生 macOS 挂载检查确认是 webdavfs 后，另一次实验在创建目标文件时超时，尚未执行 rename；同期 Docker API500、随后 daemon 不可连接。源内容和空目标已有 Committed 日志，测试文件保留，见 [原生失败证据](evidence/2026-09-17/native-move-blocked.json)。原因未定，不能把协议成功当作原生/Finder移动成功；真实移动丢响应与进程中断恢复仍需验收。
+
+
+## 实验性目录移动
+
+lab_move 同时开放同账户/空间、同 state_dir 的目录专用移动。一次取得源和目标整棵子树的写占用，核对未决子项、源类型、目标不存在及源目标不重叠。完整读取源文件（绑定ETag），连同零字节文件、空目录写入本地tar；只存内容和相对路径，不将归档解压到任意路径。整个归档计入max_upload上限，含tar开销；备份失败或超限不发送移动。第一份Prepared日志已是kind=dirmove并包含源/目标子树，避免重启误作上传。
+
+MoveSent落盘后只发送一次PUT directory，策略ask。结果未知只读对账：源必须404，目标的完整目录树必须与本地备份的路径、类型、大小和逐文件SHA-256完全一致，额外路径或缺失空目录都拒绝成功。未决日志阻止两棵子树及其后代的新建、写入和读取/列目录。未发送的Prepared可显式reconcile到Aborted，保留tar；提交结果未知不重发请求，也不逐文件搬运。
+
+新增通用NoDirMoveFallback能力，SJTU显式设置；默认后端仍保持上游行为。已有目标（包括同一路径）返回标准ErrorDirExists，operations.DirMove直接返回错误。目录覆盖/合并尚未实现；跨空间移动也不支持。归档保留源内容，但完整系统验收还需要元数据、回收策略、效率和所有故障点验证。
+
+真实WebDAV正常移动、目录移动后丢响应、取消及独立后端进程SIGKILL接管均通过；后两者分别保留MoveUnknown/MoveSent和双子树占用，对账后Committed。源备份包含文件内容、零字节文件和空目录。证据见[正常移动](evidence/2026-09-17/webdav-directory-move.json)、[丢响应与取消](evidence/2026-09-17/directory-move-response-loss.json)、[SIGKILL](evidence/2026-09-17/directory-move-process-death.json)。这些不是整机掉电或Finder系统PASS。

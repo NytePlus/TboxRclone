@@ -192,3 +192,21 @@ TestLiveMoveProcessDeath 用独立子进程持有后端状态，父子均独立�
 两项实验期间先卸载宿主实验挂载、停止原WebDAV实例，使用同一/state/sjtu和/state/owners，未另建目录绕过实例排他。结束后恢复原隔离服务。Docker全量Go race/vet通过。
 
 已有目标覆盖的独立SIGKILL进程实验随后也通过：云端已覆盖而响应未送达时杀进程，MoveSent与双路径占用保留，新进程读取源备份并只读对账到Committed，修改尝试0。[覆盖强杀证据](evidence/2026-09-17/move-process-death-overwrite.json)。空目标与覆盖目标分别使用独立测试进程，未提前释放实例锁。
+
+
+## 目录专用移动与完整树恢复
+
+目录移动由拒绝状态推进为lab_move下的原生能力：原子取得两个子树的进程内占用，拒绝未决子项和重叠路径，流式tar备份完整内容及空目录，再一次PUT directory。kind=dirmove/源目标从第一份日志就持久化；源404并且目标整树路径、类型、大小和每个文件SHA一致才能Committed。子树列目录也尊重运行期和持久占用。归档大小（含头部）受max_upload限制，过大或读失败在远端移动之前退出。
+
+模拟测试覆盖空目录、嵌套Unicode、零字节、丢响应、源重建、内容变化、多出子项、缺失空目录、拒绝、已有目标、备份失败/超限、未决子项、路径重叠及子树占用。归档解析拒绝父路径逃逸、绝对路径、重复路径、缺失父目录和链接/特殊文件。
+
+检查上游fstests时发现已有目标必须返回准确ErrorDirExists，直接用NoRetry包装虽能阻止回退，却违反错误契约。新增默认false的NoDirMoveFallback能力，掩码按OR保守保留限制；SJTU保留标准错误且operations不再回退逐文件移动。回归先复现“目录原生拒绝后通用层仍搬走子文件”，再验证修复。默认其他后端不变；上游operations及完整WebDAV race、主项目全量race/vet通过。
+
+真实WebDAV整树移动201、目录控制接口204；独立核对文件、零字节和空目录，日志Committed。[正常协议证据](evidence/2026-09-17/webdav-directory-move.json)。真实目录丢响应、取消和SIGKILL也通过：[丢响应](evidence/2026-09-17/directory-move-response-loss.json)、[进程强杀](evidence/2026-09-17/directory-move-process-death.json)。恢复不发送修改请求，保留完整tar备份。目录合并/覆盖、完整Finder与整机掉电仍是缺口。
+
+本轮同时修复delete/rmdir首份Prepared记录先被标为上传的崩溃窗口：PrepareDeletion在首次发布时写入类型，发布后目录fsync失败的注入测试确认不能误作零字节上传恢复。旧证据与旧日志不做猜测性改写。
+
+
+macOS原生 /bin/mv 在同一webdavfs的from/to之间移动普通文件和嵌套目录均退出0，包含Unicode文件名、隐藏文件、零字节与空目录。独立云端全树和逐文件SHA核对通过，源路径消失；普通文件move1条、目录dirmove1条、macOS配对AppleDouble move2条均Committed，本地备份校验通过。[原生证据](evidence/2026-09-17/macos-directory-move.json)。
+
+首次独立核对的预期只包含显式创建的内容，发现额外的nested/._empty后失败，见[首次核对](evidence/2026-09-17/native-directory-move-initial-check.json)。检查移动前tar确认macOS已经创建这些AppleDouble；后续把目录内元数据逐项与移动前归档比较，目录外配对文件与原始已提交上传记录比较，核对头部magic/version、大小和SHA，没有忽略额外路径。目录备份实际11项，包含5个AppleDouble文件；整个fixture有9个元数据文件。仍没有真实操作录屏，因此ST-004-T未标PASS。

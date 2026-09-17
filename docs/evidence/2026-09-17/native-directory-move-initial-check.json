@@ -1,0 +1,7 @@
+{
+  "fixture": "native-dir-9405317f34f2",
+  "result": "failed initial fact-check",
+  "unexpected_file": "to/tree/nested/._empty",
+  "cause": "test baseline omitted macOS AppleDouble metadata already present in the pre-move backup",
+  "followup": "compare all metadata against pre-move backup and original upload records; do not ignore extra paths"
+}

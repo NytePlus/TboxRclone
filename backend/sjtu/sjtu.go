@@ -40,9 +40,9 @@ func init() {
 			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
 			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
 			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
-			{Name: "lab_move", Default: false, Help: "Experimental journaled file moves under the single-controlled-client contract; requires lab_writes."},
+			{Name: "lab_move", Default: false, Help: "Experimental journaled file and directory moves under the single-controlled-client contract; requires lab_writes."},
 			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
-			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
+			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable spool size, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
 		}})
 }
 
@@ -111,7 +111,7 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		return nil, err
 	}
 	f := &Fs{name: name, root: root, opt: opt, c: c}
-	f.features = (&fs.Features{CanHaveEmptyDirectories: true, MoveOverwrites: opt.LabMove}).Fill(ctx, f)
+	f.features = (&fs.Features{CanHaveEmptyDirectories: true, MoveOverwrites: opt.LabMove, NoDirMoveFallback: true}).Fill(ctx, f)
 	if !opt.LabMove {
 		f.features.Move = nil
 	}
@@ -162,6 +162,14 @@ func mapped(err, missing error) error {
 func (f *Fs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
 	p, e := f.full(dir)
 	if e != nil {
+		return nil, e
+	}
+	release, e := f.acquireFile(p, false)
+	if e != nil {
+		return nil, e
+	}
+	defer release()
+	if e = journal.CheckPending(f.opt.StateDir, f.c.Endpoint+"/"+f.c.Library+"/"+f.c.Space, p); e != nil {
 		return nil, e
 	}
 	items, e := f.c.List(ctx, p)

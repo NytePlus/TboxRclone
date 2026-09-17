@@ -23,6 +23,7 @@ import (
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/recovery"
 	"github.com/nyte/TboxRclone/internal/smh"
+	"github.com/nyte/TboxRclone/internal/treebackup"
 	"github.com/rclone/rclone/fs/config/configmap"
 	"github.com/rclone/rclone/fs/object"
 )
@@ -87,7 +88,13 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 	if err = independent.UseUserToken(os.Getenv("TBOX_USER_TOKEN_FILE"), "1"); err != nil {
 		t.Fatal(err)
 	}
+	directory := os.Getenv("TBOX_MOVE_FAULT_DIRECTORY") == "1"
+	kind, operation := "file", "move"
+	if directory {
+		kind, operation = "directory", "dirmove"
+	}
 	type result struct {
+		Directory           bool               `json:"directory"`
 		Fixture             string             `json:"fixture"`
 		Overwrite           bool               `json:"overwrite"`
 		Cancel              bool               `json:"context_cancelled"`
@@ -115,8 +122,14 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 		}
 	}()
 	for _, overwrite := range []bool{false, true} {
+		if directory && overwrite {
+			continue
+		}
 		for _, cancelCall := range []bool{false, true} {
 			name := "new"
+			if directory {
+				name = "directory"
+			}
 			if overwrite {
 				name = "overwrite"
 			}
@@ -130,7 +143,7 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				}
 				prefix := "move-fault-" + hex.EncodeToString(id[:])
 				source, target := prefix+"-source", prefix+"-target"
-				out := &result{Fixture: prefix, Overwrite: overwrite, Cancel: cancelCall}
+				out := &result{Fixture: prefix, Overwrite: overwrite, Cancel: cancelCall, Directory: directory}
 				report.Results = append(report.Results, out)
 				payload := []byte("retained source for real post-origin MOVE fault\n")
 				put := func(remote string, data []byte) {
@@ -141,13 +154,24 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 					}
 				}
 				f.c.HTTP.Transport = observed
-				put(source, payload)
-				if overwrite {
-					put(target, []byte("old target\n"))
-				}
-				src, err := f.NewObject(ctx, source)
-				if err != nil {
-					t.Fatal(err)
+				var move func(context.Context) error
+				if directory {
+					if err := f.Mkdir(ctx, source+"/empty"); err != nil {
+						t.Fatal(err)
+					}
+					put(source+"/child", payload)
+					put(source+"/zero", nil)
+					move = func(ctx context.Context) error { return f.DirMove(ctx, f, source, target) }
+				} else {
+					put(source, payload)
+					if overwrite {
+						put(target, []byte("old target\n"))
+					}
+					src, err := f.NewObject(ctx, source)
+					if err != nil {
+						t.Fatal(err)
+					}
+					move = func(ctx context.Context) error { _, err := f.Move(ctx, src, target); return err }
 				}
 				observed.Lock()
 				hosts := []string{}
@@ -163,7 +187,7 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				defer server.Close()
 				defer proxy.Close()
 				defer func() { out.Events = proxy.Events(0) }()
-				rule := faultproxy.Rule{ID: "move-after-origin", Host: "pan.sjtu.edu.cn:443", Method: "PUT", PathPrefix: "/api/v1/file/" + ids.Library + "/" + ids.Space + "/" + root + "/" + target, Nth: 1, Action: "hold_response"}
+				rule := faultproxy.Rule{ID: "move-after-origin", Host: "pan.sjtu.edu.cn:443", Method: "PUT", PathPrefix: "/api/v1/" + kind + "/" + ids.Library + "/" + ids.Space + "/" + root + "/" + target, Nth: 1, Action: "hold_response"}
 				if err = proxy.SetRules([]faultproxy.Rule{rule}); err != nil {
 					t.Fatal(err)
 				}
@@ -183,7 +207,7 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				callCtx, callCancel := context.WithCancel(ctx)
 				defer callCancel()
 				done := make(chan error, 1)
-				go func() { _, err := f.Move(callCtx, src, target); done <- err }()
+				go func() { done <- move(callCtx) }()
 				// Ensure no backend goroutine can outlive its test and transport.
 				finished := false
 				defer func() {
@@ -224,21 +248,8 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				if out.OriginStatus < 200 || out.OriginStatus >= 300 {
 					t.Fatal("origin move did not succeed", out.OriginStatus)
 				}
-				if _, err = independent.Info(ctx, root+"/"+source); !smh.IsStatus(err, 404) {
-					t.Fatal("source absence not established", err)
-				}
-				item, err := independent.Info(ctx, root+"/"+target)
-				if err != nil {
+				if err = verifyLiveMoveOutcome(ctx, independent, root+"/"+source, root+"/"+target, payload, directory); err != nil {
 					t.Fatal(err)
-				}
-				r, err := independent.Open(ctx, root+"/"+target, item, 0, -1)
-				if err != nil {
-					t.Fatal(err)
-				}
-				data, err := io.ReadAll(r)
-				closeErr := r.Close()
-				if err != nil || closeErr != nil || !bytes.Equal(data, payload) {
-					t.Fatal("independent target mismatch")
 				}
 				out.VerifiedBeforeDrop = true
 				if ready := os.Getenv("TBOX_MOVE_KILL_READY"); ready != "" && os.Getenv("TBOX_LIVE_MOVE_DEATH") == "1" {
@@ -282,7 +293,7 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				}
 				var record *journal.Record
 				for i := range records {
-					if records[i].Kind == "move" && records[i].Path == root+"/"+target {
+					if records[i].Kind == operation && records[i].Path == root+"/"+target {
 						if record != nil {
 							t.Fatal("duplicate move record")
 						}
@@ -297,14 +308,16 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				data, err = io.ReadAll(backup)
+				out.BackupMatches = liveMoveBackupMatches(backup, payload, directory)
 				backup.Close()
-				out.BackupMatches = err == nil && bytes.Equal(data, payload)
 				if !out.BackupMatches {
 					t.Fatal("backup lost")
 				}
 				if cancelCall {
 					out.PendingBoth = errors.Is(s.Pending(record.Scope, record.SourcePath), journal.ErrPending) && errors.Is(s.Pending(record.Scope, record.Path), journal.ErrPending)
+					if directory {
+						out.PendingBoth = out.PendingBoth && errors.Is(s.Pending(record.Scope, record.SourcePath+"/child"), journal.ErrPending) && errors.Is(s.Pending(record.Scope, record.Path+"/child"), journal.ErrPending)
+					}
 					if !out.PendingBoth || record.State != "MoveUnknown" {
 						t.Fatal("unresolved reservations lost", record.State)
 					}
@@ -337,4 +350,59 @@ func TestLiveMoveResponseLoss(t *testing.T) {
 			}
 		}
 	}
+}
+
+func liveMoveTree(payload []byte) map[string]treebackup.Entry {
+	return map[string]treebackup.Entry{
+		".": {Directory: true}, "empty": {Directory: true},
+		"child": {Size: int64(len(payload)), SHA256: hashLiveMove(payload)},
+		"zero":  {SHA256: hashLiveMove(nil)},
+	}
+}
+
+func verifyLiveMoveOutcome(ctx context.Context, c *smh.Client, source, target string, payload []byte, directory bool) error {
+	if _, err := c.Info(ctx, source); !smh.IsStatus(err, 404) {
+		return errors.New("source absence not established")
+	}
+	if directory {
+		return treebackup.Verify(ctx, c, target, liveMoveTree(payload))
+	}
+	item, err := c.Info(ctx, target)
+	if err != nil {
+		return err
+	}
+	reader, err := c.Open(ctx, target, item, 0, -1)
+	if err != nil {
+		return err
+	}
+	data, err := io.ReadAll(reader)
+	ce := reader.Close()
+	if err != nil {
+		return err
+	}
+	if ce != nil {
+		return ce
+	}
+	if !bytes.Equal(data, payload) {
+		return errors.New("independent target mismatch")
+	}
+	return nil
+}
+
+func liveMoveBackupMatches(reader io.Reader, payload []byte, directory bool) bool {
+	if !directory {
+		data, err := io.ReadAll(reader)
+		return err == nil && bytes.Equal(data, payload)
+	}
+	actual, err := treebackup.Manifest(reader)
+	expected := liveMoveTree(payload)
+	if err != nil || len(actual) != len(expected) {
+		return false
+	}
+	for name, want := range expected {
+		if got, ok := actual[name]; !ok || got != want {
+			return false
+		}
+	}
+	return true
 }

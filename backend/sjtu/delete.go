@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/url"
-	"strings"
 
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/recovery"
@@ -52,7 +51,7 @@ func (o *Object) remove(ctx context.Context) error {
 		return errors.New("delete target changed; refresh object before deleting")
 	}
 	// A zero-byte spool is an intent artifact, not a backup of deleted content.
-	r, err := s.Prepare(ctx, scope, p, strings.NewReader(""), 0, 0)
+	r, err := s.PrepareDeletion(ctx, scope, p, "delete")
 	if err != nil {
 		return err
 	}
@@ -132,7 +131,7 @@ func (f *Fs) rmdir(ctx context.Context, dir string) error {
 	if len(children) != 0 {
 		return fs.ErrorDirectoryNotEmpty
 	}
-	r, err := s.Prepare(ctx, scope, p, strings.NewReader(""), 0, 0)
+	r, err := s.PrepareDeletion(ctx, scope, p, "rmdir")
 	if err != nil {
 		return err
 	}

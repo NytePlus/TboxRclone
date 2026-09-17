@@ -245,7 +245,7 @@ func TestPreparedMoveReconcileDoesNotTouchCloud(t *testing.T) {
 	}
 }
 
-func TestDirectoryMoveDoesNotFallBackToPartialMoves(t *testing.T) {
+func TestDisabledDirectoryMoveDoesNotFallBackToPartialMoves(t *testing.T) {
 	f, _ := newSimulator(t, false)
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()

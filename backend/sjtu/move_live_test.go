@@ -135,15 +135,25 @@ func TestLiveWebDAVFileMove(t *testing.T) {
 	verify("-target", nil)
 	verify("-final", fresh)
 	request("create directory", "MKCOL", "-dir", nil, "", "", 201)
+	request("create empty directory", "MKCOL", "-dir/empty", nil, "", "", 201)
+	request("create zero file", "PUT", "-dir/zero", []byte{}, "", "", 201)
 	request("create directory child", "PUT", "-dir/child", fresh, "", "", 201)
-	request("directory fallback rejected", "MOVE", "-dir", nil, "-dir-next", "", 403)
-	verify("-dir/child", fresh)
-	verify("-dir-next", nil)
+	request("directory moved as a tree", "MOVE", "-dir", nil, "-dir-next", "", 201)
+	verify("-dir", nil)
+	verify("-dir-next/child", fresh)
+	verify("-dir-next/zero", []byte{})
+	empty, err := c.List(ctx, root+"/"+prefix+"-dir-next/empty")
+	check("independent empty directory retained", err == nil && len(empty) == 0)
 	records, err := (&journal.Store{Dir: os.Getenv("TBOX_STATE_DIR")}).Records()
 	if err != nil {
 		t.Fatal(err)
 	}
+	directoryMoves := 0
 	for _, r := range records {
+		if r.Kind == "dirmove" && r.Path == root+"/"+prefix+"-dir-next" {
+			check("directory move committed", r.State == "Committed")
+			directoryMoves++
+		}
 		if r.Kind == "move" && strings.HasPrefix(r.Path, root+"/"+prefix) {
 			check("move committed with source identity", r.State == "Committed" && r.SourcePath != "")
 			check("move backup hash", r.SHA256 == hashLiveMove(fresh))
@@ -151,6 +161,7 @@ func TestLiveWebDAVFileMove(t *testing.T) {
 		}
 	}
 	check("exactly two move records", report.Moves == 2)
+	check("exactly one directory move record", directoryMoves == 1)
 }
 
 func hashLiveMove(data []byte) string { sum := sha256.Sum256(data); return hex.EncodeToString(sum[:]) }

@@ -125,9 +125,3 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	}
 	return f.NewObject(ctx, remote)
 }
-
-// DirMove rejects directory moves until a durable whole-tree operation exists.
-// A non-sentinel error prevents rclone from falling back to partial file moves.
-func (f *Fs) DirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string) error {
-	return fserrors.NoRetryError(errors.New("directory move requires a durable whole-tree operation; file-by-file fallback is disabled"))
-}

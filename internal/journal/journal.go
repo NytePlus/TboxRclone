@@ -208,7 +208,15 @@ func (s *Store) pending(scope, p string, tree bool) error {
 		return e
 	}
 	for _, r := range records {
-		overlap := r.Path == p || (r.SourcePath != "" && (r.SourcePath == p || (tree && strings.HasPrefix(r.SourcePath, p+"/")))) || (r.Kind == "rmdir" && strings.HasPrefix(p, r.Path+"/")) || (tree && strings.HasPrefix(r.Path, p+"/"))
+		overlap := false
+		for _, reserved := range []string{r.Path, r.SourcePath} {
+			if reserved == "" {
+				continue
+			}
+			if reserved == p || (tree && strings.HasPrefix(reserved, p+"/")) || ((r.Kind == "rmdir" || r.Kind == "dirmove") && strings.HasPrefix(p, reserved+"/")) {
+				overlap = true
+			}
+		}
 		if r.Scope == scope && overlap && r.State != "Committed" && r.State != "Aborted" {
 			return fmt.Errorf("%w: operation %s is %s; reconcile before retrying", ErrPending, r.ID, r.State)
 		}
@@ -231,6 +239,27 @@ func (s *Store) PrepareMove(ctx context.Context, scope, source, target string, i
 		return nil, err
 	}
 	return s.prepare(ctx, scope, target, in, size, max, "move", source, overwrite)
+}
+
+// PrepareDirectoryMove records both subtree reservations with the first backup publication.
+func (s *Store) PrepareDirectoryMove(ctx context.Context, scope, source, target string, in io.Reader, max int64) (*Record, error) {
+	if source == "" || target == "" || source == target || strings.HasPrefix(source, target+"/") || strings.HasPrefix(target, source+"/") {
+		return nil, errors.New("directory move requires disjoint source and destination")
+	}
+	for _, p := range []string{source, target} {
+		if err := s.PendingSubtree(scope, p); err != nil {
+			return nil, err
+		}
+	}
+	return s.prepare(ctx, scope, target, in, -1, max, "dirmove", source, false)
+}
+
+// PrepareDeletion publishes the deletion kind before any recovery-visible record.
+func (s *Store) PrepareDeletion(ctx context.Context, scope, p, kind string) (*Record, error) {
+	if kind != "delete" && kind != "rmdir" {
+		return nil, errors.New("invalid deletion kind")
+	}
+	return s.prepare(ctx, scope, p, strings.NewReader(""), 0, 0, kind, "", false)
 }
 
 func (s *Store) prepare(ctx context.Context, scope, p string, in io.Reader, size, max int64, kind, source string, overwrite bool) (*Record, error) {

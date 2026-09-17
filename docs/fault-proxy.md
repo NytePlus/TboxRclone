@@ -115,3 +115,5 @@ docker compose run --rm \
 真正SIGKILL实验使用相同卷和身份环境，把开关改为 `TBOX_LIVE_MOVE_DEATH=1`、报告变量改为 `TBOX_MOVE_DEATH_REPORT=/state/move-process-death.json`、测试名改为 `^TestLiveMoveProcessDeath$`。另加 `TBOX_MOVE_DEATH_OVERWRITE=1` 测已有目标；两种应分别启动测试进程，因为接管后的实例锁保持至进程退出。父进程独立核对后杀死持锁子进程，再接管原目录；恢复HTTP传输拒绝API非GET请求，不能用重发移动蒙混通过。
 
 生成的fixtures、备份及日志保留，不自动删除。测试完成并确认无未决操作后，用原来的TBOX_LAB_REMOTE和实验开关恢复服务，再运行挂载入口。上述均为真实后端实验，不能代替Finder、目录移动或整机掉电验收。
+
+目录移动复用上述两项测试入口，额外设置 `TBOX_MOVE_FAULT_DIRECTORY=1`。丢响应测试只执行目标不存在的正常/取消两种分支；SIGKILL测试选择directory子场景，不与TBOX_MOVE_DEATH_OVERWRITE混用。独立核对比较完整树而非仅根目录存在，备份核对包含空目录和零字节文件。

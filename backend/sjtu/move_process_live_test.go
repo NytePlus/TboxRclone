@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 	"os"
 	"os/exec"
@@ -58,6 +57,14 @@ func TestLiveMoveProcessDeath(t *testing.T) {
 	}
 	pattern := "^TestLiveMoveResponseLoss$/^new$"
 	overwrite := os.Getenv("TBOX_MOVE_DEATH_OVERWRITE") == "1"
+	directory := os.Getenv("TBOX_MOVE_FAULT_DIRECTORY") == "1"
+	operation := "move"
+	if directory {
+		if overwrite {
+			t.Fatal("directory overwrite is not supported")
+		}
+		pattern, operation = "^TestLiveMoveResponseLoss$/^directory$", "dirmove"
+	}
 	if overwrite {
 		pattern = "^TestLiveMoveResponseLoss$/^overwrite$"
 	}
@@ -79,6 +86,7 @@ func TestLiveMoveProcessDeath(t *testing.T) {
 		}
 	}()
 	report := struct {
+		Directory         bool               `json:"directory"`
 		Overwrite         bool               `json:"overwrite"`
 		At                string             `json:"at"`
 		Scope             string             `json:"scope"`
@@ -95,7 +103,7 @@ func TestLiveMoveProcessDeath(t *testing.T) {
 		MutationsRecovery int                `json:"mutation_attempts_during_recovery"`
 		Pass              bool               `json:"pass"`
 		Events            []faultproxy.Event `json:"proxy_events_before_kill"`
-	}{Overwrite: overwrite, At: time.Now().UTC().Format(time.RFC3339), Scope: "real cloud MOVE with SIGKILL of separate backend process; not Finder or host power loss"}
+	}{Directory: directory, Overwrite: overwrite, At: time.Now().UTC().Format(time.RFC3339), Scope: "real cloud MOVE with SIGKILL of separate backend process; not Finder or host power loss"}
 	defer func() {
 		b, _ := json.MarshalIndent(report, "", "  ")
 		if p := os.Getenv("TBOX_MOVE_DEATH_REPORT"); p != "" {
@@ -170,21 +178,8 @@ waiting:
 	defer cancel()
 	source, target := root+"/"+child.Fixture+"-source", root+"/"+child.Fixture+"-target"
 	payload := []byte("retained source for real post-origin MOVE fault\n")
-	if _, err = c.Info(ctx, source); !smh.IsStatus(err, 404) {
-		t.Fatal("source not independently absent", err)
-	}
-	item, err := c.Info(ctx, target)
-	if err != nil {
+	if err = verifyLiveMoveOutcome(ctx, c, source, target, payload, directory); err != nil {
 		t.Fatal(err)
-	}
-	reader, err := c.Open(ctx, target, item, 0, -1)
-	if err != nil {
-		t.Fatal(err)
-	}
-	data, err := io.ReadAll(reader)
-	closeErr := reader.Close()
-	if err != nil || closeErr != nil || !bytes.Equal(data, payload) {
-		t.Fatal("target mismatch before kill")
 	}
 	report.ParentVerified = true
 	if err = cmd.Process.Kill(); err != nil {
@@ -215,7 +210,7 @@ waiting:
 	}
 	var record *journal.Record
 	for i := range records {
-		if records[i].Kind == "move" && records[i].Path == target {
+		if records[i].Kind == operation && records[i].Path == target {
 			if record != nil {
 				t.Fatal("duplicate move record")
 			}
@@ -230,6 +225,9 @@ waiting:
 		t.Fatal("wrong crash boundary", record.State)
 	}
 	report.PendingBoth = errors.Is(s.Pending(record.Scope, source), journal.ErrPending) && errors.Is(s.Pending(record.Scope, target), journal.ErrPending)
+	if directory {
+		report.PendingBoth = report.PendingBoth && errors.Is(s.Pending(record.Scope, source+"/child"), journal.ErrPending) && errors.Is(s.Pending(record.Scope, target+"/child"), journal.ErrPending)
+	}
 	if !report.PendingBoth {
 		t.Fatal("reservations lost")
 	}
@@ -237,9 +235,8 @@ waiting:
 	if err != nil {
 		t.Fatal(err)
 	}
-	data, err = io.ReadAll(backup)
+	report.BackupMatches = liveMoveBackupMatches(backup, payload, directory)
 	backup.Close()
-	report.BackupMatches = err == nil && bytes.Equal(data, payload)
 	if !report.BackupMatches {
 		t.Fatal("backup lost")
 	}

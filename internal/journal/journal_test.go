@@ -264,3 +264,46 @@ func TestMoveFirstPublicationKeepsIdentity(t *testing.T) {
 		t.Fatal("backup lost", err)
 	}
 }
+
+func TestMutationFirstPublicationKeepsKindAndSubtrees(t *testing.T) {
+	for _, kind := range []string{"delete", "rmdir", "dirmove"} {
+		t.Run(kind, func(t *testing.T) {
+			s := store(t)
+			calls := 0
+			s.syncDirectory = func(string) error {
+				calls++
+				if calls == 2 {
+					return errors.New("publication sync failed")
+				}
+				return nil
+			}
+			var err error
+			if kind == "dirmove" {
+				_, err = s.PrepareDirectoryMove(context.Background(), "scope", "source", "target", strings.NewReader("backup"), 10)
+			} else {
+				_, err = s.PrepareDeletion(context.Background(), "scope", "target", kind)
+			}
+			if err == nil {
+				t.Fatal("missing injected failure")
+			}
+			records, err := s.Records()
+			if err != nil || len(records) != 1 {
+				t.Fatal(records, err)
+			}
+			r := records[0]
+			if r.Kind != kind || r.State != "Prepared" {
+				t.Fatal("misclassified durable operation", r)
+			}
+			if kind == "dirmove" {
+				for _, p := range []string{"source", "source/child", "target", "target/child"} {
+					if !errors.Is(s.Pending("scope", p), ErrPending) {
+						t.Fatal("missing subtree reservation", p)
+					}
+				}
+				if err = s.PendingSubtree("scope", "source"); !errors.Is(err, ErrPending) {
+					t.Fatal(err)
+				}
+			}
+		})
+	}
+}

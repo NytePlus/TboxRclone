@@ -59,12 +59,12 @@ func run() error {
 	}
 	if actions == 0 {
 		type summary struct {
-			ID, State, Path, SHA256 string
-			Size                    int64
+			ID, State, Path, SHA256, Kind, SourcePath string
+			Size                                      int64
 		}
 		out := []summary{}
 		for _, r := range records {
-			out = append(out, summary{r.ID, r.State, r.Path, r.SHA256, r.Size})
+			out = append(out, summary{ID: r.ID, State: r.State, Path: r.Path, SHA256: r.SHA256, Kind: r.Kind, SourcePath: r.SourcePath, Size: r.Size})
 		}
 		return json.NewEncoder(os.Stdout).Encode(out)
 	}
@@ -91,7 +91,9 @@ func run() error {
 			if e != nil {
 				return e
 			}
-			if r.Kind == "delete" || r.Kind == "rmdir" {
+			if r.Kind == "dirmove" {
+				fmt.Printf("%s %s; complete directory content tar backup retained\n", r.ID, r.State)
+			} else if r.Kind == "delete" || r.Kind == "rmdir" {
 				fmt.Printf("%s %s; deletion intent retained (not a content backup); recycle receipt present: %t\n", r.ID, r.State, r.RecycledID != "")
 			} else {
 				fmt.Printf("%s %s; local spool retained\n", r.ID, r.State)

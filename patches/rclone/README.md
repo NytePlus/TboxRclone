@@ -29,3 +29,6 @@ sh scripts/rclone-patches.sh --check
 
 
 `0003-backend-move-overwrite.patch` 新增默认 false 的 `Features.MoveOverwrites`：后端声明后，通用 operations.Move 不再先删除已有目标。Mask 保守交集传播。补丁0001同时在 MOVE 请求上下文中推迟文件目标删除到后端 Move，Overwrite:F仍由协议层拒绝；目录目标不套用此文件能力。两层回归均先复现“后端拒绝但目标已丢失”，再验证旧目标保留、正常覆盖成功和默认行为不变。已完整重放三个补丁并逐字节比较7个上游文件；上游WebDAV完整race32.838s、operations移动回归、主项目全量race/vet通过。能力名称不承诺服务端掉电原子性。
+
+
+补丁0003还包含默认false的NoDirMoveFallback：后端拒绝目录移动时不再模拟逐文件移动；能力掩码按OR保留限制。SJTU因此可以按原生契约返回准确ErrorDirExists，同时保护已有目标及完整源树。operations回归先复现返回nil并搬走源子文件，再验证显式能力开启时保留源与目标。未声明能力的默认目录移动流程不变。
