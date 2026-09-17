@@ -70,4 +70,4 @@ Compose WebDAV 服务现开启 `--exclusive-access`。它在前置条件检查�
 
 显式 `lab_delete=true`（同时需要 lab_writes）允许隔离根内的文件回收站删除。取得文件写占用和日志锁、核对调用对象的旧 ETag/大小后，持久化 kind=delete 和 DeleteSent，才发送一次 `DELETE file?permanent=0`。之后保存 DeleteUnknown 并只读查询路径；独占前提下确认 404 才记 Committed，释放持久占用。查询失败或路径仍存在，保留未决日志；禁止盲目重发 DELETE。tbox-state 的 reconcile 分派删除对账，resume/abort 上传命令拒绝删除日志。
 
-正常返回时尽可能记录 recycledItemId；响应没有 ID 或丢失时不虚构回收站身份。删除的零字节 spool 只是意图凭据，不是原文件备份。当前真实实验确认路径删除及后续重建，但未验证回收站恢复、回收站数量或真实删除丢响应；这些仍是完整验收缺口。目录删除仍未实现，默认不开启该实验能力。
+正常返回时尽可能记录 recycledItemId；响应没有 ID 或丢失时不虚构回收站身份。删除的零字节 spool 只是意图凭据，不是原文件备份。真实实验已确认路径删除、后续重建，以及单个生成条目的回收站 ask 冲突拒绝和 rename 恢复。回收站数量、真实删除/恢复丢响应、产品级恢复流程仍是完整验收缺口。目录删除仍未实现，默认不开启该实验能力。

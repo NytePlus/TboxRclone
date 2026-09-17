@@ -8,6 +8,7 @@ import (
 
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/recovery"
+	"github.com/nyte/TboxRclone/internal/smh"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/fserrors"
 )
@@ -61,10 +62,10 @@ func (o *Object) remove(ctx context.Context) error {
 		return err
 	}
 	var result struct {
-		RecycledID string `json:"recycledItemId"`
+		RecycledID smh.Identifier `json:"recycledItemId"`
 	}
 	requestErr := f.c.JSON(ctx, "DELETE", "file", p, url.Values{"permanent": {"0"}}, nil, &result)
-	r.RecycledID = result.RecycledID
+	r.RecycledID = string(result.RecycledID)
 	r.State = "DeleteUnknown"
 	if err = s.Save(r); err != nil {
 		return errors.Join(requestErr, err)

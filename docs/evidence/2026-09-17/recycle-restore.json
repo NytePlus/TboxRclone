@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-17T07:11:11.392043+00:00",
+  "scope": "direct API restore of one previously generated deleted fixture, service stopped",
+  "fixture": "delete-go-b1b9eefc825a",
+  "recycled_item_id": "50285957",
+  "list_entry_original_path_matches": true,
+  "ask_conflict_http": 409,
+  "rename_restore_http": 200,
+  "restored_path": "codex-api-lab/run-20260917T020318Z-f0339b72/delete-go-b1b9eefc825a (1)",
+  "restored_old_content_matches": true,
+  "restored_sha256": "ecdbce7ceccd9215923ae72cadcdad833159982d7e2af30fb5fae8e810632de1",
+  "new_original_path_preserved": true,
+  "new_sha256": "4284705c5429e7ac4499d91e1f49a0aa68bdf3b119443509842da9c54fef401b",
+  "mutations_sent": 2,
+  "fallback_to_root": false
+}

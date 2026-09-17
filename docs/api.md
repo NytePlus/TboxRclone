@@ -147,3 +147,13 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 ### 目录游标类型
 
 当前部署的 `nextMarker` 在跨页时为 JSON 非负整数，不能只按字符串解码，也不能经过 float64 中转。客户端保留其精确十进制表示作为下一次 marker，并兼容 SDK 描述的不透明字符串游标。稳定 0/1/50/51/1000 项和每页 50 项的实测见 [目录规模实验](live-api-findings.md#整数目录游标与稳定目录规模)。
+
+### 回收站 ID 与恢复（真实隔离样本）
+
+`recycledItemId` 实际可为 JSON 整数；Go 必须兼容整数和字符串且不能经 float64 转换。先前删除响应按 string 解码导致凭据未保存，修复后新删除日志已保存 ID。回归额外使用 9007199254740993 验证不会丢精度。
+
+`GET /api/v1/recycled/{L}/{S}?limit=100` 实测 200，返回 `totalNum` 和 `contents`。本次只匹配一项：`originalPath` 是包含文件名的完整路径数组，size 为十进制字符串，recycledItemId 为整数，另有 removalTime、remainingTime、authorityList。列表分页及保留时长契约仍未验证。
+
+仅对已匹配的本次测试条目调用 `POST /api/v1/recycled/{L}/{S}/{ID}?restore=1&conflict_resolution_strategy=ask&restore_path_strategy=originalPath`，body `{}`：原路径已有重建文件时返回 409，重建文件不变。随后改为 `rename` 返回 200 和最终 path，恢复在原实验目录下自动改名；独立下载的旧内容 SHA-256 正确，原路径的新内容仍完整。没有使用 overwrite 或 fallbackToRoot，也没有操作其他回收站条目。见 [恢复证据](evidence/2026-09-17/recycle-restore.json)。
+
+恢复属于修改操作，响应丢失不得盲目重放 rename，否则可能产生重复副本；本次尚未验证恢复丢响应/异步任务。客户端未提供产品级自动恢复命令，接口实验不代替 Finder 删除/撤销验收。

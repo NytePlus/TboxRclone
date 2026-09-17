@@ -18,7 +18,7 @@ import (
 )
 
 func TestDurableDeleteNeverReplays(t *testing.T) {
-	for _, mode := range []string{"ack", "drop_response", "recreated", "denied", "read_failure", "stale_object", "disabled"} {
+	for _, mode := range []string{"ack", "ack_numeric", "drop_response", "recreated", "denied", "read_failure", "stale_object", "disabled"} {
 		t.Run(mode, func(t *testing.T) {
 			f, _ := newSimulator(t, false)
 			f.opt.LabDelete = mode != "disabled"
@@ -60,7 +60,11 @@ func TestDurableDeleteNeverReplays(t *testing.T) {
 						conn.Close()
 						return
 					}
-					json.NewEncoder(w).Encode(map[string]string{"recycledItemId": "fixture-trash-id"})
+					if mode == "ack_numeric" {
+						json.NewEncoder(w).Encode(map[string]int64{"recycledItemId": 9007199254740993})
+					} else {
+						json.NewEncoder(w).Encode(map[string]string{"recycledItemId": "fixture-trash-id"})
+					}
 					return
 				}
 				if r.Method != "GET" || !strings.Contains(r.URL.Path, "/directory/") {
@@ -89,7 +93,7 @@ func TestDurableDeleteNeverReplays(t *testing.T) {
 				etag = "new"
 			}
 			err = obj.Remove(context.Background())
-			if mode == "ack" || mode == "drop_response" {
+			if mode == "ack" || mode == "ack_numeric" || mode == "drop_response" {
 				if err != nil || exists || deletes != 1 {
 					t.Fatalf("delete result: exists=%t calls=%d err=%v", exists, deletes, err)
 				}
@@ -115,10 +119,13 @@ func TestDurableDeleteNeverReplays(t *testing.T) {
 			if record.Kind != "delete" {
 				t.Fatal("kind lost")
 			}
+			if mode == "ack_numeric" && record.RecycledID != "9007199254740993" {
+				t.Fatal("numeric recycle ID lost precision", record.RecycledID)
+			}
 			if mode == "ack" && record.RecycledID != "fixture-trash-id" {
 				t.Fatal("trash receipt lost")
 			}
-			if mode == "ack" || mode == "drop_response" {
+			if mode == "ack" || mode == "ack_numeric" || mode == "drop_response" {
 				if record.State != "Committed" {
 					t.Fatal(record.State)
 				}

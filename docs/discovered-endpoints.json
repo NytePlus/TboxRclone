@@ -1586,7 +1586,9 @@
       ],
       "source": "dist/apis/recycled-api.js",
       "evidence": "S",
-      "runtime_verified": false
+      "runtime_verified": true,
+      "runtime_evidence": "evidence/2026-09-17/recycle-restore.json",
+      "runtime_scope": "One generated fixture: list matched originalPath; restore ask=409 and rename=200 with both old and new SHA-256 verified. Pagination, overwrite and fallbackToRoot unverified."
     },
     {
       "operation": "recycleListByPage",
@@ -1672,7 +1674,9 @@
       ],
       "source": "dist/apis/recycled-api.js",
       "evidence": "S",
-      "runtime_verified": false
+      "runtime_verified": true,
+      "runtime_evidence": "evidence/2026-09-17/recycle-restore.json",
+      "runtime_scope": "One generated fixture: list matched originalPath; restore ask=409 and rename=200 with both old and new SHA-256 verified. Pagination, overwrite and fallbackToRoot unverified."
     },
     {
       "operation": "recycleRestoreBatch",

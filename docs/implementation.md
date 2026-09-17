@@ -145,3 +145,9 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 模拟 HTTPS 回归检查服务端收到 DELETE 时日志已经是 DeleteSent，并覆盖正常删除、执行后丢响应、同路径重建、权限拒绝、对账读失败后恢复、陈旧对象、开关未启用、终态再次对账不误删新文件及上传命令类型拒绝。全量 Docker race/vet 通过。
 
 在线隔离服务随后重建并显式开启 TBOX_LAB_DELETE=true（同时包含上一轮 Mkdir 修复）。真实 WebDAV 创建201→删除204→独立云端 info404→同路径新建201，新文件独立内容匹配，删除日志 Committed，见 [文件删除证据](evidence/2026-09-17/go-trash-delete.json)。本次未取得回收站 ID，未做恢复；也未做真实删除丢响应和 Finder 删除，不能标记完整 C-017 通过。
+
+## 数字回收站 ID 修复与恢复实测
+
+找到此前缺失凭据的原因：实例返回整数 recycledItemId，删除响应用 Go string 解码失败，随后只读核对虽然确认路径消失，却丢了回收站 ID。现以 smh.Identifier 兼容整数/字符串并保留精确十进制，不接受负数、浮点或指数格式。回归通过完整 Remove 路径验证 9007199254740993 正确落盘。全量 Docker race/vet 通过，重建服务后新的真实删除日志已保存回收站凭据，见 [修复后删除](evidence/2026-09-17/go-trash-delete-receipt.json)。
+
+停止服务后，回收站列表精确匹配上一轮生成条目的 originalPath/name/size。ask 恢复到已有同名新文件返回409且新内容不变；rename 恢复返回200和实验根内新名字，独立旧内容 SHA-256 正确，原路径新内容也保留，见 [回收站恢复](evidence/2026-09-17/recycle-restore.json)。随后恢复了在线服务。没有改变此前未取到 ID 的历史日志，也没有标记系统场景 PASS。恢复丢响应、自动回收站定位及 Finder 撤销仍待实现和验收。
