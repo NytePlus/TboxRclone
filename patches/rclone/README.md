@@ -15,6 +15,7 @@ sh scripts/rclone-patches.sh --check
 - WebDAV Mkdir 在 VFS 已有资源时返回 os.ErrExist，使重复 MKCOL 返回 405；rclone 后端 Mkdir 仍保持幂等。
 - PUT 在打开截断写句柄前检查 If-Match/If-None-Match 的星号、标签列表及强弱比较，条件不满足返回 412。
 - 上游本地后端的 MKCOL、创建条件以及实体标签条件 HTTP 回归测试，先观察失败，再验证修复后通过。
+- 可选 `--exclusive-access` 在请求入口拒绝读写/双写及源目标子树冲突，要求 VFS cache off。Compose 已开启；原生调用需显式传入该选项。回归覆盖真实请求体暂停、并发读取、目录操作与释放，不改变默认关闭时的上游并发行为。
 
 **边界：**这些检查使用 VFS 视图，不构成服务端原子条件写。外部客户端修改、缓存失效、其他修改方法的条件头及请求之间的竞争仍须验收。SJTU backend 的 ask 确认仍是新建文件的最终冲突保护；单客户端范围的顺序覆盖已通过显式实验开关开放，不具备跨客户端 CAS 保证。
 

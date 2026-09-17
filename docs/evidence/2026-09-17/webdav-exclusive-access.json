@@ -1,0 +1,52 @@
+{
+  "at": "2026-09-17T06:53:37.055685+00:00",
+  "scope": "real concurrent WebDAV HTTP, not Finder",
+  "fixture": "exclusive-d5e0b9edef99",
+  "synchronization": "100 Continue received after first PUT body read requested",
+  "events": [
+    {
+      "method": "PUT",
+      "http": 423,
+      "expected": 423
+    },
+    {
+      "method": "GET",
+      "http": 423,
+      "expected": 423
+    },
+    {
+      "method": "DELETE",
+      "http": 423,
+      "expected": 423
+    },
+    {
+      "method": "MOVE",
+      "http": 423,
+      "expected": 423
+    },
+    {
+      "method": "PROPFIND",
+      "http": 207,
+      "expected": 207
+    },
+    {
+      "method": "original_PUT",
+      "http": 201,
+      "expected": 201
+    },
+    {
+      "method": "reopen_GET",
+      "http": 200,
+      "expected": 200,
+      "content_matches": true
+    }
+  ],
+  "independent_cloud_matches": true,
+  "sha256": "1dd963a0e69b74735e7a3e912c8bc757d99dc169756013bdbae7c6068f442df0",
+  "records": [
+    {
+      "state": "Committed",
+      "size": 56
+    }
+  ]
+}

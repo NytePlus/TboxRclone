@@ -1,8 +1,86 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..8c49a71 100644
+index d3420bb..5f22963 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
-@@ -403,6 +403,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -8,10 +8,12 @@ import (
+ 	"mime"
+ 	"net"
+ 	"net/http"
++	"net/url"
+ 	"os"
+ 	"path"
+ 	"strconv"
+ 	"strings"
++	"sync"
+ 	"time"
+ 
+ 	chi "github.com/go-chi/chi/v5"
+@@ -43,6 +45,10 @@ var OptionsInfo = fs.Options{{
+ 	Name:    "disable_dir_list",
+ 	Default: false,
+ 	Help:    "Disable HTML directory list on GET request for a directory",
++}, {
++	Name:    "exclusive_access",
++	Default: false,
++	Help:    "Reject overlapping WebDAV mutations and file reads instead of queuing them (single service, cache off)",
+ }, {
+ 	Name:    "disable_zip",
+ 	Default: false,
+@@ -54,12 +60,13 @@ var OptionsInfo = fs.Options{{
+ 
+ // Options required for http server
+ type Options struct {
+-	Auth           libhttp.AuthConfig
+-	HTTP           libhttp.Config
+-	Template       libhttp.TemplateConfig
+-	EtagHash       string `config:"etag_hash"`
+-	DisableDirList bool   `config:"disable_dir_list"`
+-	DisableZip     bool   `config:"disable_zip"`
++	Auth            libhttp.AuthConfig
++	HTTP            libhttp.Config
++	Template        libhttp.TemplateConfig
++	EtagHash        string `config:"etag_hash"`
++	DisableDirList  bool   `config:"disable_dir_list"`
++	DisableZip      bool   `config:"disable_zip"`
++	ExclusiveAccess bool   `config:"exclusive_access"`
+ }
+ 
+ // Opt is options set by command line flags
+@@ -238,6 +245,8 @@ type WebDAV struct {
+ 	webdavhandler *webdav.Handler
+ 	ctx           context.Context // for global config
+ 	etagHashType  hash.Type
++	accessMu      sync.Mutex
++	requests      map[*http.Request][]davAccess
+ }
+ 
+ func webDAVCompressMiddleware() func(http.Handler) http.Handler {
+@@ -259,6 +268,9 @@ var _ webdav.FileSystem = (*WebDAV)(nil)
+ 
+ // Make a new WebDAV to serve the remote
+ func newWebDAV(ctx context.Context, f fs.Fs, opt *Options, vfsOpt *vfscommon.Options, proxyOpt *proxy.Options) (w *WebDAV, err error) {
++	if opt.ExclusiveAccess && vfsOpt.CacheMode != vfscommon.CacheModeOff {
++		return nil, fmt.Errorf("exclusive-access requires vfs-cache-mode off; deferred writes outlive HTTP requests")
++	}
+ 	w = &WebDAV{
+ 		f:            f,
+ 		ctx:          ctx,
+@@ -396,6 +408,14 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+ }
+ 
+ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
++	if w.opt.ExclusiveAccess {
++		release, status := w.acquireRequest(r)
++		if status != 0 {
++			http.Error(rw, http.StatusText(status), status)
++			return
++		}
++		defer release()
++	}
+ 	urlPath := r.URL.Path
+ 	isDir := strings.HasSuffix(urlPath, "/")
+ 	remote := strings.Trim(urlPath, "/")
+@@ -403,6 +423,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
@@ -49,7 +127,7 @@ index d3420bb..8c49a71 100644
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -521,6 +561,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +581,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -63,7 +141,7 @@ index d3420bb..8c49a71 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
-@@ -723,3 +770,53 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -723,3 +790,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -117,11 +195,74 @@ index d3420bb..8c49a71 100644
 +	}
 +	return false, false
 +}
++
++type davAccess struct {
++	name        string
++	write, tree bool
++}
++
++func containsDAVPath(parent, child string) bool {
++	return parent == child || parent == "/" || strings.HasPrefix(child, parent+"/")
++}
++
++// acquireRequest owns all source/destination paths as a single operation before
++// any precondition check or file open. Readers coexist; conflicts fail immediately.
++// This is request lifetime protection for one cache-off WebDAV server, not a
++// persistent WebDAV lock or a guarantee against native VFS/external writers.
++func (w *WebDAV) acquireRequest(r *http.Request) (func(), int) {
++	source := path.Clean("/" + strings.TrimPrefix(r.URL.Path, "/"))
++	var claims []davAccess
++	switch r.Method {
++	case "GET", "HEAD", "PROPFIND":
++		claims = []davAccess{{name: source, tree: r.URL.Query().Get("download") == "zip"}}
++	case "PUT", "DELETE", "MKCOL", "PROPPATCH", "LOCK", "UNLOCK":
++		claims = []davAccess{{name: source, write: true, tree: true}}
++	case "MOVE", "COPY":
++		dest, err := url.Parse(r.Header.Get("Destination"))
++		if err != nil || dest.Path == "" || dest.RawQuery != "" || dest.Fragment != "" || (dest.Host != "" && dest.Host != r.Host) {
++			return nil, http.StatusBadRequest
++		}
++		claims = []davAccess{{name: source, write: r.Method == "MOVE", tree: true}, {name: path.Clean("/" + strings.TrimPrefix(dest.Path, "/")), write: true, tree: true}}
++	default:
++		return func() {}, 0
++	}
++	w.accessMu.Lock()
++	defer w.accessMu.Unlock()
++	for _, active := range w.requests {
++		for _, a := range active {
++			for _, b := range claims {
++				overlap := a.name == b.name || (a.tree && containsDAVPath(a.name, b.name)) || (b.tree && containsDAVPath(b.name, a.name))
++				if overlap && (a.write || b.write) {
++					return nil, http.StatusLocked
++				}
++			}
++		}
++	}
++	if w.requests == nil {
++		w.requests = make(map[*http.Request][]davAccess)
++	}
++	w.requests[r] = claims
++	var once sync.Once
++	return func() { once.Do(func() { w.accessMu.Lock(); defer w.accessMu.Unlock(); delete(w.requests, r) }) }, 0
++}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..43e5611 100644
+index bd14826..d9ebb05 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
-@@ -438,3 +438,89 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -13,9 +13,12 @@ import (
+ 	"flag"
+ 	"io"
+ 	"net/http"
++	"net/http/httptest"
+ 	"os"
+ 	"strings"
++	"sync"
+ 	"testing"
++	"time"
+ 
+ 	_ "github.com/rclone/rclone/backend/local"
+ 	"github.com/rclone/rclone/cmd/serve/proxy"
+@@ -438,3 +441,232 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -210,4 +351,147 @@ index bd14826..43e5611 100644
 +			require.Equal(t, contents, string(b))
 +		})
 +	}
++}
++
++type heldPUT struct {
++	entered, release chan struct{}
++	once             sync.Once
++	source           io.Reader
++}
++
++func (b *heldPUT) Read(p []byte) (int, error) {
++	b.once.Do(func() { close(b.entered); <-b.release })
++	return b.source.Read(p)
++}
++
++func TestExclusiveRequestsRejectConflictsBeforeTruncation(t *testing.T) {
++	f, err := fs.NewFs(context.Background(), t.TempDir())
++	require.NoError(t, err)
++	opt := Opt
++	opt.ExclusiveAccess = true
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++	require.NoError(t, err)
++	defer w.Shutdown()
++	require.NoError(t, w.Mkdir(context.Background(), "tree", 0700))
++	body := &heldPUT{entered: make(chan struct{}), release: make(chan struct{}), source: strings.NewReader("first contents")}
++	var once sync.Once
++	unblock := func() { once.Do(func() { close(body.release) }) }
++	defer unblock()
++	first := httptest.NewRequest("PUT", "http://fixture/tree/file", body)
++	firstResponse := httptest.NewRecorder()
++	done := make(chan struct{})
++	go func() { defer close(done); w.ServeHTTP(firstResponse, first) }()
++	select {
++	case <-body.entered:
++	case <-time.After(5 * time.Second):
++		t.Fatal("first PUT never read input")
++	}
++	for _, tc := range []struct {
++		method, path, dest string
++		status             int
++	}{
++		{"PUT", "/tree/file", "", 423},
++		{"GET", "/tree/file", "", 423},
++		{"DELETE", "/tree", "", 423},
++		{"MOVE", "/tree", "http://fixture/new-tree", 423},
++		{"COPY", "/tree", "http://fixture/tree-copy", 423},
++		{"MOVE", "/other", "http://fixture/tree/file", 423},
++		{"PUT", "/tree/sibling", "", 201},
++		{"PUT", "/new-tree", "", 201},
++		{"PUT", "/tree/./file", "", 423},
++		{"PROPFIND", "/tree", "", 207},
++	} {
++		var input io.Reader
++		if tc.method == "PUT" {
++			input = strings.NewReader("second")
++		}
++		request := httptest.NewRequest(tc.method, "http://fixture"+tc.path, input)
++		request.Header.Set("Depth", "1")
++		if tc.dest != "" {
++			request.Header.Set("Destination", tc.dest)
++		}
++		response := httptest.NewRecorder()
++		w.ServeHTTP(response, request)
++		assert.Equal(t, tc.status, response.Code, "%s %s", tc.method, tc.path)
++	}
++	unblock()
++	select {
++	case <-done:
++	case <-time.After(5 * time.Second):
++		t.Fatal("PUT never finished")
++	}
++	require.Equal(t, 201, firstResponse.Code)
++	response := httptest.NewRecorder()
++	w.ServeHTTP(response, httptest.NewRequest("GET", "http://fixture/tree/file", nil))
++	require.Equal(t, 200, response.Code)
++	require.Equal(t, "first contents", response.Body.String())
++}
++
++type heldResponse struct {
++	*httptest.ResponseRecorder
++	entered, release chan struct{}
++	once             sync.Once
++}
++
++func (w *heldResponse) Write(b []byte) (int, error) {
++	w.once.Do(func() { close(w.entered); <-w.release })
++	return w.ResponseRecorder.Write(b)
++}
++
++func TestExclusiveReadLifetimeAndRelease(t *testing.T) {
++	f, err := fs.NewFs(context.Background(), t.TempDir())
++	require.NoError(t, err)
++	opt := Opt
++	opt.ExclusiveAccess = true
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++	require.NoError(t, err)
++	defer w.Shutdown()
++	put := func() int {
++		rec := httptest.NewRecorder()
++		w.ServeHTTP(rec, httptest.NewRequest("PUT", "http://fixture/file", strings.NewReader("complete data")))
++		return rec.Code
++	}
++	require.Equal(t, 201, put())
++	out := &heldResponse{ResponseRecorder: httptest.NewRecorder(), entered: make(chan struct{}), release: make(chan struct{})}
++	var once sync.Once
++	release := func() { once.Do(func() { close(out.release) }) }
++	defer release()
++	done := make(chan struct{})
++	go func() { defer close(done); w.ServeHTTP(out, httptest.NewRequest("GET", "http://fixture/file", nil)) }()
++	select {
++	case <-out.entered:
++	case <-time.After(5 * time.Second):
++		t.Fatal("read did not start")
++	}
++	second := httptest.NewRecorder()
++	w.ServeHTTP(second, httptest.NewRequest("GET", "http://fixture/file", nil))
++	require.Equal(t, 200, second.Code)
++	require.Equal(t, 423, put())
++	release()
++	select {
++	case <-done:
++	case <-time.After(5 * time.Second):
++		t.Fatal("read did not finish")
++	}
++	require.Equal(t, "complete data", out.Body.String())
++	require.Equal(t, 201, put())
++	missing := httptest.NewRecorder()
++	w.ServeHTTP(missing, httptest.NewRequest("GET", "http://fixture/missing", nil))
++	require.Equal(t, 404, missing.Code)
++	rec := httptest.NewRecorder()
++	w.ServeHTTP(rec, httptest.NewRequest("PUT", "http://fixture/missing", strings.NewReader("now exists")))
++	require.Equal(t, 201, rec.Code)
++}
++
++func TestExclusiveAccessRejectsDeferredCache(t *testing.T) {
++	f, err := fs.NewFs(context.Background(), t.TempDir())
++	require.NoError(t, err)
++	opt := Opt
++	opt.ExclusiveAccess = true
++	cache := vfscommon.Opt
++	cache.CacheMode = vfscommon.CacheModeFull
++	_, err = newWebDAV(context.Background(), f, &opt, &cache, &proxy.Opt)
++	require.ErrorContains(t, err, "requires vfs-cache-mode off")
 +}

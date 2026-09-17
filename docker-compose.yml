@@ -26,7 +26,7 @@ services:
       RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
     ports:
       - 127.0.0.1:8686:8686
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --cache-dir, /state/vfs]
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --exclusive-access, --cache-dir, /state/vfs]
     healthcheck:
       test: [CMD, curl, --fail, --silent, --request, OPTIONS, http://127.0.0.1:8686/]
       interval: 5s
@@ -70,7 +70,7 @@ services:
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --cache-dir, /state/vfs]
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --exclusive-access, --cache-dir, /state/vfs]
   fault-client:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c

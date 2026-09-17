@@ -121,3 +121,13 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 补丁 0001 现于打开截断写句柄前检查 PUT 的 If-Match/If-None-Match。支持星号、标签列表及强弱比较，拒绝格式不完整的列表；ETag 与上游 WebDAV 使用相同生成规则。新增回归先复现失败，再验证匹配条件成功、错误/弱 If-Match 拒绝、命中强弱 If-None-Match 拒绝和原内容保留。上游完整 WebDAV race 测试（27.090s）、主项目 race/vet 均通过。
 
 重新构建隔离服务后，四种真实拒绝请求均为 412，独立云端内容未变，日志只有初始创建记录，见 [修复后证据](evidence/2026-09-17/webdav-if-match-patched.json)。这是 VFS 当前视图的前置检查，不解决检查与提交之间的竞争、陈旧缓存、默认元数据 ETag 的碰撞、其他修改方法或完整前端操作占用；不能据此标记 C-006/C-012 完成。Finder 本轮仍未执行复制。
+
+## WebDAV 请求冲突拒绝
+
+补丁 0001 新增可选 `exclusive_access`；Compose 正常和故障服务显式开启。请求入口在读取输入、条件检查、截断写入之前取得全部路径占用，冲突返回 423，源目标原子取得，目录变更覆盖子树。请求结束释放，包括失败。GET 读者并存，普通目录浏览不因子项上传而拒绝；ZIP 下载读占子树。非 off 的 VFS 缓存模式拒绝启用该选项，避免后台写回提前释放请求占用。
+
+回归先复现进行中上传可被 GET/DELETE/MOVE 等穿透，修复后覆盖双写/读写、目录变更、COPY 源及 MOVE 目标、路径别名、失败后无残留占用、兄弟文件及目录浏览、多个读者及读完释放、异步缓存拒绝。上游完整 WebDAV race 测试（31.989s）、主项目 race/vet 与补丁重放逐字节比较通过。
+
+真实服务复测通过 Expect:100-continue 暂停首个 PUT 正文，期间同路径 PUT/GET/DELETE、以其为目标的 MOVE 均 423；目录 PROPFIND 207。放行首个正文后 PUT 201、重开 GET 200、独立云端字节正确，仅一条 Committed 日志，见 [并发请求证据](evidence/2026-09-17/webdav-exclusive-access.json)。这不是 Finder 双编辑器或长期文件句柄验收，系统分支仍未通过。
+
+开启请求冲突控制后，macOS webdavfs 普通保存再次通过 open/write/fsync/close/reopen 和独立云端 61 字节匹配，见 [普通保存回归](evidence/2026-09-17/macos-webdav-exclusive-write.json)。该回归仅证明所测正常保存路径未被新保护阻断。
