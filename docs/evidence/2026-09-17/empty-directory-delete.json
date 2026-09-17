@@ -1,0 +1,49 @@
+{
+  "at": "2026-09-17T07:24:27.045160+00:00",
+  "scope": "WebDAV protocol and native macOS rmdir syscalls, not Finder",
+  "events": [
+    {
+      "operation": "webdav_delete_nonempty",
+      "http": 405
+    },
+    {
+      "operation": "child_preserved",
+      "ok": true
+    },
+    {
+      "operation": "webdav_delete_empty",
+      "http": 204
+    },
+    {
+      "operation": "macos_mkdir",
+      "ok": true
+    },
+    {
+      "operation": "macos_rmdir_empty",
+      "ok": true
+    },
+    {
+      "operation": "independent_absence",
+      "fixture": "rmdir-b19ff1561ab8",
+      "http": 404
+    },
+    {
+      "operation": "independent_absence",
+      "fixture": "rmdir-b19ff1561ab8-native",
+      "http": 404
+    }
+  ],
+  "directory_records": [
+    {
+      "kind": "rmdir",
+      "state": "Committed",
+      "recycle_receipt": true
+    },
+    {
+      "kind": "rmdir",
+      "state": "Committed",
+      "recycle_receipt": true
+    }
+  ],
+  "native_mount_verified": true
+}

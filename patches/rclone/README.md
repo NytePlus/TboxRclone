@@ -24,3 +24,5 @@ sh scripts/rclone-patches.sh --check
 `0002-external-backend-overview.patch` 修复通用注册流程覆盖显式 `RegInfo.Overview` 的问题：提供值时保留它；nil 时仍按上游逻辑加载嵌入元数据并报告缺失。没有硬编码 SJTU 名称，也没有关闭错误日志。回归测试先复现失败，随后验证外部后端及别名保留同一元数据、内置 local 仍载入原值。SJTU 自身只声明实验状态，不虚报完整集成测试或数据安全评级。
 
 补丁 0002 已从固定上游原文件在临时目录应用并逐字节比对；Docker Compose 中上游 `go test -race ./fs -count=1`、项目 `go test -race ./...` 和 CLI version 均通过。完整系统验收仍未通过。
+
+`--no-recursive-delete` 为另一个默认关闭的通用选项，目录删除改走非递归 VFS Remove。本项目 Compose 开启它以保护 rmdir 的非空语义。新增 HTTP 回归先复现默认 RemoveAll 删除子文件，再验证选项开启后非空 DELETE 为405、子文件保留、清空后删除204。

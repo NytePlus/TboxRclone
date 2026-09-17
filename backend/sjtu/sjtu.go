@@ -243,7 +243,13 @@ func (f *Fs) mkdirComponent(ctx context.Context, current string) error {
 	}
 	// Existing directories need no exclusive ownership: sibling uploads may
 	// independently ensure their shared ancestors without becoming conflicting.
-	if exists, err := check(); err != nil || exists {
+	releaseRead, err := f.acquireFile(current, false)
+	if err != nil {
+		return fserrors.NoRetryError(err)
+	}
+	exists, err := check()
+	releaseRead()
+	if err != nil || exists {
 		return err
 	}
 	release, err := f.acquireFile(current, true)
@@ -270,11 +276,6 @@ func (f *Fs) mkdirComponent(ctx context.Context, current string) error {
 		return fserrors.NoRetryError(err)
 	}
 	return nil
-}
-
-// Rmdir refuses an unproven non-empty-directory deletion contract.
-func (f *Fs) Rmdir(context.Context, string) error {
-	return fserrors.NoRetryError(errors.New("safe atomic empty-directory deletion is not verified"))
 }
 
 // Put preserves input before starting a create or explicitly enabled overwrite.
@@ -356,7 +357,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		return fserrors.NoRetryError(e)
 	}
 	defer s.Close()
-	scope := f.opt.Endpoint + "/" + f.opt.Library + "/" + f.opt.Space
+	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
 	r, e := s.Prepare(ctx, scope, p, in, src.Size(), int64(f.opt.MaxUpload))
 	if e != nil {
 		return fserrors.NoRetryError(e)

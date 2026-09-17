@@ -6,7 +6,7 @@
 
 Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；必要的上游修复保存在 `patches/rclone/`，按固定版本重放。
 
-**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。覆盖和文件删除默认关闭，目录删除仍未实现；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（lab_overwrite=true）及文件回收站删除（lab_delete=true）。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
+**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。覆盖、文件删除和空目录删除默认关闭，非空目录递归删除仍拒绝；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（lab_overwrite=true）及文件/空目录回收站删除（lab_delete=true，配合 --exclusive-access --no-recursive-delete）。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
 
 ## 构建与离线测试
 

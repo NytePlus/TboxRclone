@@ -1,0 +1,46 @@
+{
+  "at": "2026-09-17T07:22:05.330331+00:00",
+  "scope": "WebDAV HTTP valid; native attempt invalid because mount was absent",
+  "events": [
+    {
+      "operation": "webdav_delete_nonempty",
+      "http": 405
+    },
+    {
+      "operation": "child_preserved",
+      "ok": true
+    },
+    {
+      "operation": "webdav_delete_empty",
+      "http": 204
+    },
+    {
+      "operation": "macos_mkdir",
+      "ok": true
+    },
+    {
+      "operation": "macos_rmdir_empty",
+      "ok": true
+    },
+    {
+      "operation": "independent_absence",
+      "fixture": "rmdir-28b844804c1b",
+      "http": 404
+    },
+    {
+      "operation": "independent_absence",
+      "fixture": "rmdir-28b844804c1b-native",
+      "http": 404
+    }
+  ],
+  "directory_records": [
+    {
+      "kind": "rmdir",
+      "state": "Committed",
+      "recycle_receipt": true
+    }
+  ],
+  "native_mount_verified": false,
+  "native_result_valid": false,
+  "assertion_failure": "expected two remote rmdir records; only HTTP deletion had a record"
+}

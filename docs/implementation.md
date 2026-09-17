@@ -151,3 +151,13 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 找到此前缺失凭据的原因：实例返回整数 recycledItemId，删除响应用 Go string 解码失败，随后只读核对虽然确认路径消失，却丢了回收站 ID。现以 smh.Identifier 兼容整数/字符串并保留精确十进制，不接受负数、浮点或指数格式。回归通过完整 Remove 路径验证 9007199254740993 正确落盘。全量 Docker race/vet 通过，重建服务后新的真实删除日志已保存回收站凭据，见 [修复后删除](evidence/2026-09-17/go-trash-delete-receipt.json)。
 
 停止服务后，回收站列表精确匹配上一轮生成条目的 originalPath/name/size。ask 恢复到已有同名新文件返回409且新内容不变；rename 恢复返回200和实验根内新名字，独立旧内容 SHA-256 正确，原路径新内容也保留，见 [回收站恢复](evidence/2026-09-17/recycle-restore.json)。随后恢复了在线服务。没有改变此前未取到 ID 的历史日志，也没有标记系统场景 PASS。恢复丢响应、自动回收站定位及 Finder 撤销仍待实现和验收。
+
+## 空目录删除与防递归绕过
+
+Rmdir 已在 lab_delete 下实现：取得后端子树写占用，检查所有未决子项，确认目录存在且完整列表为空，持久记录 rmdir/DeleteSent 后仅发一次非永久 directory_only 删除。与文件删除共用只读对账；未决 rmdir 对整个子树保持持久占用。上传日志统一使用 Client 规范化后的账户/空间键，避免选项与客户端 origin 形式不同绕过 pending 检查。
+
+发现 WebDAV 的默认 RemoveAll 会先递归删除子文件，从而绕过后端非空目录拒绝。补丁新增默认关闭的 no_recursive_delete，Compose 显式开启；目录改走 VFS Remove，非空目录405，文件和空目录仍可删除。该选项也会拒绝用户有意递归删除非空目录，当前作为明确的实验限制。
+
+回归覆盖空/非空、删除丢响应、未知结果、已有未决子项、空检查期间创建子项、后续子树上传/Mkdir 被阻止。全量 Docker race/vet、上游 WebDAV race（32.113s）及补丁重放比较通过。真实 HTTP 非空删除405且子内容不变，移除子项后空目录删除204；重新验证挂载表并挂载后，原生 macOS mkdir/rmdir 成功，两个目录均独立查询404、两条 rmdir 日志 Committed 且有回收站凭据，见 [空目录删除](evidence/2026-09-17/empty-directory-delete.json)。
+
+首次本机尝试时旧挂载已消失，仅操作到本地挂载点目录；日志计数不符揭示该问题，证据已标无效并保留在 [首次尝试](evidence/2026-09-17/empty-directory-delete-attempt.json)。验证规格补充每次重新核对挂载表，不能沿用旧挂载状态。没有将这次无效本地操作计为网盘验收，Finder 与完整竞态场景仍未通过。

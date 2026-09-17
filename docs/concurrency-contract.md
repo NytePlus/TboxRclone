@@ -70,4 +70,11 @@ Compose WebDAV 服务现开启 `--exclusive-access`。它在前置条件检查�
 
 显式 `lab_delete=true`（同时需要 lab_writes）允许隔离根内的文件回收站删除。取得文件写占用和日志锁、核对调用对象的旧 ETag/大小后，持久化 kind=delete 和 DeleteSent，才发送一次 `DELETE file?permanent=0`。之后保存 DeleteUnknown 并只读查询路径；独占前提下确认 404 才记 Committed，释放持久占用。查询失败或路径仍存在，保留未决日志；禁止盲目重发 DELETE。tbox-state 的 reconcile 分派删除对账，resume/abort 上传命令拒绝删除日志。
 
-正常返回时尽可能记录 recycledItemId；响应没有 ID 或丢失时不虚构回收站身份。删除的零字节 spool 只是意图凭据，不是原文件备份。真实实验已确认路径删除、后续重建，以及单个生成条目的回收站 ask 冲突拒绝和 rename 恢复。回收站数量、真实删除/恢复丢响应、产品级恢复流程仍是完整验收缺口。目录删除仍未实现，默认不开启该实验能力。
+正常返回时尽可能记录 recycledItemId；响应没有 ID 或丢失时不虚构回收站身份。删除的零字节 spool 只是意图凭据，不是原文件备份。真实实验已确认路径删除、后续重建，以及单个生成条目的回收站 ask 冲突拒绝和 rename 恢复。回收站数量、真实删除/恢复丢响应、产品级恢复流程仍是完整验收缺口。空目录删除见下述补充；默认不开启该实验能力。
+
+
+## 空目录删除
+
+lab_delete 同时允许空目录删除。后端持有子树写占用，阻止子项创建/读写和其他目录操作，并在全局日志锁下检查本子树的所有未决记录。确认目录类型及完整列表为空后，才写入 kind=rmdir/DeleteSent 并发送一次 directory DELETE（permanent=0、directory_only=1）。结果未知时只读核对；持久 rmdir 记录阻止整个子树的新上传与 Mkdir，终态确认不存在才释放。安全性依赖受控单客户端，directory_only 参数本身不保证非空目录保护。
+
+WebDAV 默认 RemoveAll 会递归删除，所以本项目同时启用 `--no-recursive-delete`：目录走 VFS Remove 而不是 RemoveAll。非空目录拒绝，子文件保留；不能通过先递归删除子项来让 Rmdir 的空检查失去意义。目前不提供 Finder 递归删除非空文件夹；未来若实现，应有单独明确的操作契约和恢复机制。

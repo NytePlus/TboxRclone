@@ -56,21 +56,30 @@ func (o *Object) remove(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	r.Kind, r.State = "delete", "DeleteSent"
+	r.Kind = "delete"
 	r.OldETag, r.OldSize = current.ETag, int64(current.Size)
-	if err = s.Save(r); err != nil {
+	return f.deleteOnce(ctx, s, r, "file")
+}
+
+func (f *Fs) deleteOnce(ctx context.Context, s *journal.Store, r *journal.Record, kind string) error {
+	r.State = "DeleteSent"
+	if err := s.Save(r); err != nil {
 		return err
 	}
 	var result struct {
 		RecycledID smh.Identifier `json:"recycledItemId"`
 	}
-	requestErr := f.c.JSON(ctx, "DELETE", "file", p, url.Values{"permanent": {"0"}}, nil, &result)
+	query := url.Values{"permanent": {"0"}}
+	if kind == "directory" {
+		query.Set("directory_only", "1")
+	}
+	requestErr := f.c.JSON(ctx, "DELETE", kind, r.Path, query, nil, &result)
 	r.RecycledID = string(result.RecycledID)
 	r.State = "DeleteUnknown"
-	if err = s.Save(r); err != nil {
+	if err := s.Save(r); err != nil {
 		return errors.Join(requestErr, err)
 	}
-	if err = recovery.Reconcile(ctx, s, f.c, r); err != nil {
+	if err := recovery.Reconcile(ctx, s, f.c, r); err != nil {
 		return errors.Join(requestErr, err)
 	}
 	return nil
@@ -79,6 +88,62 @@ func (o *Object) remove(ctx context.Context) error {
 // Remove requires explicit lab deletion and suppresses rclone mutation retries.
 func (o *Object) Remove(ctx context.Context) error {
 	if err := o.remove(ctx); err != nil {
+		return fserrors.NoRetryError(err)
+	}
+	return nil
+}
+
+func (f *Fs) rmdir(ctx context.Context, dir string) error {
+	if err := f.writeAllowed(); err != nil {
+		return err
+	}
+	if !f.opt.LabDelete {
+		return errors.New("rmdir requires explicit lab_delete and exclusive-writer contract")
+	}
+	p, err := f.full(dir)
+	if err != nil {
+		return err
+	}
+	release, err := f.acquirePath(p, true, true)
+	if err != nil {
+		return err
+	}
+	defer release()
+	s, err := journal.OpenContext(ctx, f.opt.StateDir)
+	if err != nil {
+		return err
+	}
+	defer s.Close()
+	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
+	if err = s.PendingSubtree(scope, p); err != nil {
+		return err
+	}
+	info, err := f.c.Info(ctx, p)
+	if err != nil {
+		return mapped(err, fs.ErrorDirNotFound)
+	}
+	if info.Type != "dir" {
+		return fs.ErrorIsFile
+	}
+	children, err := f.c.List(ctx, p)
+	if err != nil {
+		return err
+	}
+	if len(children) != 0 {
+		return fs.ErrorDirectoryNotEmpty
+	}
+	r, err := s.Prepare(ctx, scope, p, strings.NewReader(""), 0, 0)
+	if err != nil {
+		return err
+	}
+	r.Kind = "rmdir"
+	return f.deleteOnce(ctx, s, r, "directory")
+}
+
+// Rmdir uses exclusive subtree ownership from the emptiness check through
+// confirmation. The server's directory_only flag alone does not supply safety.
+func (f *Fs) Rmdir(ctx context.Context, dir string) error {
+	if err := f.rmdir(ctx, dir); err != nil {
 		return fserrors.NoRetryError(err)
 	}
 	return nil

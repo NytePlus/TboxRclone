@@ -12,6 +12,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -196,13 +197,18 @@ func (s *Store) Records() ([]Record, error) {
 }
 
 // Pending prevents a later invocation from blindly replaying an unresolved write.
-func (s *Store) Pending(scope, p string) error {
+func (s *Store) Pending(scope, p string) error { return s.pending(scope, p, false) }
+
+// PendingSubtree prevents a directory operation from crossing unresolved children.
+func (s *Store) PendingSubtree(scope, p string) error { return s.pending(scope, p, true) }
+func (s *Store) pending(scope, p string, tree bool) error {
 	records, e := s.Records()
 	if e != nil {
 		return e
 	}
 	for _, r := range records {
-		if r.Scope == scope && r.Path == p && r.State != "Committed" && r.State != "Aborted" {
+		overlap := r.Path == p || (r.Kind == "rmdir" && strings.HasPrefix(p, r.Path+"/")) || (tree && strings.HasPrefix(r.Path, p+"/"))
+		if r.Scope == scope && overlap && r.State != "Committed" && r.State != "Aborted" {
 			return fmt.Errorf("%w: operation %s is %s; reconcile before retrying", ErrPending, r.ID, r.State)
 		}
 	}

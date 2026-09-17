@@ -1,5 +1,5 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..5f22963 100644
+index d3420bb..88458f2 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
 @@ -8,10 +8,12 @@ import (
@@ -15,7 +15,7 @@ index d3420bb..5f22963 100644
  	"time"
  
  	chi "github.com/go-chi/chi/v5"
-@@ -43,6 +45,10 @@ var OptionsInfo = fs.Options{{
+@@ -43,6 +45,14 @@ var OptionsInfo = fs.Options{{
  	Name:    "disable_dir_list",
  	Default: false,
  	Help:    "Disable HTML directory list on GET request for a directory",
@@ -23,10 +23,14 @@ index d3420bb..5f22963 100644
 +	Name:    "exclusive_access",
 +	Default: false,
 +	Help:    "Reject overlapping WebDAV mutations and file reads instead of queuing them (single service, cache off)",
++}, {
++	Name:    "no_recursive_delete",
++	Default: false,
++	Help:    "Refuse recursive directory deletion; only files and empty directories may be removed",
  }, {
  	Name:    "disable_zip",
  	Default: false,
-@@ -54,12 +60,13 @@ var OptionsInfo = fs.Options{{
+@@ -54,12 +64,14 @@ var OptionsInfo = fs.Options{{
  
  // Options required for http server
  type Options struct {
@@ -36,17 +40,18 @@ index d3420bb..5f22963 100644
 -	EtagHash       string `config:"etag_hash"`
 -	DisableDirList bool   `config:"disable_dir_list"`
 -	DisableZip     bool   `config:"disable_zip"`
-+	Auth            libhttp.AuthConfig
-+	HTTP            libhttp.Config
-+	Template        libhttp.TemplateConfig
-+	EtagHash        string `config:"etag_hash"`
-+	DisableDirList  bool   `config:"disable_dir_list"`
-+	DisableZip      bool   `config:"disable_zip"`
-+	ExclusiveAccess bool   `config:"exclusive_access"`
++	Auth              libhttp.AuthConfig
++	HTTP              libhttp.Config
++	Template          libhttp.TemplateConfig
++	EtagHash          string `config:"etag_hash"`
++	DisableDirList    bool   `config:"disable_dir_list"`
++	DisableZip        bool   `config:"disable_zip"`
++	ExclusiveAccess   bool   `config:"exclusive_access"`
++	NoRecursiveDelete bool   `config:"no_recursive_delete"`
  }
  
  // Opt is options set by command line flags
-@@ -238,6 +245,8 @@ type WebDAV struct {
+@@ -238,6 +250,8 @@ type WebDAV struct {
  	webdavhandler *webdav.Handler
  	ctx           context.Context // for global config
  	etagHashType  hash.Type
@@ -55,7 +60,7 @@ index d3420bb..5f22963 100644
  }
  
  func webDAVCompressMiddleware() func(http.Handler) http.Handler {
-@@ -259,6 +268,9 @@ var _ webdav.FileSystem = (*WebDAV)(nil)
+@@ -259,6 +273,9 @@ var _ webdav.FileSystem = (*WebDAV)(nil)
  
  // Make a new WebDAV to serve the remote
  func newWebDAV(ctx context.Context, f fs.Fs, opt *Options, vfsOpt *vfscommon.Options, proxyOpt *proxy.Options) (w *WebDAV, err error) {
@@ -65,7 +70,7 @@ index d3420bb..5f22963 100644
  	w = &WebDAV{
  		f:            f,
  		ctx:          ctx,
-@@ -396,6 +408,14 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+@@ -396,6 +413,14 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
  }
  
  func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
@@ -80,7 +85,7 @@ index d3420bb..5f22963 100644
  	urlPath := r.URL.Path
  	isDir := strings.HasSuffix(urlPath, "/")
  	remote := strings.Trim(urlPath, "/")
-@@ -403,6 +423,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -403,6 +428,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
@@ -127,7 +132,7 @@ index d3420bb..5f22963 100644
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -521,6 +581,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +586,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -141,7 +146,20 @@ index d3420bb..5f22963 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
-@@ -723,3 +790,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -554,7 +626,11 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
+ 	if err != nil {
+ 		return err
+ 	}
+-	err = node.RemoveAll()
++	if w.opt.NoRecursiveDelete && node.IsDir() {
++		err = node.Remove()
++	} else {
++		err = node.RemoveAll()
++	}
+ 	if err != nil {
+ 		return err
+ 	}
+@@ -723,3 +799,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -246,7 +264,7 @@ index d3420bb..5f22963 100644
 +	return func() { once.Do(func() { w.accessMu.Lock(); defer w.accessMu.Unlock(); delete(w.requests, r) }) }, 0
 +}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..d9ebb05 100644
+index bd14826..2333f43 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
 @@ -13,9 +13,12 @@ import (
@@ -262,7 +280,7 @@ index bd14826..d9ebb05 100644
  
  	_ "github.com/rclone/rclone/backend/local"
  	"github.com/rclone/rclone/cmd/serve/proxy"
-@@ -438,3 +441,232 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -438,3 +441,257 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -494,4 +512,29 @@ index bd14826..d9ebb05 100644
 +	cache.CacheMode = vfscommon.CacheModeFull
 +	_, err = newWebDAV(context.Background(), f, &opt, &cache, &proxy.Opt)
 +	require.ErrorContains(t, err, "requires vfs-cache-mode off")
++}
++
++func TestNoRecursiveDeletePreservesChild(t *testing.T) {
++	f, err := fs.NewFs(context.Background(), t.TempDir())
++	require.NoError(t, err)
++	opt := Opt
++	opt.ExclusiveAccess = true
++	opt.NoRecursiveDelete = true
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++	require.NoError(t, err)
++	defer w.Shutdown()
++	request := func(method, path, body string) *httptest.ResponseRecorder {
++		out := httptest.NewRecorder()
++		w.ServeHTTP(out, httptest.NewRequest(method, "http://fixture"+path, strings.NewReader(body)))
++		return out
++	}
++	require.Equal(t, 201, request("MKCOL", "/dir", "").Code)
++	require.Equal(t, 201, request("PUT", "/dir/child", "keep").Code)
++	require.Equal(t, 405, request("DELETE", "/dir", "").Code)
++	child := request("GET", "/dir/child", "")
++	require.Equal(t, 200, child.Code)
++	require.Equal(t, "keep", child.Body.String())
++	require.Equal(t, 204, request("DELETE", "/dir/child", "").Code)
++	require.Equal(t, 204, request("DELETE", "/dir", "").Code)
 +}
