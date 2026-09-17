@@ -1,0 +1,89 @@
+{
+  "at": "2026-09-17T03:24:29Z",
+  "scope": "live WebDAV protocol; not Finder acceptance",
+  "fixture": "davcheck-bbf626bcdae330fe/",
+  "results": [
+    {
+      "case": "options",
+      "expected_http": 200,
+      "actual_http": 200,
+      "pass": true
+    },
+    {
+      "case": "mkcol_new",
+      "expected_http": 201,
+      "actual_http": 201,
+      "pass": true
+    },
+    {
+      "case": "mkcol_existing",
+      "expected_http": 405,
+      "actual_http": 405,
+      "pass": true
+    },
+    {
+      "case": "put_new",
+      "expected_http": 201,
+      "actual_http": 201,
+      "pass": true
+    },
+    {
+      "case": "get_content",
+      "expected_http": 200,
+      "actual_http": 200,
+      "pass": true
+    },
+    {
+      "case": "head",
+      "expected_http": 200,
+      "actual_http": 200,
+      "pass": true
+    },
+    {
+      "case": "range",
+      "expected_http": 206,
+      "actual_http": 206,
+      "pass": true
+    },
+    {
+      "case": "range_unsatisfiable",
+      "expected_http": 416,
+      "actual_http": 416,
+      "pass": true
+    },
+    {
+      "case": "if_match_wrong_get",
+      "expected_http": 412,
+      "actual_http": 412,
+      "pass": true
+    },
+    {
+      "case": "if_none_match_get",
+      "expected_http": 304,
+      "actual_http": 304,
+      "pass": true
+    },
+    {
+      "case": "if_none_match_put",
+      "expected_http": 412,
+      "actual_http": 412,
+      "pass": true
+    },
+    {
+      "case": "failed_put_preserves_content",
+      "expected_http": 200,
+      "actual_http": 200,
+      "pass": true
+    },
+    {
+      "case": "propfind",
+      "expected_http": 207,
+      "actual_http": 207,
+      "pass": true
+    }
+  ],
+  "checker_exit": 0,
+  "new_upload_states": [
+    "Committed"
+  ]
+}

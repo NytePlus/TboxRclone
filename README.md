@@ -1,6 +1,6 @@
 # TboxRclone
 
-Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；无需修改或复制上游源码。
+Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；必要的上游修复保存在 `patches/rclone/`，按固定版本重放。
 
 **尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。当前禁止覆盖、删除和目录删除；只在隔离实验目录开放显式启用的创建操作。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
 
@@ -8,11 +8,14 @@ Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_
 
 ```sh
 git submodule update --init --recursive
+sh scripts/rclone-patches.sh --apply
 docker compose run --rm go-tests go test -race ./...
 docker compose run --rm go-tests go vet ./...
 docker compose run --rm go-tests go build -o bin/tboxrclone-linux-arm64 ./cmd/tboxrclone
 docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o bin/tboxrclone-darwin-arm64 ./cmd/tboxrclone
 ```
+
+子模块 gitlink 保持上游固定提交，工作区带有可重放补丁；不要把这部分差异误当成未保存代码。补丁和对应回归测试由主仓库跟踪。Compose 构建及服务启动会先检查补丁是否就绪，不会修改只读服务卷。升级子模块前必须显式重做补丁及回归。
 
 Linux 二进制架构取决于 Docker 主机架构。macOS Intel 构建用 `GOARCH=amd64`。当前 CLI 提供 `copy/copyto/cat/check/lsf/lsjson/mkdir/config/serve webdav`；原生 mount 尚未接入。
 
@@ -77,7 +80,7 @@ docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go b
 bin/davcheck -url http://127.0.0.1:8686/ -allow-lab-writes > reports/webdav-check.json
 ```
 
-检查器只接受 loopback IP，以随机目录创建固定测试数据并保留现场。任一 HTTP 状态或内容不满足契约就返回非零；当前实测 11 项通过、2 项失败：重复 MKCOL 为 201 而非 405，条件 PUT 为 405 而非 412。这是协议诊断，不是 Finder 验收，也不更新 manifest 为 PASS。
+检查器只接受 loopback IP，以随机目录创建固定测试数据并保留现场。任一 HTTP 状态或内容不满足契约就返回非零；固定上游原始版本曾有两项失败；应用当前补丁后实测 13/13 通过，重复 MKCOL 为 405、已有资源的 PUT If-None-Match:* 为 412。补丁只检查 VFS 可见状态，外部修改、缓存失效和其他条件头仍待验证。这是协议诊断，不是 Finder 验收，也不更新 manifest 为 PASS。
 
 ## 验收
 

@@ -109,3 +109,9 @@ Compose 服务指向隔离实验目录，Mac 原生 `davcheck` 通过 loopback �
 - 已有文件的 PUT If-None-Match:* 返回 405，应为 412。服务日志表明仍进入后端上传准备，产生 Prepared 日志后因禁止覆盖而失败；独立 GET 保留原内容。
 
 协议工具会对这两项失败返回非零。这些实际失败不能被上游本地后端测试通过掩盖；也不能将 curl/HTTP 请求替代 Finder 用户操作。Finder 自动化目前两次返回 cgWindowNotFound，尚无可操作窗口或 UI 录屏。
+
+### WebDAV 补丁后的复测
+
+固定上游源码应用可重放补丁后，服务重新构建并通过健康检查。[复测记录](evidence/2026-09-17/webdav-check-patched.json) 为 13/13，通过状态分别包含重复 MKCOL 405、已有资源条件 PUT 412。检查前后上传日志差集只有一个 Committed，没有被拒绝 PUT 的 Prepared 记录。
+
+这证明两个已复现的顺序请求问题已修复；VFS 视图可能陈旧，因此不能将此结果外推成云端原子条件写或跨客户端并发验收。原始失败证据保留，不回写为 PASS；系统 manifest 状态不变。

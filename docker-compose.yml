@@ -2,6 +2,7 @@ services:
   go-tests:
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
+    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
     volumes:
       - .:/src
       - go-modules:/go/pkg/mod
@@ -13,6 +14,7 @@ services:
     profiles: [live]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
+    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
     volumes:
       - .:/src:ro
       - go-modules:/go/pkg/mod
@@ -31,6 +33,7 @@ services:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
+    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
     volumes:
       - .:/src:ro
       - go-modules:/go/pkg/mod
@@ -48,6 +51,7 @@ services:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
+    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
     network_mode: service:fault-proxy
     depends_on:
       fault-proxy:
@@ -67,6 +71,7 @@ services:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
+    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
     network_mode: service:fault-proxy
     depends_on:
       fault-proxy:

@@ -1,0 +1,81 @@
+diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
+index d3420bb..3cc27d4 100644
+--- a/cmd/serve/webdav/webdav.go
++++ b/cmd/serve/webdav/webdav.go
+@@ -403,6 +403,18 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+ 		w.serveDir(rw, r, remote)
+ 		return
+ 	}
++	// Reject create-only PUT before opening a truncating write handle.
++	// This checks the VFS view; backend publication still needs its own
++	// atomic conflict policy against changes made by other clients.
++	if r.Method == "PUT" && strings.TrimSpace(r.Header.Get("If-None-Match")) == "*" {
++		if _, err := w.Stat(r.Context(), remote); err == nil {
++			http.Error(rw, "Precondition Failed", http.StatusPreconditionFailed)
++			return
++		} else if !os.IsNotExist(err) {
++			http.Error(rw, "Failed to check precondition", http.StatusInternalServerError)
++			return
++		}
++	}
+ 	// Work around bug in x/net/webdav which handles Overwrite incorrectly
+ 	// See: https://github.com/golang/go/issues/66059
+ 	// Remove when the above bug is fixed.
+@@ -521,6 +533,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+ 	if err != nil {
+ 		return err
+ 	}
++	// webdav.FileSystem follows os.Mkdir semantics, while VFS Mkdir is
++	// idempotent. RFC 4918 requires MKCOL on an existing resource to fail.
++	if _, err := VFS.Stat(name); err == nil {
++		return os.ErrExist
++	} else if !os.IsNotExist(err) {
++		return err
++	}
+ 	dir, leaf, err := VFS.StatParent(name)
+ 	if err != nil {
+ 		return err
+diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
+index bd14826..4188783 100644
+--- a/cmd/serve/webdav/webdav_test.go
++++ b/cmd/serve/webdav/webdav_test.go
+@@ -438,3 +438,39 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+ 	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
+ 		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
+ }
++
++func TestMkcolExistingResourceRejected(t *testing.T) {
++	base := startWritableServer(t)
++	mkcol(t, base, "exists")
++	for _, path := range []string{"exists", "exists/"} {
++		req, err := http.NewRequest("MKCOL", base+path, nil)
++		require.NoError(t, err)
++		resp, err := http.DefaultClient.Do(req)
++		require.NoError(t, err)
++		_ = resp.Body.Close()
++		require.Equal(t, http.StatusMethodNotAllowed, resp.StatusCode)
++	}
++}
++
++func TestPutIfNoneMatchStarPreservesExistingFile(t *testing.T) {
++	base := startWritableServer(t)
++	for i, payload := range []string{"original", "replacement"} {
++		req, err := http.NewRequest("PUT", base+"conditional.txt", strings.NewReader(payload))
++		require.NoError(t, err)
++		req.Header.Set("If-None-Match", "*")
++		resp, err := http.DefaultClient.Do(req)
++		require.NoError(t, err)
++		_ = resp.Body.Close()
++		expected := http.StatusCreated
++		if i == 1 {
++			expected = http.StatusPreconditionFailed
++		}
++		require.Equal(t, expected, resp.StatusCode)
++	}
++	resp, err := http.Get(base + "conditional.txt")
++	require.NoError(t, err)
++	defer resp.Body.Close()
++	body, err := io.ReadAll(resp.Body)
++	require.NoError(t, err)
++	require.Equal(t, "original", string(body))
++}
