@@ -40,11 +40,11 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | PUT `/api/v1/directory/{L}/{S}/{P}` | conflict_resolution_strategy=ask | 状态/错误 | C；重复建目录不等于新建成功 |
 | GET `/api/v1/file/{L}/{S}/{P}` | Range: bytes=start-end | 内容流；验证 200/206/416、Content-Range | C；可重试但必须固定版本 |
 | PUT `/api/v1/file/{L}/{S}/{P}` | strategy=overwrite，JSON `{}` | domain/path/headers/confirmKey 等上传参数 | C；简单上传初始化，不是直接上传内容 |
-| POST `/api/v1/file/{L}/{S}/{P}?multipart` | strategy=rename；`{"partNumberRange":[1,2]}` | confirmKey、uploadId、domain/path、expiration、parts 的签名 headers | C+实测；片号是明确列表（[1,3] 不包含 2），客户端每批最多 50 片；服务端上限未证实 |
+| POST `/api/v1/file/{L}/{S}/{P}?multipart` | strategy=rename；`{"partNumberRange":[1,2]}` | confirmKey、uploadId、domain/path、expiration、parts 的签名 headers | C+实测；片号是明确列表（[1,3] 不包含 2），客户端每批最多 50 片；实测 50/51 个授权均可返回，硬上限未证实 |
 | PUT `https://{domain}{path}?uploadId=...&partNumber=N` | 返回的签名 headers + 分片字节 | HTTP 状态；应记录分片 ETag/大小 | C；数据面 URL 来自服务端，不自行猜测 |
 | POST `/api/v1/file/{L}/{S}/{K}?renew` | `{"partNumberRange":[...]}` | 新的分片授权 | C+实测；返回相同 K/uploadId/path 的逐片新授权；续期不等于已传内容持久化 |
 | GET `/api/v1/file/{L}/{S}/{K}?upload` | 现有代码额外 no_upload_part_info=1 | confirmed/path/type/uploadId/parts 等 DTO | C+F；DTO 有字段不代表该参数下实际返回 |
-| POST `/api/v1/file/{L}/{S}/{K}?confirm` | strategy=overwrite；可选 `{"crc64":"十进制字符串"}` | path/name/size/eTag/crc64/时间/isOverwrittened | C；初始化 rename 与确认 overwrite 要验证最终路径 |
+| POST `/api/v1/file/{L}/{S}/{K}?confirm` | strategy=overwrite；可选 `{"crc64":"十进制字符串"}` | path/name/size/eTag/crc64/时间/isOverwrittened | C；实测 ask 初始化允许同名会话，最终 confirm 冲突返回 409；错误 content_cas 覆盖保护被忽略 |
 | DELETE `/api/v1/file/{L}/{S}/{P}` | permanent=0 | 204 或 recycledItemId | C；删除到回收站 |
 | PUT `/api/v1/file/{L}/{S}/{目标P}` | strategy=ask；`{"from":"源路径"}` | path | C；服务端移动，目录不可据此推定可靠 |
 | PUT 同上 | strategy=ask；`{"copyFrom":"源路径"}` | path | C；复制不保证单请求同步完成 |
@@ -61,7 +61,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | P0 | PUT `/api/v1/directory/{L}/{S}/{目标P}` | copyFrom + strategy；目录专用复制 | F+S |
 | P0 | PUT 同上 | from + strategy；目录专用移动 | S；F 普通移动定义走 file 路径 |
 | P0 | DELETE `/api/v1/directory/{L}/{S}/{P}` | permanent、directory_only；验证能否服务器端保证只删空目录 | S |
-| P0 | 文件 confirm/move/copy/delete 等的 content_cas；info 的 with_content_cas | 候选条件写保护；源/目标作用域、错误码和比较原子性未证明 | S |
+| P0 | 文件 confirm/move/copy/delete 等的 content_cas；info 的 with_content_cas | 候选条件写保护；实测错误条件在删除、覆盖 confirm、移动源/目标均被忽略，不能用作并发保护 | S |
 | P0 | info 的 with_inode；GET `/api/v1/inode/{L}/{S}/{Inode}` | 候选稳定身份，用于移动结果核对 | S |
 | P1 | HEAD `/api/v1/file/{L}/{S}/{P}` 与 `/directory/...` | 快速状态/权限检查；不能代替 GET 校验内容 | F+S |
 | P1 | GET `/api/v1/file/{L}/{S}/{P}?info` | 下载信息/签名地址；history_id 等；减少内容代理开销 | F+S |
@@ -123,3 +123,11 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 - `complete-file-upload200-response.d.ts` 的覆盖标识为 `isOverwritten`，与已有研究记录的 DTO 拼写不同；实际解析应以交大响应为准。
 
 上述描述来自 sources.json 锁定的 SDK 包。后续交大实例探测已确认签名分片映射、上传状态参数要求，以及部分条件字段不起作用；以 [真实接口实验](live-api-findings.md) 的具体证据为准。
+
+## 8. 小文件恢复和创建竞争的部署结论
+
+简单上传 K 调用 `renew`：空 body 返回 400 `ParamInvalid`；提供 `partNumberRange:[1]` 返回 404 `NotMultipartUpload`。因此不能假设简单上传也可续签。0 字节和 4 字节文件均已通过单片 multipart 的初始化、PUT、confirm、完整读回；后端统一采用该协议，不再为小文件选择无法续签的简单上传。
+
+两个先初始化的同目标 ask 会话中，第一个 confirm 200，第二个 confirm 409 `SameNameDirectoryOrFileExists`，独立读取保持第一个内容。初始化现有文件 ask 仍 201，不能把初始化成功当作预留文件名；必须在 confirm 处继续使用 ask 并处理冲突。
+
+错误 `content_cas` 在 overwrite confirm 中返回 200 并实际替换内容；移动同时提供错误 query `content_cas` 和 body `contentCas` 也返回 200、源路径 404。这些实测不支持条件覆盖/条件移动。目录专用移动返回 204 并保留子文件，但其并发/未知结果契约仍未证明。`fs-delta/cursor` 本次返回 404。具体证据见 [真实实验](live-api-findings.md)。

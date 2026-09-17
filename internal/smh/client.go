@@ -449,6 +449,9 @@ func (c *Client) putData(ctx context.Context, u Upload, r io.Reader, size int64)
 		return "", ErrProtocol
 	}
 	req.ContentLength = size
+	if size == 0 {
+		req.Body = http.NoBody
+	}
 	req.GetBody = nil
 	for k, v := range u.Headers {
 		if strings.EqualFold(k, "Host") {

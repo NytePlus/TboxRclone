@@ -3,8 +3,6 @@ package sjtu
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -33,7 +31,7 @@ func init() {
 		{Name: "organization_id", Default: "1", Help: "Organization ID for personal-space token refresh."},
 		{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
 		{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
-		{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. Files of 8 MiB or larger use multipart."},
+		{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
 	}})
 }
 
@@ -308,87 +306,13 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if e = f.Mkdir(ctx, parent); e != nil {
 		return fail(e)
 	}
-	if r.Size >= 2*transfer.PartSize {
-		if e = transfer.Start(ctx, s, f.c, r); e != nil {
-			return fail(e)
-		}
-		o.item, e = f.c.Info(ctx, p)
-		if e != nil {
-			return fail(e)
-		}
-		return nil
-	}
-	// Persist intent before sending an operation whose response might be lost.
-	r.State = "InitSent"
-	if e = s.Save(r); e != nil {
+	if e = transfer.Start(ctx, s, f.c, r); e != nil {
 		return fail(e)
 	}
-	var u smh.Upload
-	if e = f.c.JSON(ctx, "PUT", "file", p, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, &u); e != nil {
-		return fail(e)
-	}
-	if u.Key == "" {
-		return fail(smh.ErrProtocol)
-	}
-	r.ConfirmKey = u.Key
-	r.State = "Uploading"
-	if e = s.Save(r); e != nil {
-		return fail(e)
-	}
-	data, e := s.Data(r)
+	o.item, e = f.c.Info(ctx, p)
 	if e != nil {
 		return fail(e)
 	}
-	e = f.c.PutData(ctx, u, data, r.Size)
-	data.Close()
-	if e != nil {
-		return fail(e)
-	}
-	r.State = "CommitSent"
-	if e = s.Save(r); e != nil {
-		return fail(e)
-	}
-	var confirmed smh.Item
-	e = f.c.JSON(ctx, "POST", "file", u.Key, url.Values{"confirm": {"1"}, "conflict_resolution_strategy": {"ask"}}, struct{}{}, &confirmed)
-	if e != nil {
-		r.State = "Unknown"
-		if se := s.Save(r); se != nil {
-			return fail(errors.Join(e, se))
-		}
-		return fail(e)
-	}
-	if strings.Join(confirmed.Path, "/") != p || int64(confirmed.Size) != r.Size {
-		return fail(smh.ErrUnknown)
-	}
-	actual, e := f.c.Info(ctx, p)
-	if e != nil {
-		return fail(e)
-	}
-	if int64(actual.Size) != r.Size {
-		return fail(smh.ErrUnknown)
-	}
-	// An independent read establishes content identity before marking success.
-	reader, e := f.c.Open(ctx, p, actual, 0, -1)
-	if e != nil {
-		return fail(e)
-	}
-	h := sha256.New()
-	n, e := io.Copy(h, reader)
-	ce := reader.Close()
-	if e == nil {
-		e = ce
-	}
-	if e != nil {
-		return fail(e)
-	}
-	if n != r.Size || hex.EncodeToString(h.Sum(nil)) != r.SHA256 {
-		return fail(errors.New("remote checksum mismatch"))
-	}
-	r.State = "Committed"
-	if e = s.Save(r); e != nil {
-		return fail(e)
-	}
-	o.item = actual
 	return nil
 }
 

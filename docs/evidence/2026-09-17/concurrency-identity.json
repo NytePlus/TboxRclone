@@ -1,0 +1,104 @@
+{
+  "at": "2026-09-17T02:56:20.251019+00:00",
+  "scope": "new isolated generated fixtures only",
+  "events": [
+    {
+      "operation": "two_create_only_sessions",
+      "first_http": 200,
+      "second_http": 409,
+      "second_code": "SameNameDirectoryOrFileExists",
+      "read_http": 200,
+      "first_bytes_preserved": true
+    },
+    {
+      "operation": "initialize_existing_ask",
+      "http": 201,
+      "code": null
+    },
+    {
+      "operation": "overwrite_wrong_cas",
+      "confirm_http": 200,
+      "code": null,
+      "read_http": 200,
+      "old_bytes_preserved": false,
+      "new_bytes_visible": true
+    },
+    {
+      "operation": "file_identity",
+      "http": 200,
+      "fields": [
+        "authorityButtonList",
+        "authorityList",
+        "contentType",
+        "crc64",
+        "creationTime",
+        "eTag",
+        "fileType",
+        "historySize",
+        "isAuthorized",
+        "metaData",
+        "modificationTime",
+        "name",
+        "path",
+        "previewAsIcon",
+        "previewByCI",
+        "previewByDoc",
+        "sensitiveWordAuditStatus",
+        "size",
+        "tagList",
+        "type",
+        "userId",
+        "userOrgId",
+        "versionId",
+        "virusAuditStatus"
+      ],
+      "has_inode": false,
+      "has_content_cas": false,
+      "has_version": true,
+      "version_changed": true
+    },
+    {
+      "operation": "history_list",
+      "http": 200,
+      "fields": [
+        "contents",
+        "totalNum"
+      ],
+      "entry_count": 1
+    },
+    {
+      "operation": "move_wrong_source_and_target_cas",
+      "http": 200,
+      "code": null,
+      "source_http": 404,
+      "destination_http": 200,
+      "destination_matches": true,
+      "fields": [
+        "path"
+      ]
+    },
+    {
+      "operation": "delta_cursor",
+      "http": 404,
+      "fields": [
+        "code"
+      ]
+    },
+    {
+      "operation": "directory_move",
+      "http": 204,
+      "fields": [],
+      "source_http": 404,
+      "child_http": 200,
+      "child_matches": true
+    },
+    {
+      "operation": "abort_unpublished_own_session",
+      "http": 204
+    },
+    {
+      "operation": "abort_unpublished_own_session",
+      "http": 204
+    }
+  ]
+}

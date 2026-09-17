@@ -71,3 +71,31 @@
 ## 自动获取个人空间令牌
 
 Go 客户端已按真实 `POST /user/v1/space/1/personal?user_token=...` 协议集成私有 UserToken 文件，验证返回 libraryId/spaceId 与既定空间一致后只在内存缓存 accessToken。通过故意不存在的 accessToken 文件验证配置优先级及真实请求成功，见 [证据](evidence/2026-09-17/automatic-token.json)。1800 秒过期的提前刷新仅完成受控时钟测试，真实长时运行尚待验收；401/403 不触发原业务请求重放。
+
+## 创建竞争、覆盖和移动
+
+[并发及身份探测](evidence/2026-09-17/concurrency-identity.json) 使用全新隔离生成文件：
+
+- 两个 ask 会话先初始化，第一个确认 200，第二个确认 409 `SameNameDirectoryOrFileExists`，第一份内容保留。对已存在文件再 ask 初始化仍 201；真正冲突点在 confirm。
+- overwrite confirm 使用错误 `content_cas` 返回 200，新内容实际可见；目标旧内容被替换。
+- 移动同时提供错误源 body.contentCas 和目标 query.content_cas，返回 200；源 404，目标内容与源一致。这些条件未阻止操作，不能把它们当作 CAS。
+- 文件 info 仍无 inode/contentCas；versionId 在覆盖前后发生变化，但这不证明其能作为写入前置条件。
+- 目录专用移动返回 204，源 404，目标子文件内容完整；尚未证明同名覆盖、丢响应和并发修改下的保护。
+- `fs-delta/cursor` 返回 404。
+- 历史列表只返回一个标为最新的条目；对应 history_id 可下载最新内容，虚构 history_id 返回 404。未取得旧内容保存的证据，不能宣称覆盖后能靠历史恢复旧版本。见 [历史读取](evidence/2026-09-17/history-read.json)。
+
+## 所有文件统一使用可续签上传
+
+[简单上传续签](evidence/2026-09-17/simple-renew.json) 返回：空 body 为 400/ParamInvalid，加片号为 404/NotMultipartUpload。该探测会话已通过 upload abort 204 结束。
+
+[单片原始协议](evidence/2026-09-17/small-multipart.json) 证明空文件和 4 字节文件可以初始化 multipart、上传唯一分片、确认、完整下载。[真实 Go 客户端](evidence/2026-09-17/go-small-multipart.json) 随后对空文件和 15 字节文件完成相同验证。因此新上传统一使用可续签协议，旧版简单上传的遗留日志仍保留且不会猜测重建。
+
+[授权列表边界](evidence/2026-09-17/signature-batch-boundary.json) 实际发送 50 和 51 个明确片号，服务端各返回 50 和 51 个授权；两次均 200。未推断更大上限，客户端仍使用至多 50 片/批。探测会话未上传数据，已 abort 204。
+
+## 进程中断实测
+
+[Linux SIGINT](evidence/2026-09-17/multipart-sigint.json) 与 [Linux SIGKILL](evidence/2026-09-17/multipart-sigkill.json)：真实数据面分片完整应答被代理暂扣时，对容器 PID 1 的编译后客户端发送信号；分别退出 2、137。日志仍为 Uploading；新的进程复用原 K/uploadId 进行恢复；最终 Committed 且绕开代理的完整下载 SHA-256 一致。
+
+已确认片不重传另由离线请求计数测试验证；上述真实实验的恢复阶段使用直连，未采集恢复阶段逐片请求计数。
+
+这两项是 Linux 进程中断证据，不是 macOS Finder 录屏、宿主机崩溃或掉电持久性证据；ST-003 等系统分支仍未标为 PASS。

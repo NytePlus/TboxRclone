@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-17T02:57:16.872803+00:00",
+  "events": [
+    {
+      "operation": "read_history_id",
+      "http": 200,
+      "entry_is_latest": true,
+      "original_bytes": false,
+      "latest_bytes": true
+    },
+    {
+      "operation": "read_invalid_history_id",
+      "http": 404,
+      "latest_bytes": false
+    }
+  ]
+}

@@ -35,7 +35,7 @@ rclone v1.75.1 内置 hash 集合没有通用的 SMH CRC64 类型；先将 CRC64
 
 “单元测试”需要分三层：后端离线单元测试；rclone `fstests` 真实后端集成测试；WebDAV/VFS/macOS 系统测试。`fstests.Run` 不是纯单元测试，会真的创建和删除远端数据。
 
-### 3.1 后端离线单元测试（需新增）
+### 3.1 后端离线单元测试（持续补齐）
 
 | 编号 | 必测内容 |
 |---|---|
@@ -78,15 +78,15 @@ func TestIntegration(t *testing.T) {
 }
 ```
 
-配置 `TestSjtu:` 的根只指向专用实验目录。推荐未来 Compose 提供 `go-tests`（固定 Go 工具链）、`webdav`、`fault-proxy` 三个服务；源码、配置只读挂载，缓存与日志单独持久卷，secrets 不写入镜像或 git。在 rclone checkout 内执行：
+配置 `TestSjtu:` 的根只指向专用实验目录。当前 Compose 提供 `go-tests`（固定 Go 工具链）、`webdav`、`fault-proxy` 等服务；源码、配置只读挂载，缓存与日志单独持久卷，secrets 不写入镜像或 git。在项目根目录执行：
 
 ```sh
-go test -race ./backend/sjtu -run '^TestUnit' -count=1
+go test -race ./...
 go test ./backend/sjtu -run '^TestIntegration$' -count=1 -v
-go test ./cmd/serve/webdav ./vfs/... -count=1
+go test github.com/rclone/rclone/cmd/serve/webdav github.com/rclone/rclone/vfs/... -count=1
 ```
 
-第一条的 TestUnit 是待新增测试命名约定；backend/sjtu 尚不存在。日常精简回归须保留父层，例如上游短 EOF 的路径是 `TestIntegration/FsMkdir/FsPutShortEOF`；运行记录应核对实际 RUN/PASS/SKIP 数，不能以“没有跑任何测试的 exit 0”过关。
+第一条会运行 backend/sjtu、SMH、日志、恢复和故障代理等离线测试；未配置真实空间时 TestIntegration 明确跳过。日常精简回归须保留父层，例如上游短 EOF 的路径是 `TestIntegration/FsMkdir/FsPutShortEOF`；运行记录应核对实际 RUN/PASS/SKIP 数，不能以“没有跑任何测试的 exit 0”过关。
 
 ### 3.3 已有 WebDAV 回归
 

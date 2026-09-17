@@ -38,6 +38,7 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 			t.Error("SMH credential sent to data plane")
 		}
 		sim.bytes, _ = io.ReadAll(r.Body)
+		w.Header().Set("ETag", `"part1"`)
 		w.WriteHeader(200)
 	}))
 	t.Cleanup(sim.data.Close)
@@ -66,12 +67,12 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 			}
 			return
 		}
-		if r.Method == "PUT" {
+		if r.Method == "POST" && r.URL.Query().Has("multipart") {
 			sim.init++
 			if r.URL.Query().Get("conflict_resolution_strategy") != "ask" {
 				t.Error("unsafe strategy")
 			}
-			json.NewEncoder(w).Encode(smh.Upload{Key: "K", Domain: sim.data.URL, Path: "/data"})
+			json.NewEncoder(w).Encode(smh.Upload{Key: "K", UploadID: "upload", Domain: sim.data.URL, Path: "/data", Parts: map[string]smh.PartSignature{"1": {Headers: map[string]string{"x-fixture": "part"}}}})
 			return
 		}
 		if r.Method == "POST" {

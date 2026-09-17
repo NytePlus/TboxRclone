@@ -34,18 +34,21 @@ func bound(c *smh.Client, r *journal.Record) error {
 
 // Start initializes exactly once, after persisting the spool and intent.
 func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if err := bound(c, r); err != nil {
 		return err
 	}
-	if r.State != "Prepared" || r.Size <= 0 {
-		return errors.New("multipart requires a prepared nonempty upload")
+	if r.State != "Prepared" || r.Size < 0 {
+		return errors.New("multipart requires a prepared upload")
 	}
 	data, err := s.Data(r)
 	if err != nil {
 		return err
 	}
 	defer data.Close()
-	count := (r.Size + PartSize - 1) / PartSize
+	count := max(int64(1), (r.Size+PartSize-1)/PartSize)
 	if count > 10000 {
 		return errors.New("multipart part count exceeds supported limit")
 	}
@@ -58,6 +61,9 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 			return err
 		}
 		r.Parts = append(r.Parts, journal.Part{Number: n, Size: size, SHA256: hex.EncodeToString(h.Sum(nil))})
+	}
+	if err = ctx.Err(); err != nil {
+		return err
 	}
 	r.State = "InitSent"
 	if err = s.Save(r); err != nil {
@@ -77,7 +83,7 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 	if err = s.Save(r); err != nil {
 		return err
 	}
-	return Resume(ctx, s, c, r)
+	return uploadAndCommit(ctx, s, c, r, data, &u)
 }
 
 // Resume never reinitializes an upload or replays a submitted confirmation.
@@ -89,7 +95,7 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 	if r.State == "CommitSent" || r.State == "Unknown" {
 		return recovery.Reconcile(ctx, s, c, r)
 	}
-	if r.State != "Uploading" || r.UploadID == "" || r.ConfirmKey == "" || r.UploadPath == "" || r.PartSize != PartSize || r.Size <= 0 {
+	if r.State != "Uploading" || r.UploadID == "" || r.ConfirmKey == "" || r.UploadPath == "" || r.PartSize != PartSize || r.Size < 0 {
 		return errors.New("operation is not a resumable multipart upload")
 	}
 	data, err := s.Data(r)
@@ -97,7 +103,7 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 		return err
 	}
 	defer data.Close()
-	count := (r.Size + PartSize - 1) / PartSize
+	count := max(int64(1), (r.Size+PartSize-1)/PartSize)
 	if count > 10000 || len(r.Parts) != int(count) {
 		return smh.ErrProtocol
 	}
@@ -134,6 +140,11 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 			return errors.New("acknowledged remote part disappeared")
 		}
 	}
+	return uploadAndCommit(ctx, s, c, r, data, nil)
+}
+
+func uploadAndCommit(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record, data io.ReaderAt, initial *smh.Upload) error {
+	var err error
 	for first := 1; first <= len(r.Parts); first += batchSize {
 		last := min(first+batchSize-1, len(r.Parts))
 		pending := []int{}
@@ -145,9 +156,15 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 		if len(pending) == 0 {
 			continue
 		}
-		u, e := c.Renew(ctx, r.ConfirmKey, first, last)
-		if e != nil {
-			return e
+		var u smh.Upload
+		if first == 1 && initial != nil {
+			u = *initial
+		} else {
+			var e error
+			u, e = c.Renew(ctx, r.ConfirmKey, first, last)
+			if e != nil {
+				return e
+			}
 		}
 		if u.Key != r.ConfirmKey || u.UploadID != r.UploadID || u.Path != r.UploadPath {
 			return errors.New("renewal changed upload identity")
@@ -198,6 +215,9 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 		if err = ctx.Err(); err != nil {
 			return err
 		}
+	}
+	if err = ctx.Err(); err != nil {
+		return err
 	}
 	r.State = "CommitSent"
 	if err = s.Save(r); err != nil {

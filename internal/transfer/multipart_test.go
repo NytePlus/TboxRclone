@@ -29,12 +29,15 @@ type remote struct {
 	server                                   *httptest.Server
 }
 
-func fixture(t *testing.T) (*remote, *smh.Client, *journal.Store, *journal.Record, []byte) {
+func fixture(t *testing.T, contents ...[]byte) (*remote, *smh.Client, *journal.Store, *journal.Record, []byte) {
 	t.Helper()
 	m := &remote{parts: map[int][]byte{}, puts: map[int]int{}}
 	payload := make([]byte, 2*PartSize+13)
 	for i := range payload {
 		payload[i] = byte(i*17 + i/97)
+	}
+	if len(contents) > 0 {
+		payload = contents[0]
 	}
 	m.server = httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		m.mu.Lock()
@@ -150,7 +153,7 @@ func TestMultipartRoundTrip(t *testing.T) {
 	if e := Start(context.Background(), s, c, r); e != nil {
 		t.Fatal(e)
 	}
-	if r.State != "Committed" || m.init != 1 || m.confirm != 1 {
+	if r.State != "Committed" || m.init != 1 || m.confirm != 1 || m.renew != 0 {
 		t.Fatalf("%s init=%d confirm=%d", r.State, m.init, m.confirm)
 	}
 	for _, p := range r.Parts {
@@ -231,14 +234,42 @@ func TestMultipartLostConfirmReconcilesWithoutReplay(t *testing.T) {
 func TestMultipartRejectsChangedRenewal(t *testing.T) {
 	m, c, s, r, _ := fixture(t)
 	defer s.Close()
-	m.badRenew = true
+	m.dropPart = true
 	if e := Start(context.Background(), s, c, r); e == nil {
+		t.Fatal("expected interrupted upload")
+	}
+	m.badRenew = true
+	before := 0
+	for _, n := range m.puts {
+		before += n
+	}
+	if e := Resume(context.Background(), s, c, r); e == nil {
 		t.Fatal("changed session accepted")
 	}
-	if len(m.parts) != 0 || m.confirm != 0 {
+	after := 0
+	for _, n := range m.puts {
+		after += n
+	}
+	if after != before || m.confirm != 0 {
 		t.Fatal("mutated changed session")
 	}
 }
+
+func TestResumableUploadSizeBoundaries(t *testing.T) {
+	for _, payload := range [][]byte{{}, {1}, []byte("tiny"), make([]byte, PartSize-1), make([]byte, PartSize), make([]byte, PartSize+1)} {
+		t.Run(fmt.Sprint(len(payload)), func(t *testing.T) {
+			m, c, s, r, _ := fixture(t, payload)
+			defer s.Close()
+			if e := Start(context.Background(), s, c, r); e != nil {
+				t.Fatal(e)
+			}
+			if r.State != "Committed" || len(r.Parts) != max(1, (len(payload)+int(PartSize)-1)/int(PartSize)) || r.UploadID == "" || m.init != 1 || m.confirm != 1 || m.renew != 0 {
+				t.Fatal("small file did not use resumable session")
+			}
+		})
+	}
+}
+
 func TestMultipartRecoveryFailsClosed(t *testing.T) {
 	for _, mode := range []string{"scope", "spool", "part hash", "remote part", "missing session"} {
 		t.Run(mode, func(t *testing.T) {
