@@ -37,6 +37,7 @@ func init() {
 			{Name: "user_token_file", Help: "Private UserToken file for automatic personal-space token refresh; takes precedence over token_file."},
 			{Name: "organization_id", Default: "1", Help: "Organization ID for personal-space token refresh."},
 			{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
+			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
 			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
 			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
 		}})
@@ -51,6 +52,7 @@ type Options struct {
 	UserTokenFile string        `config:"user_token_file"`
 	Organization  string        `config:"organization_id"`
 	StateDir      string        `config:"state_dir"`
+	OwnershipDir  string        `config:"ownership_dir"`
 	LabWrites     bool          `config:"lab_writes"`
 	MaxUpload     fs.SizeSuffix `config:"max_upload"`
 }
@@ -99,7 +101,7 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 	}
 	// Hold for the process lifetime, not an individual Fs: VFS handles and
 	// rclone shutdown callbacks may outlive that object's cached lifetime.
-	if err = instance.Claim(opt.StateDir); err != nil {
+	if err = instance.ClaimScope(opt.OwnershipDir, opt.StateDir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
 		return nil, err
 	}
 	f := &Fs{name: name, root: root, opt: opt, c: c}

@@ -2,6 +2,8 @@
 
 目标使用约束见[单客户端并发契约](docs/concurrency-contract.md)：单个受控服务实例，同路径冲突直接拒绝；不同文件及分片允许并行。该约束尚未完整实现，不能据此认为当前写入能力已经可发布。
 
+服务和恢复命令必须共享所有权注册目录与原状态目录。后端可设置 `ownership_dir`；`tbox-state` 使用相同 `--ownership-dir`。Compose 已设置 `RCLONE_SJTU_OWNERSHIP_DIR=/state/owners`，恢复命令也读取此环境变量。原生缺省位置为用户配置目录下的 `TboxRclone/owners`。一个空间首次绑定后，换 state_dir 会被拒绝，防止绕过未决数据；不要通过删除注册文件或换注册目录强行启动。跨宿主/容器迁移尚未提供自动流程。
+
 Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；必要的上游修复保存在 `patches/rclone/`，按固定版本重放。
 
 **尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。当前禁止覆盖、删除和目录删除；只在隔离实验目录开放显式启用的创建操作。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。

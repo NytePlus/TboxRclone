@@ -18,7 +18,13 @@ func TestOwnerSubprocess(t *testing.T) {
 	if dir == "" {
 		return
 	}
-	if err := Claim(dir); err != nil {
+	claim := func() error {
+		if scope := os.Getenv("TBOX_INSTANCE_TEST_SCOPE"); scope != "" {
+			return ClaimScope(os.Getenv("TBOX_INSTANCE_TEST_REGISTRY"), dir, scope)
+		}
+		return Claim(dir)
+	}
+	if err := claim(); err != nil {
 		fmt.Fprintln(os.Stdout, "rejected")
 		os.Exit(23)
 	}
@@ -121,5 +127,48 @@ func TestUnsafeLockRejected(t *testing.T) {
 	b, err := os.ReadFile(target)
 	if err != nil || string(b) != "keep" {
 		t.Fatal("symlink target changed")
+	}
+}
+
+func TestScopeExcludesDifferentStateAndPersistsAfterExit(t *testing.T) {
+	registry := filepath.Join(t.TempDir(), "owners")
+	state := filepath.Join(t.TempDir(), "state")
+	scope := "https://fixture.invalid/library/space"
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	child := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestOwnerSubprocess$")
+	child.Env = append(os.Environ(), "TBOX_INSTANCE_TEST_DIR="+state, "TBOX_INSTANCE_TEST_SCOPE="+scope, "TBOX_INSTANCE_TEST_REGISTRY="+registry)
+	input, err := child.StdinPipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	output, err := child.StdoutPipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = child.Start(); err != nil {
+		t.Fatal(err)
+	}
+	defer func() { input.Close(); child.Process.Kill(); child.Wait() }()
+	line, err := bufio.NewReader(output).ReadString('\n')
+	if err != nil || line != "owned\n" {
+		t.Fatalf("owner %q: %v", line, err)
+	}
+	other := filepath.Join(t.TempDir(), "other-state")
+	if err = ClaimScope(registry, other, scope); !errors.Is(err, ErrInUse) {
+		t.Fatalf("different state bypassed live owner: %v", err)
+	}
+	input.Close()
+	if err = child.Wait(); err != nil {
+		t.Fatal(err)
+	}
+	if err = ClaimScope(registry, other, scope); err == nil {
+		t.Fatal("new state hid old recovery directory after exit")
+	}
+	if err = ClaimScope(registry, state, scope); err != nil {
+		t.Fatalf("original state cannot recover: %v", err)
+	}
+	if err = ClaimScope(registry, other, "https://fixture.invalid/library/other-space"); err != nil {
+		t.Fatalf("unrelated space blocked: %v", err)
 	}
 }

@@ -21,6 +21,8 @@ services:
       - go-build:/root/.cache/go-build
       - ./.secrets:/secrets:ro
       - ./.state:/state
+    environment:
+      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
     ports:
       - 127.0.0.1:8686:8686
     command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, /secrets/rclone.conf, --addr, ':8686', --vfs-cache-mode, 'off', --cache-dir, /state/vfs]
@@ -63,6 +65,7 @@ services:
       - ./.secrets:/secrets:ro
       - ./.state:/state
     environment:
+      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem
@@ -83,6 +86,7 @@ services:
       - ./.secrets:/secrets:ro
       - ./.state:/state
     environment:
+      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem

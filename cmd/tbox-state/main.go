@@ -19,6 +19,7 @@ import (
 
 func run() error {
 	dir := flag.String("state-dir", "", "private durable state directory")
+	ownership := flag.String("ownership-dir", os.Getenv("RCLONE_SJTU_OWNERSHIP_DIR"), "shared cloud-space ownership registry (same as service; defaults to RCLONE_SJTU_OWNERSHIP_DIR)")
 	endpoint := flag.String("endpoint", "https://pan.sjtu.edu.cn", "SMH origin")
 	library := flag.String("library-id", "", "library ID")
 	space := flag.String("space-id", "", "space ID")
@@ -39,7 +40,11 @@ func run() error {
 		return fmt.Errorf("choose one of reconcile, resume, or abort")
 	}
 	if actions != 0 {
-		if err := instance.Claim(*dir); err != nil {
+		c, err := smh.New(*endpoint, *library, *space, *token)
+		if err != nil {
+			return err
+		}
+		if err = instance.ClaimScope(*ownership, *dir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
 			return err
 		}
 	}
