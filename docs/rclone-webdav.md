@@ -1,5 +1,7 @@
 # rclone 接入、必要测试子集与 WebDAV 契约
 
+当前验收采用[单客户端并发约束](concurrency-contract.md)。客户端冲突拒绝与未知结果的持久路径占用取代跨客户端 CAS 要求；不同文件和同一上传的分片并行仍是目标。
+
 ## 1. 架构与实现边界
 
 建议 `macOS Finder → rclone serve webdav → rclone VFS → 原生 sjtu backend → 交大 SMH API/对象存储`。另一条路径为 `macOS 应用 → rclone mount → VFS → 同一 backend`，需要单独验证本机挂载支持与权限。
@@ -47,7 +49,7 @@ rclone v1.75.1 内置 hash 集合没有通用的 SMH CRC64 类型；先将 CRC64
 | U06 | Range 200/206/416、远端忽略 Range、内容变化、ctx cancel 和响应体释放 |
 | U07 | 持久日志恢复、缓存不足、错误校验和；既有文件不被失败上传破坏 |
 | U08 | 分页游标重复/空页/末页、条目新增删除，避免死循环和误认完整 |
-| U09 | 同路径并发写、ABA 重建、abort 与 confirm 竞争、条件版本冲突 |
+| U09 | 同路径双写/读写拒绝、第二实例拒绝、未决路径跨重启占用、abort 与 confirm 竞争 |
 
 用 Go `httptest`/可控 fake transport、故障点与可注入时钟；关键状态机用 `go test -race`。mock 可以验证客户端行为，不能证明真实服务器的原子性。
 

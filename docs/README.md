@@ -1,5 +1,7 @@
 # 交大云盘接口与 rclone 接入研究
 
+最新产品范围：[单客户端并发约束](concurrency-contract.md)。用户明确不要求外部多客户端同时修改同一文件；受控客户端必须拒绝冲突访问，仍支持不同文件及分片并行。
+
 研究日期：2026-09-17。目标：把交大云盘接入原生 rclone backend，再通过 `rclone serve webdav` 接入 macOS Finder；直接 `rclone mount` 作为另一条独立验收路径。
 
 本文保留接口调研基线。Go 实验实现与执行结果见 [实施状态](implementation.md) 和 [项目入口](../README.md)，仍不是已经完成验收的 rclone 后端。已进行隔离目录内的登录后读写、分片协议探测和真实提交后丢响应实验，详见 [真实接口实验](live-api-findings.md)。尚未完成 macOS/Finder 挂载验收，不能据此宣称完整原子性或崩溃一致性成立。

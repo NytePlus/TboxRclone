@@ -22,7 +22,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 拖入固定内容文件",
       "branch": "正常上传",
       "expected": "远端正式文件为完整版本或尚未出现；恢复后 SHA-256 一致",
@@ -57,7 +57,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 拖入固定内容文件",
       "branch": "上传第一个/中间/最后一个分片时断网",
       "expected": "远端正式文件为完整版本或尚未出现；恢复后 SHA-256 一致",
@@ -92,7 +92,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "在 Finder 覆盖同名文件时取消",
       "branch": "confirm 之前取消",
       "expected": "提交前旧版不变；提交后允许新版但必须对账，禁止误删",
@@ -127,7 +127,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "在 Finder 覆盖同名文件时取消",
       "branch": "confirm 已执行后丢响应再取消",
       "expected": "提交前旧版不变；提交后允许新版但必须对账，禁止误删",
@@ -162,7 +162,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 保存后重启服务",
       "branch": "SIGTERM",
       "expected": "达到所声明持久边界的数据恢复；待传数据仍存在，不静默清空",
@@ -196,7 +196,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 保存后重启服务",
       "branch": "SIGKILL；另做宿主机崩溃/掉电实验",
       "expected": "达到所声明持久边界的数据恢复；待传数据仍存在，不静默清空",
@@ -230,7 +230,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 mv 两个挂载内目录之间的文件/目录",
       "branch": "MOVE 响应送达",
       "expected": "源目标身份可核对；不重复复制/不误删新对象；目录树完整",
@@ -265,7 +265,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 mv 两个挂载内目录之间的文件/目录",
       "branch": "MOVE 已执行但响应丢失，Ctrl+C 后重试",
       "expected": "源目标身份可核对；不重复复制/不误删新对象；目录树完整",
@@ -300,7 +300,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 mv 本地文件到挂载盘，观察源和同步状态",
       "branch": "目标已确认",
       "expected": "必须如实显示未同步；严格云端先于删源需求若不满足则阻断发布或提供同步完成流程",
@@ -334,7 +334,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 mv 本地文件到挂载盘，观察源和同步状态",
       "branch": "目标仅进入本地 VFS 缓存时断网/杀服务",
       "expected": "必须如实显示未同步；严格云端先于删源需求若不满足则阻断发布或提供同步完成流程",
@@ -356,9 +356,9 @@
     },
     {
       "id": "ST-006-T",
-      "title": "并发保存无静默丢更新：版本匹配",
+      "title": "同路径冲突明确拒绝：无冲突顺序保存",
       "user_role": "isolated normal user",
-      "user_goal": "并发保存无静默丢更新",
+      "user_goal": "同路径冲突明确拒绝",
       "condition_ids": [
         "C-006"
       ],
@@ -368,10 +368,10 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
-      "user_action": "两个 Finder 客户端/编辑器覆盖同一路径",
-      "branch": "版本匹配",
-      "expected": "条件匹配才提交；冲突显式报告并保留两份数据",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder/编辑器顺序保存同一文件，关闭后重新打开",
+      "branch": "路径没有冲突占用",
+      "expected": "顺序操作成功，关闭后重开内容完整；自己的多次 write 不被当成竞争写入",
       "api_support_roles": [
         "setup",
         "external-event",
@@ -385,14 +385,14 @@
       "related_unit_tests": [
         "U09"
       ],
-      "known_gap": "api.md#4-新发现的高价值能力",
+      "known_gap": "concurrency-contract.md",
       "status": "not_run"
     },
     {
       "id": "ST-006-F",
-      "title": "并发保存无静默丢更新：网页端或第二客户端先更新；另测 ABA 同路径重建",
+      "title": "同路径冲突明确拒绝：双写、读写、第二实例与恢复占用",
       "user_role": "isolated normal user",
-      "user_goal": "并发保存无静默丢更新",
+      "user_goal": "同路径冲突明确拒绝",
       "condition_ids": [
         "C-006"
       ],
@@ -402,10 +402,10 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
-      "user_action": "两个 Finder 客户端/编辑器覆盖同一路径",
-      "branch": "网页端或第二客户端先更新；另测 ABA 同路径重建",
-      "expected": "条件匹配才提交；冲突显式报告并保留两份数据",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "通过同一挂载制造双写和读写冲突；启动第二服务实例；重启后尝试修改未决路径",
+      "branch": "双写、读写冲突、第二服务实例、重启恢复中的同路径重建",
+      "expected": "冲突立即明确拒绝、不自动排队覆盖；首个操作数据保留；未决路径跨重启保持占用",
       "api_support_roles": [
         "setup",
         "external-event",
@@ -419,7 +419,7 @@
       "related_unit_tests": [
         "U09"
       ],
-      "known_gap": "api.md#4-新发现的高价值能力",
+      "known_gap": "concurrency-contract.md",
       "status": "not_run"
     },
     {
@@ -436,7 +436,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 大文件上传暂停网络后恢复",
       "branch": "K 和签名有效",
       "expected": "已验分片复用；过期正确续期/重建；不重用错误字节",
@@ -471,7 +471,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 大文件上传暂停网络后恢复",
       "branch": "签名到期、K 过期、重复发送同一分片",
       "expected": "已验分片复用；过期正确续期/重建；不重用错误字节",
@@ -506,7 +506,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "挂载写文件；协议层补充构造短流",
       "branch": "零字节、完整长度、未知长度",
       "expected": "空文件可用；长度错误不发布残缺文件，不无限等待",
@@ -540,7 +540,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "挂载写文件；协议层补充构造短流",
       "branch": "提前 EOF、多余字节、流读取失败",
       "expected": "空文件可用；长度错误不发布残缺文件，不无限等待",
@@ -574,7 +574,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 快速查看/应用 seek 大文件",
       "branch": "固定版本 Range",
       "expected": "不混合不同版本；错误 Range 可检测；必要时重新打开",
@@ -608,7 +608,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 快速查看/应用 seek 大文件",
       "branch": "Range 被忽略、416、读取中网页端替换",
       "expected": "不混合不同版本；错误 Range 可检测；必要时重新打开",
@@ -642,7 +642,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 打开超过一页的目录",
       "branch": "0/1/50/51/1000 条稳定列表",
       "expected": "稳定目录无丢项/重复；变化时策略明确且不死循环",
@@ -676,7 +676,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 打开超过一页的目录",
       "branch": "分页期间新增/删除/重命名、重复游标",
       "expected": "稳定目录无丢项/重复；变化时策略明确且不死循环",
@@ -710,7 +710,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 rmdir 挂载目录",
       "branch": "空目录",
       "expected": "空目录删除；非空/竞态不递归删除用户内容",
@@ -732,7 +732,7 @@
     },
     {
       "id": "ST-011-F",
-      "title": "非空目录不会被误删：非空目录；检查后并发新建子项",
+      "title": "非空目录不会被误删：非空目录与受控子项创建竞态",
       "user_role": "isolated normal user",
       "user_goal": "非空目录不会被误删",
       "condition_ids": [
@@ -744,10 +744,10 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "终端 rmdir 挂载目录",
-      "branch": "非空目录；检查后并发新建子项",
-      "expected": "空目录删除；非空/竞态不递归删除用户内容",
+      "branch": "非空目录；同一受控实例在空检查后尝试新建子项",
+      "expected": "非空目录拒绝删除；检查至删除期间阻止受控子项创建，不丢已有内容",
       "api_support_roles": [
         "setup",
         "external-event",
@@ -761,7 +761,7 @@
       "related_unit_tests": [
         "U09"
       ],
-      "known_gap": "api.md#4-新发现的高价值能力",
+      "known_gap": "concurrency-contract.md",
       "status": "not_run"
     },
     {
@@ -778,7 +778,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "编辑器打开并保存，第二客户端修改；协议层补充 token 条件",
       "branch": "正确 token/有效时间",
       "expected": "无权写操作被拒绝；重启后行为明确；不虚报持久云端锁",
@@ -812,7 +812,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "编辑器打开并保存，第二客户端修改；协议层补充 token 条件",
       "branch": "缺 token、错误 token、过期、服务重启、父目录锁",
       "expected": "无权写操作被拒绝；重启后行为明确；不虚报持久云端锁",
@@ -846,7 +846,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 替换文件、复制目录；协议层设置 Overwrite",
       "branch": "目标不存在",
       "expected": "完整复制；F 拒绝覆盖；安全保存不先删旧版导致丢失",
@@ -881,7 +881,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 替换文件、复制目录；协议层设置 Overwrite",
       "branch": "目标已存在，Overwrite 缺省/T/F；文件目录冲突",
       "expected": "完整复制；F 拒绝覆盖；安全保存不先删旧版导致丢失",
@@ -916,7 +916,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 新建重命名；应用保存并重新打开",
       "branch": "普通名称",
       "expected": "路径可往返；冲突可见；不静默吞掉所需属性",
@@ -951,7 +951,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 新建重命名；应用保存并重新打开",
       "branch": "中文、emoji、引号、%#?+、NFC/NFD、大小写、AppleDouble",
       "expected": "路径可往返；冲突可见；不静默吞掉所需属性",
@@ -986,7 +986,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 保存/浏览后重开",
       "branch": "正常权限、token、磁盘空间",
       "expected": "保留可恢复副本；不把权限失败当空目录；退避有界",
@@ -1022,7 +1022,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 保存/浏览后重开",
       "branch": "401/403/429/5xx、云端配额、本地缓存满",
       "expected": "保留可恢复副本；不把权限失败当空目录；退避有界",
@@ -1058,7 +1058,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 复制大目录并立即重开",
       "branch": "task 完成且全成功",
       "expected": "未完成不显示云端成功；部分失败逐项可追踪",
@@ -1093,7 +1093,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 复制大目录并立即重开",
       "branch": "仅受理、部分失败、task 查询超时",
       "expected": "未完成不显示云端成功；部分失败逐项可追踪",
@@ -1128,10 +1128,10 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 删除后断网，网页端同路径创建新文件",
-      "branch": "删除成功且无重建",
-      "expected": "不删除后来创建的文件；回收站项与操作身份一致",
+      "branch": "删除结果已明确且没有重建",
+      "expected": "删除完成并核对后释放路径占用；回收站项可追踪",
       "api_support_roles": [
         "setup",
         "external-event",
@@ -1146,12 +1146,12 @@
         "U05",
         "U09"
       ],
-      "known_gap": "api.md#5-幂等性与结果未知",
+      "known_gap": "concurrency-contract.md",
       "status": "not_run"
     },
     {
       "id": "ST-017-F",
-      "title": "删除重试不误删新对象：删成功响应丢失后路径已被重建",
+      "title": "删除恢复不误删新对象：结果未知时拒绝重建",
       "user_role": "isolated normal user",
       "user_goal": "删除重试不误删新对象",
       "condition_ids": [
@@ -1163,10 +1163,10 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
-      "user_action": "Finder 删除后断网，网页端同路径创建新文件",
-      "branch": "删成功响应丢失后路径已被重建",
-      "expected": "不删除后来创建的文件；回收站项与操作身份一致",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 删除后断网，经同一挂载尝试同路径重建；重启后重复尝试，完成对账后再新建",
+      "branch": "删除响应丢失后受控重建；重启恢复期间受控重建",
+      "expected": "未决删除阻止同路径重建；对账后才释放占用；新对象不得被旧操作后续重试删除",
       "api_support_roles": [
         "setup",
         "external-event",
@@ -1181,7 +1181,7 @@
         "U05",
         "U09"
       ],
-      "known_gap": "api.md#5-幂等性与结果未知",
+      "known_gap": "concurrency-contract.md",
       "status": "not_run"
     },
     {
@@ -1198,7 +1198,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 复制文件同时浏览目录",
       "branch": "单文件、稳定低延迟网络",
       "expected": "内容始终一致；请求/内存有界；记录吞吐和 p95，不以提速牺牲正确性",
@@ -1233,7 +1233,7 @@
         "sjtu backend",
         "SMH API"
       ],
-      "preconditions": "verification.md section 2; isolated fixture root",
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
       "user_action": "Finder 复制文件同时浏览目录",
       "branch": "多文件/高 RTT/限速/丢包/恢复并发",
       "expected": "内容始终一致；请求/内存有界；记录吞吐和 p95，不以提速牺牲正确性",
@@ -1254,5 +1254,12 @@
       "known_gap": "rclone-webdav.md#6-效率指标与发布门槛",
       "status": "not_run"
     }
-  ]
+  ],
+  "product_contract": {
+    "revision": "single-controlled-client-v1",
+    "document": "docs/concurrency-contract.md",
+    "basis": "2026-09-17 user explicitly excludes concurrent access to the same file; client must reject conflicts",
+    "external_writers": "unsupported within managed root while mounted or recovery is pending",
+    "independent_file_and_part_parallelism": "required"
+  }
 }

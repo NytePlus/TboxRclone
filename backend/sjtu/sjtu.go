@@ -281,7 +281,16 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (io.ReadClo
 	if e != nil {
 		return nil, e
 	}
-	return o.f.c.Open(ctx, p, o.item, start, length)
+	release, e := o.f.acquireFile(p, false)
+	if e != nil {
+		return nil, fserrors.NoRetryError(e)
+	}
+	r, e := o.f.c.Open(ctx, p, o.item, start, length)
+	if e != nil {
+		release()
+		return nil, e
+	}
+	return &ownedReader{ReadCloser: r, release: release}, nil
 }
 
 // Remove refuses path-based deletion until object-conditional semantics are verified.
@@ -299,6 +308,13 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if e != nil {
 		return e
 	}
+	// Acquire before waiting for the journal or accepting input. A competing
+	// write must fail now, never wait and become an unintended later overwrite.
+	release, e := f.acquireFile(p, true)
+	if e != nil {
+		return fserrors.NoRetryError(e)
+	}
+	defer release()
 	s, e := journal.OpenContext(ctx, f.opt.StateDir)
 	if e != nil {
 		return fserrors.NoRetryError(e)

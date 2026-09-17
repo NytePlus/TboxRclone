@@ -36,12 +36,13 @@
     "cached_only_kill"
   ],
   "ST-006-T": [
-    "matching_version"
+    "sequential_save_and_reopen"
   ],
   "ST-006-F": [
-    "web_client_update",
-    "second_client_update",
-    "aba_recreation"
+    "same_path_two_writers_rejected",
+    "read_write_conflict_rejected",
+    "second_service_instance_rejected",
+    "pending_path_reserved_after_restart"
   ],
   "ST-007-T": [
     "resume_valid_session"
@@ -87,7 +88,7 @@
   ],
   "ST-011-F": [
     "nonempty_directory",
-    "create_after_empty_check"
+    "controlled_create_after_empty_check_rejected"
   ],
   "ST-012-T": [
     "valid_lock_token"
@@ -144,7 +145,9 @@
     "delete_without_recreation"
   ],
   "ST-017-F": [
-    "delete_response_lost_then_recreated"
+    "unknown_delete_blocks_recreation",
+    "unknown_delete_blocks_recreation_after_restart",
+    "reconciled_delete_does_not_remove_later_file"
   ],
   "ST-018-T": [
     "single_file_low_latency"
