@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nyte/TboxRclone/internal/instance"
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/recovery"
 	"github.com/nyte/TboxRclone/internal/smh"
@@ -36,6 +37,11 @@ func run() error {
 	}
 	if actions > 1 {
 		return fmt.Errorf("choose one of reconcile, resume, or abort")
+	}
+	if actions != 0 {
+		if err := instance.Claim(*dir); err != nil {
+			return err
+		}
 	}
 	s, e := journal.Open(*dir)
 	if e != nil {

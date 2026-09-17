@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/instance"
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/smh"
 	"github.com/nyte/TboxRclone/internal/transfer"
@@ -95,6 +96,11 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		}
 	} else if opt.TokenFile == "" {
 		return nil, errors.New("token_file or user_token_file is required")
+	}
+	// Hold for the process lifetime, not an individual Fs: VFS handles and
+	// rclone shutdown callbacks may outlive that object's cached lifetime.
+	if err = instance.Claim(opt.StateDir); err != nil {
+		return nil, err
 	}
 	f := &Fs{name: name, root: root, opt: opt, c: c}
 	f.features = (&fs.Features{CanHaveEmptyDirectories: true}).Fill(ctx, f)
