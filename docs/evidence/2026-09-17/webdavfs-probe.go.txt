@@ -1,0 +1,21 @@
+package main
+import("encoding/json";"net/http";"os";"sync";"time";"golang.org/x/net/webdav";"io";"sort")
+type logWriter struct {sync.Mutex; out *os.File}
+func main(){
+ root:="/src/.state/davobserve/files";if err:=os.MkdirAll(root,0700);err!=nil{panic(err)}
+ out,err:=os.OpenFile("/src/.state/davobserve/requests.jsonl",os.O_CREATE|os.O_EXCL|os.O_WRONLY,0600);if err!=nil{panic(err)};defer out.Close();logger:=&logWriter{out:out}
+ h:=&webdav.Handler{FileSystem:webdav.Dir(root),LockSystem:webdav.NewMemLS()}
+ server:=&http.Server{Addr:":8690",ReadHeaderTimeout:10*time.Second,Handler:http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){
+  start:=time.Now().UTC();body:=&counter{ReadCloser:r.Body};r.Body=body
+  keys:=[]string{};for k:=range r.Header{keys=append(keys,k)};sort.Strings(keys)
+  rec:=&response{ResponseWriter:w}
+  h.ServeHTTP(rec,r)
+  logger.Lock();defer logger.Unlock()
+  json.NewEncoder(logger.out).Encode(map[string]any{"at":start,"finished":time.Now().UTC(),"method":r.Method,"path":r.URL.Path,"content_length":r.ContentLength,"body_bytes":body.n,"header_names":keys,"expected_entity_length":r.Header.Get("X-Expected-Entity-Length"),"has_if":r.Header.Get("If")!="","has_lock_token":r.Header.Get("Lock-Token")!="","status":rec.status});logger.out.Sync()
+ })};panic(server.ListenAndServe())
+}
+type counter struct {io.ReadCloser;n int64}
+func(c *counter)Read(p []byte)(int,error){n,e:=c.ReadCloser.Read(p);c.n+=int64(n);return n,e}
+type response struct{http.ResponseWriter;status int}
+func(r *response)WriteHeader(s int){r.status=s;r.ResponseWriter.WriteHeader(s)}
+func(r *response)Write(p []byte)(int,error){if r.status==0{r.WriteHeader(200)};return r.ResponseWriter.Write(p)}

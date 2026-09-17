@@ -266,8 +266,16 @@ docker compose run --rm \
 
 源码追查发现 `x/net/webdav v0.57.0 handleLock` 对不存在路径执行 `OpenFile(O_RDWR|O_CREATE|O_TRUNC)` 后立即 Close；当前 VFS cache-off 将其发布为空文件。该路径足以产生上述缺陷，但此次未记录逐请求 HTTP 方法，不能仅据此排除 Finder 也发送零长度 PUT。后续须捕获限定实验路径的方法/长度序列并做协议回归。修复需要区分锁占位与真正的零字节保存，保证本地持久状态、重启后占用及最终发布；不能禁用空文件、按时间猜测上传完成或把占位文件排除出验收。
 
-用户报告随后 `lock-sequence.bin` 诊断拖拽受到鼠标干扰，该次操作不作为验收依据。按用户要求另用全新随机名称 `finder-retest-936b4cfcdb73.bin` 重测，录制 101.61 秒并核验动作画面。此次真实请求日志首先出现 PUT，没有该路径 LOCK；对应后端日志为 0 字节 Prepared，说明不能仅修复 LOCK 的空资源创建路径。该 PUT 因 SMH transport failure 失败，后续 PUT 被原 Prepared 占用拒绝；独立观察 57 次均为 404，本地完整源文件 SHA-256 未变。重测没有完成正常上传，不升级 PASS，也不覆盖此前原子可见性失败证据。见[独立重测结果](evidence/2026-09-17/finder-retest-transport-failed.json)。
+用户报告随后 `lock-sequence.bin` 诊断拖拽受到鼠标干扰，该次操作不作为验收依据。按用户要求另用全新随机名称 `finder-retest-936b4cfcdb73.bin` 重测，录制 101.61 秒并核验动作画面。此次真实请求日志首先出现 PUT，没有该路径 LOCK；对应后端日志为 0 字节 Prepared，说明不能仅修复 LOCK 的空资源创建路径。该 PUT 因 SMH transport failure 失败，后续 PUT 被原 Prepared 占用拒绝；独立观察共 57 次，其中 55 次为 404、2 次传输失败（失败期间可见性未知），本地完整源文件 SHA-256 未变。重测没有完成正常上传，不升级 PASS，也不覆盖此前原子可见性失败证据。见[独立重测结果](evidence/2026-09-17/finder-retest-transport-failed.json)。
 
 后续离线协议回归发现独立缺陷：x/net/webdav 在 io.Copy 请求体失败后仍普通 Close，可能发布已收到的前缀。严格模式现在校验请求体长度/完整结束并异常关闭 VFS；同时修复 Rcat 探测输入时忽略非 EOF 错误的问题，避免上传未填满的缓冲区。旧文件保护、新目标不存在及正常空/非空/未知长度请求有回归，完整上游 WebDAV race 与 Rcat 测试通过。该修复处理单次请求中断，不把 Finder 已完整提交的零字节 PUT 当作非法空文件；原占位可见性缺陷仍未解决。
 
 SMH 传输错误增加固定类别（DNS、TLS、超时、拒绝/重置连接、不可达、EOF），不保留原始错误链中的签名 URL、令牌、主机名和证书信息。测试验证直接与多层包装错误不泄密；取消仍返回原 context 错误，变更请求失败仍为 ErrUnknown 且不增加重放，不能根据错误类别推断“肯定没有执行”。
+
+## macOS 写入边界探针（2026-09-17）
+
+为避免把普通空文件误判为上传占位，检查了 Apple 公开 webdavfs 源码（固定提交 `a239d37d7407700119e9c92f66f38ab0a296cb0f`），并使用本机原生挂载对隔离的本地 x/net/webdav 服务做 syscall 诊断；不连接云盘，不替代 Finder 验收。源码中 create 使用空 PUT，write-open 使用 LOCK，close 使用 UNLOCK；但实际序列比此概括更复杂。
+
+5 个场景覆盖空文件、单次写入、两次 fsync，以及有意保持打开一秒的空/非空文件。新建文件均先空 PUT，随后有一次 LOCK/UNLOCK，在应用 open 返回前又取得第二次 LOCK；数据和 fsync 属于后一个锁生命周期。**第一次 UNLOCK 不是用户复制完成边界**。两次 fsync 会发送两个不同长度 PUT；本次小文件没有 X-Expected-Entity-Length。不能采用“第一次解锁就发布”、只看该长度头，或静默延时猜测完成。原生额外信号或有明确定义的提交协调层仍需设计与验证。
+
+[完整脱敏请求/系统调用时序及源码摘要](evidence/2026-09-17/webdavfs-publication-boundary.json) 保留所有相关方法、长度、状态、头名称及 token 存在与否，不保存 token/认证值或请求内容。[探针源码](evidence/2026-09-17/webdavfs-probe.go.txt) 使用本地 Dir 和内存锁，不是产品服务。诊断挂载已卸载，文件仅在本项目忽略的 `.state/davobserve` 中，云盘数据未修改。此发现不改变原验收要求，也不产生系统 PASS。

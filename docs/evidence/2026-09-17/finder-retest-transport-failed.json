@@ -24,7 +24,7 @@
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "state": "Prepared"
   },
-  "observation": "Initial zero-byte PUT failed with SMH transport failure. The subsequent PUT was rejected because the original operation remained Prepared. Formal cloud path absent throughout sampled interval; full source retained locally. This run does not establish successful normal upload or resolve earlier zero-byte visibility failure.",
+  "observation": "Initial zero-byte PUT failed with SMH transport failure. The subsequent PUT was rejected because the original operation remained Prepared. Formal cloud path absent in 55 successful observations; 2 transport failures leave visibility unknown at those instants; full source retained locally. This run does not establish successful normal upload or resolve earlier zero-byte visibility failure.",
   "request_sequence": [
     "webdav-1  | 2026/09/17 12:03:10 INFO  : //finder-normal-c188d19f1620/finder-retest-936b4cfcdb73.bin: PROPFIND from 172.18.0.1:63642",
     "webdav-1  | 2026/09/17 12:03:10 INFO  : //finder-normal-c188d19f1620/finder-retest-936b4cfcdb73.bin: PROPFIND from 172.18.0.1:63642",
@@ -40,5 +40,9 @@
     "cloud-observations.json": "e68d63c14e3d24553ecf23761f7ab337279e5a897842c2aa34e7ae5f66c97a97",
     "request-sequence.log": "ba32b431729cbc1025e5f2c81b526c1cc6b4c56ddc11fe73ed2cf0154f8a5712",
     "action-frame.png": "056d1083d2f076374fad034096ef4ada3bb6c1e424be11c3423c07e528f37fb6"
+  },
+  "cloud_status_counts": {
+    "absent": 55,
+    "SMH transport failure": 2
   }
 }

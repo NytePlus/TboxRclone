@@ -1,0 +1,902 @@
+{
+  "scope": "Native macOS webdavfs syscalls against isolated local x/net/webdav probe, not cloud or Finder acceptance",
+  "macos": "26.5.2 (25F84)",
+  "server": "golang.org/x/net/webdav v0.57.0, local Dir + NewMemLS",
+  "source_commit": "a239d37d7407700119e9c92f66f38ab0a296cb0f",
+  "source_url": "https://github.com/apple-oss-distributions/webdavfs/tree/a239d37d7407700119e9c92f66f38ab0a296cb0f",
+  "cases": [
+    "empty",
+    "single_write_fsync",
+    "two_writes_two_fsync",
+    "empty_open_held_one_second",
+    "nonempty_open_and_fsync_held_one_second"
+  ],
+  "observations": [
+    "Initial empty PUT precedes the first LOCK for new files.",
+    "New files have a LOCK/UNLOCK pair before the application open call returns, then another LOCK/UNLOCK lifetime.",
+    "UNLOCK alone cannot identify completion of the user copy: the first UNLOCK precedes application data.",
+    "Two fsync calls produce two content PUT requests under the later lock.",
+    "X-Expected-Entity-Length was absent for these small writes; it is not a reliable final-content marker."
+  ],
+  "verdict": "Do not implement publish-on-first-UNLOCK or time-based placeholder completion. Additional native ownership/commit signaling requires investigation.",
+  "requests": [
+    {
+      "at": "2026-09-17T12:46:00.023561802Z",
+      "body_bytes": 0,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.023980218Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/empty.bin",
+      "status": 404
+    },
+    {
+      "at": "2026-09-17T12:46:00.02612551Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.02746451Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/empty.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.086060218Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.086463968Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/empty.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.08727776Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.08728251Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/empty.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.088034468Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.088100593Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/empty.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.088890343Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.088893718Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/empty.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.089602552Z",
+      "body_bytes": 0,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.089733135Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/single.bin",
+      "status": 404
+    },
+    {
+      "at": "2026-09-17T12:46:00.090442135Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.091015052Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/single.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.09280376Z",
+      "body_bytes": 179,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.093317468Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/empty.bin",
+      "status": 207
+    },
+    {
+      "at": "2026-09-17T12:46:00.09839676Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.098540635Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/single.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.09951676Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.09952401Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/single.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.100321802Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.100392718Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/single.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.10140026Z",
+      "body_bytes": 8,
+      "content_length": 8,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.102202927Z",
+      "has_if": true,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "If",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/single.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.103275468Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.103287677Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/single.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.104720927Z",
+      "body_bytes": 0,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.104927177Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/two-fsync.bin",
+      "status": 404
+    },
+    {
+      "at": "2026-09-17T12:46:00.106158635Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.108050635Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/two-fsync.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.10614926Z",
+      "body_bytes": 179,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.108609635Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/single.bin",
+      "status": 207
+    },
+    {
+      "at": "2026-09-17T12:46:00.115738135Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.115846218Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/two-fsync.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.116344468Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.116346718Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/two-fsync.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.11675651Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.116780427Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/two-fsync.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:00.11741476Z",
+      "body_bytes": 6,
+      "content_length": 6,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.117789343Z",
+      "has_if": true,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "If",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/two-fsync.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.11834126Z",
+      "body_bytes": 14,
+      "content_length": 14,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.118596093Z",
+      "has_if": true,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "If",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/two-fsync.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:00.119101552Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.119103635Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/two-fsync.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:00.11968301Z",
+      "body_bytes": 179,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:00.119957177Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/two-fsync.bin",
+      "status": 207
+    },
+    {
+      "at": "2026-09-17T12:46:58.824421135Z",
+      "body_bytes": 0,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:58.825232176Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/empty-held.bin",
+      "status": 404
+    },
+    {
+      "at": "2026-09-17T12:46:58.826929718Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:58.828060968Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/empty-held.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:46:58.83848976Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:58.838871093Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/empty-held.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:58.839727218Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:58.839733551Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/empty-held.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:46:58.840593885Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:58.840660801Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/empty-held.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:46:59.847750802Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:46:59.847778677Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/empty-held.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:47:00.85599201Z",
+      "body_bytes": 0,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.856395385Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/data-held.bin",
+      "status": 404
+    },
+    {
+      "at": "2026-09-17T12:47:00.858915635Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.859897302Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/data-held.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:47:00.871093094Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.871416344Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/data-held.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:47:00.873061427Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.873072552Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/data-held.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:47:00.874193594Z",
+      "body_bytes": 179,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.87465226Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/data-held.bin",
+      "status": 207
+    },
+    {
+      "at": "2026-09-17T12:47:00.87569701Z",
+      "body_bytes": 229,
+      "content_length": 229,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:00.875760635Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "Timeout",
+        "User-Agent"
+      ],
+      "method": "LOCK",
+      "path": "/data-held.bin",
+      "status": 200
+    },
+    {
+      "at": "2026-09-17T12:47:01.881016678Z",
+      "body_bytes": 8,
+      "content_length": 8,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:01.881886678Z",
+      "has_if": true,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "If",
+        "User-Agent"
+      ],
+      "method": "PUT",
+      "path": "/data-held.bin",
+      "status": 201
+    },
+    {
+      "at": "2026-09-17T12:47:02.886949095Z",
+      "body_bytes": 0,
+      "content_length": 0,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:02.886970595Z",
+      "has_if": false,
+      "has_lock_token": true,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Lock-Token",
+        "User-Agent"
+      ],
+      "method": "UNLOCK",
+      "path": "/data-held.bin",
+      "status": 204
+    },
+    {
+      "at": "2026-09-17T12:47:02.901431553Z",
+      "body_bytes": 179,
+      "content_length": 179,
+      "expected_entity_length": "",
+      "finished": "2026-09-17T12:47:02.902860595Z",
+      "has_if": false,
+      "has_lock_token": false,
+      "header_names": [
+        "Accept",
+        "Connection",
+        "Content-Length",
+        "Content-Type",
+        "Depth",
+        "User-Agent"
+      ],
+      "method": "PROPFIND",
+      "path": "/data-held.bin",
+      "status": 207
+    }
+  ],
+  "syscalls": [
+    {
+      "case": "empty.bin",
+      "action": "before_open",
+      "at": "2026-09-17T12:46:00.022728+00:00"
+    },
+    {
+      "case": "empty.bin",
+      "action": "opened",
+      "at": "2026-09-17T12:46:00.089587+00:00"
+    },
+    {
+      "case": "empty.bin",
+      "action": "closed",
+      "at": "2026-09-17T12:46:00.090144+00:00"
+    },
+    {
+      "case": "single.bin",
+      "action": "before_open",
+      "at": "2026-09-17T12:46:00.090251+00:00"
+    },
+    {
+      "case": "single.bin",
+      "action": "opened",
+      "at": "2026-09-17T12:46:00.101999+00:00"
+    },
+    {
+      "case": "single.bin",
+      "action": "fsynced_8",
+      "at": "2026-09-17T12:46:00.103575+00:00"
+    },
+    {
+      "case": "single.bin",
+      "action": "closed",
+      "at": "2026-09-17T12:46:00.104843+00:00"
+    },
+    {
+      "case": "two-fsync.bin",
+      "action": "before_open",
+      "at": "2026-09-17T12:46:00.104961+00:00"
+    },
+    {
+      "case": "two-fsync.bin",
+      "action": "opened",
+      "at": "2026-09-17T12:46:00.118040+00:00"
+    },
+    {
+      "case": "two-fsync.bin",
+      "action": "fsynced_6",
+      "at": "2026-09-17T12:46:00.119049+00:00"
+    },
+    {
+      "case": "two-fsync.bin",
+      "action": "fsynced_8",
+      "at": "2026-09-17T12:46:00.119870+00:00"
+    },
+    {
+      "case": "two-fsync.bin",
+      "action": "closed",
+      "at": "2026-09-17T12:46:00.120247+00:00"
+    },
+    {
+      "case": "empty-held.bin",
+      "action": "before_open",
+      "at": "2026-09-17T12:46:58.822928+00:00"
+    },
+    {
+      "case": "empty-held.bin",
+      "action": "opened",
+      "at": "2026-09-17T12:46:58.842065+00:00"
+    },
+    {
+      "case": "empty-held.bin",
+      "action": "before_close",
+      "at": "2026-09-17T12:46:59.847147+00:00"
+    },
+    {
+      "case": "empty-held.bin",
+      "action": "closed",
+      "at": "2026-09-17T12:46:59.850239+00:00"
+    },
+    {
+      "case": "data-held.bin",
+      "action": "before_open",
+      "at": "2026-09-17T12:47:00.854779+00:00"
+    },
+    {
+      "case": "data-held.bin",
+      "action": "opened",
+      "at": "2026-09-17T12:47:00.877578+00:00"
+    },
+    {
+      "case": "data-held.bin",
+      "action": "fsynced",
+      "at": "2026-09-17T12:47:01.883617+00:00"
+    },
+    {
+      "case": "data-held.bin",
+      "action": "before_close",
+      "at": "2026-09-17T12:47:02.886019+00:00"
+    },
+    {
+      "case": "data-held.bin",
+      "action": "closed",
+      "at": "2026-09-17T12:47:02.889628+00:00"
+    }
+  ],
+  "source_sha256": {
+    "mount.tproj/webdav_network.c": "d13a3d7389a4b721c5cf5c3a2425cf2a6e8cd7ab4750d42c527a69c1f230b290",
+    "mount.tproj/webdav_file.c": "ae250b863a165d3a478f15a2907037cc8dbcb73d2c238ea53619bcc14dabe80a",
+    "webdav_fs.kextproj/webdav_fs.kmodproj/webdav_vnops.c": "b44e802d30ebfe4c39ea40853b7b10d2f34b1e997131779a5d4fe7c7d4f40d72"
+  }
+}
