@@ -145,3 +145,7 @@ macOS 26.5.2 使用系统 mount_webdav 连接本机 Compose 服务。只读挂�
 新建一个隔离实验目录并登记 cloud_to_local 同步（201），分别将新生成的本地 ID、刚返回的服务端 syncId 作为 local_sync_id 调用两个令牌端点：四次均 200，返回字段仅 libraryId/spaceId/accessToken/expiresIn。使用各自令牌读取该实验目录，四次均 200、localSync=null，无 inode/ssn。查询本次登记列表为 200，单条详情仍 404。最后仅删除本次登记（204），保留实验目录；未修改既有同步或全局配置。
 
 证据：[sync-token-probe.json](evidence/2026-09-17/sync-token-probe.json)。参数被接受不证明有同步语义，404 也不能证明所有 fs-journal 能力均不可用。现阶段仍未得到可用于原子条件覆盖的对象身份或序号，不能据此开放覆盖。
+
+## HTTP 条件头不能保护覆盖
+
+在两个全新生成文件上，分别对 multipart 初始化及 confirm 都添加错误 `If-Match`、`If-None-Match: *`，并使用 overwrite 策略。两组初始化 201、确认 200；独立完整下载均为新字节，旧字节未保留。见 [HTTP 条件头实验](evidence/2026-09-17/http-mutation-conditions.json)。因此，这些标准 HTTP 头在所测控制面操作中没有阻止覆盖，不能作为 content_cas 的替代保护。这里只验证这两组请求，不声称所有服务端接口均无条件能力。

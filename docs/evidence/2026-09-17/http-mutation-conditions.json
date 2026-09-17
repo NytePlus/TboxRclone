@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-17T04:55:21.950424+00:00",
+  "scope": "Generated fixtures only; formal files retained",
+  "events": [
+    {
+      "case": "wrong-if-match",
+      "headers": {
+        "If-Match": "\"tbox-definitely-not-current\""
+      },
+      "applied_to": "multipart initialization and confirm",
+      "mutation_status": 200,
+      "read_status": 200,
+      "old_preserved": false,
+      "new_visible": true,
+      "old_sha256": "2e5252a6bd6f9c00564022e0ad0d99fd75facb9edb7b18a9daf3b368691140ed",
+      "new_sha256": "f948def76fd92bbf87a0155c2a8769613fd6936d20dfc5f2cf64310064b045d5",
+      "observed_sha256": "f948def76fd92bbf87a0155c2a8769613fd6936d20dfc5f2cf64310064b045d5"
+    },
+    {
+      "case": "if-none-match-star",
+      "headers": {
+        "If-None-Match": "*"
+      },
+      "applied_to": "multipart initialization and confirm",
+      "mutation_status": 200,
+      "read_status": 200,
+      "old_preserved": false,
+      "new_visible": true,
+      "old_sha256": "f474ffb2976c220799afd751dc153c52a46bb7a554e2869f58f981ea0b10e833",
+      "new_sha256": "b36a88996722e659d6901b16213dbc27aa66897bf521a1f54e08dcd8b1d53b14",
+      "observed_sha256": "b36a88996722e659d6901b16213dbc27aa66897bf521a1f54e08dcd8b1d53b14"
+    }
+  ],
+  "limitation": "API experiments only; no Finder PASS"
+}
