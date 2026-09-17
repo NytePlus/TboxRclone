@@ -32,3 +32,11 @@ sh scripts/rclone-patches.sh --check
 
 
 补丁0003还包含默认false的NoDirMoveFallback：后端拒绝目录移动时不再模拟逐文件移动；能力掩码按OR保留限制。SJTU因此可以按原生契约返回准确ErrorDirExists，同时保护已有目标及完整源树。operations回归先复现返回nil并搬走源子文件，再验证显式能力开启时保留源与目标。未声明能力的默认目录移动流程不变。
+
+## 中断的 PUT 请求体
+
+严格模式 `--exclusive-access` 现在跟踪 PUT 请求体的实际字节数、结束和读取错误。短于/长于 Content-Length，或未知长度流读取失败时，文件 Close 使用 VFS `CloseWithError`，不能把异常当正常 EOF。正常零字节、已知长度和未知长度请求仍支持；默认未开启严格模式的行为不变。
+
+上游 `operations.Rcat` 在探测输入大小时曾忽略非 EOF 读取错误，将未填满的缓冲区继续送往 PutStream；即使取消上传，local backend 也可能先截断并删除旧目标。补丁0003在开始上传前返回该输入错误。HTTP 回归先复现短流返回201、断流把旧内容替换成前缀，以及仅改 Close 后旧目标被删除，再验证两处联动修复。另有 Rcat 回归验证源读取失败时不调用 PutStream、旧内容保留、新目标不存在。
+
+完整上游 WebDAV race 测试和 Rcat 测试通过，7 个上游修改文件已从固定 HEAD 重放全部补丁并逐字节比较。这不宣称所有后端的大流上传具备原子覆盖；SJTU 仍依赖完整本地 spool 后才上传的后端契约。也不解决 Finder 成功发送独立零字节 PUT 后再上传内容的问题，ST-001-T 仍为 FAIL。

@@ -21,7 +21,7 @@ index 1563dc4..02e1f3b 100644
  	ft.NoMultiThreading = ft.NoMultiThreading && mask.NoMultiThreading
  	// ft.Overlay = ft.Overlay && mask.Overlay don't propagate Overlay
 diff --git a/fs/operations/operations.go b/fs/operations/operations.go
-index fb2049e..ffca265 100644
+index fb2049e..917970c 100644
 --- a/fs/operations/operations.go
 +++ b/fs/operations/operations.go
 @@ -463,13 +463,16 @@ func move(ctx context.Context, fdst fs.Fs, dst fs.Object, remote string, src fs.
@@ -45,7 +45,18 @@ index fb2049e..ffca265 100644
  				}
  			} else if src.Remote() == remote {
  				return newDst, nil
-@@ -2423,12 +2426,16 @@ func DirMove(ctx context.Context, f fs.Fs, srcRemote, dstRemote string) (err err
+@@ -1417,6 +1420,10 @@ func rcatSrc(ctx context.Context, fdst fs.Fs, dstFileName string, in io.ReadClos
+ 	if n, err := io.ReadFull(trackingIn, buf); err == io.EOF || err == io.ErrUnexpectedEOF {
+ 		fileIsSmall = true
+ 		buf = buf[:n]
++	} else if err != nil {
++		// Do not send a partially filled probe buffer to PutStream: a failed
++		// input is not a complete upload and must not truncate an old object.
++		return nil, fmt.Errorf("failed to read upload input: %w", err)
+ 	}
+ 
+ 	// Read the data we have already read in buf and any further unread
+@@ -2423,12 +2430,16 @@ func DirMove(ctx context.Context, f fs.Fs, srcRemote, dstRemote string) (err err
  		if err == nil {
  			accounting.Stats(ctx).Renames(1)
  		}
@@ -64,10 +75,10 @@ index fb2049e..ffca265 100644
  	tree, err := walk.NewDirTree(ctx, f, srcRemote, true, -1)
  	if err != nil {
 diff --git a/fs/operations/operations_test.go b/fs/operations/operations_test.go
-index 8c2bc86..dbfdf3b 100644
+index 8c2bc86..8ab919b 100644
 --- a/fs/operations/operations_test.go
 +++ b/fs/operations/operations_test.go
-@@ -2039,3 +2039,63 @@ func TestRemoveExisting(t *testing.T) {
+@@ -2039,3 +2039,92 @@ func TestRemoveExisting(t *testing.T) {
  	cleanup(&returnedError)
  	r.CheckRemoteItems(t)
  }
@@ -131,3 +142,32 @@ index 8c2bc86..dbfdf3b 100644
 +	require.NoError(t, err)
 +	require.Equal(t, "keep", string(b))
 +}
++
++func TestRcatInputFailurePreservesDestination(t *testing.T) {
++	ctx := context.Background()
++	root := t.TempDir()
++	require.NoError(t, os.WriteFile(root+"/target", []byte("original"), 0600))
++	f, err := fs.NewFs(ctx, root)
++	require.NoError(t, err)
++	calls := 0
++	original := f.Features().PutStream
++	f.Features().PutStream = func(ctx context.Context, in io.Reader, src fs.ObjectInfo, opts ...fs.OpenOption) (fs.Object, error) {
++		calls++
++		return original(ctx, in, src, opts...)
++	}
++	inputErr := errors.New("source interrupted")
++	for _, name := range []string{"target", "missing"} {
++		_, err = operations.Rcat(ctx, f, name, io.NopCloser(io.MultiReader(strings.NewReader("prefix"), rcatFailedInput{inputErr})), time.Now(), nil)
++		require.ErrorIs(t, err, inputErr)
++		require.Zero(t, calls)
++		b, e := os.ReadFile(root + "/target")
++		require.NoError(t, e)
++		require.Equal(t, "original", string(b))
++		_, e = os.Stat(root + "/missing")
++		require.True(t, os.IsNotExist(e))
++	}
++}
++
++type rcatFailedInput struct{ err error }
++
++func (r rcatFailedInput) Read([]byte) (int, error) { return 0, r.err }

@@ -171,14 +171,7 @@ func safeTransportError(ctx context.Context, err error) error {
 	if ctx.Err() != nil {
 		return ctx.Err()
 	}
-	var u *url.Error
-	if errors.As(err, &u) {
-		if u.Timeout() {
-			return fmt.Errorf("SMH transport timeout: %w", ErrTransport)
-		}
-		return ErrTransport
-	}
-	return ErrTransport
+	return classifyTransportError(err)
 }
 
 // JSON issues one control-plane request. Mutations are never automatically retried.
