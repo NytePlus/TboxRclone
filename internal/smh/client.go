@@ -96,6 +96,7 @@ type Client struct {
 	Endpoint, Library, Space string
 	Token                    func(context.Context) (string, error)
 	HTTP                     *http.Client
+	invalidateToken          func(string)
 }
 
 // New constructs a client with bounded requests and no automatic redirects.
@@ -207,6 +208,7 @@ func (c *Client) JSON(ctx context.Context, method, kind, p string, q url.Values,
 		return e
 	}
 	defer resp.Body.Close()
+	c.rejectExpiredToken(req, resp)
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		e := &Error{resp.StatusCode}
 		if mutation && (resp.StatusCode >= 500 || resp.StatusCode == 408) {
@@ -347,6 +349,7 @@ func (c *Client) Open(ctx context.Context, p string, item Item, start, length in
 	if err != nil {
 		return nil, safeTransportError(ctx, err)
 	}
+	c.rejectExpiredToken(req, resp)
 	// Only content reads follow signed HTTPS redirects. Never forward cookies,
 	// authorization, Referer, or control-plane query parameters to that host.
 	for redirects := 0; resp.StatusCode >= 300 && resp.StatusCode <= 399; redirects++ {
@@ -464,4 +467,11 @@ func (c *Client) putData(ctx context.Context, u Upload, r io.Reader, size int64)
 	}
 	_, err = io.Copy(io.Discard, io.LimitReader(resp.Body, 65536))
 	return resp.Header.Get("ETag"), err
+}
+
+// Reauthentication is deferred to the next caller; never replay the failed request.
+func (c *Client) rejectExpiredToken(req *http.Request, resp *http.Response) {
+	if (resp.StatusCode == 401 || resp.StatusCode == 403) && c.invalidateToken != nil {
+		c.invalidateToken(req.URL.Query().Get("access_token"))
+	}
 }

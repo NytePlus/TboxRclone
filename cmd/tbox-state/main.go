@@ -22,6 +22,8 @@ func run() error {
 	library := flag.String("library-id", "", "library ID")
 	space := flag.String("space-id", "", "space ID")
 	token := flag.String("token-file", "", "access token file")
+	userToken := flag.String("user-token-file", "", "private UserToken file for personal-space token refresh")
+	org := flag.String("organization-id", "1", "personal-space organization ID")
 	id := flag.String("reconcile", "", "operation ID to reconcile with read-only requests")
 	resume := flag.String("resume", "", "resume an existing isolated multipart upload; never reinitialize or repeat confirmation")
 	flag.Parse()
@@ -51,6 +53,11 @@ func run() error {
 	c, e := smh.New(*endpoint, *library, *space, *token)
 	if e != nil {
 		return e
+	}
+	if *userToken != "" {
+		if e = c.UseUserToken(*userToken, *org); e != nil {
+			return e
+		}
 	}
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()

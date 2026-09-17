@@ -67,3 +67,7 @@
 这些是 CLI/API 层证据，不替代 Finder 场景、掉电持久性、过期会话或长时间吞吐验收。
 
 真实 HTTPS 代理在一个分片 PUT 的服务端完整 200 应答后断开客户端连接。客户端返回错误、日志停在 Uploading；另一个进程 `-resume` 复用相同 K/uploadId，完成后为 Committed，独立下载 SHA-256 一致。见 [分片丢应答](evidence/2026-09-17/multipart-response-loss.json)。该次只验证一个分片应答丢失，不等于全部中断点或系统验收通过。
+
+## 自动获取个人空间令牌
+
+Go 客户端已按真实 `POST /user/v1/space/1/personal?user_token=...` 协议集成私有 UserToken 文件，验证返回 libraryId/spaceId 与既定空间一致后只在内存缓存 accessToken。通过故意不存在的 accessToken 文件验证配置优先级及真实请求成功，见 [证据](evidence/2026-09-17/automatic-token.json)。1800 秒过期的提前刷新仅完成受控时钟测试，真实长时运行尚待验收；401/403 不触发原业务请求重放。

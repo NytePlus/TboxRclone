@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-17T02:51:59.926469+00:00",
+  "command": "native sjtu lsjson on isolated lab root",
+  "access_token_file": "deliberately nonexistent",
+  "user_token_source": "private local file",
+  "exit": 0,
+  "listing_entries": 8,
+  "lease_expiry_test": "offline controlled clock only; live 1800-second expiry not exercised"
+}

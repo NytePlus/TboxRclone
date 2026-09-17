@@ -18,7 +18,7 @@ Linux 二进制架构取决于 Docker 主机架构。macOS Intel 构建用 `GOAR
 
 ## 配置实验环境
 
-将有效的空间 accessToken 保存为 `.secrets/access-token`（单行原文、权限 0600），不要提交到 Git。`library_id` 与 `space_id` 必须来自同一空间。SSO 自动登录及 token 自动续期尚未实现；token 文件每次请求重读，可原子替换该文件来更新凭据。
+将有效的空间 accessToken 保存为 `.secrets/access-token`（单行原文、权限 0600），不要提交到 Git。`library_id` 与 `space_id` 必须来自同一空间。可选择配置 `user_token_file`，客户端自动取得个人空间 accessToken，在过期前刷新并合并并发刷新请求；此文件必须为私有普通文件（0600）。刷新响应必须匹配配置的 library_id/space_id，不能悄悄切换账户空间。accessToken 只缓存在内存，不写配置；SSO 交互登录仍未实现。只配置 `token_file` 时每次请求重读，可原子替换该文件来更新凭据。
 
 `.secrets/rclone.conf` 示例：
 
@@ -28,6 +28,9 @@ type = sjtu
 library_id = <libraryId>
 space_id = <spaceId>
 token_file = /secrets/access-token
+# 可选：使用已有 UserToken 自动取个人空间令牌，优先于 token_file
+# user_token_file = /secrets/user-token
+# organization_id = 1
 state_dir = /state/sjtu
 lab_writes = false
 max_upload = 64Mi
@@ -61,7 +64,7 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
   -token-file /absolute/private/access-token -reconcile '<operation-id>'
 ```
 
-主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
+主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。恢复工具也支持 `-user-token-file /secrets/user-token -organization-id 1` 自动取得令牌。鉴权失败会使缓存失效，但不会自动重放刚才的请求，尤其不会重放写操作。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
 
 ## 验收
 
