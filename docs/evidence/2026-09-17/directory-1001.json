@@ -1,0 +1,98 @@
+{
+  "scope": "API production List limit1000 and explicit limit50; not Finder acceptance",
+  "source_sha256": "93dce77ec7ff34182180c510c80bb729ca06e74ecaf4251b9fdec9b4894ed23d",
+  "events": [
+    {
+      "Time": "2026-09-17T05:27:19.304631804Z",
+      "Action": "start",
+      "Package": "github.com/nyte/TboxRclone/internal/smh"
+    },
+    {
+      "Time": "2026-09-17T05:27:19.307241471Z",
+      "Action": "run",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries"
+    },
+    {
+      "Time": "2026-09-17T05:27:19.307266887Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "=== RUN   TestLiveDirectoryBoundaries\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:19.421439804Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=0 exact_set=true limit50_pages=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:19.483217304Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=1 exact_set=true limit50_pages=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:20.988783721Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=50 exact_set=true limit50_pages=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:21.08916093Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=51 exact_set=true limit50_pages=2\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:44.428877135Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=1000 exact_set=true limit50_pages=20\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:45.09109726Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "    list_live_test.go:114: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/list-boundaries-976ae251c89e5c3555e3ccd639a35562 entries=1001 exact_set=true limit50_pages=21\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:45.091203219Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Output": "--- PASS: TestLiveDirectoryBoundaries (25.78s)\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:45.091275427Z",
+      "Action": "pass",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveDirectoryBoundaries",
+      "Elapsed": 25.78
+    },
+    {
+      "Time": "2026-09-17T05:27:45.091341219Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "PASS\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:45.092954385Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "ok  \tgithub.com/nyte/TboxRclone/internal/smh\t25.788s\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:45.092986677Z",
+      "Action": "pass",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Elapsed": 25.788
+    }
+  ]
+}

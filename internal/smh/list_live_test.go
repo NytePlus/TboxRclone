@@ -17,7 +17,7 @@ import (
 // listing path and forced 50-entry pages. Only generated directories are created.
 func TestLiveDirectoryBoundaries(t *testing.T) {
 	if os.Getenv("TBOX_LIVE_LIST") != "1" {
-		t.Skip("opt-in live 1000-directory lab fixture")
+		t.Skip("opt-in live 1001-directory lab fixture")
 	}
 	var ids struct {
 		Library string `json:"libraryId"`
@@ -56,7 +56,7 @@ func TestLiveDirectoryBoundaries(t *testing.T) {
 	}
 	mkdir(path)
 	count := 0
-	for _, want := range []int{0, 1, 50, 51, 1000} {
+	for _, want := range []int{0, 1, 50, 51, 1000, 1001} {
 		for count < want {
 			mkdir(fmt.Sprintf("%s/dir-%04d", path, count))
 			count++
