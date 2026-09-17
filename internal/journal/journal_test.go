@@ -195,3 +195,34 @@ func TestOpenContextWaitsAndCancels(t *testing.T) {
 		t.Fatalf("canceled acquisition: %v", err)
 	}
 }
+
+func TestPendingSnapshotDuringUnrelatedTransfer(t *testing.T) {
+	s := store(t)
+	r, err := s.Prepare(context.Background(), "scope", "pending", strings.NewReader("safe"), 4, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Keep the store lock held: unrelated reads must not wait for network I/O.
+	if err := CheckPending(s.Dir, "scope", "other"); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckPending(s.Dir, "other-account", "pending"); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckPending(s.Dir, "scope", "pending"); !errors.Is(err, ErrPending) {
+		t.Fatal(err)
+	}
+	r.State = "Committed"
+	if err := s.Save(r); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckPending(s.Dir, "scope", "pending"); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(s.Dir, "broken.json"), []byte("{"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckPending(s.Dir, "scope", "other"); err == nil {
+		t.Fatal("corrupt journal accepted")
+	}
+}

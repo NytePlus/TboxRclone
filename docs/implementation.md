@@ -88,3 +88,5 @@ WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离�
 按新契约，后端在读取上传输入及等待日志锁之前取得进程内写占用。同路径竞争直接返回不可自动重试的 busy 错误；只读允许多个句柄，直到最后一个 Close 才允许写入。占用按 Client 的 endpoint/library/space 和完整远端路径建立，在多个 Fs 对象间共享，不使用 remote 名称或 state_dir 作为隔离键。失败的 Open 释放占用，重复 Close 不释放其他读者的占用。
 
 回归通过真实 backend 方法和模拟 HTTPS 服务验证：暂停首个上传的 spool 读取后，另一 Fs/状态目录的同路径写入未消费输入即失败，同路径读失败而另一文件读可用；首个上传完成后内容可重新读取；多读者及错误 Open 的释放正确。仍未完成 VFS 前端操作级保护、跨进程实例排他、子树锁、重启占用及不同文件实际并行上传。系统验收状态不变。
+
+后续补齐持久未决日志的读取保护：Object.Open 在取得内存读占用后查询原子发布的日志；Prepared、Uploading、CommitSent、Unknown、AbortSent、AbortUnknown 均阻止读取该路径，返回不可自动重试的 ErrPending。终态 Committed/Aborted 不再占用。损坏或不安全的日志目录直接失败，不将其当成无未决操作。快照读取不等待全局上传锁，因此其他文件读取仍可进行。模拟 HTTPS 后端回归以新 Fs 对象和重新打开的持久日志覆盖这些状态及释放后的原内容读取；这是恢复代码验证，不是实际 Finder 重启或掉电验收，也不能阻止另选状态目录的独立进程。

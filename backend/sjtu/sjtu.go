@@ -285,6 +285,10 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (io.ReadClo
 	if e != nil {
 		return nil, fserrors.NoRetryError(e)
 	}
+	if e = journal.CheckPending(o.f.opt.StateDir, o.f.c.Endpoint+"/"+o.f.c.Library+"/"+o.f.c.Space, p); e != nil {
+		release()
+		return nil, fserrors.NoRetryError(e)
+	}
 	r, e := o.f.c.Open(ctx, p, o.item, start, length)
 	if e != nil {
 		release()

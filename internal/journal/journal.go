@@ -50,6 +50,30 @@ type Store struct {
 // ErrBusy indicates an existing owner of the store lock.
 var ErrBusy = errors.New("state store busy; retry after active transfer completes")
 
+// ErrPending identifies a durable reservation that survives process exit.
+var ErrPending = errors.New("path has an unresolved operation")
+
+// CheckPending reads atomically published records without taking the transfer
+// lock. This lets unrelated reads continue while a different file is uploading.
+// It is used under the backend's in-process path ownership; it does not replace
+// service-instance exclusion or authorize a concurrent external writer.
+func CheckPending(dir, scope, p string) error {
+	if !filepath.IsAbs(dir) {
+		return errors.New("state directory must be absolute")
+	}
+	st, err := os.Lstat(dir)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil // A fresh store has never accepted an upload.
+	}
+	if err != nil {
+		return err
+	}
+	if !st.IsDir() || st.Mode().Perm()&0077 != 0 {
+		return errors.New("state directory must be a private directory (0700)")
+	}
+	return (&Store{Dir: dir}).Pending(scope, p)
+}
+
 // OpenContext waits for an available store or context cancellation.
 func OpenContext(ctx context.Context, dir string) (*Store, error) {
 	for {
@@ -174,7 +198,7 @@ func (s *Store) Pending(scope, p string) error {
 	}
 	for _, r := range records {
 		if r.Scope == scope && r.Path == p && r.State != "Committed" && r.State != "Aborted" {
-			return fmt.Errorf("operation %s is %s; reconcile before retrying", r.ID, r.State)
+			return fmt.Errorf("%w: operation %s is %s; reconcile before retrying", ErrPending, r.ID, r.State)
 		}
 	}
 	return nil

@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/smh"
 	"github.com/rclone/rclone/fs/fserrors"
 	"github.com/rclone/rclone/fs/object"
@@ -142,4 +143,71 @@ func TestFailedOpenReleasesFileOwnership(t *testing.T) {
 		t.Fatalf("failed open leaked ownership: %v", err)
 	}
 	release()
+}
+
+// No in-memory writer exists: this models a fresh backend after an interrupted
+// process, with the durable journal as the only remaining ownership evidence.
+func TestPendingJournalBlocksReadAfterReopen(t *testing.T) {
+	f, sim := newSimulator(t, false)
+	sim.published = true
+	sim.bytes = []byte("old")
+	ctx := context.Background()
+	s, err := journal.Open(f.opt.StateDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	r, err := s.Prepare(ctx, f.c.Endpoint+"/"+f.c.Library+"/"+f.c.Space, f.root+"/file", strings.NewReader("new"), 3, 10)
+	if err != nil {
+		s.Close()
+		t.Fatal(err)
+	}
+	s.Close()
+	fresh := *f
+	for _, state := range []string{"Prepared", "Uploading", "CommitSent", "Unknown", "AbortSent", "AbortUnknown"} {
+		s, err = journal.Open(f.opt.StateDir)
+		if err != nil {
+			t.Fatal(err)
+		}
+		r.State = state
+		err = s.Save(r)
+		s.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+		o, err := fresh.NewObject(ctx, "file")
+		if err != nil {
+			t.Fatal(err)
+		}
+		reader, err := o.Open(ctx)
+		if reader != nil {
+			reader.Close()
+		}
+		if !errors.Is(err, journal.ErrPending) || !fserrors.IsNoRetryError(err) {
+			t.Fatalf("%s: %v", state, err)
+		}
+	}
+	s, err = journal.Open(f.opt.StateDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// An explicit, durably recorded cancellation releases the reservation.
+	r.State = "Aborted"
+	err = s.Save(r)
+	s.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	o, err := fresh.NewObject(ctx, "file")
+	if err != nil {
+		t.Fatal(err)
+	}
+	reader, err := o.Open(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer reader.Close()
+	b, err := io.ReadAll(reader)
+	if err != nil || string(b) != "old" {
+		t.Fatalf("old content %q: %v", b, err)
+	}
 }
