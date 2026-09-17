@@ -3,6 +3,7 @@ package sjtu
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -231,4 +232,43 @@ func TestUnitU09ReconcilePreservesConflict(t *testing.T) {
 		t.Fatal(e)
 	}
 	data.Close()
+}
+
+func TestMkdirConcurrentCreation(t *testing.T) {
+	for _, kind := range []string{"dir", "file"} {
+		t.Run(kind, func(t *testing.T) {
+			f, _ := newSimulator(t, false)
+			infoCalls, puts := 0, 0
+			server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if !strings.HasSuffix(r.URL.Path, "/child") {
+					io.WriteString(w, `{"type":"dir"}`)
+					return
+				}
+				if r.Method == "PUT" {
+					puts++
+					w.WriteHeader(409)
+					return
+				}
+				infoCalls++
+				if infoCalls == 1 {
+					w.WriteHeader(404)
+					return
+				}
+				json.NewEncoder(w).Encode(smh.Item{Type: kind})
+			}))
+			defer server.Close()
+			f.c.Endpoint = server.URL
+			f.c.HTTP = server.Client()
+			err := f.Mkdir(context.Background(), "child")
+			if kind == "dir" && err != nil {
+				t.Fatal(err)
+			}
+			if kind == "file" && !errors.Is(err, fs.ErrorIsFile) {
+				t.Fatalf("file conflict accepted: %v", err)
+			}
+			if puts != 1 || infoCalls != 2 {
+				t.Fatalf("puts=%d info=%d", puts, infoCalls)
+			}
+		})
+	}
 }

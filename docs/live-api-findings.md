@@ -207,3 +207,11 @@ docker compose run --rm \
 前端 `checkRemotePath` 将 UI 的 BOTH 策略映射为 `SyncMode.TwoWay`；后者实际字符串为 `two_way`，不能将 UI 字符串 `both` 直接作为接口 mode。对新的空实验目录登记 two_way 返回 201，仅返回 syncId。随后两种 local_sync_id（本地 ID/服务端 ID）与两个令牌接口的四种组合均 200，但仍无 inode/ssn；目录 localSync 均为 null。自己的登记列表可读 200，单条详情仍 404，最后仅删除本次登记 204，目录保留。
 
 证据：[双向登记补查](evidence/2026-09-17/sync-two-way-probe.json)。这排除了此前只测 cloud_to_local 的模式差异，仍未得到 fs-journal 所需目录身份或安全覆盖能力。没有启动同步引擎或更改其他用户目录/同步设置。
+
+## 四文件并发复制与目录创建竞争
+
+真实 `rclone copy --transfers 4 --retries 1 --low-level-retries 1` 上传四个各 1 MiB 的生成文件，首次退出失败：两个文件因日志锁忙失败，另一个因并发创建父目录返回 409 失败。局部数据和 Prepared 日志均保留。
+
+修复日志锁竞争为 context 可取消的等待：后端串行使用同一个持久日志，不再把正常排队直接判为不可重试上传失败；底层非锁竞争错误仍立即返回，显式状态 CLI 的 Open 仍非阻塞。Mkdir 在 ask 创建返回 409 后仅只读确认目标；确实是目录才满足幂等创建，文件冲突仍拒绝，不重放创建请求。
+
+在新的隔离目标重复同样四文件命令，退出 0；四条日志均 Committed，逐个独立云端下载的 SHA-256 全部匹配。见 [批量复制前后证据](evidence/2026-09-17/batch-lock-recovery.json)。故障回归先失败后通过，覆盖等待取消、锁释放、目录/文件竞争；全量 race 测试通过。该结果证明所测 CLI 批量新建路径不再因锁竞争立即失败；上传仍按日志目录串行，未证明 C-018 吞吐目标或 Finder 批量复制。

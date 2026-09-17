@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"syscall"
+	"time"
 )
 
 // Record is the durable upload state; it contains no access token or signed URL.
@@ -46,6 +47,29 @@ type Store struct {
 	syncDirectory func(string) error
 }
 
+// ErrBusy indicates an existing owner of the store lock.
+var ErrBusy = errors.New("state store busy; retry after active transfer completes")
+
+// OpenContext waits for an available store or context cancellation.
+func OpenContext(ctx context.Context, dir string) (*Store, error) {
+	for {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		s, err := Open(dir)
+		if !errors.Is(err, ErrBusy) {
+			return s, err
+		}
+		timer := time.NewTimer(100 * time.Millisecond)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
+			return nil, ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
 // Open takes a nonblocking process lock; callers must Close it.
 func Open(dir string) (*Store, error) {
 	if !filepath.IsAbs(dir) {
@@ -67,7 +91,10 @@ func Open(dir string) (*Store, error) {
 	}
 	if err = syscall.Flock(int(f.Fd()), syscall.LOCK_EX|syscall.LOCK_NB); err != nil {
 		f.Close()
-		return nil, errors.New("state store busy; retry after active transfer completes")
+		if errors.Is(err, syscall.EWOULDBLOCK) || errors.Is(err, syscall.EAGAIN) {
+			return nil, ErrBusy
+		}
+		return nil, err
 	}
 	return &Store{Dir: dir, lock: f, syncDirectory: syncDir}, nil
 }

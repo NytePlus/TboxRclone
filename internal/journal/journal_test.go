@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func store(t *testing.T) *Store {
@@ -167,5 +168,30 @@ func TestPrepareDirectorySyncFailurePreservesSpool(t *testing.T) {
 	}
 	if reopened.Pending("scope", "file") == nil {
 		t.Fatal("unresolved preparation allowed blind retry")
+	}
+}
+
+func TestOpenContextWaitsAndCancels(t *testing.T) {
+	s := store(t)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Millisecond)
+	defer cancel()
+	if next, err := OpenContext(ctx, s.Dir); !errors.Is(err, context.DeadlineExceeded) {
+		if next != nil {
+			next.Close()
+		}
+		t.Fatalf("expected cancellation while occupied: %v", err)
+	}
+	if err := s.Close(); err != nil {
+		t.Fatal(err)
+	}
+	next, err := OpenContext(context.Background(), s.Dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer next.Close()
+	canceled, stop := context.WithCancel(context.Background())
+	stop()
+	if _, err := OpenContext(canceled, s.Dir); !errors.Is(err, context.Canceled) {
+		t.Fatalf("canceled acquisition: %v", err)
 	}
 }

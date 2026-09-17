@@ -1,0 +1,42 @@
+{
+  "at": "2026-09-17T05:42:36.883989+00:00",
+  "scope": "Four-file rclone copy CLI with transfers=4, not Finder acceptance",
+  "before_exit": 1,
+  "before_log": "2026/09/17 05:40:06 ERROR : file-3.bin: Failed to copy: state store busy; retry after active transfer completes\n2026/09/17 05:40:06 ERROR : file-1.bin: Failed to copy: state store busy; retry after active transfer completes\n2026/09/17 05:40:07 ERROR : file-2.bin: Failed to copy: operation 95d609788b06c79920629b5d7a193dea (Prepared), local data retained: SMH HTTP 409\n2026/09/17 05:40:07 ERROR : Can't retry any of the errors - not attempting retries\n2026/09/17 05:40:07 NOTICE: Failed to copy with 3 errors: last error was: operation 95d609788b06c79920629b5d7a193dea (Prepared), local data retained: SMH HTTP 409\nexit status 6\n\n",
+  "after_exit": 0,
+  "remote": "codex-api-lab/run-20260917T020318Z-f0339b72/batch-lock-9ca8675c-after",
+  "checks": [
+    {
+      "name": "file-0.bin",
+      "bytes": 1048576,
+      "sha256": "af6bc14f1c16c30beba0c11b133ce5eec3d3ef2226f10cfaa6f02c9d16081667",
+      "matches": true
+    },
+    {
+      "name": "file-1.bin",
+      "bytes": 1048576,
+      "sha256": "afbab17c6a68148e34336098eec1b4366d64eb71251acdcc33b4c1288516ff3e",
+      "matches": true
+    },
+    {
+      "name": "file-2.bin",
+      "bytes": 1048576,
+      "sha256": "7f825dd4f64d82b6de201f2b8fb78e1807629d8c0e4aeae3515108ef97d0d115",
+      "matches": true
+    },
+    {
+      "name": "file-3.bin",
+      "bytes": 1048576,
+      "sha256": "82df21b2451b8f84425bfa137129ade6b39ece9ed9f3086161b366cd1238a4f4",
+      "matches": true
+    }
+  ],
+  "journal_count": 4,
+  "states": [
+    "Committed",
+    "Committed",
+    "Committed",
+    "Committed"
+  ],
+  "limitation": "Uploads still serialized per journal store; no throughput target established"
+}

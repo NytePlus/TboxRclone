@@ -216,6 +216,18 @@ func (f *Fs) Mkdir(ctx context.Context, dir string) error {
 			return mapped(e, fs.ErrorDirNotFound)
 		}
 		e = f.c.JSON(ctx, "PUT", "directory", current, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, nil)
+		if smh.IsStatus(e, 409) {
+			// Another creator may have won after Info. Only an existing directory
+			// satisfies Mkdir; never retry the mutation or accept a file collision.
+			existing, checkErr := f.c.Info(ctx, current)
+			if checkErr == nil {
+				if existing.Type == "dir" {
+					continue
+				}
+				return fs.ErrorIsFile
+			}
+			return fserrors.NoRetryError(errors.Join(e, checkErr))
+		}
 		if e != nil {
 			return fserrors.NoRetryError(e)
 		}
@@ -287,7 +299,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if e != nil {
 		return e
 	}
-	s, e := journal.Open(f.opt.StateDir)
+	s, e := journal.OpenContext(ctx, f.opt.StateDir)
 	if e != nil {
 		return fserrors.NoRetryError(e)
 	}
