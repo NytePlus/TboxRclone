@@ -1,0 +1,37 @@
+{
+  "at": "2026-09-17T06:46:13.959255+00:00",
+  "scope": "real WebDAV HTTP; not Finder",
+  "fixture": "dav-conditions-4a99b37455",
+  "events": [
+    {
+      "header": "If-Match",
+      "value_kind": "strong",
+      "http": 412
+    },
+    {
+      "header": "If-Match",
+      "value_kind": "weak",
+      "http": 412
+    },
+    {
+      "header": "If-None-Match",
+      "value_kind": "strong",
+      "http": 412
+    },
+    {
+      "header": "If-None-Match",
+      "value_kind": "weak",
+      "http": 412
+    }
+  ],
+  "webdav_old_preserved": true,
+  "independent_cloud_http": 200,
+  "independent_cloud_matches": true,
+  "sha256": "4b9496fb7df017386494502e41510975df4dbf67cec685fe8dc970b6a9e710a5",
+  "journals": [
+    {
+      "state": "Committed",
+      "size": 16
+    }
+  ]
+}

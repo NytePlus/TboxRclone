@@ -1,0 +1,9 @@
+{
+  "fixture": "dav-ifmatch-5bb27eda72",
+  "scope": "real WebDAV HTTP; not Finder",
+  "setup_http": 201,
+  "wrong_if_match_http": 201,
+  "read_http": 200,
+  "old_preserved": false,
+  "observed_sha256": "40f57ccc92a4651c37d9f16477d7401a5b8c1f852e0601c7a44a8fa40e588d41"
+}

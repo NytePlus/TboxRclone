@@ -113,3 +113,11 @@ WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离�
 macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：open/write(61)/fsync/close 全部成功，关闭后通过挂载重读正确，独立云端下载也为完整 61 字节。旧失败证据保留，新证据见 [macOS 写入复测](evidence/2026-09-17/macos-webdav-overwrite.json)。此结果修复了已测的“创建空文件后写入被拒绝”路径；不证明全部 Finder 保存、并发、AppleDouble、网络故障或服务器发布原子性。Finder 可见挂载，但尚未执行 UI 复制或录制验收；系统分支不标 PASS。
 
 服务与实验挂载当前保留供后续 Finder 测试使用。覆盖开关为本次启动显式启用，Compose 缺省仍为 false。
+
+## PUT 实体标签条件修复
+
+启用顺序覆盖后，真实 WebDAV 错误 If-Match 请求曾返回 201 并替换生成文件，见 [失败证据](evidence/2026-09-17/webdav-if-match.json)。原补丁仅检查 If-None-Match:*，不能满足一般 PUT 前置条件。
+
+补丁 0001 现于打开截断写句柄前检查 PUT 的 If-Match/If-None-Match。支持星号、标签列表及强弱比较，拒绝格式不完整的列表；ETag 与上游 WebDAV 使用相同生成规则。新增回归先复现失败，再验证匹配条件成功、错误/弱 If-Match 拒绝、命中强弱 If-None-Match 拒绝和原内容保留。上游完整 WebDAV race 测试（27.090s）、主项目 race/vet 均通过。
+
+重新构建隔离服务后，四种真实拒绝请求均为 412，独立云端内容未变，日志只有初始创建记录，见 [修复后证据](evidence/2026-09-17/webdav-if-match-patched.json)。这是 VFS 当前视图的前置检查，不解决检查与提交之间的竞争、陈旧缓存、默认元数据 ETag 的碰撞、其他修改方法或完整前端操作占用；不能据此标记 C-006/C-012 完成。Finder 本轮仍未执行复制。

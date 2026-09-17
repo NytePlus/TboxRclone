@@ -1,27 +1,55 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..3cc27d4 100644
+index d3420bb..8c49a71 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
-@@ -403,6 +403,18 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -403,6 +403,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
-+	// Reject create-only PUT before opening a truncating write handle.
-+	// This checks the VFS view; backend publication still needs its own
-+	// atomic conflict policy against changes made by other clients.
-+	if r.Method == "PUT" && strings.TrimSpace(r.Header.Get("If-None-Match")) == "*" {
-+		if _, err := w.Stat(r.Context(), remote); err == nil {
-+			http.Error(rw, "Precondition Failed", http.StatusPreconditionFailed)
-+			return
-+		} else if !os.IsNotExist(err) {
-+			http.Error(rw, "Failed to check precondition", http.StatusInternalServerError)
-+			return
++	// Check PUT entity-tag conditions before opening a truncating handle.
++	// This is the VFS view, not an atomic backend publication condition.
++	if r.Method == "PUT" {
++		match := strings.Join(r.Header.Values("If-Match"), ",")
++		none := strings.Join(r.Header.Values("If-None-Match"), ",")
++		if match != "" || none != "" {
++			fi, err := w.Stat(r.Context(), remote)
++			exists := err == nil
++			if err != nil && !os.IsNotExist(err) {
++				http.Error(rw, "Failed to check precondition", http.StatusInternalServerError)
++				return
++			}
++			tag := ""
++			if exists {
++				tag, err = fi.(FileInfo).ETag(r.Context())
++				if err == webdav.ErrNotImplemented {
++					// Same fallback used by x/net/webdav's findETag.
++					tag, err = fmt.Sprintf(`"%x%x"`, fi.ModTime().UnixNano(), fi.Size()), nil
++				}
++				if err != nil {
++					http.Error(rw, "Failed to check ETag", http.StatusInternalServerError)
++					return
++				}
++			}
++			if match != "" {
++				matches, valid := matchEntityTags(match, tag, exists, false)
++				if !valid || !matches {
++					http.Error(rw, "Precondition Failed", http.StatusPreconditionFailed)
++					return
++				}
++			}
++			if none != "" {
++				matches, valid := matchEntityTags(none, tag, exists, true)
++				if !valid || matches {
++					http.Error(rw, "Precondition Failed", http.StatusPreconditionFailed)
++					return
++				}
++			}
 +		}
 +	}
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -521,6 +533,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +561,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -35,11 +63,65 @@ index d3420bb..3cc27d4 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
+@@ -723,3 +770,53 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+ 	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
+ 	return "application/octet-stream", nil
+ }
++
++// matchEntityTags parses the complete HTTP entity-tag list, including quoted
++// commas. If-Match requires strong comparison; If-None-Match uses weak comparison.
++func matchEntityTags(value, current string, exists, weak bool) (bool, bool) {
++	value = strings.TrimSpace(value)
++	if value == "*" {
++		return exists, true
++	}
++	matched := false
++	for value != "" {
++		original := value
++		isWeak := strings.HasPrefix(value, "W/")
++		if isWeak {
++			value = value[2:]
++		}
++		if len(value) == 0 || value[0] != '"' {
++			return false, false
++		}
++		end := 1
++		for end < len(value) && value[end] != '"' {
++			if value[end] < 0x21 || value[end] == 0x7f {
++				return false, false
++			}
++			end++
++		}
++		if end == len(value) {
++			return false, false
++		}
++		tag := value[:end+1]
++		if exists && ((weak && tag == strings.TrimPrefix(current, "W/")) || (!weak && !isWeak && tag == current)) {
++			matched = true
++		}
++		consumed := end + 1
++		if isWeak {
++			consumed += 2
++		}
++		value = strings.TrimSpace(original[consumed:])
++		if value == "" {
++			return matched, true
++		}
++		if value[0] != ',' {
++			return false, false
++		}
++		value = strings.TrimSpace(value[1:])
++		if value == "" {
++			return false, false
++		}
++	}
++	return false, false
++}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..4188783 100644
+index bd14826..43e5611 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
-@@ -438,3 +438,39 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -438,3 +438,89 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -78,4 +160,54 @@ index bd14826..4188783 100644
 +	body, err := io.ReadAll(resp.Body)
 +	require.NoError(t, err)
 +	require.Equal(t, "original", string(body))
++}
++
++func TestPutEntityTagConditions(t *testing.T) {
++	for _, tc := range []struct {
++		name, header, value string
++		allow               bool
++	}{
++		{"wrong_match", "If-Match", `"wrong"`, false},
++		{"matching", "If-Match", "CURRENT", true},
++		{"weak_match", "If-Match", "W/CURRENT", false},
++		{"match_list", "If-Match", `"other", CURRENT`, true},
++		{"none_match", "If-None-Match", "CURRENT", false},
++		{"weak_none_match", "If-None-Match", "W/CURRENT", false},
++		{"none_other", "If-None-Match", `"other"`, true},
++		{"invalid_list", "If-Match", `CURRENT,invalid`, false},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			base := startWritableServer(t)
++			req, err := http.NewRequest("PUT", base+"file", strings.NewReader("original"))
++			require.NoError(t, err)
++			resp, err := http.DefaultClient.Do(req)
++			require.NoError(t, err)
++			resp.Body.Close()
++			require.Equal(t, 201, resp.StatusCode)
++			resp, err = http.Get(base + "file")
++			require.NoError(t, err)
++			etag := resp.Header.Get("ETag")
++			require.NotEmpty(t, etag)
++			resp.Body.Close()
++			req, err = http.NewRequest("PUT", base+"file", strings.NewReader("replacement"))
++			require.NoError(t, err)
++			req.Header.Set(tc.header, strings.ReplaceAll(tc.value, "CURRENT", etag))
++			resp, err = http.DefaultClient.Do(req)
++			require.NoError(t, err)
++			resp.Body.Close()
++			want := http.StatusPreconditionFailed
++			contents := "original"
++			if tc.allow {
++				want = http.StatusCreated
++				contents = "replacement"
++			}
++			require.Equal(t, want, resp.StatusCode)
++			resp, err = http.Get(base + "file")
++			require.NoError(t, err)
++			defer resp.Body.Close()
++			b, err := io.ReadAll(resp.Body)
++			require.NoError(t, err)
++			require.Equal(t, contents, string(b))
++		})
++	}
 +}
