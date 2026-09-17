@@ -150,7 +150,7 @@ macOS 26.5.2 使用系统 mount_webdav 连接本机 Compose 服务。只读挂�
 
 在两个全新生成文件上，分别对 multipart 初始化及 confirm 都添加错误 `If-Match`、`If-None-Match: *`，并使用 overwrite 策略。两组初始化 201、确认 200；独立完整下载均为新字节，旧字节未保留。见 [HTTP 条件头实验](evidence/2026-09-17/http-mutation-conditions.json)。因此，这些标准 HTTP 头在所测控制面操作中没有阻止覆盖，不能作为 content_cas 的替代保护。这里只验证这两组请求，不声称所有服务端接口均无条件能力。
 
-## 真实时钟令牌过期测试（进行中）
+## 真实时钟令牌过期测试（失败）
 
 新增 `internal/smh/TestLiveTokenExpiry`，默认 SKIP。显式启用后，在同一 Client 中每 30 秒读取隔离实验目录，持续至少 31 分钟，记录成功读取次数与令牌值是否发生变化（不输出令牌或摘要）。结束时用最初的令牌只读请求，要求其返回 401/403；同一进程的新令牌须持续可读。本测试不修改云端数据，也不替代 SSO、Finder 或故障情况下的认证验收。
 
@@ -164,7 +164,9 @@ docker compose run --rm \
   go-tests go test -json ./internal/smh -run '^TestLiveTokenExpiry$' -count=1 -timeout=35m
 ```
 
-2026-09-17 05:02:49 UTC 首次运行已成功读取，日志在忽略目录 `reports/auth-soak.jsonl`。尚在等待真实过期边界，**未判 PASS**。
+2026-09-17 05:02:49 UTC 至 05:33:52 UTC 的运行已完成。63 次正常读取成功，在 29 分 2 秒观察到一次自动刷新；31 分 2 秒用最初令牌读取仍成功，未按测试预期返回 401/403，因此测试 **FAIL**。结果保留，不改为 PASS。见 [完整脱敏日志](evidence/2026-09-17/token-real-expiry.json)。
+
+随后另一个私有保存的令牌（文件年龄约 2363 秒，不等于精确签发年龄）读取返回 403；新换取令牌仍声明 expiresIn=1800，服务端 Date 与本机当前时间一致。见 [有效期补查](evidence/2026-09-17/token-ttl-probe.json)。该保存令牌不同于长测中的最初令牌，不能用其 403 覆盖长测失败。当前证据支持提前刷新与持续可读，但尚未确定服务端是硬过期、空闲过期还是存在宽限/缓存，SSO 重新认证也未验证。
 
 ## 有界自动续传
 

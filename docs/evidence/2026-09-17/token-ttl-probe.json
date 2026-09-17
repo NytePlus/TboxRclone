@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-17T05:34:43.999141+00:00",
+  "saved_token_file_age_seconds": 2363,
+  "saved_token_read_status": 403,
+  "saved_token_response_date": "Thu, 17 Sep 2026 05:34:44 GMT",
+  "fresh_token_response_date": "Thu, 17 Sep 2026 05:34:44 GMT",
+  "fresh_expires_in": 1800,
+  "fresh_differs_from_saved": true,
+  "limitations": "File age is not authoritative issuance time; this is a different token from the 31-minute process test"
+}

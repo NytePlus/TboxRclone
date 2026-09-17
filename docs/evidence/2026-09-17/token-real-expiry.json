@@ -1,0 +1,519 @@
+{
+  "scope": "Real-clock API token test; not Finder or SSO acceptance",
+  "source": "internal/smh/token_live_test.go",
+  "source_sha256": "a53f18df0c4b7a1dfe9aee446bed44d8da0eefb0111746bc64e30fef8477c20c",
+  "result": "FAIL",
+  "successful_reads": 63,
+  "observed_refreshes": 1,
+  "refresh_after_seconds": 1742,
+  "elapsed_seconds": 1862.47,
+  "failure": "Original token remained accepted after 31 minutes of an actively-read session",
+  "unresolved": "Hard lifetime versus inactivity lifetime or server grace/cache behavior; not established",
+  "events": [
+    {
+      "Time": "2026-09-17T05:02:49.931384721Z",
+      "Action": "start",
+      "Package": "github.com/nyte/TboxRclone/internal/smh"
+    },
+    {
+      "Time": "2026-09-17T05:02:49.933627013Z",
+      "Action": "run",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry"
+    },
+    {
+      "Time": "2026-09-17T05:02:49.933667346Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "=== RUN   TestLiveTokenExpiry\n"
+    },
+    {
+      "Time": "2026-09-17T05:02:49.99318993Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=0s successful_reads=1 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:03:20.043453096Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=30s successful_reads=2 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:03:50.099448846Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=1m0s successful_reads=3 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:04:20.148281305Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=1m30s successful_reads=4 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:04:50.167810805Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=2m0s successful_reads=5 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:05:20.221647388Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=2m30s successful_reads=6 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:05:50.240200638Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=3m0s successful_reads=7 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:06:20.297377596Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=3m30s successful_reads=8 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:06:50.328944638Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=4m0s successful_reads=9 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:07:20.381930305Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=4m30s successful_reads=10 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:07:50.440789305Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=5m1s successful_reads=11 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:08:20.466321221Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=5m31s successful_reads=12 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:08:50.494964096Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=6m1s successful_reads=13 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:09:20.551981346Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=6m31s successful_reads=14 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:09:50.646668221Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=7m1s successful_reads=15 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:10:20.712799221Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=7m31s successful_reads=16 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:10:50.739322096Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=8m1s successful_reads=17 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:11:20.763640596Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=8m31s successful_reads=18 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:11:50.816556055Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=9m1s successful_reads=19 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:12:20.849198597Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=9m31s successful_reads=20 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:12:50.874197888Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=10m1s successful_reads=21 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:13:20.921854263Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=10m31s successful_reads=22 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:13:50.93924093Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=11m1s successful_reads=23 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:14:20.969080347Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=11m31s successful_reads=24 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:14:50.99571643Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=12m1s successful_reads=25 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:15:21.040696888Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=12m31s successful_reads=26 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:15:51.057319055Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=13m1s successful_reads=27 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:16:21.082091888Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=13m31s successful_reads=28 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:16:51.108586055Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=14m1s successful_reads=29 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:17:21.161271305Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=14m31s successful_reads=30 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:17:51.217981347Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=15m1s successful_reads=31 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:18:21.272836097Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=15m31s successful_reads=32 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:18:51.35453343Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=16m1s successful_reads=33 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:21.407757513Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=16m31s successful_reads=34 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:51.457845097Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=17m2s successful_reads=35 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:20:21.511584722Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=17m32s successful_reads=36 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:20:51.53530668Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=18m2s successful_reads=37 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:21:21.590531555Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=18m32s successful_reads=38 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:21:51.613781555Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=19m2s successful_reads=39 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:22:21.636123555Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=19m32s successful_reads=40 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:22:51.658443514Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=20m2s successful_reads=41 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:23:21.678647055Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=20m32s successful_reads=42 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:23:51.693058139Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=21m2s successful_reads=43 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:24:21.744547389Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=21m32s successful_reads=44 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:24:51.760628764Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=22m2s successful_reads=45 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:25:21.789692722Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=22m32s successful_reads=46 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:25:51.83825943Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=23m2s successful_reads=47 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:26:21.905805514Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=23m32s successful_reads=48 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:26:51.940561639Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=24m2s successful_reads=49 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:21.989202555Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=24m32s successful_reads=50 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:27:52.022404264Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=25m2s successful_reads=51 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:28:22.072084805Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=25m32s successful_reads=52 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:28:52.096962722Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=26m2s successful_reads=53 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:29:22.118541389Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=26m32s successful_reads=54 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:29:52.17100893Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=27m2s successful_reads=55 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:30:22.202904639Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=27m32s successful_reads=56 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:30:52.225575139Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=28m2s successful_reads=57 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:31:22.27578843Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=28m32s successful_reads=58 token_changes=0\n"
+    },
+    {
+      "Time": "2026-09-17T05:31:52.339907222Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:66: token changed after 29m2s\n"
+    },
+    {
+      "Time": "2026-09-17T05:31:52.34002468Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=29m2s successful_reads=59 token_changes=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:32:22.357690389Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=29m32s successful_reads=60 token_changes=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:32:52.38179143Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=30m2s successful_reads=61 token_changes=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:22.401178264Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=30m32s successful_reads=62 token_changes=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.42453493Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:69: elapsed=31m2s successful_reads=63 token_changes=1\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.439877097Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "    token_live_test.go:89: original token was not rejected as expired: <nil>\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.440019597Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Output": "--- FAIL: TestLiveTokenExpiry (1862.47s)\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.440038264Z",
+      "Action": "fail",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveTokenExpiry",
+      "Elapsed": 1862.47
+    },
+    {
+      "Time": "2026-09-17T05:33:52.440095555Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "FAIL\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.443242847Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "FAIL\tgithub.com/nyte/TboxRclone/internal/smh\t1862.473s\n"
+    },
+    {
+      "Time": "2026-09-17T05:33:52.443286139Z",
+      "Action": "fail",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Elapsed": 1862.473
+    }
+  ]
+}
