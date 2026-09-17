@@ -23,6 +23,9 @@ const workers = 4
 const batchSize = 50
 
 func bound(c *smh.Client, r *journal.Record) error {
+	if r.Kind != "" && r.Kind != "upload" {
+		return errors.New("operation is not an upload")
+	}
 	if r.Scope != c.Endpoint+"/"+c.Library+"/"+c.Space {
 		return errors.New("account or space does not match journal")
 	}

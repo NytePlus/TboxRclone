@@ -19,6 +19,8 @@ import (
 // Record is the durable upload state; it contains no access token or signed URL.
 type Record struct {
 	ID         string `json:"id"`
+	Kind       string `json:"kind,omitempty"`
+	RecycledID string `json:"recycled_item_id,omitempty"`
 	Scope      string `json:"scope"`
 	Path       string `json:"path"`
 	Size       int64  `json:"size"`

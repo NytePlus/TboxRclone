@@ -137,3 +137,11 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 后端 Mkdir 现在逐级检查持久未决记录；未决文件路径以及需要经过它的子目录创建均拒绝。缺失目录在发送创建请求前取得进程内路径写占用，并重新检查日志及远端类型，避免初次查询后的占用变化。已有目录直接返回，不占用共享父目录来阻塞不同文件上传。服务端创建竞争仍只读核对类型，不重发 mutation。
 
 回归以模拟 HTTPS 服务验证：首个上传尚在读取 spool 时，同路径和子路径 Mkdir 均报 busy；Unknown 日志关闭重开并换用新 Fs 后，两种目录创建均报 ErrPending，服务器没有收到任何目录 PUT，原 spool 完整。原 Mkdir 409 类型核对、批量相关路径及全量 Docker race/vet 通过。在线服务尚未重新部署此变化，Finder 与真实重启恢复验收仍待执行。
+
+## 文件删除的持久意图与只读核对
+
+新增默认关闭的 lab_delete，限 lab_writes 的隔离根。Remove 核对旧对象后先保存 DeleteSent，再发一次非永久删除；正常或丢响应均进入只读核对，路径仍存在/重建时保留 DeleteUnknown，不自动重放。kind 字段区分上传与删除，防止恢复命令把删除误作上传；reconcile 支持删除，上传 resume/abort 明确拒绝。零字节 intent spool 不代表原文件备份，CLI 对删除单独报告回收站凭据是否存在。
+
+模拟 HTTPS 回归检查服务端收到 DELETE 时日志已经是 DeleteSent，并覆盖正常删除、执行后丢响应、同路径重建、权限拒绝、对账读失败后恢复、陈旧对象、开关未启用、终态再次对账不误删新文件及上传命令类型拒绝。全量 Docker race/vet 通过。
+
+在线隔离服务随后重建并显式开启 TBOX_LAB_DELETE=true（同时包含上一轮 Mkdir 修复）。真实 WebDAV 创建201→删除204→独立云端 info404→同路径新建201，新文件独立内容匹配，删除日志 Committed，见 [文件删除证据](evidence/2026-09-17/go-trash-delete.json)。本次未取得回收站 ID，未做恢复；也未做真实删除丢响应和 Finder 删除，不能标记完整 C-017 通过。

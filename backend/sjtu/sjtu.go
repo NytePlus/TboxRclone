@@ -40,6 +40,7 @@ func init() {
 			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
 			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
 			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
+			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
 			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
 		}})
 }
@@ -56,6 +57,7 @@ type Options struct {
 	OwnershipDir  string        `config:"ownership_dir"`
 	LabWrites     bool          `config:"lab_writes"`
 	LabOverwrite  bool          `config:"lab_overwrite"`
+	LabDelete     bool          `config:"lab_delete"`
 	MaxUpload     fs.SizeSuffix `config:"max_upload"`
 }
 
@@ -330,11 +332,6 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (io.ReadClo
 		return nil, e
 	}
 	return &ownedReader{ReadCloser: r, release: release}, nil
-}
-
-// Remove refuses path-based deletion until object-conditional semantics are verified.
-func (o *Object) Remove(context.Context) error {
-	return fserrors.NoRetryError(errors.New("object-conditional deletion is not verified"))
 }
 
 // Update implements durable uploads and opt-in sequential overwrite in the lab.

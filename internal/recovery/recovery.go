@@ -1,4 +1,4 @@
-// Package recovery reconciles uploads using reads only; it never replays a mutation.
+// Package recovery reconciles durable operations using reads only; it never replays a mutation.
 package recovery
 
 import (
@@ -14,11 +14,17 @@ import (
 	"github.com/nyte/TboxRclone/internal/smh"
 )
 
-// Reconcile marks an upload committed only when its session and independent content agree.
+// Reconcile checks upload session/content or deletion absence before recording completion.
 // The local spool is retained, including when remote data no longer matches.
 func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
 	if r.Scope != c.Endpoint+"/"+c.Library+"/"+c.Space {
 		return errors.New("account or space does not match journal")
+	}
+	if r.Kind == "delete" {
+		return reconcileDelete(ctx, s, c, r)
+	}
+	if r.Kind != "" && r.Kind != "upload" {
+		return errors.New("unsupported recovery operation")
 	}
 	if r.State == "Committed" {
 		return nil

@@ -91,7 +91,11 @@ func run() error {
 			if e != nil {
 				return e
 			}
-			fmt.Printf("%s %s; local spool retained\n", r.ID, r.State)
+			if r.Kind == "delete" {
+				fmt.Printf("%s %s; deletion intent retained (not a content backup); recycle receipt present: %t\n", r.ID, r.State, r.RecycledID != "")
+			} else {
+				fmt.Printf("%s %s; local spool retained\n", r.ID, r.State)
+			}
 			return nil
 		}
 	}

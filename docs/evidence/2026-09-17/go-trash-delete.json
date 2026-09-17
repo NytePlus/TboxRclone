@@ -1,0 +1,49 @@
+{
+  "at": "2026-09-17T07:04:48.558075+00:00",
+  "scope": "real WebDAV trash deletion, not Finder",
+  "fixture": "delete-go-b1b9eefc825a",
+  "events": [
+    {
+      "operation": "create",
+      "http": 201
+    },
+    {
+      "operation": "delete",
+      "http": 204
+    },
+    {
+      "operation": "independent_info_after_delete",
+      "http": 404
+    },
+    {
+      "operation": "recreate_after_terminal_delete",
+      "http": 201
+    }
+  ],
+  "independent_recreated_content_matches": true,
+  "sha256": "4284705c5429e7ac4499d91e1f49a0aa68bdf3b119443509842da9c54fef401b",
+  "records": [
+    {
+      "kind": "upload",
+      "state": "Committed",
+      "size": 34,
+      "old_size": null,
+      "recycle_receipt": false
+    },
+    {
+      "kind": "upload",
+      "state": "Committed",
+      "size": 34,
+      "old_size": null,
+      "recycle_receipt": false
+    },
+    {
+      "kind": "delete",
+      "state": "Committed",
+      "size": 0,
+      "old_size": 34,
+      "recycle_receipt": false
+    }
+  ],
+  "recycle_restore_tested": false
+}
