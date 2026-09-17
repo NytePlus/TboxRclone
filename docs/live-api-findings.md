@@ -137,3 +137,11 @@ macOS 26.5.2 使用系统 mount_webdav 连接本机 Compose 服务。只读挂�
 可写挂载的新文件实验暴露不同于单次 HTTP PUT 的流程：macOS 先创建云端空文件，再提交实际内容和 AppleDouble。open/write 返回成功，fsync 为 EPERM，close 仍成功；独立直接云端读取为 0 字节。61 字节正文和 4096 字节 AppleDouble 均在本地 Prepared spool 中完整保留。[写入失败证据](evidence/2026-09-17/macos-webdav-write.json)。这属于发布缺陷，不能因为 HTTP 检查 13/13 而将 macOS 写入标为通过。
 
 原生 FUSE 另一条路径已完成 cmount/CGO 接线和本机构建，但缺少运行库而无法挂载。[构建证据](evidence/2026-09-17/macos-native-build.json)。所有上述测试均不是 Finder UI 录屏或完整系统验收。
+
+## local_sync_id 令牌补充实验
+
+在同一份固定前端中补录两个空间令牌定义（目录现有 55 个前端操作定义，并非 55 个均可用的独立接口）：`POST /user/v1/space/{organizationId}/personal` 和 `POST /user/v1/space/{organizationId}/token/{spaceId}`。二者 query 均列出可选 `local_sync_id`。`Ge.fetch` 的普通空间令牌调用 body 为可选 `spaceOrgId`；本地配置 `localSyncId` 由客户端生成，与服务端登记 `syncId` 分开保存，不能将二者混同。
+
+新建一个隔离实验目录并登记 cloud_to_local 同步（201），分别将新生成的本地 ID、刚返回的服务端 syncId 作为 local_sync_id 调用两个令牌端点：四次均 200，返回字段仅 libraryId/spaceId/accessToken/expiresIn。使用各自令牌读取该实验目录，四次均 200、localSync=null，无 inode/ssn。查询本次登记列表为 200，单条详情仍 404。最后仅删除本次登记（204），保留实验目录；未修改既有同步或全局配置。
+
+证据：[sync-token-probe.json](evidence/2026-09-17/sync-token-probe.json)。参数被接受不证明有同步语义，404 也不能证明所有 fs-journal 能力均不可用。现阶段仍未得到可用于原子条件覆盖的对象身份或序号，不能据此开放覆盖。

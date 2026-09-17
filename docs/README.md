@@ -9,7 +9,7 @@
 1. [接口文档](api.md)：当前调用、额外接口、参数、返回值和重试语义。
 2. [rclone 与 WebDAV 接入及测试子集](rclone-webdav.md)：后端映射、上游真实测试名称、挂载成功边界与发布门槛。
 3. [故障实验与条件覆盖矩阵](verification.md)：如何证明完整性、幂等性、中断恢复和效率。
-4. [接口发现清单](discovered-endpoints.json)：53 个交大公开前端定义、110 个 SMH SDK 操作；包含重叠能力与同名操作，不是 163 个不同且可用的接口。
+4. [接口发现清单](discovered-endpoints.json)：55 个交大公开前端定义、110 个 SMH SDK 操作；包含重叠能力与同名操作，不是 165 个不同且可用的接口。
 5. [来源锁定](sources.json)：源码版本、公开资源 URL 与 SHA-256。
 6. [验收场景清单](test-manifest.json)：机器可读测试计划，所有场景均标记未执行。
 

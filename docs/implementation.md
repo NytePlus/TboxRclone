@@ -36,7 +36,7 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | B07：读与目录协议仍需实例确认 | C-009/010/014 | 强制要求返回 ETag；marker 分页异常直接失败。未验证服务端忽略参数及元数据/数据 ETag 是否相同。 |
 | B08：宿主机掉电持久边界未验证 | C-003 | fsync 与日志重开测试不等于宿主机掉电测试；不能宣称掉电零丢失。 |
 | B09：macOS 原生 mount 运行环境和验收未完成 | 原生 mount 验收路径 | 已接入 cmount 并成功原生 CGO 构建；本机缺少 FUSE 运行库，实际挂载失败。macOS 内置 webdavfs 已成功挂载读取，但与原生 FUSE、Finder UI 是不同验证路径。 |
-| B10：上游静态 overview 未包含外部 backend | CLI 启动信息 | rclone 注册时输出 `no overview data found for "sjtu"`，随后能列出并配置 sjtu；需后续可复现的上游元数据接线，不能将此错误日志隐藏。 |
+| B10：外部 backend overview 被覆盖（已修复） | CLI 启动信息 | 上游通用注册函数保留显式提供的 Overview；SJTU 提供实验状态元数据。缺省仍读取内置配置。新增测试先失败后通过，CLI version 无原错误；见补丁 0002。 |
 | B11：WebDAV 重复 MKCOL（已修复已测路径） | C-010/014，WebDAV MKCOL | 补丁在 WebDAV 层区分已有资源；上游回归及真实重复 MKCOL 均返回 405。其他客户端并发创建仍待验收。 |
 | B12：WebDAV 完整条件写尚未验收 | C-006/014，If-None-Match/If-Match | 已修复 VFS 可见目标的 PUT If-None-Match:*，真实返回 412 且不产生上传日志；其他条件头、陈旧 VFS 缓存、网页端竞争和云端 CAS 仍未解决。 |
 | B13：macOS webdavfs 新文件写入失败 | C-001/005/008/012/014 | open 创建空文件后，write 数据的后续覆盖被拒绝。fsync 为 EPERM、close 成功，独立云端仍 0 字节；完整数据在 Prepared 日志。须解决安全覆盖及 macOS 提交语义后才能发布。 |

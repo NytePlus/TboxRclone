@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-17",
+  "issue": "B10",
+  "upstream_base": "687d264b689b8c49a67e2e52a8a5e0caa01c04ce",
+  "patch": "patches/rclone/0002-external-backend-overview.patch",
+  "regression_before": "TestRegisterOverview/external_backend_keeps_explicit_metadata FAIL; supplied metadata overwritten and missing overview error emitted",
+  "regression_after": "upstream go test -race ./fs -count=1 PASS",
+  "root_tests": "go test -race ./... PASS; live TestIntegration remains skipped without remote",
+  "cli": "go run ./cmd/tboxrclone version exit 0; no missing sjtu overview error",
+  "reproducibility": "Applied patch to pinned upstream files and byte-compared successfully",
+  "system_acceptance": "No system scenario promoted to PASS"
+}

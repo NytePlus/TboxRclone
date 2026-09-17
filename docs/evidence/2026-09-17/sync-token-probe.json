@@ -1,0 +1,312 @@
+{
+  "run_id": "run-20260917T020318Z-f0339b72",
+  "time": "2026-09-17T04:13:39.502470+00:00",
+  "scope": "Only generated isolated directory; registration removed; directory retained",
+  "requests": [
+    {
+      "operation": "personal baseline",
+      "status": 200,
+      "response_shape": {
+        "libraryId": "str",
+        "spaceId": "str",
+        "accessToken": "str",
+        "expiresIn": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "create isolated directory",
+      "status": 201,
+      "response_shape": {
+        "creationTime": "str"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "register isolated sync",
+      "status": 201,
+      "response_shape": {
+        "syncId": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "personal with local ID",
+      "status": 200,
+      "response_shape": {
+        "libraryId": "str",
+        "spaceId": "str",
+        "accessToken": "str",
+        "expiresIn": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "directory info with personal local ID",
+      "status": 200,
+      "response_shape": {
+        "path": [
+          "str"
+        ],
+        "name": "str",
+        "type": "str",
+        "userId": "str",
+        "userOrgId": "str",
+        "creationTime": "str",
+        "modificationTime": "str",
+        "eTag": "str",
+        "virusAuditStatus": "int",
+        "sensitiveWordAuditStatus": "int",
+        "authorityList": {
+          "canView": "bool",
+          "canPreview": "bool",
+          "canDownload": "bool",
+          "canPrint": "bool",
+          "canUpload": "bool",
+          "canDelete": "bool",
+          "canModify": "bool",
+          "canAuthorize": "bool",
+          "canShare": "bool",
+          "canPreviewSelf": "bool",
+          "canDownloadSelf": "bool"
+        },
+        "authorityButtonList": {
+          "showViewButton": "bool",
+          "showPreviewButton": "bool",
+          "showDownloadButton": "bool",
+          "showUploadButton": "bool",
+          "showDeleteButton": "bool",
+          "showAuthorizeButton": "bool",
+          "showShareButton": "bool",
+          "showModifyButton": "bool",
+          "showMoveButton": "bool",
+          "showRenameButton": "bool",
+          "showCopyButton": "bool",
+          "showRestoreButton": "bool"
+        },
+        "localSync": "NoneType",
+        "tagList": [],
+        "isAuthorized": "bool"
+      },
+      "identity_fields": {
+        "localSync": null
+      }
+    },
+    {
+      "operation": "token with local ID",
+      "status": 200,
+      "response_shape": {
+        "libraryId": "str",
+        "spaceId": "str",
+        "accessToken": "str",
+        "expiresIn": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "directory info with token local ID",
+      "status": 200,
+      "response_shape": {
+        "path": [
+          "str"
+        ],
+        "name": "str",
+        "type": "str",
+        "userId": "str",
+        "userOrgId": "str",
+        "creationTime": "str",
+        "modificationTime": "str",
+        "eTag": "str",
+        "virusAuditStatus": "int",
+        "sensitiveWordAuditStatus": "int",
+        "authorityList": {
+          "canView": "bool",
+          "canPreview": "bool",
+          "canDownload": "bool",
+          "canPrint": "bool",
+          "canUpload": "bool",
+          "canDelete": "bool",
+          "canModify": "bool",
+          "canAuthorize": "bool",
+          "canShare": "bool",
+          "canPreviewSelf": "bool",
+          "canDownloadSelf": "bool"
+        },
+        "authorityButtonList": {
+          "showViewButton": "bool",
+          "showPreviewButton": "bool",
+          "showDownloadButton": "bool",
+          "showUploadButton": "bool",
+          "showDeleteButton": "bool",
+          "showAuthorizeButton": "bool",
+          "showShareButton": "bool",
+          "showModifyButton": "bool",
+          "showMoveButton": "bool",
+          "showRenameButton": "bool",
+          "showCopyButton": "bool",
+          "showRestoreButton": "bool"
+        },
+        "localSync": "NoneType",
+        "tagList": [],
+        "isAuthorized": "bool"
+      },
+      "identity_fields": {
+        "localSync": null
+      }
+    },
+    {
+      "operation": "personal with server sync ID",
+      "status": 200,
+      "response_shape": {
+        "libraryId": "str",
+        "spaceId": "str",
+        "accessToken": "str",
+        "expiresIn": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "directory info with personal server sync ID",
+      "status": 200,
+      "response_shape": {
+        "path": [
+          "str"
+        ],
+        "name": "str",
+        "type": "str",
+        "userId": "str",
+        "userOrgId": "str",
+        "creationTime": "str",
+        "modificationTime": "str",
+        "eTag": "str",
+        "virusAuditStatus": "int",
+        "sensitiveWordAuditStatus": "int",
+        "authorityList": {
+          "canView": "bool",
+          "canPreview": "bool",
+          "canDownload": "bool",
+          "canPrint": "bool",
+          "canUpload": "bool",
+          "canDelete": "bool",
+          "canModify": "bool",
+          "canAuthorize": "bool",
+          "canShare": "bool",
+          "canPreviewSelf": "bool",
+          "canDownloadSelf": "bool"
+        },
+        "authorityButtonList": {
+          "showViewButton": "bool",
+          "showPreviewButton": "bool",
+          "showDownloadButton": "bool",
+          "showUploadButton": "bool",
+          "showDeleteButton": "bool",
+          "showAuthorizeButton": "bool",
+          "showShareButton": "bool",
+          "showModifyButton": "bool",
+          "showMoveButton": "bool",
+          "showRenameButton": "bool",
+          "showCopyButton": "bool",
+          "showRestoreButton": "bool"
+        },
+        "localSync": "NoneType",
+        "tagList": [],
+        "isAuthorized": "bool"
+      },
+      "identity_fields": {
+        "localSync": null
+      }
+    },
+    {
+      "operation": "token with server sync ID",
+      "status": 200,
+      "response_shape": {
+        "libraryId": "str",
+        "spaceId": "str",
+        "accessToken": "str",
+        "expiresIn": "int"
+      },
+      "identity_fields": {}
+    },
+    {
+      "operation": "directory info with token server sync ID",
+      "status": 200,
+      "response_shape": {
+        "path": [
+          "str"
+        ],
+        "name": "str",
+        "type": "str",
+        "userId": "str",
+        "userOrgId": "str",
+        "creationTime": "str",
+        "modificationTime": "str",
+        "eTag": "str",
+        "virusAuditStatus": "int",
+        "sensitiveWordAuditStatus": "int",
+        "authorityList": {
+          "canView": "bool",
+          "canPreview": "bool",
+          "canDownload": "bool",
+          "canPrint": "bool",
+          "canUpload": "bool",
+          "canDelete": "bool",
+          "canModify": "bool",
+          "canAuthorize": "bool",
+          "canShare": "bool",
+          "canPreviewSelf": "bool",
+          "canDownloadSelf": "bool"
+        },
+        "authorityButtonList": {
+          "showViewButton": "bool",
+          "showPreviewButton": "bool",
+          "showDownloadButton": "bool",
+          "showUploadButton": "bool",
+          "showDeleteButton": "bool",
+          "showAuthorizeButton": "bool",
+          "showShareButton": "bool",
+          "showModifyButton": "bool",
+          "showMoveButton": "bool",
+          "showRenameButton": "bool",
+          "showCopyButton": "bool",
+          "showRestoreButton": "bool"
+        },
+        "localSync": "NoneType",
+        "tagList": [],
+        "isAuthorized": "bool"
+      },
+      "identity_fields": {
+        "localSync": null
+      }
+    },
+    {
+      "operation": "query own sync",
+      "status": 200,
+      "response_shape": [
+        {
+          "syncId": "int",
+          "status": "str",
+          "cloudPath": [
+            "str"
+          ],
+          "mode": "str",
+          "creationTime": "str",
+          "localPath": "str",
+          "deviceId": "str"
+        }
+      ]
+    },
+    {
+      "operation": "get own sync",
+      "status": 404,
+      "response_shape": {},
+      "identity_fields": {}
+    },
+    {
+      "operation": "delete own sync registration",
+      "status": 204,
+      "response_shape": {},
+      "identity_fields": {}
+    }
+  ],
+  "verdict": "Discovery only; no conditional mutation tested"
+}

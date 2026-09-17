@@ -14,6 +14,7 @@ import (
 	"github.com/nyte/TboxRclone/internal/journal"
 	"github.com/nyte/TboxRclone/internal/smh"
 	"github.com/nyte/TboxRclone/internal/transfer"
+	"github.com/rclone/rclone/backend/overview"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/config/configmap"
 	"github.com/rclone/rclone/fs/config/configstruct"
@@ -22,17 +23,22 @@ import (
 )
 
 func init() {
-	fs.Register(&fs.RegInfo{Name: "sjtu", Description: "SJTU cloud drive (experimental)", NewFs: NewFs, Options: []fs.Option{
-		{Name: "endpoint", Default: "https://pan.sjtu.edu.cn", Help: "SMH HTTPS origin."},
-		{Name: "library_id", Required: true, Help: "Library ID from personal space credentials."},
-		{Name: "space_id", Required: true, Help: "Space ID from personal space credentials."},
-		{Name: "token_file", Help: "Absolute path to a private access token file; reread on each request."},
-		{Name: "user_token_file", Help: "Private UserToken file for automatic personal-space token refresh; takes precedence over token_file."},
-		{Name: "organization_id", Default: "1", Help: "Organization ID for personal-space token refresh."},
-		{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
-		{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
-		{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
-	}})
+	fs.Register(&fs.RegInfo{Name: "sjtu", Description: "SJTU cloud drive (experimental)", NewFs: NewFs,
+		Overview: &overview.BackendConfig{
+			Backend: "sjtu", Name: "SJTU cloud drive (experimental)",
+			IntegrationTests: "Incomplete; destructive operations disabled",
+			DataIntegrity:    "Experimental; conditional overwrite not established",
+		}, Options: []fs.Option{
+			{Name: "endpoint", Default: "https://pan.sjtu.edu.cn", Help: "SMH HTTPS origin."},
+			{Name: "library_id", Required: true, Help: "Library ID from personal space credentials."},
+			{Name: "space_id", Required: true, Help: "Space ID from personal space credentials."},
+			{Name: "token_file", Help: "Absolute path to a private access token file; reread on each request."},
+			{Name: "user_token_file", Help: "Private UserToken file for automatic personal-space token refresh; takes precedence over token_file."},
+			{Name: "organization_id", Default: "1", Help: "Organization ID for personal-space token refresh."},
+			{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
+			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
+			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
+		}})
 }
 
 // Options configures one account and the persistent journal.

@@ -33,7 +33,7 @@
       "sha256": "3d6c946d3775a7915f2c974b75612dc509e9f094864b9c1d729afd85c73936c8"
     }
   ],
-  "frontend_definitions": 53,
+  "frontend_definitions": 55,
   "sdk_operations": 110,
   "authenticated_probes_run": true,
   "authenticated_probe_evidence": "live-api-findings.md"

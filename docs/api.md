@@ -137,3 +137,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 实测顺序：confirm 200 → abort 204 → K 查询 404，但正式路径仍 200 且内容完整。反向 abort 204 → confirm 404/UploadNotFound → K 和正式路径均 404。并发请求观察到 confirm 200 + abort 204（文件存在），或 confirm 404/UploadIncomplete + abort 204（文件不存在）。错误码不同不能被合并成同一种结果。
 
 客户端只在持久化 abort 意图后，确认 K 不存在且正式路径不存在，才将任务标为 Aborted；这是观测到的可用性结论，不是“从未发布”或“所有暂存对象物理清空”的保证。若 K 消失但正式文件存在，保留 AbortUnknown 和完整 spool；不得为满足用户取消而删除正式路径。对已发送 confirm 的任务先只读对账，已提交任务拒绝中止。对 Prepared 的取消纯本地，不调用远端。
+
+### 空间令牌 local_sync_id 补充
+
+前端声明 personal 和 token/{spaceId} 两个 POST 空间令牌接口支持 `local_sync_id`。隔离登记实验中，本地 ID 和服务端 syncId 两组输入均可获得令牌，但均未产生 inode/ssn，目录 localSync 为 null。此参数的同步语义未验证，不能用于宣称 CAS。见 [令牌实验](live-api-findings.md#local_sync_id-令牌补充实验)。

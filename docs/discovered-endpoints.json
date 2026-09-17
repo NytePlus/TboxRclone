@@ -487,6 +487,28 @@
       "definition": "migrateSyncInfo:{method:\"post\",path:\"/user/v1/sync/{organizationId}/migrate\",queryKeys:{required:[\"user_token\"]},bodyKeys:{required:[\"list\"]},autoParams:{organizationId:\"\",user_token:\"\"}}",
       "evidence": "F",
       "runtime_verified": false
+    },
+    {
+      "operation": "getSpaceInfo",
+      "method": "POST",
+      "path": "/user/v1/space/{organizationId}/personal",
+      "offset": 560156,
+      "definition": "getSpaceInfo:{method:\"post\",path:\"/user/v1/space/{organizationId}/personal\",queryKeys:{required:[\"user_token\"],noRequired:[\"local_sync_id\"]},autoParams:{organizationId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": true,
+      "runtime_evidence": "evidence/2026-09-17/sync-token-probe.json",
+      "limitations": "200 observed with local_sync_id; no inode/ssn returned; synchronization or conditional write semantics not verified"
+    },
+    {
+      "operation": "getSpaceAccessToken",
+      "method": "POST",
+      "path": "/user/v1/space/{organizationId}/token/{spaceId}",
+      "offset": 560343,
+      "definition": "getSpaceAccessToken:{method:\"post\",path:\"/user/v1/space/{organizationId}/token/{spaceId}\",queryKeys:{required:[\"user_token\"],noRequired:[\"local_sync_id\"]},autoParams:{organizationId:\"\",user_token:\"\"}}",
+      "evidence": "F",
+      "runtime_verified": true,
+      "runtime_evidence": "evidence/2026-09-17/sync-token-probe.json",
+      "limitations": "200 observed with local_sync_id; no inode/ssn returned; synchronization or conditional write semantics not verified"
     }
   ],
   "sdk": [
