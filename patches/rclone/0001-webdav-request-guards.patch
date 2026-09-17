@@ -1,5 +1,5 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index d3420bb..20b4232 100644
+index d3420bb..45be2f1 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
 @@ -4,14 +4,18 @@ package webdav
@@ -301,7 +301,7 @@ index d3420bb..20b4232 100644
  }
  
  // Readdir reads directory entries from the handle
-@@ -723,3 +916,103 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -723,3 +916,115 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -382,7 +382,19 @@ index d3420bb..20b4232 100644
 +		if err != nil || dest.Path == "" || dest.RawQuery != "" || dest.Fragment != "" || (dest.Host != "" && dest.Host != r.Host) {
 +			return nil, http.StatusBadRequest
 +		}
-+		claims = []davAccess{{name: source, write: r.Method == "MOVE", tree: true}, {name: path.Clean("/" + strings.TrimPrefix(dest.Path, "/")), write: true, tree: true}}
++		// The router already stripped BaseURL from the request path, but
++		// Destination still names the public URL. Claims must use one namespace.
++		base := strings.TrimSuffix(w.opt.HTTP.BaseURL, "/")
++		if base != "" && dest.Path != base && !strings.HasPrefix(dest.Path, base+"/") {
++			return nil, http.StatusBadRequest
++		}
++		target := path.Clean("/" + strings.TrimPrefix(strings.TrimPrefix(dest.Path, base), "/"))
++		// Overlapping trees can recursively copy themselves or delete a source
++		// while replacing its ancestor. Reject before opening either path.
++		if containsDAVPath(source, target) || containsDAVPath(target, source) {
++			return nil, http.StatusForbidden
++		}
++		claims = []davAccess{{name: source, write: r.Method == "MOVE", tree: true}, {name: target, write: true, tree: true}}
 +	default:
 +		return func() {}, 0
 +	}
@@ -406,7 +418,7 @@ index d3420bb..20b4232 100644
 +	return func() { once.Do(func() { w.accessMu.Lock(); defer w.accessMu.Unlock(); delete(w.requests, r) }) }, 0
 +}
 diff --git a/cmd/serve/webdav/webdav_test.go b/cmd/serve/webdav/webdav_test.go
-index bd14826..21c4bcf 100644
+index bd14826..34ebe8e 100644
 --- a/cmd/serve/webdav/webdav_test.go
 +++ b/cmd/serve/webdav/webdav_test.go
 @@ -10,12 +10,18 @@ package webdav
@@ -428,7 +440,7 @@ index bd14826..21c4bcf 100644
  
  	_ "github.com/rclone/rclone/backend/local"
  	"github.com/rclone/rclone/cmd/serve/proxy"
-@@ -438,3 +444,583 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
+@@ -438,3 +444,690 @@ func TestMoveOverwriteFalseStillRejects(t *testing.T) {
  	assert.Equal(t, http.StatusPreconditionFailed, resp.StatusCode,
  		"MOVE with explicit Overwrite: F must still return 412 when destination exists")
  }
@@ -1011,4 +1023,111 @@ index bd14826..21c4bcf 100644
 +			}
 +		})
 +	}
++}
++
++func TestExclusiveCopyMoveRejectOverlappingPaths(t *testing.T) {
++	for _, method := range []string{"COPY", "MOVE"} {
++		for _, tc := range []struct {
++			source, destination string
++			want                int
++		}{
++			{"/a", "/a", 403}, {"/a", "/a/child", 403}, {"/a/child", "/a", 403},
++			{"/a", "/%61/child", 403}, {"/a", "/a/../a", 403}, {"/", "/child", 403},
++			{"/a", "/ab", 0}, {"/a/one", "/a/two", 0},
++		} {
++			t.Run(method+tc.source+tc.destination, func(t *testing.T) {
++				w := &WebDAV{}
++				r := httptest.NewRequest(method, "http://fixture"+tc.source, nil)
++				r.Header.Set("Destination", "http://fixture"+tc.destination)
++				release, status := w.acquireRequest(r)
++				if release != nil {
++					release()
++				}
++				require.Equal(t, tc.want, status)
++			})
++		}
++	}
++}
++
++func TestExclusiveDestinationUsesSameNamespaceAsSource(t *testing.T) {
++	for _, method := range []string{"COPY", "MOVE"} {
++		t.Run(method, func(t *testing.T) {
++			w := &WebDAV{}
++			w.opt.HTTP.BaseURL = "/prefix"
++			first := httptest.NewRequest(method, "http://fixture/source", nil)
++			first.Header.Set("Destination", "http://fixture/prefix/target")
++			release, status := w.acquireRequest(first)
++			require.Zero(t, status)
++			defer release()
++			for _, tc := range []struct {
++				method, path string
++				want         int
++			}{{"PUT", "/target", 423}, {"GET", "/target", 423}, {"DELETE", "/target/child", 423}, {"PUT", "/source", 423}, {"PUT", "/sibling", 0}} {
++				r := httptest.NewRequest(tc.method, "http://fixture"+tc.path, nil)
++				done, status := w.acquireRequest(r)
++				if done != nil {
++					done()
++				}
++				require.Equal(t, tc.want, status, tc.method+tc.path)
++			}
++		})
++	}
++	w := &WebDAV{}
++	w.opt.HTTP.BaseURL = "/prefix"
++	for _, dest := range []string{"/outside", "/prefix-other/target"} {
++		r := httptest.NewRequest("COPY", "http://fixture/source", nil)
++		r.Header.Set("Destination", "http://fixture"+dest)
++		release, status := w.acquireRequest(r)
++		if release != nil {
++			release()
++		}
++		require.Equal(t, 400, status)
++	}
++}
++
++func TestExclusiveCopyMoveHTTPPathBoundaries(t *testing.T) {
++	root := t.TempDir()
++	require.NoError(t, os.Mkdir(root+"/tree", 0700))
++	require.NoError(t, os.WriteFile(root+"/tree/file", []byte("keep"), 0600))
++	f, err := fs.NewFs(context.Background(), root)
++	require.NoError(t, err)
++	opt := Opt
++	opt.ExclusiveAccess = true
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	opt.HTTP.BaseURL = "/prefix"
++	w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++	require.NoError(t, err)
++	go func() { assert.NoError(t, w.Serve()) }()
++	defer w.Shutdown()
++	base := w.server.URLs()[0]
++	client := &http.Client{Timeout: 5 * time.Second}
++	request := func(method, source, target string, want int) {
++		req, e := http.NewRequest(method, base+source, nil)
++		require.NoError(t, e)
++		req.Header.Set("Destination", base+target)
++		resp, e := client.Do(req)
++		require.NoError(t, e)
++		defer resp.Body.Close()
++		_, e = io.Copy(io.Discard, resp.Body)
++		require.NoError(t, e)
++		require.Equal(t, want, resp.StatusCode, method+" "+source+" -> "+target)
++	}
++	for _, method := range []string{"COPY", "MOVE"} {
++		request(method, "tree", "tree/child", 403)
++		request(method, "tree", "tree/%2e", 403)
++		request(method, "tree/file", "tree", 403)
++	}
++	b, err := os.ReadFile(root + "/tree/file")
++	require.NoError(t, err)
++	require.Equal(t, "keep", string(b))
++	_, err = os.Stat(root + "/tree/child")
++	require.True(t, os.IsNotExist(err))
++	request("COPY", "tree", "clone", 201)
++	request("MOVE", "clone", "moved", 201)
++	b, err = os.ReadFile(root + "/moved/file")
++	require.NoError(t, err)
++	require.Equal(t, "keep", string(b))
++	b, err = os.ReadFile(root + "/tree/file")
++	require.NoError(t, err)
++	require.Equal(t, "keep", string(b))
 +}

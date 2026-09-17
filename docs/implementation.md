@@ -4,7 +4,9 @@
 
 日期：2026-09-17。状态：实验实现，未发布，目标未完成。
 
-## 已有实现
+最新检查点：完整真实上游生命周期已有 87 PASS、33 SKIP、0 FAIL；Finder 正常上传实际暴露零字节占位，ST-001-T 为 FAIL，系统验收仍为 0/36 PASS。文件/目录 MOVE、文件 COPY 覆盖与不同文件并行已增加实现及实验性开关。请求体中断、COPY 预删目标、源断流以及带 URL 前缀的目标锁命名空间已有修复与回归。原生客户端提交边界、整树替换、持久 WebDAV 锁、缓存总配额/GC、完整故障及整机掉电验收仍未完成。详细证据以 [真实实验记录](live-api-findings.md)、[当前补丁](../patches/rclone/README.md) 和 [验收清单](test-manifest.json) 为准；下文保留实施过程中的早期基线与追加记录。
+
+## 早期实现基线
 
 - 主项目 Go module 与固定 Go 1.26.0 Docker Compose；rclone v1.75.1 submodule 固定上游提交，工作区应用主仓库跟踪的可重放补丁。
 - 注册 `sjtu` backend，提供元数据、分页、严格 Range/ETag 读取、受限创建目录、已知/未知长度的持久化上传；包括空文件在内统一使用可续签分片协议。
@@ -17,7 +19,7 @@
 - 36 个系统分支的子场景目录与证据门禁。离线测试不会修改系统场景状态。
 - HTTPS CONNECT 故障代理与 Compose faults 服务：双通道 allowlist、完整响应暂扣/释放、发送前/响应后断开、传输中截断。见 [实验说明](fault-proxy.md)。
 
-## 已执行验证
+## 早期验证记录
 
 具体命令及日志在工作区 `reports/`。`go test -race ./...` 共 54 个顶层测试 PASS，真实 TestIntegration 1 个 SKIP；`go vet ./...` PASS；上游 `cmd/serve/webdav` 测试 PASS（27.531s）；Linux 与 macOS ARM64 构建 PASS，macOS 本机已执行 version/backend help。离线测试涵盖 Unicode/保留字符、整数精度、JSON/HTTP 错误、异步受理不能当完成、控制面重定向不泄漏凭据、Range 被忽略/变化/短流、EOF/额外字节、分页重复、上传丢响应、日志重新打开、缓存损坏和进程锁。后端测试经过真实 HTTP/TLS 客户端与模拟服务器，不证明交大实例具有相同语义。
 
@@ -25,7 +27,7 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 
 真实 SJTU fstests 已执行入口，但出现 6 个 PASS、19 个 FAIL、4 个 SKIP 子测试事件后在 240 秒处超时，完整套件未跑完；Finder、宿主机断电/崩溃及真实多客户端覆盖仍未完成。manifest 继续保持 NOT_RUN；证据门禁当前为 0/36 PASS，并按预期返回非零退出码。
 
-## 已知缺陷/未实现能力（发布阻塞）
+## 早期缺陷清单（后续进展见追加记录）
 
 | 问题 | 影响条件 | 当前行为及后续要求 |
 |---|---|---|
