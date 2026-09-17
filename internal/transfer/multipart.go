@@ -1,4 +1,4 @@
-// Package transfer implements durable create-only multipart uploads.
+// Package transfer implements durable multipart uploads with explicit intent.
 package transfer
 
 import (
@@ -29,7 +29,17 @@ func bound(c *smh.Client, r *journal.Record) error {
 	if !strings.HasPrefix(r.Path, "codex-api-lab/") || smh.ValidatePath(r.Path) != nil {
 		return errors.New("multipart writes require an isolated lab path")
 	}
+	if r.Overwrite && (r.OldETag == "" || r.OldSize < 0) {
+		return errors.New("overwrite requires recorded previous content identity")
+	}
 	return nil
+}
+
+func strategy(r *journal.Record) string {
+	if r.Overwrite {
+		return "overwrite"
+	}
+	return "ask"
 }
 
 // Start initializes exactly once, after persisting the spool and intent.
@@ -69,7 +79,7 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 	if err = s.Save(r); err != nil {
 		return err
 	}
-	u, err := c.Multipart(ctx, r.Path, r.Size, min(int(count), batchSize))
+	u, err := c.MultipartStrategy(ctx, r.Path, r.Size, min(int(count), batchSize), strategy(r))
 	if err != nil {
 		return err
 	}
@@ -219,12 +229,23 @@ func uploadAndCommit(ctx context.Context, s *journal.Store, c *smh.Client, r *jo
 	if err = ctx.Err(); err != nil {
 		return err
 	}
+	if r.Overwrite {
+		// Defensive change detection under the exclusive-writer contract. This
+		// read is not a server CAS and cannot protect against external writers.
+		previous, e := c.Info(ctx, r.Path)
+		if e != nil {
+			return e
+		}
+		if previous.ETag != r.OldETag || int64(previous.Size) != r.OldSize || previous.Type == "dir" {
+			return errors.New("overwrite target changed; old and pending data retained")
+		}
+	}
 	r.State = "CommitSent"
 	if err = s.Save(r); err != nil {
 		return err
 	}
 	var confirmed smh.Item
-	err = c.JSON(ctx, "POST", "file", r.ConfirmKey, url.Values{"confirm": {"1"}, "conflict_resolution_strategy": {"ask"}}, struct{}{}, &confirmed)
+	err = c.JSON(ctx, "POST", "file", r.ConfirmKey, url.Values{"confirm": {"1"}, "conflict_resolution_strategy": {strategy(r)}}, struct{}{}, &confirmed)
 	if err != nil {
 		r.State = "Unknown"
 		return errors.Join(err, s.Save(r))

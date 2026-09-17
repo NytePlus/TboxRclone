@@ -10,11 +10,16 @@ import (
 
 // Multipart starts the deployed SJTU part-map protocol, not the newer SDK protocol.
 func (c *Client) Multipart(ctx context.Context, path string, size int64, last int) (Upload, error) {
+	return c.MultipartStrategy(ctx, path, size, last, "ask")
+}
+
+// MultipartStrategy only permits explicit create or exclusive-writer overwrite.
+func (c *Client) MultipartStrategy(ctx context.Context, path string, size int64, last int, strategy string) (Upload, error) {
 	var u Upload
-	if size < 0 || last < 1 || last > 50 {
+	if size < 0 || last < 1 || last > 50 || (strategy != "ask" && strategy != "overwrite") {
 		return u, ErrProtocol
 	}
-	err := c.JSON(ctx, "POST", "file", path, url.Values{"multipart": {"1"}, "filesize": {strconv.FormatInt(size, 10)}, "conflict_resolution_strategy": {"ask"}}, map[string]any{"partNumberRange": partNumbers(1, last)}, &u)
+	err := c.JSON(ctx, "POST", "file", path, url.Values{"multipart": {"1"}, "filesize": {strconv.FormatInt(size, 10)}, "conflict_resolution_strategy": {strategy}}, map[string]any{"partNumberRange": partNumbers(1, last)}, &u)
 	return u, err
 }
 

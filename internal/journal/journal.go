@@ -26,6 +26,9 @@ type Record struct {
 	State      string `json:"state"`
 	ConfirmKey string `json:"confirm_key,omitempty"`
 	OldCAS     string `json:"old_cas,omitempty"`
+	Overwrite  bool   `json:"overwrite,omitempty"`
+	OldETag    string `json:"old_etag,omitempty"`
+	OldSize    int64  `json:"old_size,omitempty"`
 	UploadID   string `json:"upload_id,omitempty"`
 	UploadPath string `json:"upload_path,omitempty"`
 	PartSize   int64  `json:"part_size,omitempty"`

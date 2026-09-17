@@ -98,8 +98,11 @@ func setState(s *journal.Store, r *journal.Record, state string) error {
 	return nil
 }
 func finishAbort(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
-	_, err := c.Info(ctx, r.Path)
-	if smh.IsStatus(err, 404) {
+	previous, err := c.Info(ctx, r.Path)
+	if smh.IsStatus(err, 404) && !r.Overwrite {
+		return setState(s, r, "Aborted")
+	}
+	if err == nil && r.Overwrite && previous.Type != "dir" && previous.ETag == r.OldETag && int64(previous.Size) == r.OldSize {
 		return setState(s, r, "Aborted")
 	}
 	if err == nil {

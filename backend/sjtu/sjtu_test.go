@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -21,14 +22,19 @@ import (
 )
 
 type simulator struct {
-	mu               sync.Mutex
-	bytes            []byte
-	published        bool
-	init, confirm    int
-	drop             bool
-	blockReconcile   bool
-	replaceOnConfirm []byte
-	api, data        *httptest.Server
+	mu                 sync.Mutex
+	bytes              []byte
+	staged             []byte
+	overwrite          bool
+	failPart           bool
+	cancelAfterPart    context.CancelFunc
+	changeDuringUpload []byte
+	published          bool
+	init, confirm      int
+	drop               bool
+	blockReconcile     bool
+	replaceOnConfirm   []byte
+	api, data          *httptest.Server
 }
 
 func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
@@ -40,7 +46,17 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		if r.URL.Query().Get("access_token") != "" {
 			t.Error("SMH credential sent to data plane")
 		}
-		sim.bytes, _ = io.ReadAll(r.Body)
+		if sim.failPart {
+			w.WriteHeader(403)
+			return
+		}
+		sim.staged, _ = io.ReadAll(r.Body)
+		if sim.changeDuringUpload != nil {
+			sim.bytes = sim.changeDuringUpload
+		}
+		if sim.cancelAfterPart != nil {
+			sim.cancelAfterPart()
+		}
 		w.Header().Set("ETag", `"part1"`)
 		w.WriteHeader(200)
 	}))
@@ -76,7 +92,11 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		}
 		if r.Method == "POST" && r.URL.Query().Has("multipart") {
 			sim.init++
-			if r.URL.Query().Get("conflict_resolution_strategy") != "ask" {
+			want := "ask"
+			if sim.overwrite {
+				want = "overwrite"
+			}
+			if r.URL.Query().Get("conflict_resolution_strategy") != want {
 				t.Error("unsafe strategy")
 			}
 			json.NewEncoder(w).Encode(smh.Upload{Key: "K", UploadID: "upload", Domain: sim.data.URL, Path: "/data", Parts: map[string]smh.PartSignature{"1": {Headers: map[string]string{"x-fixture": "part"}}}})
@@ -84,6 +104,14 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		}
 		if r.Method == "POST" {
 			sim.confirm++
+			want := "ask"
+			if sim.overwrite {
+				want = "overwrite"
+			}
+			if r.URL.Query().Get("conflict_resolution_strategy") != want {
+				t.Error("incorrect confirm strategy")
+			}
+			sim.bytes = sim.staged
 			sim.published = true
 			if sim.replaceOnConfirm != nil {
 				sim.bytes = sim.replaceOnConfirm
@@ -268,6 +296,93 @@ func TestMkdirConcurrentCreation(t *testing.T) {
 			}
 			if puts != 1 || infoCalls != 2 {
 				t.Fatalf("puts=%d info=%d", puts, infoCalls)
+			}
+		})
+	}
+}
+
+func TestSequentialOverwriteAndLostResponse(t *testing.T) {
+	for _, drop := range []bool{false, true} {
+		t.Run(fmt.Sprintf("drop=%t", drop), func(t *testing.T) {
+			f, sim := newSimulator(t, drop)
+			f.opt.LabOverwrite = true
+			sim.overwrite = true
+			sim.published = true
+			sim.bytes = []byte{} // Finder/webdavfs first creates an empty file.
+			src := object.NewStaticObjectInfo("file", time.Now(), 4, true, nil, f)
+			o, err := f.Put(context.Background(), strings.NewReader("new!"), src)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if sim.init != 1 || sim.confirm != 1 || string(sim.bytes) != "new!" {
+				t.Fatalf("init=%d confirm=%d bytes=%q", sim.init, sim.confirm, sim.bytes)
+			}
+			reader, err := o.Open(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			b, err := io.ReadAll(reader)
+			reader.Close()
+			if err != nil || string(b) != "new!" {
+				t.Fatalf("reopen %q %v", b, err)
+			}
+			s, err := journal.Open(f.opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer s.Close()
+			records, err := s.Records()
+			if err != nil || len(records) != 1 || records[0].State != "Committed" || !records[0].Overwrite || records[0].OldETag != "v1" {
+				t.Fatalf("intent/result %v %v", records, err)
+			}
+		})
+	}
+}
+
+func TestOverwriteFailureBeforeConfirmPreservesOld(t *testing.T) {
+	for _, mode := range []string{"part_failure", "cancel", "target_changed"} {
+		t.Run(mode, func(t *testing.T) {
+			f, sim := newSimulator(t, false)
+			f.opt.LabOverwrite = true
+			sim.overwrite = true
+			sim.published = true
+			sim.bytes = []byte("old")
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			expected := "old"
+			switch mode {
+			case "part_failure":
+				sim.failPart = true
+			case "cancel":
+				sim.cancelAfterPart = cancel
+			case "target_changed":
+				sim.changeDuringUpload = []byte("external")
+				expected = "external"
+			}
+			src := object.NewStaticObjectInfo("file", time.Now(), 4, true, nil, f)
+			if _, err := f.Put(ctx, strings.NewReader("new!"), src); err == nil {
+				t.Fatal("failure reported success")
+			}
+			if sim.confirm != 0 || string(sim.bytes) != expected {
+				t.Fatalf("old replaced: %q confirm=%d", sim.bytes, sim.confirm)
+			}
+			s, err := journal.Open(f.opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer s.Close()
+			records, err := s.Records()
+			if err != nil || len(records) != 1 {
+				t.Fatal(records, err)
+			}
+			data, err := s.Data(&records[0])
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer data.Close()
+			b, err := io.ReadAll(data)
+			if err != nil || string(b) != "new!" {
+				t.Fatalf("new data lost %q: %v", b, err)
 			}
 		})
 	}

@@ -39,6 +39,7 @@ func init() {
 			{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
 			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
 			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
+			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
 			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable upload spool size. All files use resumable multipart, including empty files."},
 		}})
 }
@@ -54,6 +55,7 @@ type Options struct {
 	StateDir      string        `config:"state_dir"`
 	OwnershipDir  string        `config:"ownership_dir"`
 	LabWrites     bool          `config:"lab_writes"`
+	LabOverwrite  bool          `config:"lab_overwrite"`
 	MaxUpload     fs.SizeSuffix `config:"max_upload"`
 }
 
@@ -248,7 +250,7 @@ func (f *Fs) Rmdir(context.Context, string) error {
 	return fserrors.NoRetryError(errors.New("safe atomic empty-directory deletion is not verified"))
 }
 
-// Put preserves input before starting an upload and refuses unsafe overwrite.
+// Put preserves input before starting a create or explicitly enabled overwrite.
 func (f *Fs) Put(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) (fs.Object, error) {
 	o := &Object{f: f, remote: src.Remote()}
 	if e := o.Update(ctx, in, src, options...); e != nil {
@@ -310,7 +312,7 @@ func (o *Object) Remove(context.Context) error {
 	return fserrors.NoRetryError(errors.New("object-conditional deletion is not verified"))
 }
 
-// Update implements durable, create-only uploads for isolated experiments.
+// Update implements durable uploads and opt-in sequential overwrite in the lab.
 func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) error {
 	f := o.f
 	if e := f.writeAllowed(); e != nil {
@@ -340,10 +342,22 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	fail := func(err error) error {
 		return fserrors.NoRetryError(fmt.Errorf("operation %s (%s), local data retained: %w", r.ID, r.State, err))
 	}
-	if _, e = f.c.Info(ctx, p); e == nil {
-		return fail(errors.New("overwrite requires verified compare-and-swap semantics"))
-	} else if !smh.IsStatus(e, 404) {
-		return fail(e)
+	if previous, infoErr := f.c.Info(ctx, p); infoErr == nil {
+		if previous.Type == "dir" {
+			return fail(fs.ErrorIsDir)
+		}
+		if !f.opt.LabOverwrite {
+			return fail(errors.New("overwrite requires explicit lab_overwrite and the single-controlled-client contract"))
+		}
+		if previous.ETag == "" {
+			return fail(errors.New("overwrite target has no content validator"))
+		}
+		r.Overwrite, r.OldETag, r.OldSize = true, previous.ETag, int64(previous.Size)
+		if e = s.Save(r); e != nil {
+			return fail(e)
+		}
+	} else if !smh.IsStatus(infoErr, 404) {
+		return fail(infoErr)
 	}
 	parent := path.Dir(o.remote)
 	if parent == "." {

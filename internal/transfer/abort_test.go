@@ -222,3 +222,51 @@ func TestAbortErasedSessionWithPublishedFileStaysUnknown(t *testing.T) {
 	}
 	data.Close()
 }
+
+func TestOverwriteAbortRequiresPreviousVersion(t *testing.T) {
+	for _, mode := range []string{"old_unchanged", "changed", "missing", "lost_response"} {
+		t.Run(mode, func(t *testing.T) {
+			f, c, s, r := setupAbort(t)
+			r.Overwrite = true
+			r.OldETag = "v1"
+			r.OldSize = 4
+			f.targetExists = mode != "missing"
+			if mode == "changed" {
+				r.OldETag = "previous"
+			}
+			if mode == "lost_response" {
+				f.drop = true
+			}
+			if err := s.Save(r); err != nil {
+				t.Fatal(err)
+			}
+			err := Abort(context.Background(), s, c, r)
+			if mode == "lost_response" {
+				if err == nil || r.State != "AbortUnknown" {
+					t.Fatal(err, r.State)
+				}
+				records, e := s.Records()
+				if e != nil {
+					t.Fatal(e)
+				}
+				r = &records[0]
+				err = Abort(context.Background(), s, c, r)
+			}
+			if mode == "old_unchanged" || mode == "lost_response" {
+				if err != nil || r.State != "Aborted" {
+					t.Fatal(err, r.State)
+				}
+			} else if err == nil || r.State != "AbortUnknown" {
+				t.Fatal("changed/missing previous file accepted", err, r.State)
+			}
+			if f.calls != 1 {
+				t.Fatal("abort replayed", f.calls)
+			}
+			data, e := s.Data(r)
+			if e != nil {
+				t.Fatal(e)
+			}
+			data.Close()
+		})
+	}
+}
