@@ -41,8 +41,9 @@ type Part struct {
 
 // Store serializes access to the journal directory across processes.
 type Store struct {
-	Dir  string
-	lock *os.File
+	Dir           string
+	lock          *os.File
+	syncDirectory func(string) error
 }
 
 // Open takes a nonblocking process lock; callers must Close it.
@@ -68,7 +69,7 @@ func Open(dir string) (*Store, error) {
 		f.Close()
 		return nil, errors.New("state store busy; retry after active transfer completes")
 	}
-	return &Store{dir, f}, nil
+	return &Store{Dir: dir, lock: f, syncDirectory: syncDir}, nil
 }
 
 // Close releases the process lock.
@@ -111,7 +112,7 @@ func (s *Store) Save(r *Record) error {
 	if e = os.Rename(name, filepath.Join(s.Dir, r.ID+".json")); e != nil {
 		return e
 	}
-	return syncDir(s.Dir)
+	return s.syncDirectory(s.Dir)
 }
 
 // Records lists all operations; malformed entries fail closed.
@@ -196,13 +197,15 @@ func (s *Store) Prepare(ctx context.Context, scope, p string, in io.Reader, size
 	}
 	r.Size = n
 	r.SHA256 = hex.EncodeToString(h.Sum(nil))
-	if e = syncDir(s.Dir); e != nil {
+	if e = s.syncDirectory(s.Dir); e != nil {
 		return nil, e
 	}
+	// Save may publish the record before a later fsync fails. Its spool must
+	// survive any ambiguous publication outcome, even if this leaves an orphan.
+	keep = true
 	if e = s.Save(r); e != nil {
 		return nil, e
 	}
-	keep = true
 	return r, nil
 }
 

@@ -66,3 +66,9 @@ WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离�
 已使用官方 Go 1.26.0 和固定 macFUSE 头文件构建原生 macOS ARM64 cmount 二进制，mount help 成功；实际 FUSE 探针因运行库缺失失败。没有安装驱动或修改系统安全设置。macOS 26.5.2 内置 webdavfs 只读挂载成功，完整读取、pread、空文件和 51 项目录正确；不是 Finder UI 验收。
 
 随后用 webdavfs 创建隔离文件并写入 61 字节：open/write 成功、fsync errno=1、close 成功；独立云端仍 0 字节。状态日志同时存在 0 字节 Committed 和 61 字节 Prepared，后者 SHA-256 与测试源一致；AppleDouble 同样留下 0 字节提交和 4096 字节 Prepared，全部 spool 校验通过。普通卸载被系统进程只读句柄占用阻挡；在确认所有生成数据已持久化后，仅对此实验卷强制卸载成功，服务随后停止。证据见 [原生构建](evidence/2026-09-17/macos-native-build.json)、[webdavfs 读取](evidence/2026-09-17/macos-webdav-read.json)、[webdavfs 写入失败](evidence/2026-09-17/macos-webdav-write.json)。Finder 仍无法取得窗口，已异步请求用户打开窗口，不以系统调用替代 UI 验收。
+
+## 本地日志落盘错误修复
+
+`Prepare` 曾在记录 rename 已成功、随后的目录 fsync 返回错误时删除完整 spool，导致重开日志后无法恢复数据。新增故障注入测试已先复现该失败。现在完整 spool 和其目录已同步后，在尝试发布日志前便保留 spool；任何日志保存错误仍向调用者返回失败，但不再删除可能已被记录引用的数据。保存较早失败时允许留下孤立 spool，仍不自动 GC。
+
+回归测试在第二次目录同步处注入错误，关闭并重新打开 Store，验证记录仍阻止盲目重试、完整内容和 SHA 校验可恢复。这是文件系统调用故障测试，不是宿主机掉电保证，C-003 的真实掉电验收仍未完成。

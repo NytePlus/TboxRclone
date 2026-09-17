@@ -128,3 +128,44 @@ func TestUnitU07CancelledInput(t *testing.T) {
 		t.Fatal(e)
 	}
 }
+
+func TestPrepareDirectorySyncFailurePreservesSpool(t *testing.T) {
+	s := store(t)
+	failure := errors.New("injected directory fsync failure")
+	calls := 0
+	s.syncDirectory = func(dir string) error {
+		calls++
+		if calls == 2 {
+			return failure
+		}
+		return syncDir(dir)
+	}
+	_, err := s.Prepare(context.Background(), "scope", "file", strings.NewReader("durable bytes"), 13, 100)
+	if !errors.Is(err, failure) {
+		t.Fatalf("expected durability error, got %v", err)
+	}
+	if err := s.Close(); err != nil {
+		t.Fatal(err)
+	}
+	reopened, err := Open(s.Dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer reopened.Close()
+	records, err := reopened.Records()
+	if err != nil || len(records) != 1 {
+		t.Fatalf("records=%v err=%v", records, err)
+	}
+	f, err := reopened.Data(&records[0])
+	if err != nil {
+		t.Fatalf("published record lost its complete spool: %v", err)
+	}
+	defer f.Close()
+	b, err := io.ReadAll(f)
+	if err != nil || string(b) != "durable bytes" {
+		t.Fatalf("data=%q err=%v", b, err)
+	}
+	if reopened.Pending("scope", "file") == nil {
+		t.Fatal("unresolved preparation allowed blind retry")
+	}
+}
