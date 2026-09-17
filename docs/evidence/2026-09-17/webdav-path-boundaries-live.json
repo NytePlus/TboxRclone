@@ -1,0 +1,40 @@
+{
+  "at": "2026-09-17T13:17:54.172979+00:00",
+  "scope": "running isolated SJTU WebDAV service; rejected path operations, not full native acceptance",
+  "commit": "04692f0edb4b2365db0a2669ab7458d55877390a",
+  "service_binary_sha256": "c7ea2020625dd87b73b2ca16069827095290c8888fd64e8fae6f491494092810",
+  "patch_sha256": {
+    "0003-backend-move-overwrite.patch": "12199a93808d5bee11ba1c9d535fc939b74ca8b221f08d8db8e76818196718cb",
+    "0002-external-backend-overview.patch": "15e1f32bc48d70964dbb25501428dda40a43e4e1f1c31f28a79ca83f6e16e14d",
+    "0001-webdav-request-guards.patch": "77542ca627acc4d6d5299c0978f12f9605da187b2588e35000c13704428acd1b"
+  },
+  "results": [
+    {
+      "method": "COPY",
+      "source": "copy-check-b065fdff5ea8",
+      "destination": "copy-check-b065fdff5ea8/child",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "MOVE",
+      "source": "copy-check-b065fdff5ea8",
+      "destination": "copy-check-b065fdff5ea8/child",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "COPY",
+      "source": "copy-check-b065fdff5ea8/source.bin",
+      "destination": "copy-check-b065fdff5ea8/source.bin/.",
+      "status": 403,
+      "expected": 403
+    }
+  ],
+  "source_sha256_before": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+  "source_sha256_after": "7c30c0f0536bb406c52562d4e83e2e07c98f95e3670654a5425344668c3a1b50",
+  "source_matches_expected": true,
+  "journal_unchanged": true,
+  "journal_records": 794,
+  "pass": true
+}
