@@ -12,10 +12,13 @@
 - `tbox-state` 对账已发送的提交，只使用远端读取；遇到冲突保持 Unknown。
 - 完整上游 `fstests.Run` 入口；未配置真实测试空间时明确 SKIP。
 - 36 个系统分支的子场景目录与证据门禁。离线测试不会修改系统场景状态。
+- HTTPS CONNECT 故障代理与 Compose faults 服务：双通道 allowlist、完整响应暂扣/释放、发送前/响应后断开、传输中截断。见 [实验说明](fault-proxy.md)。
 
 ## 已执行验证
 
-具体命令及日志在工作区 `reports/`。`go test -race ./...` 共 25 个顶层测试 PASS，真实 TestIntegration 1 个 SKIP；`go vet ./...` PASS；上游 `cmd/serve/webdav` 测试 PASS（27.531s）；Linux 与 macOS ARM64 构建 PASS，macOS 本机已执行 version/backend help。离线测试涵盖 Unicode/保留字符、整数精度、JSON/HTTP 错误、异步受理不能当完成、控制面重定向不泄漏凭据、Range 被忽略/变化/短流、EOF/额外字节、分页重复、上传丢响应、日志重新打开、缓存损坏和进程锁。后端测试经过真实 HTTP/TLS 客户端与模拟服务器，不证明交大实例具有相同语义。
+具体命令及日志在工作区 `reports/`。`go test -race ./...` 共 34 个顶层测试 PASS，真实 TestIntegration 1 个 SKIP；`go vet ./...` PASS；上游 `cmd/serve/webdav` 测试 PASS（27.531s）；Linux 与 macOS ARM64 构建 PASS，macOS 本机已执行 version/backend help。离线测试涵盖 Unicode/保留字符、整数精度、JSON/HTTP 错误、异步受理不能当完成、控制面重定向不泄漏凭据、Range 被忽略/变化/短流、EOF/额外字节、分页重复、上传丢响应、日志重新打开、缓存损坏和进程锁。后端测试经过真实 HTTP/TLS 客户端与模拟服务器，不证明交大实例具有相同语义。
+
+HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立事实核对、控制/签名数据双通道、上传/下载截断、规则单次触发、authority 隔离和进程关闭。Compose faults 服务已启动并通过健康检查，已确认控制接口可用及非 allowlist CONNECT 返回 403；该服务验证没有访问交大云盘，检查后已停止。
 
 真实 SJTU fstests、Finder、宿主机断电/崩溃、真实多客户端冲突均尚未执行。manifest 继续保持 NOT_RUN；证据门禁当前为 0/36 PASS，并按预期返回非零退出码。
 
@@ -36,4 +39,4 @@
 
 API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子目录”，并未承诺非空目录拒绝；不得用它直接实现 rmdir。SDK 1.0.16 multipart 响应描述是顶层 headers，而已有 Tbox 研究为分片签名列表，须通过真实响应确认部署版本，不能混合猜测。
 
-下一步：取得普通用户的有效登录方式和隔离实验空间，执行 api.md/verification.md 的 V 级发现实验；根据实测契约实现 B01/B02/B04，同时补充控制面与数据面故障代理。真实证据应持续记录到 manifest，已知实现缺陷不能改写成符合预期。
+下一步：取得普通用户的有效登录方式和隔离实验空间，执行 api.md/verification.md 的 V 级发现实验；根据实测契约实现 B01/B02/B04，使用已加入的控制面与数据面故障代理记录真实证据，并继续补充 RTT/带宽/丢包性能注入。真实证据应持续记录到 manifest，已知实现缺陷不能改写成符合预期。

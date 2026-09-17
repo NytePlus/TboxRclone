@@ -65,7 +65,7 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
 
 ## 验收
 
-[原始调研](docs/README.md) · [接口](docs/api.md) · [验证规格](docs/verification.md) · [机器清单](test-manifest.json) · [证据格式](docs/evidence-format.md)
+[原始调研](docs/README.md) · [接口](docs/api.md) · [验证规格](docs/verification.md) · [机器清单](test-manifest.json) · [证据格式](docs/evidence-format.md) · [HTTPS 故障代理](docs/fault-proxy.md)
 
 ```sh
 # 运行完整上游 WebDAV 测试（上游本地后端；不是交大/Finder 验收）
