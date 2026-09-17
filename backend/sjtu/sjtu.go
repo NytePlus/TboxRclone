@@ -214,33 +214,58 @@ func (f *Fs) Mkdir(ctx context.Context, dir string) error {
 	}
 	parts := strings.Split(p, "/")
 	for n := 1; n <= len(parts); n++ {
-		current := strings.Join(parts[:n], "/")
-		i, e := f.c.Info(ctx, current)
-		if e == nil {
-			if i.Type != "dir" {
-				return fs.ErrorIsFile
+		if err := f.mkdirComponent(ctx, strings.Join(parts[:n], "/")); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f *Fs) mkdirComponent(ctx context.Context, current string) error {
+	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
+	check := func() (bool, error) {
+		if err := journal.CheckPending(f.opt.StateDir, scope, current); err != nil {
+			return false, fserrors.NoRetryError(err)
+		}
+		item, err := f.c.Info(ctx, current)
+		if err == nil {
+			if item.Type != "dir" {
+				return false, fs.ErrorIsFile
 			}
-			continue
+			return true, nil
 		}
-		if !smh.IsStatus(e, 404) {
-			return mapped(e, fs.ErrorDirNotFound)
+		if !smh.IsStatus(err, 404) {
+			return false, mapped(err, fs.ErrorDirNotFound)
 		}
-		e = f.c.JSON(ctx, "PUT", "directory", current, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, nil)
-		if smh.IsStatus(e, 409) {
-			// Another creator may have won after Info. Only an existing directory
-			// satisfies Mkdir; never retry the mutation or accept a file collision.
-			existing, checkErr := f.c.Info(ctx, current)
-			if checkErr == nil {
-				if existing.Type == "dir" {
-					continue
-				}
-				return fs.ErrorIsFile
+		return false, nil
+	}
+	// Existing directories need no exclusive ownership: sibling uploads may
+	// independently ensure their shared ancestors without becoming conflicting.
+	if exists, err := check(); err != nil || exists {
+		return err
+	}
+	release, err := f.acquireFile(current, true)
+	if err != nil {
+		return fserrors.NoRetryError(err)
+	}
+	defer release()
+	// The path may have become reserved or been created since the first check.
+	if exists, err := check(); err != nil || exists {
+		return err
+	}
+	err = f.c.JSON(ctx, "PUT", "directory", current, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, nil)
+	if smh.IsStatus(err, 409) {
+		existing, checkErr := f.c.Info(ctx, current)
+		if checkErr == nil {
+			if existing.Type == "dir" {
+				return nil
 			}
-			return fserrors.NoRetryError(errors.Join(e, checkErr))
+			return fs.ErrorIsFile
 		}
-		if e != nil {
-			return fserrors.NoRetryError(e)
-		}
+		return fserrors.NoRetryError(errors.Join(err, checkErr))
+	}
+	if err != nil {
+		return fserrors.NoRetryError(err)
 	}
 	return nil
 }

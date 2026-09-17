@@ -131,3 +131,9 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 真实服务复测通过 Expect:100-continue 暂停首个 PUT 正文，期间同路径 PUT/GET/DELETE、以其为目标的 MOVE 均 423；目录 PROPFIND 207。放行首个正文后 PUT 201、重开 GET 200、独立云端字节正确，仅一条 Committed 日志，见 [并发请求证据](evidence/2026-09-17/webdav-exclusive-access.json)。这不是 Finder 双编辑器或长期文件句柄验收，系统分支仍未通过。
 
 开启请求冲突控制后，macOS webdavfs 普通保存再次通过 open/write/fsync/close/reopen 和独立云端 61 字节匹配，见 [普通保存回归](evidence/2026-09-17/macos-webdav-exclusive-write.json)。该回归仅证明所测正常保存路径未被新保护阻断。
+
+## 未决文件不能被目录创建绕过
+
+后端 Mkdir 现在逐级检查持久未决记录；未决文件路径以及需要经过它的子目录创建均拒绝。缺失目录在发送创建请求前取得进程内路径写占用，并重新检查日志及远端类型，避免初次查询后的占用变化。已有目录直接返回，不占用共享父目录来阻塞不同文件上传。服务端创建竞争仍只读核对类型，不重发 mutation。
+
+回归以模拟 HTTPS 服务验证：首个上传尚在读取 spool 时，同路径和子路径 Mkdir 均报 busy；Unknown 日志关闭重开并换用新 Fs 后，两种目录创建均报 ErrPending，服务器没有收到任何目录 PUT，原 spool 完整。原 Mkdir 409 类型核对、批量相关路径及全量 Docker race/vet 通过。在线服务尚未重新部署此变化，Finder 与真实重启恢复验收仍待执行。

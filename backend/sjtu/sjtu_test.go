@@ -278,7 +278,7 @@ func TestMkdirConcurrentCreation(t *testing.T) {
 					return
 				}
 				infoCalls++
-				if infoCalls == 1 {
+				if infoCalls <= 2 {
 					w.WriteHeader(404)
 					return
 				}
@@ -294,7 +294,7 @@ func TestMkdirConcurrentCreation(t *testing.T) {
 			if kind == "file" && !errors.Is(err, fs.ErrorIsFile) {
 				t.Fatalf("file conflict accepted: %v", err)
 			}
-			if puts != 1 || infoCalls != 2 {
+			if puts != 1 || infoCalls != 3 {
 				t.Fatalf("puts=%d info=%d", puts, infoCalls)
 			}
 		})
@@ -383,6 +383,66 @@ func TestOverwriteFailureBeforeConfirmPreservesOld(t *testing.T) {
 			b, err := io.ReadAll(data)
 			if err != nil || string(b) != "new!" {
 				t.Fatalf("new data lost %q: %v", b, err)
+			}
+		})
+	}
+}
+
+func TestMkdirCannotReplaceDurablyReservedFile(t *testing.T) {
+	for _, target := range []string{"file", "file/child"} {
+		t.Run(target, func(t *testing.T) {
+			f, _ := newSimulator(t, false)
+			puts := 0
+			server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method == "PUT" {
+					puts++
+					io.WriteString(w, `{}`)
+					return
+				}
+				if strings.Contains(r.URL.Path, "/file") {
+					w.WriteHeader(404)
+					return
+				}
+				io.WriteString(w, `{"type":"dir"}`)
+			}))
+			defer server.Close()
+			f.c.Endpoint = server.URL
+			f.c.HTTP = server.Client()
+			s, err := journal.Open(f.opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			record, err := s.Prepare(context.Background(), f.c.Endpoint+"/l/s", f.root+"/file", strings.NewReader("pending bytes"), 13, 20)
+			if err != nil {
+				s.Close()
+				t.Fatal(err)
+			}
+			record.State = "Unknown"
+			if err = s.Save(record); err != nil {
+				s.Close()
+				t.Fatal(err)
+			}
+			s.Close()
+			fresh := *f
+			if err = fresh.Mkdir(context.Background(), target); !errors.Is(err, journal.ErrPending) {
+				t.Fatalf("pending path accepted: %v", err)
+			}
+			if puts != 0 {
+				t.Fatal("directory mutation reached server", puts)
+			}
+			s, err = journal.Open(f.opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer s.Close()
+			data, err := s.Data(record)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer data.Close()
+			bytes, err := io.ReadAll(data)
+			if err != nil || string(bytes) != "pending bytes" {
+				t.Fatalf("pending data lost: %q %v", bytes, err)
 			}
 		})
 	}

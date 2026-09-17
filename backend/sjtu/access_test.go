@@ -67,6 +67,11 @@ func TestFileConflictRejectedBeforeJournalWaitAndInput(t *testing.T) {
 		}
 		t.Fatalf("read during write: %v", err)
 	}
+	for _, name := range []string{"file", "file/child"} {
+		if err := alias.Mkdir(ctx, name); !errors.Is(err, ErrPathBusy) {
+			t.Fatalf("mkdir during upload %s: %v", name, err)
+		}
+	}
 	// A different file read is independent even while the first file is spooling.
 	other := &Object{f: f, remote: "other", item: smh.Item{ETag: "v1", Size: 0}}
 	r, err := other.Open(ctx)
