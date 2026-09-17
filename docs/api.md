@@ -55,7 +55,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 
 | 优先级 | 接口 | 参数/意义 | 证据 |
 |---|---|---|---|
-| P0 | DELETE `/api/v1/file/{L}/{S}/{K}?upload` | 取消上传；S 说明分块任务同时放弃 COS multipart；重复取消、确认竞争待测 | F+S |
+| P0 | DELETE `/api/v1/file/{L}/{S}/{K}?upload` | 取消上传；已测重复取消和 confirm 竞争：204 不代表撤销发布，已确认文件可保留而 K 消失 | F+S |
 | P0 | GET `/api/v1/file/{L}/{S}/{K}?upload` | 实测必须 no_upload_part_info=1；仍返回已上传分片列表 | C+F+S |
 | P0 | GET `/api/v1/task/{L}/{S}/{taskIdList}` | 查询异步状态，不把受理当完成 | F+S |
 | P0 | PUT `/api/v1/directory/{L}/{S}/{目标P}` | copyFrom + strategy；目录专用复制 | F+S |
@@ -94,7 +94,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | 分片 PUT | 仅同 uploadId、partNumber、相同字节重试，先验证覆盖规则 | 查询实际分片 size/ETag；重放必须从头读取该块 |
 | renew | 用已有 K 续期；刷新签名后重试，不重新建整任务 | 续期结果/原 K 是否有效 |
 | confirm | 响应丢失进入 Unknown；不马上再初始化/覆盖 | 先查 upload 状态，再查实际返回路径、身份、大小/完整内容 |
-| abort | 只针对本次已知 K；确认竞争时不得转为 DELETE 正式路径 | 查询 confirmed/最终文件与会话是否已终止 |
+| abort | 只针对本次已知 K；确认竞争时不得转为 DELETE 正式路径 | 查询 confirmed/最终文件与会话是否已终止；实测 confirm 后 abort 可 204、K 404、正式文件仍 200 |
 | mkdir | 已有同名目录可映射 rclone 成功；已有文件必须报错 | rclone Mkdir 的语义不同于 WebDAV MKCOL |
 | move | 响应丢失后不能把源 404 简单当失败/成功 | 源+目标身份/版本核对；目标仅同名同大小不够 |
 | copy | rename 策略重放会创建副本，overwrite 会覆盖并发修改 | 查询目标身份、任务完成、字节完整性 |
@@ -106,7 +106,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 
 本地持久操作日志：op_id、账户/空间、源和目标、旧对象身份/版本、预期大小/内容摘要、K/uploadId、分片大小与完成记录、任务 ID、最终路径、状态。持久状态不能保存明文长期凭据。写日志/缓存文件应先 fsync 再切换状态，必要时 fsync 父目录；具体 OS 与磁盘掉电保证仍需测试。
 
-状态机：`Prepared → Uploading → ReadyToConfirm → CommitSent → Committed`。提交前明确取消进入 `Aborting → Aborted`；CommitSent 后无确定响应进入 `Unknown → Reconcile`。不能把 Unknown 清理成失败，也不能在此状态删除本地唯一完整副本。
+状态机：`Prepared → Uploading → ReadyToConfirm → CommitSent → Committed`。提交前明确取消进入 `AbortSent → Aborted`；丢应答或事实不明进入 `AbortUnknown`；CommitSent 后无确定响应进入 `Unknown → Reconcile`。不能把 Unknown 清理成失败，也不能在此状态删除本地唯一完整副本。
 
 正式路径只允许看到旧完整版本或新完整版本。可用“唯一临时路径上传→确认→服务端移动覆盖”实现的前提，是该移动覆盖的原子性已经验证；临时文件方案本身不创造原子性。禁止“先删旧文件再上传”作为安全覆盖。rclone/VFS/WebDAV 调用链也要检查是否会先删目标，再调用后端 rename。
 
@@ -131,3 +131,9 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 两个先初始化的同目标 ask 会话中，第一个 confirm 200，第二个 confirm 409 `SameNameDirectoryOrFileExists`，独立读取保持第一个内容。初始化现有文件 ask 仍 201，不能把初始化成功当作预留文件名；必须在 confirm 处继续使用 ask 并处理冲突。
 
 错误 `content_cas` 在 overwrite confirm 中返回 200 并实际替换内容；移动同时提供错误 query `content_cas` 和 body `contentCas` 也返回 200、源路径 404。这些实测不支持条件覆盖/条件移动。目录专用移动返回 204 并保留子文件，但其并发/未知结果契约仍未证明。`fs-delta/cursor` 本次返回 404。具体证据见 [真实实验](live-api-findings.md)。
+
+## 9. 中止响应不能单独证明未发布
+
+实测顺序：confirm 200 → abort 204 → K 查询 404，但正式路径仍 200 且内容完整。反向 abort 204 → confirm 404/UploadNotFound → K 和正式路径均 404。并发请求观察到 confirm 200 + abort 204（文件存在），或 confirm 404/UploadIncomplete + abort 204（文件不存在）。错误码不同不能被合并成同一种结果。
+
+客户端只在持久化 abort 意图后，确认 K 不存在且正式路径不存在，才将任务标为 Aborted；这是观测到的可用性结论，不是“从未发布”或“所有暂存对象物理清空”的保证。若 K 消失但正式文件存在，保留 AbortUnknown 和完整 spool；不得为满足用户取消而删除正式路径。对已发送 confirm 的任务先只读对账，已提交任务拒绝中止。对 Prepared 的取消纯本地，不调用远端。

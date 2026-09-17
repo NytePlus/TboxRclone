@@ -1,4 +1,4 @@
-// Tbox-state lists pending uploads and reconciles submitted commits without replaying writes.
+// Tbox-state inspects, resumes, reconciles, or explicitly cancels recorded uploads.
 package main
 
 import (
@@ -26,9 +26,16 @@ func run() error {
 	org := flag.String("organization-id", "1", "personal-space organization ID")
 	id := flag.String("reconcile", "", "operation ID to reconcile with read-only requests")
 	resume := flag.String("resume", "", "resume an existing isolated multipart upload; never reinitialize or repeat confirmation")
+	abort := flag.String("abort", "", "cancel the recorded unpublished multipart session; retain local bytes")
 	flag.Parse()
-	if *id != "" && *resume != "" {
-		return fmt.Errorf("choose reconcile or resume")
+	actions := 0
+	for _, value := range []string{*id, *resume, *abort} {
+		if value != "" {
+			actions++
+		}
+	}
+	if actions > 1 {
+		return fmt.Errorf("choose one of reconcile, resume, or abort")
 	}
 	s, e := journal.Open(*dir)
 	if e != nil {
@@ -39,7 +46,7 @@ func run() error {
 	if e != nil {
 		return e
 	}
-	if *id == "" && *resume == "" {
+	if actions == 0 {
 		type summary struct {
 			ID, State, Path, SHA256 string
 			Size                    int64
@@ -62,8 +69,10 @@ func run() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 	for _, r := range records {
-		if r.ID == *id || r.ID == *resume {
-			if *resume != "" {
+		if r.ID == *id || r.ID == *resume || r.ID == *abort {
+			if *abort != "" {
+				e = transfer.Abort(ctx, s, c, &r)
+			} else if *resume != "" {
 				e = transfer.Resume(ctx, s, c, &r)
 			} else {
 				e = recovery.Reconcile(ctx, s, c, &r)

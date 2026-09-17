@@ -17,7 +17,7 @@
 
 ## 已执行验证
 
-具体命令及日志在工作区 `reports/`。`go test -race ./...` 共 47 个顶层测试 PASS，真实 TestIntegration 1 个 SKIP；`go vet ./...` PASS；上游 `cmd/serve/webdav` 测试 PASS（27.531s）；Linux 与 macOS ARM64 构建 PASS，macOS 本机已执行 version/backend help。离线测试涵盖 Unicode/保留字符、整数精度、JSON/HTTP 错误、异步受理不能当完成、控制面重定向不泄漏凭据、Range 被忽略/变化/短流、EOF/额外字节、分页重复、上传丢响应、日志重新打开、缓存损坏和进程锁。后端测试经过真实 HTTP/TLS 客户端与模拟服务器，不证明交大实例具有相同语义。
+具体命令及日志在工作区 `reports/`。`go test -race ./...` 共 54 个顶层测试 PASS，真实 TestIntegration 1 个 SKIP；`go vet ./...` PASS；上游 `cmd/serve/webdav` 测试 PASS（27.531s）；Linux 与 macOS ARM64 构建 PASS，macOS 本机已执行 version/backend help。离线测试涵盖 Unicode/保留字符、整数精度、JSON/HTTP 错误、异步受理不能当完成、控制面重定向不泄漏凭据、Range 被忽略/变化/短流、EOF/额外字节、分页重复、上传丢响应、日志重新打开、缓存损坏和进程锁。后端测试经过真实 HTTP/TLS 客户端与模拟服务器，不证明交大实例具有相同语义。
 
 HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立事实核对、控制/签名数据双通道、上传/下载截断、规则单次触发、authority 隔离和进程关闭。Compose faults 服务已启动并通过健康检查，已确认控制接口可用及非 allowlist CONNECT 返回 403；该服务验证没有访问交大云盘，检查后已停止。发现 `go run` 包装使 Compose 停止状态为 2 后，服务启动改为编译再 `exec` 二进制；重新健康启动并 SIGTERM 停止，已确认退出码为 0。
 
@@ -28,7 +28,7 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | 问题 | 影响条件 | 当前行为及后续要求 |
 |---|---|---|
 | B01：覆盖、条件删除、原子空目录删除未实现 | C-002/004/006/011/013/017 | 实测错误 content_cas/If-Match 删除条件被忽略，覆盖 confirm 与移动的源/目标 CAS 也被忽略；directory_only 删除非空目录后子项不可达。保持拒绝，需调查其他保护方式；属于发布功能缺失。 |
-| B02：分片恢复尚未完成产品级验收 | C-001/003/007/018 | 已实现及实测原会话分片续签/显式恢复；默认 spool 上限 64 MiB 可配置，固定 4 MiB 片最多 10000 片。尚缺自动恢复调度、过期会话处理、abort 命令、批量/超大文件与完整故障矩阵。 |
+| B02：分片恢复尚未完成产品级验收 | C-001/003/007/018 | 已实现及实测原会话分片续签/显式恢复；默认 spool 上限 64 MiB 可配置，固定 4 MiB 片最多 10000 片。已提供显式 abort 与未知结果核对；尚缺自动恢复调度、过期会话处理、批量/超大文件与完整故障矩阵。 |
 | B03：SSO 交互登录与长时会话验收未完成 | C-015 | 已有 UserToken 文件可自动获取/刷新个人空间 accessToken，缓存仅在内存；并发合并、提前续期、账户空间核验、凭据轮换检测；401/403 只使缓存失效，不重放原请求。真实 1800 秒到期和 SSO 重新认证仍待验收。 |
 | B04：服务端 Move/DirMove/Copy 与异步 task 未实现 | C-004/013/016 | 不注册可选能力，202/taskId 返回明确未完成错误。 |
 | B05：WebDAV/VFS 安全保存与云端应答边界未验收 | C-005/008/012/013/014 | 上游测试通过也不能替代交大/Finder 实测；默认使用缓存 off，仅实验。 |
@@ -57,3 +57,7 @@ API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子�
 WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离目录，加入 OPTIONS 健康检查。`cmd/davcheck` 在 macOS 原生执行对该服务的 13 项协议检查，11 项 PASS、2 项 FAIL，并以非零退出；失败是 B11/B12，见 [协议检查记录](evidence/2026-09-17/webdav-check.json)。这是 rclone→真实 SJTU 的协议链路，不是 Finder 用户路径。Finder Computer Use 用应用名及 com.apple.finder 均返回 cgWindowNotFound，未取得可操作窗口，因此本轮没有产生 Finder 录屏，也没有标记任何系统分支通过。
 
 通过 `patches/rclone/0001-webdav-request-guards.patch` 修复两个已复现路径；上游测试先失败后通过，完整 WebDAV 测试包通过（27.582s）。固定上游归档可逐字节重建当前补丁工作区。真实重新构建服务后 13/13 HTTP 检查通过；本次状态目录只新增一个 Committed 记录，被拒绝条件 PUT 不再进入上传准备。见 [补丁后协议记录](evidence/2026-09-17/webdav-check-patched.json)。这不解决服务端 CAS 缺失，不证明外部并发或全部条件头正确；系统门禁仍 0/36。
+
+显式 `tbox-state -abort` 已实现：Prepared 只做本地状态转换；Uploading 验证账户、路径和 uploadId 后持久化 AbortSent，再对 K 发 upload DELETE。CommitSent/Unknown 只对账，Committed 拒绝撤销；所有路径均保留 spool。Aborted 表示已观察会话不存在且正式路径不存在，不宣称对象存储所有暂存字节已经物理回收。中止后路径仍存在时保留 AbortUnknown。
+
+七项离线测试覆盖幂等中止、丢应答、confirm 竞争、身份/状态不匹配、会话消失但目标存在和本地 Prepared 取消。真实代理中止后丢应答从 AbortUnknown 核对至 Aborted，独立确认 K 和路径均 404，spool 保留。并发探测还确认：confirm 200 后 abort 可以 204 并删除会话记录，而正式文件仍完整存在；该分支必须保留未知状态，不能以 204 判定撤销成功。见 [中止丢应答](evidence/2026-09-17/abort-response-loss.json) 和 [提交/中止竞争](evidence/2026-09-17/confirm-abort-race.json)。不是 Finder 取消、完整历史/回收站增量或宿主机掉电验收。

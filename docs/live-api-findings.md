@@ -115,3 +115,17 @@ Compose 服务指向隔离实验目录，Mac 原生 `davcheck` 通过 loopback �
 固定上游源码应用可重放补丁后，服务重新构建并通过健康检查。[复测记录](evidence/2026-09-17/webdav-check-patched.json) 为 13/13，通过状态分别包含重复 MKCOL 405、已有资源条件 PUT 412。检查前后上传日志差集只有一个 Committed，没有被拒绝 PUT 的 Prepared 记录。
 
 这证明两个已复现的顺序请求问题已修复；VFS 视图可能陈旧，因此不能将此结果外推成云端原子条件写或跨客户端并发验收。原始失败证据保留，不回写为 PASS；系统 manifest 状态不变。
+
+## 显式中止与提交竞争
+
+[中止应答丢失](evidence/2026-09-17/abort-response-loss.json)：真实上传在数据面应答暂扣处中断，随后 Go `tbox-state -abort` 的 DELETE 应答被代理在服务端完成后丢弃；首次退出 1、日志 AbortUnknown。新的进程再次显式中止时先做读取，会话及正式路径均 404，记录 Aborted，spool 保留。
+
+[提交/中止竞争](evidence/2026-09-17/confirm-abort-race.json) 使用 5 个全新隔离文件，两个确定顺序与三次并发：
+
+- confirm 先完成：confirm 200、abort 204，K 404，但正式文件为 200 且完整。
+- abort 先完成：abort 204、confirm 404/UploadNotFound，K 与正式路径 404。
+- 三次并发：一次两请求成功且正式文件完整；两次 confirm 404/UploadIncomplete、abort 204、正式路径 404。
+
+**不能将 abort 204 等同于取消成功，也不能仅依据 K 404 判断未发布。** 当前实现会保留“会话消失但正式路径存在”的 AbortUnknown；已进入 CommitSent/Unknown 的任务先对账，不发送中止。所有分支均保留本地数据。
+
+这是 CLI/API 证据；未完成 Finder 取消操作、所有时序、历史/回收站数量增量或暂存对象物理回收核验，系统场景状态不变。

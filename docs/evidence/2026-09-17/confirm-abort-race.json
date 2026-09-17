@@ -1,0 +1,61 @@
+{
+  "at": "2026-09-17T03:32:29.363076+00:00",
+  "scope": "generated isolated API fixtures; not Finder cancellation",
+  "events": [
+    {
+      "order": "confirm_first",
+      "confirm_http": 200,
+      "confirm_code": null,
+      "abort_http": 204,
+      "abort_code": null,
+      "session_http": 404,
+      "session_confirmed": null,
+      "file_http": 200,
+      "file_exact_bytes": true
+    },
+    {
+      "order": "abort_first",
+      "confirm_http": 404,
+      "confirm_code": "UploadNotFound",
+      "abort_http": 204,
+      "abort_code": null,
+      "session_http": 404,
+      "session_confirmed": null,
+      "file_http": 404,
+      "file_exact_bytes": false
+    },
+    {
+      "order": "parallel",
+      "confirm_http": 200,
+      "confirm_code": null,
+      "abort_http": 204,
+      "abort_code": null,
+      "session_http": 404,
+      "session_confirmed": null,
+      "file_http": 200,
+      "file_exact_bytes": true
+    },
+    {
+      "order": "parallel",
+      "confirm_http": 404,
+      "confirm_code": "UploadIncomplete",
+      "abort_http": 204,
+      "abort_code": null,
+      "session_http": 404,
+      "session_confirmed": null,
+      "file_http": 404,
+      "file_exact_bytes": false
+    },
+    {
+      "order": "parallel",
+      "confirm_http": 404,
+      "confirm_code": "UploadIncomplete",
+      "abort_http": 204,
+      "abort_code": null,
+      "session_http": 404,
+      "session_confirmed": null,
+      "file_http": 404,
+      "file_exact_bytes": false
+    }
+  ]
+}

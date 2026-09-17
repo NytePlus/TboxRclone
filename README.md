@@ -67,7 +67,7 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
   -token-file /absolute/private/access-token -reconcile '<operation-id>'
 ```
 
-主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。恢复工具也支持 `-user-token-file /secrets/user-token -organization-id 1` 自动取得令牌。鉴权失败会使缓存失效，但不会自动重放刚才的请求，尤其不会重放写操作。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、旧版简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
+主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。恢复工具也支持 `-user-token-file /secrets/user-token -organization-id 1` 自动取得令牌。`-abort <operation-id>` 可显式中止未提交会话；只删除绑定的上传 K，不删除正式文件，也不清理本地数据。中止应答丢失后再次执行该命令，会先读取会话和正式路径；会话消失但正式路径存在时保持 AbortUnknown。鉴权失败会使缓存失效，但不会自动重放刚才的请求，尤其不会重放写操作。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、旧版简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
 
 ## WebDAV 协议检查
 
