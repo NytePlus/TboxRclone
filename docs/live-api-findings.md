@@ -149,3 +149,19 @@ macOS 26.5.2 使用系统 mount_webdav 连接本机 Compose 服务。只读挂�
 ## HTTP 条件头不能保护覆盖
 
 在两个全新生成文件上，分别对 multipart 初始化及 confirm 都添加错误 `If-Match`、`If-None-Match: *`，并使用 overwrite 策略。两组初始化 201、确认 200；独立完整下载均为新字节，旧字节未保留。见 [HTTP 条件头实验](evidence/2026-09-17/http-mutation-conditions.json)。因此，这些标准 HTTP 头在所测控制面操作中没有阻止覆盖，不能作为 content_cas 的替代保护。这里只验证这两组请求，不声称所有服务端接口均无条件能力。
+
+## 真实时钟令牌过期测试（进行中）
+
+新增 `internal/smh/TestLiveTokenExpiry`，默认 SKIP。显式启用后，在同一 Client 中每 30 秒读取隔离实验目录，持续至少 31 分钟，记录成功读取次数与令牌值是否发生变化（不输出令牌或摘要）。结束时用最初的令牌只读请求，要求其返回 401/403；同一进程的新令牌须持续可读。本测试不修改云端数据，也不替代 SSO、Finder 或故障情况下的认证验收。
+
+```sh
+docker compose run --rm \
+  -e TBOX_AUTH_SOAK=1 \
+  -e TBOX_SPACE_FILE=/secrets/space.json \
+  -e TBOX_USER_TOKEN_FILE=/secrets/user-token \
+  -e 'TBOX_AUTH_PATH=codex-api-lab/<run-id>' \
+  -v "$PWD/.secrets:/secrets:ro" \
+  go-tests go test -json ./internal/smh -run '^TestLiveTokenExpiry$' -count=1 -timeout=35m
+```
+
+2026-09-17 05:02:49 UTC 首次运行已成功读取，日志在忽略目录 `reports/auth-soak.jsonl`。尚在等待真实过期边界，**未判 PASS**。
