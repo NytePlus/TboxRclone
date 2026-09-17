@@ -3,6 +3,8 @@ package sjtu
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"github.com/nyte/TboxRclone/internal/transfer"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -22,11 +24,13 @@ func TestDistinctUploadsReachDataPlaneTogether(t *testing.T) {
 		if newParent {
 			name = "new_parent"
 		}
-		t.Run(name, func(t *testing.T) { testDistinctUploads(t, newParent) })
+		t.Run(name, func(t *testing.T) { testDistinctUploads(t, newParent, false) })
 	}
 }
 
-func testDistinctUploads(t *testing.T, newParent bool) {
+func TestCancelOneParallelUploadAndResume(t *testing.T) { testDistinctUploads(t, true, true) }
+
+func testDistinctUploads(t *testing.T, newParent, cancelOne bool) {
 	f, _ := newSimulator(t, false)
 	if newParent {
 		f.root += "/new-parent"
@@ -34,8 +38,9 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 	parentExists := !newParent
 	parentCreates := 0
 	type state struct {
-		data      []byte
-		published bool
+		data        []byte
+		published   bool
+		initialized int
 	}
 	var mu sync.Mutex
 	files := map[string]*state{"one": {}, "two": {}}
@@ -101,7 +106,10 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 			json.NewEncoder(w).Encode(smh.UploadStatus{Confirmed: item.published, UploadID: name, Path: strings.Split(f.root+"/"+name, "/")})
 			return
 		}
-		if r.Method == "POST" && r.URL.Query().Has("multipart") {
+		if r.Method == "POST" && (r.URL.Query().Has("multipart") || r.URL.Query().Has("renew")) {
+			if r.URL.Query().Has("multipart") {
+				item.initialized++
+			}
 			json.NewEncoder(w).Encode(smh.Upload{Key: "K-" + name, UploadID: name, Domain: server.URL, Path: "/data/" + name, Parts: map[string]smh.PartSignature{"1": {Headers: map[string]string{"x-fixture": "part"}}}})
 			return
 		}
@@ -124,12 +132,18 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 	f.c.HTTP = server.Client()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+	firstCtx, cancelFirst := context.WithCancel(ctx)
+	defer cancelFirst()
 	done := make(chan error, 2)
 	for _, name := range []string{"one", "two"} {
 		go func(name string) {
 			data := "distinct payload " + name
 			src := object.NewStaticObjectInfo(name, time.Now(), int64(len(data)), true, nil, f)
-			_, err := f.Put(ctx, strings.NewReader(data), src)
+			uploadCtx := ctx
+			if name == "one" {
+				uploadCtx = firstCtx
+			}
+			_, err := f.Put(uploadCtx, strings.NewReader(data), src)
 			done <- err
 		}(name)
 	}
@@ -147,25 +161,31 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 			t.Fatal("different files serialized before data plane")
 		}
 	}
-	// Same-file access remains fail-fast while both independent uploads run.
-	src := object.NewStaticObjectInfo("one", time.Now(), 1, true, nil, f)
+	remaining := 2
+	if cancelOne {
+		cancelFirst()
+		if err := <-done; !errors.Is(err, context.Canceled) {
+			t.Fatalf("wrong cancellation: %v", err)
+		}
+		remaining--
+		scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
+		if err := journal.CheckPending(f.opt.StateDir, scope, f.root+"/one"); !errors.Is(err, journal.ErrPending) {
+			t.Fatalf("cancelled path not reserved: %v", err)
+		}
+		retry := object.NewStaticObjectInfo("one", time.Now(), 1, true, nil, f)
+		if _, err := f.Put(ctx, strings.NewReader("x"), retry); !errors.Is(err, journal.ErrPending) {
+			t.Fatalf("cancelled path allowed new write: %v", err)
+		}
+	}
+	// Same-file access remains fail-fast while the other upload is active.
+	src := object.NewStaticObjectInfo("two", time.Now(), 1, true, nil, f)
 	if _, err := f.Put(ctx, strings.NewReader("x"), src); err == nil {
 		t.Fatal("conflicting upload accepted")
 	}
 	unblock()
-	for range 2 {
+	for range remaining {
 		if err := <-done; err != nil {
 			t.Fatal(err)
-		}
-	}
-	mu.Lock()
-	defer mu.Unlock()
-	if newParent && parentCreates != 1 {
-		t.Fatalf("parent creates: %d", parentCreates)
-	}
-	for name, item := range files {
-		if !item.published || string(item.data) != "distinct payload "+name {
-			t.Fatal("wrong independent content", name)
 		}
 	}
 	s, err := journal.Open(f.opt.StateDir)
@@ -178,6 +198,18 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 		t.Fatal(records, err)
 	}
 	for _, r := range records {
+		if cancelOne && strings.HasSuffix(r.Path, "/one") {
+			if r.State != "Uploading" {
+				t.Fatal(r.State)
+			}
+			oldKey, oldID := r.ConfirmKey, r.UploadID
+			if err := transfer.Resume(ctx, s, f.c, &r); err != nil {
+				t.Fatal(err)
+			}
+			if r.ConfirmKey != oldKey || r.UploadID != oldID {
+				t.Fatal("resume replaced session")
+			}
+		}
 		if r.State != "Committed" {
 			t.Fatal(r.State)
 		}
@@ -186,6 +218,16 @@ func testDistinctUploads(t *testing.T, newParent bool) {
 			t.Fatal(err)
 		}
 		data.Close()
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if newParent && parentCreates != 1 {
+		t.Fatalf("parent creates: %d", parentCreates)
+	}
+	for name, item := range files {
+		if item.initialized != 1 || !item.published || string(item.data) != "distinct payload "+name {
+			t.Fatal("wrong independent content", name)
+		}
 	}
 }
 

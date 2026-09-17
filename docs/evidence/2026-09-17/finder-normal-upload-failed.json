@@ -1,0 +1,47 @@
+{
+  "run_id": "finder-repeat-e4bc3ee97590",
+  "scenario_id": "ST-001-T",
+  "status": "FAIL",
+  "versions": {
+    "client": "rclone v1.75.1 + repository patches; native webdavfs",
+    "backend": "00c00297a01428b92549b5ab8bf45fd72712a3cc (only additional tests/tools uncommitted)",
+    "server": "pan.sjtu.edu.cn; service version not exposed",
+    "macos": "26.5.2 (25F84)",
+    "finder": "26.4"
+  },
+  "cloud_path": "codex-api-lab/run-20260917T020318Z-f0339b72/finder-normal-c188d19f1620/normal-upload-2.bin",
+  "expected_size": 8388625,
+  "expected_sha256": "f68bf3f879777187d58bb3d1b7d293dcdd1120b4a306b4ec035ebdbbc17c6897",
+  "samples": 181,
+  "zero_size_samples": 90,
+  "first_zero": "2026-09-17T11:36:47.049110584Z",
+  "last_zero": "2026-09-17T11:36:58.74787834Z",
+  "matching_full_reads": 2,
+  "cases": [
+    {
+      "id": "normal_upload",
+      "status": "FAIL",
+      "observation": "Real Finder drag produced a committed zero-byte formal cloud object before the complete 8388625-byte object. Both final independent full reads matched SHA-256, but atomic visibility failed.",
+      "artifacts": [
+        "cloud-observations.json",
+        "finder-upload-doh.mp4",
+        "finder-upload-doh-drag.png",
+        "journal-redacted.json",
+        "setup.json"
+      ]
+    }
+  ],
+  "recording": {
+    "path": "finder-upload-doh.mp4",
+    "seconds": 167.215,
+    "width": 3420,
+    "height": 2214,
+    "scope": "only two verified test Finder windows; other windows excluded; off-space intervals are black",
+    "visually_checked_frame_seconds": 113
+  },
+  "artifacts_sha256": {
+    "cloud-observations.json": "2fc920088b651ef98de2da23afd741101d4f8e1d8614953bfcaee38173a2b587",
+    "finder-upload-doh.mp4": "d29a1cf7760cf6c67904fd7d940696745f79c544eb0428948f6689ef1828416c",
+    "journal-redacted.json": "246cdd057b4d5fdfde1f81896bd8def0b287e518abcddf3bfdae09969d64d45b"
+  }
+}

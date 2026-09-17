@@ -5,7 +5,7 @@
     "unit": "Go testing + httptest (implemented; race tests executed)",
     "backend": "rclone fstests v1.75.1 (complete live lifecycle passed: 87 PASS, 33 SKIP; optional skips are not acceptance passes)",
     "protocol": "HTTP/WebDAV harness + HTTPS fault proxy (partial; live response-loss experiment executed)",
-    "system": "native macOS Finder UI and terminal (planned)"
+    "system": "native macOS Finder UI and terminal (first normal-upload branch executed: FAIL; remaining branches not accepted)"
   },
   "tests": [
     {
@@ -34,14 +34,14 @@
       "mock_boundaries": [
         "controlled network and process faults; real backend required for V evidence"
       ],
-      "recording_path": null,
+      "recording_path": "evidence/ST-001-T/finder-upload-doh.mp4",
       "evidence_directory": "evidence/ST-001-T",
       "related_unit_tests": [
         "U04",
         "U07"
       ],
-      "known_gap": "Native UI preflight blocked by macOS Apple Events authorization -1743; no Finder drag action or recording. See docs/evidence/2026-09-17/finder-automation-blocked.json; original safety contract: api.md#6-崩溃一致性设计契约",
-      "status": "blocked"
+      "known_gap": "Real Finder drag observed a committed zero-byte formal object before complete upload (2026-09-17); final SHA-256 matched twice, atomic visibility failed. See docs/evidence/2026-09-17/finder-normal-upload-failed.json. Automation permissions restored; historical blocked evidence retained.",
+      "status": "fail"
     },
     {
       "id": "ST-001-F",

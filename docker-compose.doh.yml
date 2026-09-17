@@ -1,0 +1,29 @@
+# Opt-in workaround for host VPN fake-IP ranges overlapping Docker networks.
+# Start with: docker compose -f docker-compose.yml -f docker-compose.doh.yml ...
+# DNS port is private to this project; no host ports or host settings are changed.
+services:
+  lab-dns:
+    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
+    command: [python3, /doh-dns.py]
+    volumes:
+      - ./scripts/doh-dns.py:/doh-dns.py:ro
+    networks:
+      lab-dns:
+        ipv4_address: 10.253.253.2
+  go-tests:
+    dns: [10.253.253.2]
+    networks: [default, lab-dns]
+    depends_on: [lab-dns]
+  webdav:
+    dns: [10.253.253.2]
+    networks: [default, lab-dns]
+    depends_on: [lab-dns]
+  fault-proxy:
+    dns: [10.253.253.2]
+    networks: [default, lab-dns]
+    depends_on: [lab-dns]
+networks:
+  lab-dns:
+    ipam:
+      config:
+        - subnet: 10.253.253.0/29

@@ -1,0 +1,32 @@
+{
+  "cancel_one": true,
+  "cancelled_origin_success_responses": 1,
+  "committed_records": 2,
+  "confirmations": 2,
+  "distinct_sessions": 2,
+  "elapsed_seconds": 4.371019252,
+  "files": [
+    {
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/parallel-3650a207f05d/one.bin",
+      "size": 9900000,
+      "sha256": "4f2615f0e5f0027fa51a4b4bc076f0154013e67f6038411eadcfbf77f4c6c06a",
+      "seconds": 1.866389251
+    },
+    {
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/parallel-3650a207f05d/two.bin",
+      "size": 9900000,
+      "sha256": "93eb43df5ec78edcee420e0d45fa7be6bca3461fac5c08fe7bf8cb474ee62411",
+      "seconds": 4.370951127
+    }
+  ],
+  "fixture": "parallel-3650a207f05d",
+  "initializations": 2,
+  "max_overlapping_sessions": 2,
+  "parent_initially_missing": true,
+  "scope": "real backend with synchronized data-request entry; not Finder acceptance or an uninstrumented throughput benchmark",
+  "states_before_recovery": {
+    "codex-api-lab/run-20260917T020318Z-f0339b72/parallel-3650a207f05d/one.bin": "Uploading",
+    "codex-api-lab/run-20260917T020318Z-f0339b72/parallel-3650a207f05d/two.bin": "Committed"
+  },
+  "status": "PASS"
+}

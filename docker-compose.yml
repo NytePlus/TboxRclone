@@ -23,6 +23,7 @@ services:
       - ./.state:/state
     environment:
       RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
+      RCLONE_LOG_LEVEL: '${TBOX_LOG_LEVEL:-NOTICE}'
       RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
       RCLONE_SJTU_LAB_DELETE: '${TBOX_LAB_DELETE:-false}'
       RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
