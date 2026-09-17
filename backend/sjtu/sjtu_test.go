@@ -20,12 +20,14 @@ import (
 )
 
 type simulator struct {
-	mu            sync.Mutex
-	bytes         []byte
-	published     bool
-	init, confirm int
-	drop          bool
-	api, data     *httptest.Server
+	mu               sync.Mutex
+	bytes            []byte
+	published        bool
+	init, confirm    int
+	drop             bool
+	blockReconcile   bool
+	replaceOnConfirm []byte
+	api, data        *httptest.Server
 }
 
 func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
@@ -47,6 +49,10 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		defer sim.mu.Unlock()
 		p := r.URL.Path
 		if r.Method == "GET" && r.URL.Query().Get("upload") == "1" {
+			if sim.blockReconcile {
+				w.WriteHeader(503)
+				return
+			}
 			if r.URL.Query().Get("no_upload_part_info") != "1" {
 				w.WriteHeader(400)
 				io.WriteString(w, `{"code":"ParamInvalid","message":"uploadPartInfo is unsupported under current deployment"}`)
@@ -78,6 +84,9 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 		if r.Method == "POST" {
 			sim.confirm++
 			sim.published = true
+			if sim.replaceOnConfirm != nil {
+				sim.bytes = sim.replaceOnConfirm
+			}
 			if sim.drop {
 				conn, _, _ := w.(http.Hijacker).Hijack()
 				conn.Close()
@@ -125,6 +134,7 @@ func TestUnitU04U07UploadAndIndependentRead(t *testing.T) {
 }
 func TestUnitU05LostCommitReconcileNoReplay(t *testing.T) {
 	f, sim := newSimulator(t, true)
+	sim.blockReconcile = true
 	src := object.NewStaticObjectInfo("file", time.Now(), 4, true, nil, f)
 	if _, e := f.Put(context.Background(), strings.NewReader("safe"), src); e == nil {
 		t.Fatal("lost response reported success")
@@ -144,6 +154,9 @@ func TestUnitU05LostCommitReconcileNoReplay(t *testing.T) {
 	if e != nil || len(records) != 1 || records[0].State != "Unknown" {
 		t.Fatal(records, e)
 	}
+	sim.mu.Lock()
+	sim.blockReconcile = false
+	sim.mu.Unlock()
 	if e = recovery.Reconcile(context.Background(), s, f.c, &records[0]); e != nil {
 		t.Fatal(e)
 	}
@@ -194,10 +207,10 @@ func TestUnitU04InvalidStreamNeverInitializesRemote(t *testing.T) {
 func TestUnitU09ReconcilePreservesConflict(t *testing.T) {
 	f, sim := newSimulator(t, true)
 	src := object.NewStaticObjectInfo("file", time.Now(), 4, true, nil, f)
-	f.Put(context.Background(), strings.NewReader("safe"), src)
-	sim.mu.Lock()
-	sim.bytes = []byte("evil")
-	sim.mu.Unlock()
+	sim.replaceOnConfirm = []byte("evil")
+	if _, err := f.Put(context.Background(), strings.NewReader("safe"), src); err == nil {
+		t.Fatal("concurrent replacement accepted during automatic reconciliation")
+	}
 	s, e := journal.Open(f.opt.StateDir)
 	if e != nil {
 		t.Fatal(e)

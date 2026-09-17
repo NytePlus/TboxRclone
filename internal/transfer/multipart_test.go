@@ -238,14 +238,18 @@ func TestMultipartRejectsChangedRenewal(t *testing.T) {
 	if e := Start(context.Background(), s, c, r); e == nil {
 		t.Fatal("expected interrupted upload")
 	}
+	m.mu.Lock()
 	m.badRenew = true
 	before := 0
 	for _, n := range m.puts {
 		before += n
 	}
+	m.mu.Unlock()
 	if e := Resume(context.Background(), s, c, r); e == nil {
 		t.Fatal("changed session accepted")
 	}
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	after := 0
 	for _, n := range m.puts {
 		after += n

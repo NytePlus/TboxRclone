@@ -312,7 +312,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if e = f.Mkdir(ctx, parent); e != nil {
 		return fail(e)
 	}
-	if e = transfer.Start(ctx, s, f.c, r); e != nil {
+	if e = transfer.StartWithRecovery(ctx, s, f.c, r); e != nil {
 		return fail(e)
 	}
 	o.item, e = f.c.Info(ctx, p)

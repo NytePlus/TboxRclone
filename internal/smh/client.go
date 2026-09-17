@@ -19,6 +19,9 @@ import (
 // ErrUnknown means a mutation may have executed and must not be replayed.
 var ErrUnknown = errors.New("remote outcome unknown; preserve local data and reconcile")
 
+// ErrTransport identifies sanitized network failures without exposing signed URLs.
+var ErrTransport = errors.New("SMH transport failure")
+
 // ErrProtocol means the response cannot establish the promised result.
 var ErrProtocol = errors.New("invalid or unsupported SMH response")
 
@@ -170,11 +173,11 @@ func safeTransportError(ctx context.Context, err error) error {
 	var u *url.Error
 	if errors.As(err, &u) {
 		if u.Timeout() {
-			return errors.New("SMH transport timeout")
+			return fmt.Errorf("SMH transport timeout: %w", ErrTransport)
 		}
-		return errors.New("SMH transport failure")
+		return ErrTransport
 	}
-	return errors.New("SMH transport failure")
+	return ErrTransport
 }
 
 // JSON issues one control-plane request. Mutations are never automatically retried.
