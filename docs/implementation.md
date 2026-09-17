@@ -41,7 +41,7 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | B10：外部 backend overview 被覆盖（已修复） | CLI 启动信息 | 上游通用注册函数保留显式提供的 Overview；SJTU 提供实验状态元数据。缺省仍读取内置配置。新增测试先失败后通过，CLI version 无原错误；见补丁 0002。 |
 | B11：WebDAV 重复 MKCOL（已修复已测路径） | C-010/014，WebDAV MKCOL | 补丁在 WebDAV 层区分已有资源；上游回归及真实重复 MKCOL 均返回 405。其他客户端并发创建仍待验收。 |
 | B12：WebDAV 完整条件写尚未验收 | C-006/014，If-None-Match/If-Match | 已修复 VFS 可见目标的 PUT If-None-Match:*，真实返回 412 且不产生上传日志；其他条件头、陈旧 VFS 缓存、网页端竞争和云端 CAS 仍未解决。 |
-| B13：macOS webdavfs 新文件写入失败 | C-001/005/008/012/014 | open 创建空文件后，write 数据的后续覆盖被拒绝。fsync 为 EPERM、close 成功，独立云端仍 0 字节；完整数据在 Prepared 日志。须解决安全覆盖及 macOS 提交语义后才能发布。 |
+| B13：macOS webdavfs 新文件写入（已修复已测路径） | C-001/005/008/012/014 | 原测试 fsync 为 EPERM、云端 0 字节。启用单客户端实验性覆盖后，新测试 open/write/fsync/close/reopen 全成功，云端 61 字节匹配，主文件与 AppleDouble 日志均 Committed。Finder 与完整故障/并发验收仍未完成。 |
 
 API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子目录”，并未承诺非空目录拒绝；不得用它直接实现 rmdir。SDK 1.0.16 multipart 响应描述是顶层 headers，但真实实例已确认使用逐片签名映射；`partNumberRange` 是明确片号列表，并非区间端点。
 
@@ -105,3 +105,11 @@ WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离�
 新增显式 `lab_overwrite`（默认 false，仍受 lab_writes 与隔离根限制）。已存在的普通文件记录 overwrite 意图及旧 ETag/大小，两个 multipart 控制请求使用相同策略；提交前检查旧身份，确认后沿用独立完整 SHA-256 对账。目录目标拒绝；未知结果不重发确认，也不执行先删后写。恢复从日志读取覆盖意图，不依赖当前配置推断。取消覆盖在上传会话消失后核对旧版本，旧版本消失或变化不标成功。
 
 模拟服务修正为分片仅写暂存、confirm 才发布，回归验证零字节旧文件的正常保存、确认已执行后丢响应只提交一次、分片失败和取消均保留旧内容与完整新 spool、目标变化阻止确认。取消回归验证旧版本不变、变化、缺失及丢响应恢复。Docker 全量 race/vet 通过。真实服务尚未重建，也尚未启用此开关；B13 的真实 macOS 写入失败仍未复测，系统验收不变。
+
+## 顺序覆盖的真实 macOS 复测
+
+随后以 `f1591d2` 重建 Compose WebDAV，仍限定原隔离根，显式设置 `TBOX_LAB_OVERWRITE=true`。HTTP WebDAV 依次保存 0/60/72 字节，三次日志均 Committed，最终独立云端下载 SHA-256 与 72 字节源一致，见 [顺序覆盖](evidence/2026-09-17/sequential-overwrite.json)。
+
+macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：open/write(61)/fsync/close 全部成功，关闭后通过挂载重读正确，独立云端下载也为完整 61 字节。旧失败证据保留，新证据见 [macOS 写入复测](evidence/2026-09-17/macos-webdav-overwrite.json)。此结果修复了已测的“创建空文件后写入被拒绝”路径；不证明全部 Finder 保存、并发、AppleDouble、网络故障或服务器发布原子性。Finder 可见挂载，但尚未执行 UI 复制或录制验收；系统分支不标 PASS。
+
+服务与实验挂载当前保留供后续 Finder 测试使用。覆盖开关为本次启动显式启用，Compose 缺省仍为 false。

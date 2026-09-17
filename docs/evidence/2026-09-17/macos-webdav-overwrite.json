@@ -1,0 +1,68 @@
+{
+  "at": "2026-09-17T06:37:28.275366+00:00",
+  "scope": "macOS webdavfs syscall write, not Finder UI",
+  "fixture": "macos-write-2b22e195",
+  "events": [
+    {
+      "operation": "open_create",
+      "ok": true
+    },
+    {
+      "operation": "write",
+      "bytes": 61,
+      "ok": true
+    },
+    {
+      "operation": "fsync",
+      "ok": true
+    },
+    {
+      "operation": "close",
+      "ok": true
+    },
+    {
+      "operation": "reopen_read",
+      "ok": true,
+      "bytes": 61
+    }
+  ],
+  "independent_cloud_http": 200,
+  "independent_cloud_size": 61,
+  "independent_cloud_matches": true,
+  "expected_sha256": "7022f403c2144f97a1f4a1d6bc28ba72c38612322f328edccb402c13710dfba4",
+  "local_source_retained": true,
+  "journals": [
+    {
+      "state": "Committed",
+      "size": 0,
+      "overwrite": false,
+      "spool_verified": true,
+      "appledouble": true
+    },
+    {
+      "state": "Committed",
+      "size": 4096,
+      "overwrite": true,
+      "spool_verified": true,
+      "appledouble": true
+    },
+    {
+      "state": "Committed",
+      "size": 0,
+      "overwrite": false,
+      "spool_verified": true,
+      "appledouble": false
+    },
+    {
+      "state": "Committed",
+      "size": 61,
+      "overwrite": true,
+      "spool_verified": true,
+      "appledouble": false
+    }
+  ],
+  "backend_commit": "f1591d2",
+  "macos_version": "26.5.2",
+  "finder_copy_executed": false,
+  "lab_overwrite_enabled": true
+}

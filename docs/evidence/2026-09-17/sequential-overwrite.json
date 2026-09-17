@@ -1,0 +1,55 @@
+{
+  "at": "2026-09-17T06:36:34.454961+00:00",
+  "scope": "HTTP WebDAV through actual SJTU; not Finder",
+  "fixture": "overwrite-9cd086c88212.txt",
+  "events": [
+    {
+      "operation": "put_and_read",
+      "put_http": 201,
+      "get_http": 200,
+      "expected_bytes": 0,
+      "match": true
+    },
+    {
+      "operation": "put_and_read",
+      "put_http": 201,
+      "get_http": 200,
+      "expected_bytes": 60,
+      "match": true
+    },
+    {
+      "operation": "put_and_read",
+      "put_http": 201,
+      "get_http": 200,
+      "expected_bytes": 72,
+      "match": true
+    }
+  ],
+  "cloud_http": 200,
+  "cloud_sha256": "e4c7b6b839f68d301ec2ee749c7d66566b298b1111a7601ee0463fe5ce946238",
+  "expected_sha256": "e4c7b6b839f68d301ec2ee749c7d66566b298b1111a7601ee0463fe5ce946238",
+  "cloud_matches": true,
+  "records": [
+    {
+      "state": "Committed",
+      "size": 0,
+      "overwrite": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "old_size": null
+    },
+    {
+      "state": "Committed",
+      "size": 72,
+      "overwrite": true,
+      "sha256": "e4c7b6b839f68d301ec2ee749c7d66566b298b1111a7601ee0463fe5ce946238",
+      "old_size": 60
+    },
+    {
+      "state": "Committed",
+      "size": 60,
+      "overwrite": true,
+      "sha256": "0747d29e7ad893f763905d3012da22604c140fd87dd66aa3d34f02b364eeb0cc",
+      "old_size": null
+    }
+  ]
+}
