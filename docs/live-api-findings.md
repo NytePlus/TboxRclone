@@ -181,3 +181,11 @@ docker compose run --rm \
 响应头已送达但正文读取中断，原代码将其归为协议错误，不能自动恢复。新增测试先复现该缺口；现将正文 I/O 失败归为脱敏传输错误，修改请求仍保留结果未知。完整但无效的 JSON 或过大响应继续作为协议错误，不自动重试。
 
 真实代理只转发 confirm 响应正文的首字节后中断，copyto 经自动只读对账退出 0；代理记录故障后的请求全部为 GET，独立完整下载 8388621 字节 SHA-256 一致。见 [正文中断证据](evidence/2026-09-17/confirm-body-auto-recovery.json)。这不是服务端 confirm 未执行的模拟，也不替代 Finder 验收。
+
+## 两次 Range 之间的外部覆盖
+
+新增显式启用的 `TestLiveReadVersionChange`，用随机生成的独立文件模拟外部写者。第一次读取旧对象前 4096 字节正确；测试写者将文件覆盖为同样大小、不同内容，info 的 ETag 发生变化；旧对象再打开第 4096～8191 字节被拒绝，未向调用者暴露内容流。新 info 对应完整下载及 Range 均与新字节一致。两份内容均为 12288 字节，完整摘要与运行日志见 [读取版本切换证据](evidence/2026-09-17/read-version-change.json)。
+
+复现使用令牌过期测试相同的私有挂载和 `TBOX_SPACE_FILE`/`TBOX_USER_TOKEN_FILE`/`TBOX_AUTH_PATH`，改为 `TBOX_LIVE_READ_CHANGE=1` 及 `go test -json ./internal/smh -run '^TestLiveReadVersionChange$' -count=1 -timeout=4m`。默认 SKIP，不对普通目录运行；只覆盖本测试刚生成的随机文件，保留最终文件。
+
+这验证元数据 validator 与实际数据读取在该实例、同大小替换场景下能阻止两次请求拼接不同版本。尚未证明单次流读取期间覆盖的快照行为、所有服务端 Range 异常或 Finder 快速查看。测试中的覆盖是故障环境模拟，不能据此给产品启用不受条件保护的覆盖。

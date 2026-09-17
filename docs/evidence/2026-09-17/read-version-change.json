@@ -1,0 +1,70 @@
+{
+  "scope": "API experiment only, not Finder acceptance",
+  "source": "internal/smh/read_live_test.go",
+  "source_sha256": "cc42b3d9eee38ff7281a8a4bc3b1267607f93926e8c1caa6c9d9b4e6162f283e",
+  "events": [
+    {
+      "Time": "2026-09-17T05:19:17.918197178Z",
+      "Action": "start",
+      "Package": "github.com/nyte/TboxRclone/internal/smh"
+    },
+    {
+      "Time": "2026-09-17T05:19:17.919599803Z",
+      "Action": "run",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveReadVersionChange"
+    },
+    {
+      "Time": "2026-09-17T05:19:17.919609803Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveReadVersionChange",
+      "Output": "=== RUN   TestLiveReadVersionChange\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:18.506491554Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveReadVersionChange",
+      "Output": "    read_live_test.go:111: fixture=codex-api-lab/run-20260917T020318Z-f0339b72/read-change-e96040d5ab7501d17d7c95bbd5ef8536.bin old_sha256=36782996f52e45494343643c1913e80a5b921a7483245d93fce78ed303c01fa8 new_sha256=e1f4a2f43ab7fc5368935911567c3125c5361a9c8a51d0d6b12f97b625b97f2e stale_range_rejected=true fresh_reads_match=true\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:18.506590512Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveReadVersionChange",
+      "Output": "--- PASS: TestLiveReadVersionChange (0.59s)\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:18.506607512Z",
+      "Action": "pass",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Test": "TestLiveReadVersionChange",
+      "Elapsed": 0.59
+    },
+    {
+      "Time": "2026-09-17T05:19:18.506678637Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "PASS\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:18.51904772Z",
+      "Action": "output",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Output": "ok  \tgithub.com/nyte/TboxRclone/internal/smh\t0.601s\n"
+    },
+    {
+      "Time": "2026-09-17T05:19:18.519091762Z",
+      "Action": "pass",
+      "Package": "github.com/nyte/TboxRclone/internal/smh",
+      "Elapsed": 0.601
+    }
+  ],
+  "limitations": [
+    "Same-size content replacement between requests only",
+    "Does not prove mid-response snapshot isolation",
+    "Does not provide atomic conditional writes",
+    "Generated fixture retained"
+  ]
+}
