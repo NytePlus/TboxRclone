@@ -44,10 +44,10 @@ docker compose run --rm -v "$PWD/.secrets:/secrets:ro" go-tests go run ./cmd/tbo
 
 开启写实验时，将 `lab_writes` 改为 `true`，并使用 `sjtu:codex-api-lab/<run-id>` 作为远端，挂载持久的 `/state` 卷。默认 spool 上限为 64 MiB，可配置；所有文件（包括空文件）统一采用可续签的 multipart；4 MiB 分片、最多 4 片并发，最多 10000 片。新建时直接使用初始化返回的签名，恢复时才查询并续签。已支持原会话显式续传，自动恢复尚未实现。所有上传先完整 spool，校验输入长度并 fsync，然后初始化会话、上传、确认、独立读取 SHA-256。失败后保留完整数据；不会先删除旧文件。
 
-WebDAV 只读入口（本机 8686）：
+WebDAV 实验入口（本机 8686）：
 
 ```sh
-docker compose --profile live up webdav
+TBOX_LAB_REMOTE='sjtu:codex-api-lab/<run-id>' docker compose --profile live up -d --wait webdav
 ```
 
 Compose 使用 `--vfs-cache-mode off`。这只是实验配置，不代表已经满足 Finder 的随机写、安全保存或跨盘移动契约。不要用正式数据试验跨盘移动。
@@ -65,6 +65,19 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
 ```
 
 主机没有 Go 时通过 Compose 执行以上命令，并挂载对应私有目录。恢复工具也支持 `-user-token-file /secrets/user-token -organization-id 1` 自动取得令牌。鉴权失败会使缓存失效，但不会自动重放刚才的请求，尤其不会重放写操作。对账不会重发 confirm、初始化、删除或 abort。只有上传会话已确认、路径一致、完整远端内容和本地 spool 的 SHA-256 一致才记为 Committed。分片 Uploading 状态可以使用相同命令的 `-resume <operation-id>` 显式恢复：重新验证本地数据、远端会话与已确认分片，续签后补传未确认片；已提交/Unknown 状态仅只读对账。片号列表不是区间；丢失应答的分片会在原 uploadId/partNumber 上重传相同字节。过期会话、InitSent 丢响应、旧版简单上传中断和内容冲突仍保留本地数据，不盲目创建新会话，也不自动恢复。已提交 spool 也保留，不会自动垃圾回收；磁盘不足会导致上传失败。
+
+## WebDAV 协议检查
+
+服务指向隔离实验目录后，可执行：
+
+```sh
+# Mac 本机没有 Go 时先用 Docker 构建原生检查器
+# 此命令以 Apple Silicon 为例。
+docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o bin/davcheck ./cmd/davcheck
+bin/davcheck -url http://127.0.0.1:8686/ -allow-lab-writes > reports/webdav-check.json
+```
+
+检查器只接受 loopback IP，以随机目录创建固定测试数据并保留现场。任一 HTTP 状态或内容不满足契约就返回非零；当前实测 11 项通过、2 项失败：重复 MKCOL 为 201 而非 405，条件 PUT 为 405 而非 412。这是协议诊断，不是 Finder 验收，也不更新 manifest 为 PASS。
 
 ## 验收
 

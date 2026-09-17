@@ -37,6 +37,8 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | B08：宿主机掉电持久边界未验证 | C-003 | fsync 与日志重开测试不等于宿主机掉电测试；不能宣称掉电零丢失。 |
 | B09：macOS 原生 mount 尚未接入 | 原生 mount 验收路径 | 已提供 macOS CLI 构建；Finder/WebDAV 和原生 mount 是不同路径。 |
 | B10：上游静态 overview 未包含外部 backend | CLI 启动信息 | rclone 注册时输出 `no overview data found for "sjtu"`，随后能列出并配置 sjtu；需后续可复现的上游元数据接线，不能将此错误日志隐藏。 |
+| B11：WebDAV 重复 MKCOL 返回错误状态 | C-010/014，WebDAV MKCOL | 真实端到端连续两次 MKCOL 均 201，应对已存在目录返回 405；上游 VFS 的幂等 Mkdir 泄漏到了 WebDAV。 |
+| B12：WebDAV PUT 条件头未正确阻止写入流程 | C-006/014，If-None-Match | 已有文件 PUT If-None-Match:* 返回 405 而非 412，且产生 Prepared 上传日志；原内容由后端拒绝覆盖保住，不能当作条件请求已实现。 |
 
 API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子目录”，并未承诺非空目录拒绝；不得用它直接实现 rmdir。SDK 1.0.16 multipart 响应描述是顶层 headers，但真实实例已确认使用逐片签名映射；`partNumberRange` 是明确片号列表，并非区间端点。
 
@@ -51,3 +53,5 @@ API `directory_only=1` 的 SDK 原文只承诺“不级联删除子文件和子�
 新增实验确认简单上传不能通过 renew 续签，而空文件和微小文件可用单片 multipart 完整提交。后端统一走分片恢复状态机，并直接利用初始化签名，省去新建时重复的状态查询、续签及 spool 重读。新增 0/1/4 MiB 边界±1 覆盖。真实 Linux 容器内 SIGINT 和 SIGKILL 在数据面应答暂扣时分别执行，新进程均从原会话恢复，独立 SHA-256 一致；这不是 macOS/Finder 或掉电测试。
 
 新发现 `ask` 只在 confirm 才阻止竞争创建（第二个会话 409），同名初始化仍 201；错误 CAS 不能保护覆盖和移动。目录专用移动 204 后子项仍可达，但缺少可靠身份及并发前置条件，因此暂不注册 Move/DirMove。签名接口可一次返回明确列举的 50 和 51 个授权，前端“50”不能当成服务端硬上限。详见 [真实接口实验](live-api-findings.md)。
+
+WebDAV 服务已通过 Compose 使用可配置的 TBOX_LAB_REMOTE 指向隔离目录，加入 OPTIONS 健康检查。`cmd/davcheck` 在 macOS 原生执行对该服务的 13 项协议检查，11 项 PASS、2 项 FAIL，并以非零退出；失败是 B11/B12，见 [协议检查记录](evidence/2026-09-17/webdav-check.json)。这是 rclone→真实 SJTU 的协议链路，不是 Finder 用户路径。Finder Computer Use 用应用名及 com.apple.finder 均返回 cgWindowNotFound，未取得可操作窗口，因此本轮没有产生 Finder 录屏，也没有标记任何系统分支通过。

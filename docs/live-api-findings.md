@@ -99,3 +99,13 @@ Go 客户端已按真实 `POST /user/v1/space/1/personal?user_token=...` 协议�
 已确认片不重传另由离线请求计数测试验证；上述真实实验的恢复阶段使用直连，未采集恢复阶段逐片请求计数。
 
 这两项是 Linux 进程中断证据，不是 macOS Finder 录屏、宿主机崩溃或掉电持久性证据；ST-003 等系统分支仍未标为 PASS。
+
+## 真实 WebDAV 链路
+
+Compose 服务指向隔离实验目录，Mac 原生 `davcheck` 通过 loopback 请求 rclone serve webdav，再由 sjtu backend 访问真实云盘。[13 项检查](evidence/2026-09-17/webdav-check.json) 中 11 项满足预期、2 项不满足：
+
+- 新文件 PUT 201，完整 GET 内容一致，HEAD 长度正确；Range 为 206 且字节/Content-Range 正确，越界 416；错误 GET If-Match 为 412，命中 If-None-Match 为 304；目录 PROPFIND 为 207 且包含文件。
+- 重复 MKCOL 仍返回 201，应为 405。
+- 已有文件的 PUT If-None-Match:* 返回 405，应为 412。服务日志表明仍进入后端上传准备，产生 Prepared 日志后因禁止覆盖而失败；独立 GET 保留原内容。
+
+协议工具会对这两项失败返回非零。这些实际失败不能被上游本地后端测试通过掩盖；也不能将 curl/HTTP 请求替代 Finder 用户操作。Finder 自动化目前两次返回 cgWindowNotFound，尚无可操作窗口或 UI 录屏。
