@@ -6,7 +6,7 @@
 
 Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；必要的上游修复保存在 `patches/rclone/`，按固定版本重放。
 
-**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。覆盖、文件删除和空目录删除默认关闭，非空目录递归删除仍拒绝；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（lab_overwrite=true）及文件/空目录回收站删除（lab_delete=true，配合 --exclusive-access --no-recursive-delete）。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
+**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。覆盖、文件删除和空目录删除默认关闭，非空目录递归删除仍拒绝；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（lab_overwrite=true）及文件/空目录回收站删除（lab_delete=true）。Compose 入口由 Tbox WebDAV guard 统一裁决请求冲突，内部 rclone WebDAV core 仍以 VFS cache off 和 no-recursive-delete 运行。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
 
 ## 构建与离线测试
 
@@ -70,6 +70,14 @@ WebDAV 实验入口（本机 8686）：
 TBOX_LAB_REMOTE='sjtu:codex-api-lab/<run-id>' docker compose --profile live up -d --wait webdav
 ```
 
+Finder 验收必须使用隔离实验配置，并显式开启该配置中的 `lab_writes = true`；默认的 `/secrets/rclone.conf` 保持只读安全设置。将专用配置放在 `.secrets/rclone-finder.conf` 后，可通过 `TBOX_RCLONE_CONFIG=/secrets/rclone-finder.conf` 选择它：
+
+```sh
+TBOX_RCLONE_CONFIG=/secrets/rclone-finder.conf \
+TBOX_LAB_REMOTE='sjtu:codex-api-lab/<run-id>' \
+docker compose --profile live up -d --wait webdav
+```
+
 macOS 挂载必须放在项目及 Docker bind mount 之外，避免将服务自己的网盘再暴露给容器文件共享：
 
 ```sh
@@ -79,6 +87,19 @@ python3 scripts/mount-webdav-macos.py check
 ```
 
 默认位置为 `/private/tmp/tboxrclone-webdav-<uid>`。可用 `TBOX_WEBDAV_MOUNT` 指定其他项目外路径，但不能位于任何额外的 Docker bind mount 内。入口拒绝项目内及与项目重叠的路径；不再使用 `.state/webdav-mount`。临时目录仅用作挂载点，恢复日志仍位于原 `.state`，不会迁移或清除。每次测试先运行 check，不能只检查目录存在。
+
+Finder 拖拽前还要准备本地 fixture，确保它由当前普通用户拥有，避免从 Docker 导出的文件触发系统密码提示：
+
+```sh
+scripts/prepare-finder-fixture.sh /private/tmp/tboxrclone-finder-<run-id>
+```
+
+`finder-drag.swift` 必须从已授予“屏幕录制”和“辅助功能”的 Terminal（或 Codex Computer Use）进程运行；受限 shell 启动的 Swift 子进程可能看不到 Finder 窗口。入口是版本化 wrapper `scripts/finder-drag.sh`，它会先执行 Swift 语法检查并使用可写 ModuleCache：
+
+```sh
+scripts/finder-drag.sh \
+  SOURCE_TITLE TARGET_TITLE FILENAME
+```
 
 Compose 使用 `--vfs-cache-mode off`。这只是实验配置，不代表已经满足 Finder 的随机写、安全保存或跨盘移动契约。不要用正式数据试验跨盘移动。
 
@@ -122,3 +143,26 @@ docker compose run --rm go-tests go run ./cmd/verify
 ```
 
 完整 SJTU `fstests` 使用 `backend/sjtu/integration_test.go`。必须显式提供 `TBOX_LIVE_REMOTE=TestSjtu:codex-api-lab/<run-id>` 及私有配置。未提供时显示 SKIP/BLOCKED，不能当成通过。真实全套入口已执行并观察到删除/清理相关失败，240 秒处超时，尚未覆盖全部子测试；不能通过筛掉失败项来改变结果。见 [真实接口实验](docs/live-api-findings.md)。
+
+Finder 测试入口固定版本 `2026-09-20.2` 支持先打开并排列两个独立列表窗口：
+
+```sh
+scripts/finder-drag.sh --open SOURCE_DIRECTORY TARGET_DIRECTORY
+```
+
+然后使用上述标题及文件名执行拖拽。2026-09-20 的 sequential-001 实测完成 Finder 拷贝，独立云端下载 65,536 字节与源 SHA-256 一致；用户确认全过程无弹窗。证据位于 `docs/evidence/2026-09-20/sequential-001`。这不代表全部系统场景或旧未决路径已通过。
+
+固定测试流程：
+
+```sh
+scripts/finder-drag.sh --preflight SOURCE TARGET FILE MOUNT
+scripts/finder-drag.sh --record SOURCE TARGET FILE MOUNT NEW_EVIDENCE_DIR
+```
+
+预检拒绝复用已有目标文件或带未决 guard 记录的路径，不删除记录。录制模式先打开窗口，再启动所有活动显示器的 15 秒录屏，正常等待录制结束，并保存命令日志。文件存在仅证明录像已输出，还需验证可解码、审阅全过程、确认拷贝结束和内容一致；若录制结束时操作仍在进行，录像不能证明全过程无弹窗；须单独记录用户全程观察或其他完整证据。当前指定的 20260919125000 目标已有未决记录，预检会阻止重复基线测试。
+
+录制入口退出码：`1` 表示执行或录制失败，`2` 表示预检或参数阻止执行，`3` 表示证据已采集但尚待完整审阅和内容校验。录制入口不会返回代表验收通过的 `0`。
+
+若目的是复现原路径的未决记录错误，可显式使用 `finder-drag.sh --record-repro SOURCE TARGET FILE MOUNT NEW_EVIDENCE_DIR`。它只放行未决记录这一项前置条件，记录警告和 `fresh_acceptance_eligible=false`；不删除记录，也不构成正式验收。录屏不可用时仍会在拖拽前停止。
+
+该已验证服务配置要求启用零字节 guard 及 `TBOX_LAB_OVERWRITE=true`，仅用于既定单客户端隔离测试根。覆盖使用持久日志和内容校验，旧未决状态不得清除。

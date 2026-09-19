@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-18",
+  "run_id": "finder-barrier-1789742283",
+  "scenario": "ST-001-T",
+  "status": "FAIL",
+  "source_path": "/private/tmp/tboxrclone-finder-barrier-1789742283/finder-barrier-1789742283.bin",
+  "destination_path": "/private/tmp/tboxrclone-webdav-501/finder-normal-c188d19f1620",
+  "source_sha256": "5f6b017e1a9397ec5c9cb4c76a524a2b2721fdd60d0bd19e024247aaed0677ce",
+  "source_size": 8388608,
+  "window_ids": [28909, 28945],
+  "recording": "finder-barrier.mp4",
+  "observation": "The restricted two-window Finder recording completed and the drag event was delivered. Server logs showed directory PROPFIND requests but no content PUT for this run, so no upload or atomic-visibility claim can be made.",
+  "verdict": "FAIL",
+  "unresolved": true
+}

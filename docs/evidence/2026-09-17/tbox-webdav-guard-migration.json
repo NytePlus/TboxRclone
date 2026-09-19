@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-09-17T15:10:14Z",
+  "git_head": "c04d042c9419fdea32c85a2d02c40747c002ffde",
+  "rclone_base": "687d264b689b8c49a67e2e52a8a5e0caa01c04ce",
+  "public_service": "tbox-webdav-guard on 127.0.0.1:8686",
+  "private_service": "rclone serve webdav on project-internal port 8685",
+  "guard_binary_sha256": "0b683870c458071d2908e5b69d0d7aa4c4175831a47da2c906cc19c78a40783d",
+  "core_binary_sha256": "a739f3710e228ddf7a4d2f19bc89d532d83975c0e82d316bddb4c6aebf2c9c9e",
+  "live_probe": {
+    "path": "guard-migration-7d4c1b.bin",
+    "first_request": "PUT headers accepted with Expect: 100-continue; body deliberately withheld",
+    "conflicting_get_status": 423,
+    "unrelated_options_status": 200,
+    "action": "client connection closed without sending the declared body",
+    "core_error_category": "failed to read upload input: context canceled",
+    "final_path_status": 404,
+    "journal_records_for_path": 0
+  },
+  "unit_coverage": [
+    "same-path read/write and write/write rejection",
+    "directory ancestor conflict rejection",
+    "unrelated path concurrency",
+    "multiple readers",
+    "MOVE source and destination acquisition",
+    "BaseURL and Destination shared namespace",
+    "same, ancestor, descendant and encoded alias rejection",
+    "outside-prefix and cross-host rejection",
+    "reverse proxy preservation of public Host and Destination"
+  ],
+  "validation": {
+    "project_go_test_race": "pass",
+    "project_go_vet": "pass",
+    "upstream_webdav_race": "pass",
+    "patch_replay_seven_files": "byte-identical",
+    "rclone_patch_check": "pass",
+    "macos_mount_recreated": true,
+    "compose_services_healthy": [
+      "webdav",
+      "webdav-core"
+    ]
+  },
+  "scope": "Proves request-lifetime guard migration and interrupted-request cleanup. It does not prove long-lived Finder handle ownership, persistent WebDAV locks, the Finder zero-byte publication boundary, or any system acceptance PASS."
+}

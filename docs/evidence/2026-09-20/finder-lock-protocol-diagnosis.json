@@ -1,0 +1,11 @@
+{
+  "status": "PROTOCOL_DEFECT_CONFIRMED_UI_CAUSALITY_UNPROVEN",
+  "source": "internal/webdavguard/guard.go",
+  "finding": "Synthetic LOCK returns HTTP 200 and Lock-Token, but an empty DAV:lockdiscovery instead of information about the granted lock.",
+  "reference": "https://www.rfc-editor.org/rfc/rfc4918#section-9.10.1",
+  "live_services": "webdav and webdav-core healthy when inspected",
+  "request_history": "docker compose --profile live logs --tail 40 webdav returned no request history; handler currently has no access logging",
+  "pending_receipts": "Preserved; no deletion, unlock, or retry against the unresolved original path.",
+  "next_required": "Reproduce and test synthetic LOCK response in isolation, correct response and token lifecycle, then rerun full-desktop recorded Finder acceptance with independent content verification.",
+  "finder_acceptance": "FAIL previously observed in-use dialog; no new UI run in this diagnostic step"
+}

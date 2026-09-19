@@ -1,0 +1,17 @@
+finder_drag_wrapper_version=2026-09-20.2-rc1
+finder_drag_start source=tboxrclone-finder-finder-guard-20260919125000 target=finder-target-finder-guard-20260919125000 item=finder-content-202609200119.bin
+finder_windows_found
+source_window=33330 target_window=33332
+finder_source_row_found
+drag_coordinates start=(261.0, 155.0) end=(1410.75, 593.5)
+visibility_check source_expected=33330 source_top=33330 source_hit=true target_expected=33332 target_top=33332 target_hit=true
+finder_drag_endpoints_visible
+finder_drag_events_begin
+drag_delivered
+/Users/nyte/Documents/ChatGPT/TboxRclone/scripts/finder-drag.swift:36:51: warning: forming 'UnsafeMutableRawPointer' to a variable of type 'T'; this is likely incorrect because 'T' may contain an object reference.
+ 34 |     guard AXUIElementCopyAttributeValue(element, attribute, &raw) == .success,
+ 35 |           let raw, CFGetTypeID(raw) == AXValueGetTypeID() else { return false }
+ 36 |     return AXValueGetValue(raw as! AXValue, type, &value)
+    |                                                   `- warning: forming 'UnsafeMutableRawPointer' to a variable of type 'T'; this is likely incorrect because 'T' may contain an object reference.
+ 37 | }
+ 38 | 

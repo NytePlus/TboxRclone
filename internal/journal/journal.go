@@ -19,24 +19,25 @@ import (
 
 // Record is the durable upload state; it contains no access token or signed URL.
 type Record struct {
-	ID         string `json:"id"`
-	Kind       string `json:"kind,omitempty"`
-	SourcePath string `json:"source_path,omitempty"`
-	RecycledID string `json:"recycled_item_id,omitempty"`
-	Scope      string `json:"scope"`
-	Path       string `json:"path"`
-	Size       int64  `json:"size"`
-	SHA256     string `json:"sha256"`
-	State      string `json:"state"`
-	ConfirmKey string `json:"confirm_key,omitempty"`
-	OldCAS     string `json:"old_cas,omitempty"`
-	Overwrite  bool   `json:"overwrite,omitempty"`
-	OldETag    string `json:"old_etag,omitempty"`
-	OldSize    int64  `json:"old_size,omitempty"`
-	UploadID   string `json:"upload_id,omitempty"`
-	UploadPath string `json:"upload_path,omitempty"`
-	PartSize   int64  `json:"part_size,omitempty"`
-	Parts      []Part `json:"parts,omitempty"`
+	SpoolReleased bool   `json:"spool_released,omitempty"`
+	ID            string `json:"id"`
+	Kind          string `json:"kind,omitempty"`
+	SourcePath    string `json:"source_path,omitempty"`
+	RecycledID    string `json:"recycled_item_id,omitempty"`
+	Scope         string `json:"scope"`
+	Path          string `json:"path"`
+	Size          int64  `json:"size"`
+	SHA256        string `json:"sha256"`
+	State         string `json:"state"`
+	ConfirmKey    string `json:"confirm_key,omitempty"`
+	OldCAS        string `json:"old_cas,omitempty"`
+	Overwrite     bool   `json:"overwrite,omitempty"`
+	OldETag       string `json:"old_etag,omitempty"`
+	OldSize       int64  `json:"old_size,omitempty"`
+	UploadID      string `json:"upload_id,omitempty"`
+	UploadPath    string `json:"upload_path,omitempty"`
+	PartSize      int64  `json:"part_size,omitempty"`
+	Parts         []Part `json:"parts,omitempty"`
 }
 
 // Part records immutable spool identity and acknowledged remote content.
@@ -50,8 +51,12 @@ type Part struct {
 // Store holds a journal lock. Recovery uses an exclusive lock; backend operations
 // may use shared locks while the service owns all relevant paths exclusively.
 type Store struct {
+	// MaxSpoolBytes limits all .data files including completed and orphan data.
+	// Zero is unlimited for standalone callers. Set before preparing operations.
+	MaxSpoolBytes int64
 	Dir           string
 	lock          *os.File
+	exclusive     bool
 	syncDirectory func(string) error
 }
 
@@ -142,7 +147,7 @@ func openMode(dir string, mode int) (*Store, error) {
 		}
 		return nil, err
 	}
-	return &Store{Dir: dir, lock: f, syncDirectory: syncDir}, nil
+	return &Store{Dir: dir, lock: f, exclusive: mode == syscall.LOCK_EX, syncDirectory: syncDir}, nil
 }
 
 // Close releases the process lock.
@@ -300,13 +305,28 @@ func (s *Store) prepare(ctx context.Context, scope, p string, in io.Reader, size
 			os.Remove(file)
 		}
 	}()
+	reserved := max
+	if size >= 0 {
+		reserved = size
+	}
+	if e = s.reserveSpool(ctx, f, reserved); e != nil {
+		f.Close()
+		return nil, e
+	}
+	var output io.Writer = f
+	if s.MaxSpoolBytes != 0 {
+		output = &boundedSpool{f: f, remaining: reserved}
+	}
 	h := sha256.New()
-	n, e := io.Copy(io.MultiWriter(f, h), io.LimitReader(&contextReader{ctx, in}, max+1))
+	n, e := io.Copy(io.MultiWriter(output, h), io.LimitReader(&contextReader{ctx, in}, max+1))
 	if e == nil && n > max {
 		e = errors.New("upload exceeds configured spool limit")
 	}
 	if e == nil && size >= 0 && n != size {
 		e = fmt.Errorf("input length mismatch: expected %d received %d", size, n)
+	}
+	if e == nil {
+		e = f.Truncate(n)
 	}
 	if e == nil {
 		e = f.Sync()
@@ -346,6 +366,9 @@ func (r *contextReader) Read(p []byte) (int, error) {
 
 // Data verifies the spool's hash before returning a reader positioned at byte zero.
 func (s *Store) Data(r *Record) (*os.File, error) {
+	if r.SpoolReleased {
+		return nil, errors.New("committed spool explicitly released")
+	}
 	if !validID(r.ID) {
 		return nil, errors.New("invalid operation ID")
 	}

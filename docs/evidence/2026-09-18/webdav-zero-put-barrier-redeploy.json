@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-18",
+  "scope": "post-redeploy guard smoke check; not Finder system acceptance",
+  "service": "127.0.0.1:8686",
+  "path": "guard-redeploy-1789746407",
+  "initial_put": 201,
+  "propfind_before_commit": 404,
+  "interpretation": "The newly recreated public guard loaded the current implementation and retained the zero-byte creation barrier. The pending state is intentionally retained for later reconciliation.",
+  "unresolved": true
+}

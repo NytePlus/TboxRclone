@@ -1,0 +1,26 @@
+{
+  "acceptance": "FAIL",
+  "reason": "Full desktop recording contains Finder in-use errors; target remains empty in current Computer Use inspection.",
+  "password_dialog": "UNDETERMINED_FOR_RECORDED_RUN; earlier user-reported prompt remains a failure, not overwritten by OCR.",
+  "final_script": "NOT_FINALIZED",
+  "process_changes": [
+    "Full desktop capture before opening Finder windows",
+    "Unresolved receipt preflight without deletion",
+    "Nonzero incomplete-review exit status",
+    "Timestamped operation timeline"
+  ],
+  "outstanding": [
+    "New recorded test blocked by zero active displays and black desktop capture; awaiting visible unlocked desktop",
+    "Recorded run did not establish successful upload",
+    "Synthetic lock lifecycle changes are unverified and not deployed"
+  ],
+  "evidence": [
+    "finder-full-desktop.mov",
+    "finder-full-desktop-result.json"
+  ],
+  "no_claims": [
+    "No claim of zero password dialogs",
+    "No claim of successful remote content verification"
+  ],
+  "video_audit": "Completed: 1862 frames, zero OCR failures; visible in-use errors confirmed, no password absence claim"
+}

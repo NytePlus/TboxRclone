@@ -1,0 +1,43 @@
+{
+  "run_id": "finder-repeat-c531c40e1a59",
+  "scenario_id": "ST-001-T",
+  "status": "FAIL",
+  "purpose": "Fresh actual Finder drag rerun requested after mouse interference",
+  "git_head": "c04d042c9419fdea32c85a2d02c40747c002ffde",
+  "expected_size": 8388625,
+  "expected_sha256": "f68bf3f879777187d58bb3d1b7d293dcdd1120b4a306b4ec035ebdbbc17c6897",
+  "source_sha256_after": "f68bf3f879777187d58bb3d1b7d293dcdd1120b4a306b4ec035ebdbbc17c6897",
+  "cloud_samples": 244,
+  "zero_byte_samples": 164,
+  "zero_byte_first": "2026-09-17T13:27:10.935195167Z",
+  "zero_byte_last": "2026-09-17T13:27:36.041741388Z",
+  "matching_full_reads": 2,
+  "transport_errors": 0,
+  "journal": [
+    {
+      "id": "1c307c0f5074c4700fde2dacdb0948a1",
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/finder-normal-c188d19f1620/finder-repeat-c531c40e1a59.bin",
+      "size": 8388625,
+      "sha256": "f68bf3f879777187d58bb3d1b7d293dcdd1120b4a306b4ec035ebdbbc17c6897",
+      "state": "Committed"
+    },
+    {
+      "id": "93c8a25a3c78c11f5de4846449db3ca9",
+      "path": "codex-api-lab/run-20260917T020318Z-f0339b72/finder-normal-c188d19f1620/finder-repeat-c531c40e1a59.bin",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "state": "Committed"
+    }
+  ],
+  "recording_seconds": 105.7,
+  "visually_checked_frame_seconds": 90,
+  "visual_observation": "Both scoped Finder windows visible; target test file shows copy progress at frame 90. Final cloud completion established by two independent full reads, not that frame.",
+  "observation": "Fresh drag reached target; cloud formal path exposed zero-byte file across 164 samples spanning 25.1 seconds, then two complete reads matched source. Atomic visibility requirement fails independently of previous mouse-interfered attempt.",
+  "artifacts_directory": "evidence/ST-001-T/finder-repeat-c531c40e1a59",
+  "artifacts_sha256": {
+    "request-sequence.log": "35236720028e4ef97058aa9c18492bb9409c497e15cd5a416db38acac706ed43",
+    "cloud-observations.json": "bdb20d09eaf9d5ab903b664d177f88ff6c9b3ff95086a2e1cc44f91bec480e1f",
+    "finder-upload.mp4": "f2e0d2b26ed5ae6f0c7395f7fc20f8962414c3804bda85aec2d71ab42b184764",
+    "result-frame.png": "dc69f0eb23328b4efd878f822f2b79bf5861be2090e74671b373397edd0f74a5"
+  }
+}

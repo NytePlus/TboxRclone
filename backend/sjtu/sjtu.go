@@ -46,6 +46,7 @@ func init() {
 			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
 			{Name: "lab_move", Default: false, Help: "Experimental journaled file and directory moves under the single-controlled-client contract; requires lab_writes."},
 			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
+			{Name: "max_spool", Default: fs.SizeSuffix(4 << 30), Help: "Aggregate logical spool budget including completed, pending and orphan data. Unknown-length inputs reserve max_upload. Does not reserve physical disk blocks."},
 			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable spool size, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
 		}})
 }
@@ -65,6 +66,7 @@ type Options struct {
 	LabOverwrite  bool                 `config:"lab_overwrite"`
 	LabDelete     bool                 `config:"lab_delete"`
 	LabMove       bool                 `config:"lab_move"`
+	MaxSpool      fs.SizeSuffix        `config:"max_spool"`
 	MaxUpload     fs.SizeSuffix        `config:"max_upload"`
 }
 
@@ -85,7 +87,7 @@ type Object struct {
 
 // NewFs creates a backend. Destructive capabilities remain disabled until validated.
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
-	opt := Options{Enc: defaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, Organization: "1"}
+	opt := Options{Enc: defaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, MaxSpool: 4 << 30, Organization: "1"}
 	if err := configstruct.Set(m, &opt); err != nil {
 		return nil, err
 	}
@@ -95,6 +97,9 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 	}
 	if opt.MaxUpload <= 0 || opt.MaxUpload > 1<<40 {
 		return nil, errors.New("max_upload must be between 1 byte and 1 TiB")
+	}
+	if opt.MaxSpool <= 0 || opt.MaxSpool > 1<<50 {
+		return nil, errors.New("max_spool must be between 1 byte and 1 PiB")
 	}
 	c, err := smh.New(opt.Endpoint, opt.Library, opt.Space, opt.TokenFile)
 	if err != nil {
@@ -410,6 +415,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		return fserrors.NoRetryError(e)
 	}
 	defer s.Close()
+	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
 	r, e := s.Prepare(ctx, scope, p, in, src.Size(), int64(f.opt.MaxUpload))
 	if e != nil {

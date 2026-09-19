@@ -1,0 +1,10 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tboxrclone-finder-finder-guard-20260919125000/finder-localread-202609200129.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/finder-target-localread-202609200129/finder-localread-202609200129.bin",
+  "remote_path": "/finder-target-localread-202609200129/finder-localread-202609200129.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "ui_success": "NOT_TESTED"
+}

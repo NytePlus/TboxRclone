@@ -1,0 +1,13 @@
+{
+  "status": "INCOMPLETE",
+  "mount_present_at_check": true,
+  "capture_max_seconds": 15,
+  "main_file_http": 404,
+  "metadata_put_bytes": 4096,
+  "finding": "Finder GET/PROPFIND of pending main object receives 404 after LOCK; local placeholder read semantics need correction.",
+  "path_hashes": {
+    "finder-content-202609200119.bin": "ca3e0cc9ba77af604d969f5134c1ffdc9d049e7456f1e4e7863079d6cd90a13c",
+    "._finder-content-202609200119.bin": "23bd6e4590ccbd43eb688497a2b7306d5b0f9ea60e5f490a1d4aaeeace79489c"
+  },
+  "no_password_absence_claim": true
+}

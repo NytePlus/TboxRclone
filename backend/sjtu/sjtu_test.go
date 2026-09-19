@@ -447,3 +447,19 @@ func TestMkdirCannotReplaceDurablyReservedFile(t *testing.T) {
 		})
 	}
 }
+
+func TestAggregateQuotaRejectsBeforeUploadInitialization(t *testing.T) {
+	f, sim := newSimulator(t, false)
+	f.opt.MaxSpool = 3
+	src := object.NewStaticObjectInfo("file", time.Now(), 4, true, nil, f)
+	if _, err := f.Put(context.Background(), strings.NewReader("safe"), src); err == nil {
+		t.Fatal("accepted over-budget upload")
+	}
+	if sim.init != 0 || sim.confirm != 0 {
+		t.Fatal("quota failure mutated cloud", sim.init, sim.confirm)
+	}
+	f.opt.MaxSpool = 4
+	if _, err := f.Put(context.Background(), strings.NewReader("safe"), src); err != nil {
+		t.Fatal(err)
+	}
+}

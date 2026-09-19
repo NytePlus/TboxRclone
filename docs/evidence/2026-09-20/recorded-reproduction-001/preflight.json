@@ -1,0 +1,12 @@
+{
+  "status": "READY_FOR_FAILURE_REPRODUCTION",
+  "source": "/private/tmp/tboxrclone-finder-finder-guard-20260919125000/finder-guard-20260919125000.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/finder-target-finder-guard-20260919125000/finder-guard-20260919125000.bin",
+  "remote_path": "/finder-target-finder-guard-20260919125000/finder-guard-20260919125000.bin",
+  "errors": [],
+  "warnings": [
+    "Unresolved guard receipt: /Users/nyte/Documents/ChatGPT/TboxRclone/.state/webdav-guard/2f66696e6465722d7461726765742d66696e6465722d67756172642d32303236303931393132353030302f66696e6465722d67756172642d32303236303931393132353030302e62696e.json"
+  ],
+  "fresh_acceptance_eligible": false,
+  "ui_success": "NOT_TESTED"
+}

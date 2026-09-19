@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-17T13:35:51.764211+00:00",
+  "binary_sha256": "a101ef94c014aa49a265b248a82d4783764a015e335536582764ddf7638a16ee",
+  "service_healthy": true,
+  "mount_recreated_and_verified": true,
+  "fixture": "/private/tmp/tboxrclone-webdav-501/finder-normal-c188d19f1620/finder-repeat-c531c40e1a59.bin",
+  "size": 8388625,
+  "sha256": "f68bf3f879777187d58bb3d1b7d293dcdd1120b4a306b4ec035ebdbbc17c6897",
+  "quota_default": "4Gi",
+  "journal_crash_tests": "reports/spool-quota-crash-checks.log",
+  "scope": "Deployment smoke and local journal SIGKILL tests only; no system acceptance branch promoted."
+}

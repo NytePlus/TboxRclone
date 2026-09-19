@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-19",
+  "scenario": "Finder drag tool preflight",
+  "status": "BLOCKED",
+  "observations": [
+    {
+      "step": "swift interpreter with default module cache",
+      "result": "FAIL",
+      "error": "Operation not permitted writing /var/folders/.../SwiftShims.pcm"
+    },
+    {
+      "step": "swift interpreter with writable module cache",
+      "result": "FAIL",
+      "error": "AppleScript Finder activation returned -1728 Can’t get application Finder; hiservices-xpc Connection invalid"
+    },
+    {
+      "step": "NSRunningApplication Finder enumeration",
+      "result": "FAIL",
+      "error": "Finder is not running, while the Finder UI was visible in the desktop layer"
+    },
+    {
+      "step": "CGWindowListCopyWindowInfo visible Finder windows",
+      "result": "FAIL",
+      "error": "visible Finder window list was empty"
+    },
+    {
+      "step": "pgrep Finder from shell",
+      "result": "FAIL",
+      "error": "Cannot get process list; sysmond service not found"
+    }
+  ],
+  "interpretation": "The drag event was not sent in this attempt. The current shell/Swift process lacks stable process/window visibility required to locate Finder coordinates. This is an environment/TCC boundary and is not evidence that the WebDAV upload path accepted or rejected content.",
+  "system_status": "No test-manifest branch promoted; ST-001-T remains FAIL."
+}

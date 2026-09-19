@@ -1,0 +1,13 @@
+{
+  "status": "BLOCKED",
+  "source": "/private/tmp/tboxrclone-finder-finder-guard-20260919125000/finder-content-202609200119.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/finder-target-finder-guard-20260919125000/finder-content-202609200119.bin",
+  "remote_path": "/finder-target-finder-guard-20260919125000/finder-content-202609200119.bin",
+  "errors": [
+    "Source and target directories must exist",
+    "Expected mount is not mounted as WebDAV"
+  ],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "ui_success": "NOT_TESTED"
+}

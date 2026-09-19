@@ -41,6 +41,7 @@ func (o *Object) remove(ctx context.Context) error {
 		return err
 	}
 	defer s.Close()
+	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
 	if err = s.Pending(scope, p); err != nil {
 		return err
@@ -123,6 +124,7 @@ func (f *Fs) rmdir(ctx context.Context, dir string) error {
 		return err
 	}
 	defer s.Close()
+	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
 	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
 	if err = s.PendingSubtree(scope, p); err != nil {
 		return err

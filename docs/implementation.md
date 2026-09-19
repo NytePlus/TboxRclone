@@ -40,7 +40,7 @@ HTTPS 故障代理增加 9 个顶层测试，覆盖提交后丢响应的独立�
 | B07：读与目录协议仍需实例确认 | C-009/010/014 | 强制要求返回 ETag；marker 分页异常直接失败。已实测两次 Range 之间替换内容，旧对象拒绝读取、新对象读回完整新内容；稳定 0/1/50/51/1000 项及强制 50 项分页已实测；修复整数 nextMarker 解码。单流覆盖、异常 Range 和变化目录分页仍待验收。 |
 | B08：宿主机掉电持久边界未验证 | C-003 | fsync 与日志重开测试不等于宿主机掉电测试；不能宣称掉电零丢失。 |
 | B09：macOS 原生 mount 运行环境和验收未完成 | 原生 mount 验收路径 | 已接入 cmount 并成功原生 CGO 构建；本机缺少 FUSE 运行库，实际挂载失败。macOS 内置 webdavfs 已成功挂载读取，但与原生 FUSE、Finder UI 是不同验证路径。 |
-| B10：外部 backend overview 被覆盖（已修复） | CLI 启动信息 | 上游通用注册函数保留显式提供的 Overview；SJTU 提供实验状态元数据。缺省仍读取内置配置。新增测试先失败后通过，CLI version 无原错误；见补丁 0002。 |
+| B10：外部 backend overview 被覆盖（未纳入 Tbox 补丁） | CLI 启动信息 | 历史实验曾验证该上游问题，但它不影响 Tbox 数据正确性；为缩小 rclone 改动面，当前不修改通用注册器，历史证据保留。 |
 | B11：WebDAV 重复 MKCOL（已修复已测路径） | C-010/014，WebDAV MKCOL | 补丁在 WebDAV 层区分已有资源；上游回归及真实重复 MKCOL 均返回 405。其他客户端并发创建仍待验收。 |
 | B12：WebDAV 完整条件写尚未验收 | C-006/014，If-None-Match/If-Match | 已修复 VFS 可见目标的 PUT If-None-Match:*，真实返回 412 且不产生上传日志；其他条件头、陈旧 VFS 缓存、网页端竞争和云端 CAS 仍未解决。 |
 | B13：macOS webdavfs 新文件写入（已修复已测路径） | C-001/005/008/012/014 | 原测试 fsync 为 EPERM、云端 0 字节。启用单客户端实验性覆盖后，新测试 open/write/fsync/close/reopen 全成功，云端 61 字节匹配，主文件与 AppleDouble 日志均 Committed。Finder 与完整故障/并发验收仍未完成。 |
@@ -126,11 +126,13 @@ macOS 内置 mount_webdav 挂载后，用新生成文件复测原 B13 路径：o
 
 ## WebDAV 请求冲突拒绝
 
-补丁 0001 新增可选 `exclusive_access`；Compose 正常和故障服务显式开启。请求入口在读取输入、条件检查、截断写入之前取得全部路径占用，冲突返回 423，源目标原子取得，目录变更覆盖子树。请求结束释放，包括失败。GET 读者并存，普通目录浏览不因子项上传而拒绝；ZIP 下载读占子树。非 off 的 VFS 缓存模式拒绝启用该选项，避免后台写回提前释放请求占用。
+请求级访问控制已从 rclone 补丁迁移到 Tbox 自有 `internal/webdavguard`。Compose 将公共 8686 端口交给 guard，内部 rclone WebDAV core 使用 8685；正常服务通过项目网络转发，故障服务在 fault-proxy 的共享网络命名空间内转发。guard 在读取请求体及打开 core 路径前取得全部路径占用，冲突返回 423，源目标原子取得，目录变更覆盖子树。请求结束释放，包括转发失败。GET 读者并存，普通目录浏览不因子项上传而拒绝；ZIP 下载读占子树。core 固定为 VFS cache off，避免后台写回超过请求占用生命周期。
 
 回归先复现进行中上传可被 GET/DELETE/MOVE 等穿透，修复后覆盖双写/读写、目录变更、COPY 源及 MOVE 目标、路径别名、失败后无残留占用、兄弟文件及目录浏览、多个读者及读完释放、异步缓存拒绝。上游完整 WebDAV race 测试（31.989s）、主项目 race/vet 与补丁重放逐字节比较通过。
 
-真实服务复测通过 Expect:100-continue 暂停首个 PUT 正文，期间同路径 PUT/GET/DELETE、以其为目标的 MOVE 均 423；目录 PROPFIND 207。放行首个正文后 PUT 201、重开 GET 200、独立云端字节正确，仅一条 Committed 日志，见 [并发请求证据](evidence/2026-09-17/webdav-exclusive-access.json)。这不是 Finder 双编辑器或长期文件句柄验收，系统分支仍未通过。
+旧 rclone 补丁版服务曾通过 Expect:100-continue 并发实验，见 [历史并发请求证据](evidence/2026-09-17/webdav-exclusive-access.json)。迁移后的 guard 以独立单元测试覆盖相同路径读写、双写、目录祖先删除、无关文件并行、读者共存、MOVE 双树占用，以及 BaseURL/Destination 同命名空间和前缀外拒绝。该历史云端证据不能自动证明新入口，单元测试也不产生系统分支 PASS。
+
+迁移后的双层 Compose 服务已实际启动：公共 guard 与内部 core 均健康，macOS 挂载重新建立。一个仅发送 PUT 头、收到 100 Continue 后暂停正文的请求持有路径时，同路径 GET 返回 423、无关 OPTIONS 返回 200；关闭连接后 core 检测 context canceled，正式路径为 404 且没有该路径的 journal 记录。运行二进制摘要、补丁基线和验证范围见 [迁移证据](evidence/2026-09-17/tbox-webdav-guard-migration.json)。这验证了请求生命周期迁移，不解决 Finder 顺序零字节 PUT 的发布边界。
 
 开启请求冲突控制后，macOS webdavfs 普通保存再次通过 open/write/fsync/close/reopen 和独立云端 61 字节匹配，见 [普通保存回归](evidence/2026-09-17/macos-webdav-exclusive-write.json)。该回归仅证明所测正常保存路径未被新保护阻断。
 
@@ -212,3 +214,58 @@ TestLiveMoveProcessDeath 用独立子进程持有后端状态，父子均独立�
 macOS原生 /bin/mv 在同一webdavfs的from/to之间移动普通文件和嵌套目录均退出0，包含Unicode文件名、隐藏文件、零字节与空目录。独立云端全树和逐文件SHA核对通过，源路径消失；普通文件move1条、目录dirmove1条、macOS配对AppleDouble move2条均Committed，本地备份校验通过。[原生证据](evidence/2026-09-17/macos-directory-move.json)。
 
 首次独立核对的预期只包含显式创建的内容，发现额外的nested/._empty后失败，见[首次核对](evidence/2026-09-17/native-directory-move-initial-check.json)。检查移动前tar确认macOS已经创建这些AppleDouble；后续把目录内元数据逐项与移动前归档比较，目录外配对文件与原始已提交上传记录比较，核对头部magic/version、大小和SHA，没有忽略额外路径。目录备份实际11项，包含5个AppleDouble文件；整个fixture有9个元数据文件。仍没有真实操作录屏，因此ST-004-T未标PASS。
+
+## Aggregate spool budget (2026-09-17)
+
+`max_spool` defaults to 4 GiB and limits logical `.data` bytes in the configured
+state directory, across concurrent backend operations. It includes completed
+records, unresolved records, and orphan data left by process death. Uploads,
+file-move backups and directory-move tar backups use the same admission path.
+Known-length inputs reserve their declared size; unknown-length inputs reserve
+`max_upload` until EOF. This conservative reservation can reject a small stream
+when its final size is unknown and the remaining budget is below `max_upload`.
+
+Admission uses a short cross-process file lock and extends the new spool to its
+reservation size before releasing the lock. Input writes cannot exceed that
+reservation. Finalization truncates unused capacity before fsync and journal
+publication. Network transfer does not hold the quota lock. Interrupted or
+unpublished invalid input removes only its own spool; ambiguous journal
+publication retains the spool. After process death, actual `.data` lengths are
+counted again, including orphan reservations. All participants sharing a state
+directory must use the same quota configuration; standalone journal callers
+currently opt in via `Store.MaxSpoolBytes` (zero means unlimited).
+
+## macOS webdavfs zero-byte creation barrier (2026-09-18)
+
+实际 webdavfs 请求序列表明，新文件会先发送独立的零字节 PUT；后续
+非空写入是另一条带 `If` 锁谓词的 PUT。若把第一条 PUT 转发给 core，交大云
+端会短暂看到正式的零字节对象，违反原子可见性。公共 Tbox WebDAV guard 现可
+将这条初始 PUT 写入 `/state/guard` 的原子 JSON 状态而不转发。精确路径的
+GET/HEAD 在提交前返回本地空内容，PROPFIND 返回本地占位属性；这些响应不证明
+远端对象已经存在，也不会触发远端写入。父目录枚举中的占位项合并尚未实现。
+
+为避免 core 的 LOCK 本身创建空对象，barrier 对该路径合成 LOCK/UNLOCK 响应。
+带有效合成锁谓词的内容 PUT 转发前解除该谓词，成功后释放状态；剩余 UNLOCK
+由 guard 消化。UNLOCK 次数不再触发空文件发布，因为真实 Finder 会在内容上传
+之前结束多轮锁。显式带有效锁的空 PUT 可以发布空文件，Finder 纯空文件流程
+仍待验收。状态文件跨 guard 重启保留，失败不会静默发布或删除。
+重启后的本地读取、重复创建拒绝和内容提交由单元测试覆盖；真实 Finder 上传、
+全桌面弹窗检查和远端完整校验仍未通过，不能以这些测试替代验收。
+
+This is not physical disk preallocation: sparse truncation cannot guarantee free
+blocks, inode availability, metadata space, or capacity for VFS/other files.
+Those failures still need system-level disk-full validation. Completed-data GC
+is not implemented; the service will eventually refuse new data rather than
+silently remove recovery evidence. Lowering the cap below current usage refuses
+new preparations, including deletion records, but preserves existing data and
+allows recovery access. No ST-015 system PASS is claimed by the unit tests.
+
+
+The quota crash test now kills a separate process with SIGKILL after it has
+written a prefix into an unknown-length reservation. Reopening the store verifies
+that the previous durable record remains readable, the incomplete spool remains
+present at its reserved length, no incomplete record was published, and a new
+upload cannot reuse that capacity. A separate test holds the quota file lock and
+checks cancellation plus cleanup of the unpublished empty spool. These are
+local journal tests in Docker, not Finder interruption or host power-loss tests.
+Run evidence: `reports/spool-quota-crash-checks.log`.

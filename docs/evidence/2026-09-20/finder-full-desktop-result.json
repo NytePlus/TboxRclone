@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-20",
+  "version": "2026-09-19.2-rc1",
+  "capture": "macOS screencapture -v -D 1 -k -V 35",
+  "active_displays": 1,
+  "recording": "finder-full-desktop.mov",
+  "screenshot": "desktop-result.png",
+  "result": "FAIL",
+  "observed_error": "无法完成此操作，因为项目“finder-guard-20260919125000.bin”正在使用中。",
+  "password": "All 1862 frames were processed by OCR with no password-text matches; this is not a conclusive absence finding. Earlier user-reported password prompt remains recorded.",
+  "target_before": "empty",
+  "preexisting_barrier": {
+    "locks": 1,
+    "unlocks": 0
+  },
+  "finalized": false,
+  "duration_seconds": 34.9966667,
+  "frame_size": [
+    3420,
+    2214
+  ],
+  "decoded_frames_seconds": [
+    0,
+    10,
+    20,
+    30
+  ],
+  "reviewed_frame": "video-20s.png: two in-use error entries",
+  "first_recording": "Interrupted without saved movie; repeated with automatic duration, final movie validated",
+  "complete_frame_decode": {
+    "frames": 1862,
+    "last_frame_seconds": 34.983333333333334,
+    "reader_completed": true,
+    "ocr_failures": 0
+  },
+  "ocr_review": {
+    "first_in_use_match_seconds": 9.2,
+    "in_use_hit_frames": 1367,
+    "password_text_hit_frames": 0,
+    "limitation": "OCR non-detection does not prove no password dialog. In-use errors visually confirmed in video-20s.png."
+  }
+}

@@ -14,7 +14,7 @@ services:
     dns: [10.253.253.2]
     networks: [default, lab-dns]
     depends_on: [lab-dns]
-  webdav:
+  webdav-core:
     dns: [10.253.253.2]
     networks: [default, lab-dns]
     depends_on: [lab-dns]

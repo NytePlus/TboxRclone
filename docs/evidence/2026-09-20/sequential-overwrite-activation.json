@@ -1,0 +1,8 @@
+{
+  "scope": "sjtu:codex-api-lab/finder-guard-20260918235817",
+  "setting": "RCLONE_SJTU_LAB_OVERWRITE=true",
+  "basis": "docs/concurrency-contract.md requires sequential Finder writes; docs/implementation.md documents existing journaled overwrite implementation",
+  "old_unresolved_receipts": "retained",
+  "deployment": "core recreated, HTTP 200, WebDAV remounted",
+  "finder_acceptance": "NOT_VERIFIED"
+}

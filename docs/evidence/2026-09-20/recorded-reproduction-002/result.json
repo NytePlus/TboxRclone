@@ -1,0 +1,22 @@
+{
+  "result": "FAIL_IN_USE_DIALOG",
+  "mode": "FAILURE_REPRODUCTION_NOT_FRESH_ACCEPTANCE",
+  "capture": "display-1.mov",
+  "duration_seconds": 119.99,
+  "frame_size": [
+    3420,
+    2214
+  ],
+  "decoded_samples_seconds": [
+    0,
+    10,
+    20,
+    30
+  ],
+  "computer_use_observation": "Finder Copy window exposed three in-use error entries for finder-guard-20260919125000.bin after drag",
+  "drag": "EVENTS_SENT",
+  "wrapper_exit_code": 3,
+  "password_dialog": "UNDETERMINED; no claim of absence from Finder-only observation or sampled video frames",
+  "pending_receipt": "preserved",
+  "finalized": false
+}

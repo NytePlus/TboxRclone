@@ -1,0 +1,18 @@
+{
+  "scope": "Finder drag workflow debugging and fixed test script",
+  "version": "2026-09-20.2",
+  "requested_original_paths": "tested in recorded-reproduction-002; failed; unresolved state preserved",
+  "failure_response": "workflow and guard repaired; isolated sequential-001 copy completed",
+  "full_desktop_evidence": "15-second recording plus explicit user attestation covering complete operation",
+  "cloud_integrity": "65536 bytes; direct API SHA256 matches source",
+  "final_script_hashes": {
+    "scripts/finder-drag.sh": "d6b056cd54698fbc1ba00b5acfe20934509d16f5755d1838bbaf23da45faf279",
+    "scripts/finder-drag.swift": "3ab44fa7482131fd8b1d5c1a353764dcd6ab303d70cc6f5c46eb07524a2c40fa",
+    "scripts/finder-record.sh": "72443922536e1639e231c8d556bfa436c1f30d3323229211fc771dd8c9cd835f"
+  },
+  "excluded_claims": [
+    "old pending paths recovered",
+    "all system acceptance scenarios passed",
+    "15-second recording alone covers full upload"
+  ]
+}

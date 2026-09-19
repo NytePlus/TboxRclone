@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-18",
+  "scope": "Tbox guard service-level verification; not a Finder system acceptance result",
+  "service": "127.0.0.1:8686 guard -> webdav-core:8685 -> SJTU backend",
+  "empty_probe": {
+    "path": "guard-zero-live6-20260918.bin",
+    "initial_put": 201,
+    "propfind_before_commit": 404,
+    "lock_unlock_cycles": [
+      {"lock": 200, "unlock": 204},
+      {"lock": 200, "unlock": 204}
+    ],
+    "propfind_after_commit": 207,
+    "core_requests": ["PUT", "PROPFIND"],
+    "interpretation": "The initial zero PUT and synthetic locks were handled by the guard; one final empty PUT reached core after the second unlock."
+  },
+  "content_probe": {
+    "path": "guard-content-live2-20260918.bin",
+    "initial_put": 201,
+    "content_put": 201,
+    "unlock_after_content": 204,
+    "get_body": "content-live",
+    "interpretation": "The webdavfs If lock predicate was stripped because the lock was synthetic; the content PUT was published once and the remaining unlock was consumed by the guard."
+  },
+  "durable_pending": "Failed exploratory probes remain as JSON state under .state/webdav-guard; no unresolved state was deleted automatically.",
+  "tests": "go test -race ./internal/webdavguard; go test -race ./...; go vet ./...",
+  "system_status": "No test-manifest branch promoted; ST-001-T remains FAIL until a fresh Finder recording proves the cloud visibility property."
+}

@@ -72,6 +72,7 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 		return err
 	}
 	defer s.Close()
+	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
 	for _, p := range []string{source, target} {
 		if err = s.PendingSubtree(scope, p); err != nil {
 			return err

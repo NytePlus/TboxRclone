@@ -29,17 +29,18 @@ func run() error {
 	id := flag.String("reconcile", "", "operation ID to reconcile with read-only requests")
 	resume := flag.String("resume", "", "resume an existing isolated multipart upload; never reinitialize or repeat confirmation")
 	abort := flag.String("abort", "", "cancel the recorded unpublished multipart session; retain local bytes")
+	prune := flag.String("prune-committed", "", "explicitly release one committed operation spool; retain journal receipt; stop service first")
 	flag.Parse()
 	actions := 0
-	for _, value := range []string{*id, *resume, *abort} {
+	for _, value := range []string{*id, *resume, *abort, *prune} {
 		if value != "" {
 			actions++
 		}
 	}
 	if actions > 1 {
-		return fmt.Errorf("choose one of reconcile, resume, or abort")
+		return fmt.Errorf("choose one of reconcile, resume, abort, or prune-committed")
 	}
-	if actions != 0 {
+	if actions != 0 && *prune == "" {
 		c, err := smh.New(*endpoint, *library, *space, *token)
 		if err != nil {
 			return err
@@ -53,6 +54,15 @@ func run() error {
 		return e
 	}
 	defer s.Close()
+	if *prune != "" {
+		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer cancel()
+		if e := s.PruneCommitted(ctx, *prune); e != nil {
+			return e
+		}
+		fmt.Printf("%s committed spool released; journal receipt retained\n", *prune)
+		return nil
+	}
 	records, e := s.Records()
 	if e != nil {
 		return e
@@ -61,10 +71,11 @@ func run() error {
 		type summary struct {
 			ID, State, Path, SHA256, Kind, SourcePath string
 			Size                                      int64
+			SpoolReleased                             bool
 		}
 		out := []summary{}
 		for _, r := range records {
-			out = append(out, summary{ID: r.ID, State: r.State, Path: r.Path, SHA256: r.SHA256, Kind: r.Kind, SourcePath: r.SourcePath, Size: r.Size})
+			out = append(out, summary{ID: r.ID, State: r.State, Path: r.Path, SHA256: r.SHA256, Kind: r.Kind, SourcePath: r.SourcePath, Size: r.Size, SpoolReleased: r.SpoolReleased})
 		}
 		return json.NewEncoder(os.Stdout).Encode(out)
 	}

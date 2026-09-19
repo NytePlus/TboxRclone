@@ -6,3 +6,9 @@
 /reports/
 *.test
 coverage.out
+
+# Local desktop recordings and screenshots (may contain personal information).
+/docs/evidence/**/*.mov
+/docs/evidence/**/*.mp4
+/docs/evidence/**/*.png
+/docs/evidence/**/*.jpg

@@ -1,0 +1,20 @@
+{
+  "observed_at": "2026-09-19T23:21:55.445405+08:00",
+  "version": "2026-09-19.2-rc1",
+  "run": "finder-guard-20260919125000",
+  "open_windows": "PASS: wrapper --open, source 32673 target 32674",
+  "computer_use_binding": "PASS: target list showed 0 items",
+  "drag": "Finder copy progress observed after icon-start change",
+  "current_ui": "正在准备拷贝 finder-guard-20260919125000.bin",
+  "password_prompt": "not observed in sampled UI checks",
+  "in_use_prompt": "not observed in sampled UI checks",
+  "target": "empty at last filesystem check",
+  "barrier": {
+    "locks": 1,
+    "unlocks": 0
+  },
+  "final_version_approved": false,
+  "status": "FAIL: user-observed password prompt; no completed copy",
+  "notes": "Earlier filename dragging entered rename; a textClipping barrier also exists. No unresolved barrier removed.",
+  "user_correction": "User reports system password prompt occurred during the prior run; Finder-only observations did not cover system dialogs."
+}

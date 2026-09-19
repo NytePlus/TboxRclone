@@ -1,0 +1,27 @@
+{
+  "acceptance": "PASS_WITH_USER_FULL_DESKTOP_ATTESTATION",
+  "finder_after": "copy progress closed; target shows file 66 KB; no current error dialog",
+  "main_put": {
+    "status": 201,
+    "bytes": 65536
+  },
+  "metadata_puts": "201 including sequential update",
+  "recording": "15 seconds; upload completed afterward, insufficient full-operation coverage",
+  "password_absence": "USER_ATTESTED: 全过程就是无弹窗，我能作证。这一套逻辑是对的。",
+  "independent_cloud_sha": "869c26de7608a7b2d42106e9e25d0abf2a5ce86d561276e80f70636e06e495dc",
+  "original_target_test": "previous failure reproduction retained in ../recorded-reproduction-002; no claim of recovery or successful rerun on that pending path",
+  "ui_attestation": "user confirms entire operation had no dialogs",
+  "verified_copy": "PASS for this isolated run",
+  "script_version": "2026-09-20.2",
+  "script_sha256": {
+    "scripts/finder-drag.sh": "d6b056cd54698fbc1ba00b5acfe20934509d16f5755d1838bbaf23da45faf279",
+    "scripts/finder-drag.swift": "3ab44fa7482131fd8b1d5c1a353764dcd6ab303d70cc6f5c46eb07524a2c40fa",
+    "scripts/finder-record.sh": "72443922536e1639e231c8d556bfa436c1f30d3323229211fc771dd8c9cd835f"
+  },
+  "acceptance_basis": [
+    "actual Finder drag and completed target UI",
+    "independent cloud full download matches source",
+    "user witnessed entire desktop operation without dialogs",
+    "fixed script hashes recorded"
+  ]
+}

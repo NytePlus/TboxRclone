@@ -1,0 +1,10 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tboxrclone-finder-finder-guard-20260919125000/finder-trace-202609200117.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/finder-target-finder-guard-20260919125000/finder-trace-202609200117.bin",
+  "remote_path": "/finder-target-finder-guard-20260919125000/finder-trace-202609200117.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "ui_success": "NOT_TESTED"
+}

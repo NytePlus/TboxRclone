@@ -1,0 +1,14 @@
+{
+  "acceptance": "FAIL",
+  "main_put": {
+    "status": 201,
+    "bytes": 65536
+  },
+  "webdav_readback_sha256": "869c26de7608a7b2d42106e9e25d0abf2a5ce86d561276e80f70636e06e495dc",
+  "independent_cloud_verification": "NOT_DONE",
+  "finder_observation": "error -43; dialog history attribution uncertain",
+  "metadata_second_put": 405,
+  "mount_after": "PRESENT",
+  "recording_coverage": "INSUFFICIENT: window opening delayed drag beyond nominal recording end",
+  "password_absence": "NOT_ESTABLISHED"
+}

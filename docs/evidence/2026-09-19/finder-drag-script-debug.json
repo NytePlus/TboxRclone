@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-19",
+  "scenario": "Computer Use / Finder drag helper debugging",
+  "script_version": "2026-09-19.1",
+  "old_run": "finder-guard-20260918235817",
+  "observed": {
+    "window_discovery": "PASS",
+    "source_row_discovery": "PASS",
+    "mouse_move": "PASS",
+    "mouse_button_drag": "PASS",
+    "finder_result": "FAIL",
+    "finder_message": "无法完成此操作，因为项目正在使用中"
+  },
+  "cause": "The old target path had a durable zero-byte barrier with locks=1 and unlocks=0. The guard correctly returned 423 Locked; Finder rendered that response as an in-use dialog.",
+  "mitigation": "Created a fresh isolated run finder-guard-20260919123909 without deleting the old unresolved state.",
+  "system_status": "No test-manifest branch promoted; ST-001-T remains FAIL until the fresh run produces content PUT and independent cloud SHA-256 evidence."
+}

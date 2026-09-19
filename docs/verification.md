@@ -24,7 +24,7 @@ V 证据记录模板：`run_id / operation / evidence_before / request_redacted 
 
 注入点：初始化前后、分片发送中/应答后、renew 前后、confirm 发送前/执行后/响应前、MOVE 执行后、task 受理/完成间、本地日志写入前/后、缓存落盘前/后。先建立无故障成功基线，再对相同数据集逐点注入。清理在完成核对之后执行，未知结果的源、缓存和临时文件先保留。
 
-每个场景的共同前置：专用普通用户、隔离实验目录、确定内容 fixture、记录旧对象、配置已锁定、服务与 Finder 版本记录。宿主挂载点必须在项目及所有 Docker bind mount 之外（使用 `scripts/mount-webdav-macos.py`）；禁止将提供服务的网盘挂回 `.state` 或 `/src` 的宿主来源。每次宿主挂载测试操作前，必须重新核对系统挂载表中的源 URL、挂载点和文件系统类型；只有同名本地目录不能算已挂载。服务重启后的旧挂载状态不得沿用。
+每个场景的共同前置：专用普通用户、隔离实验目录、确定内容 fixture、记录旧对象、配置已锁定、服务与 Finder 版本记录。宿主挂载点必须在项目及所有 Docker bind mount 之外（使用 `scripts/mount-webdav-macos.py`）；禁止将提供服务的网盘挂回 `.state` 或 `/src` 的宿主来源。每次宿主挂载测试操作前，必须重新核对系统挂载表中的源 URL、挂载点和文件系统类型；只有同名本地目录不能算已挂载。服务重启后的旧挂载状态不得沿用。Finder 夹具在拖拽前必须运行 `scripts/prepare-finder-fixture.sh FIXTURE_DIRECTORY`，确保文件由当前普通用户拥有，避免容器复制产生的属组导致系统授权对话框。真实 Finder 拖拽使用入口 `scripts/finder-drag.sh`（当前候选版本 `2026-09-19.2-rc1`，尚未通过完整 Finder 拷贝验收，不是最终测试版本）；它调用 Swift 脚本按精确窗口标题动态查找可见 Finder 窗口并校验几何信息，找不到有效窗口时立即失败，不使用历史硬编码窗口 ID。
 
 共同后验：通过独立读路径获取完整内容并算 SHA-256；截图/录屏记录 Finder 成功、失败或同步状态；日志脱敏。API 只用于 setup、external-event、fact-check；Finder 点击操作必须真实走 UI，终端 mv/rmdir 场景真实走挂载文件系统。
 
@@ -60,3 +60,9 @@ V 证据记录模板：`run_id / operation / evidence_before / request_redacted 
 报告应列出全部 36 个分支及每个负分支子场景，状态 PASS/FAIL/BLOCKED/NOT_RUN；同时列出上游集成测试 RUN/PASS/SKIP。已知实现缺陷按 FAIL 记录并关联问题；没有环境证据按 NOT_RUN/BLOCKED，不能写 PASS。
 
 发布至少要求 C-001 至 C-017 全部满足各自产品契约，C-018 达到定下的效率目标。若 rclone 原生 VFS 不能达到严格云端写入应答或跨盘移动要求，应记录缺陷、修改上层或提供明确同步工作流，不能将测试预期改成“缓存里有就算云端成功”。
+
+## 2026-09-17 Finder 拖拽复测补充
+
+用户指出前次诊断拖拽受鼠标干扰后，以全新文件重新执行真实 Finder 拖拽并限定窗口录屏。本轮 244 次独立云端观察中，78 次不存在、164 次为零字节、2 次完整读取与源 SHA-256 一致，无传输错误。零字节可见样本首尾跨度 25.1 秒；最终上传完整，但 ST-001-T 原子可见性仍为 FAIL。详见 [复测证据](evidence/2026-09-17/finder-repeat-atomic-visibility-failed.json)。不增加系统 PASS 数。
+
+2026-09-18 已在 Tbox guard 公共入口加入持久化 zero-byte creation barrier，并完成 Compose 服务级空文件/非空文件请求序列验证；证据见 [barrier 验证](evidence/2026-09-18/webdav-zero-put-barrier.json)。该证据尚未替代新的 Finder 录屏，因此不改变 ST-001-T 状态。
