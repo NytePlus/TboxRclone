@@ -6,9 +6,8 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/nyte/TboxRclone/internal/journal"
-	"github.com/nyte/TboxRclone/internal/recovery"
-	"github.com/nyte/TboxRclone/internal/smh"
+	"github.com/nyte/TboxRclone/internal/sjtu/recovery"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/fserrors"
 )
@@ -22,68 +21,63 @@ func (f *Fs) Move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	return o, nil
 }
 func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object, error) {
-	if err := f.writeAllowed(remote); err != nil {
+	if err := f.WriteAllowed(remote); err != nil {
 		return nil, err
 	}
-	if !f.opt.LabMove {
+	if !f.Opt.LabMove {
 		return nil, fs.ErrorCantMove
 	}
 	old, ok := src.(*Object)
 	if !ok {
 		return nil, fs.ErrorCantMove
 	}
-	if err := old.f.writeAllowed(old.remote); err != nil {
+	if err := old.Backend.WriteAllowed(old.RemotePath); err != nil {
 		return nil, err
 	}
-	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
-	if scope != old.f.c.Endpoint+"/"+old.f.c.Library+"/"+old.f.c.Space || f.opt.StateDir != old.f.opt.StateDir {
+	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
+	if scope != old.Backend.Client.Endpoint+"/"+old.Backend.Client.Library+"/"+old.Backend.Client.Space || f.Opt.StateDir != old.Backend.Opt.StateDir {
 		return nil, fs.ErrorCantMove
 	}
-	source, err := old.f.full(old.remote)
+	source, err := old.Backend.FullPath(old.RemotePath)
 	if err != nil {
 		return nil, err
 	}
-	target, err := f.full(remote)
+	target, err := f.FullPath(remote)
 	if err != nil {
 		return nil, err
 	}
-	release, err := f.acquirePaths(accessRequest{source, true, false}, accessRequest{target, true, false})
+	release, err := f.AcquirePaths(AccessRequest{source, true, false}, AccessRequest{target, true, false})
 	if err != nil {
 		return nil, err
 	}
 	defer release()
-	releaseSlot, err := f.acquireMutation(ctx)
+	session, err := f.BeginMutation(ctx)
 	if err != nil {
 		return nil, err
 	}
-	defer releaseSlot()
-	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
-	if err != nil {
-		return nil, err
-	}
-	defer s.Close()
-	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
+	defer session.Close()
+	s := session.Store
 	for _, p := range []string{source, target} {
 		if err = s.PendingSubtree(scope, p); err != nil {
 			return nil, err
 		}
 	}
-	current, err := f.c.Info(ctx, source)
+	current, err := f.Client.Info(ctx, source)
 	if err != nil {
 		return nil, mapped(err, fs.ErrorObjectNotFound)
 	}
-	if current.Type == "dir" || old.item.ETag == "" || current.ETag != old.item.ETag || current.Size != old.item.Size {
+	if current.Type == "dir" || old.Item.ETag == "" || current.ETag != old.Item.ETag || current.Size != old.Item.Size {
 		return nil, errors.New("move source changed")
 	}
 	if source == target {
 		return src, nil
 	}
 	strategy := "ask"
-	if dest, e := f.c.Info(ctx, target); e == nil {
+	if dest, e := f.Client.Info(ctx, target); e == nil {
 		if dest.Type == "dir" {
 			return nil, fs.ErrorIsDir
 		}
-		if !f.opt.LabOverwrite {
+		if !f.Opt.LabOverwrite {
 			return nil, errors.New("move target exists; lab_overwrite is disabled")
 		}
 		strategy = "overwrite"
@@ -91,11 +85,11 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 		return nil, e
 	}
 	// Preserve the complete source before submitting a potentially ambiguous move.
-	reader, err := f.c.Open(ctx, source, current, 0, -1)
+	reader, err := f.Client.Open(ctx, source, current, 0, -1)
 	if err != nil {
 		return nil, err
 	}
-	r, err := s.PrepareMove(ctx, scope, source, target, reader, int64(current.Size), int64(f.opt.MaxUpload), strategy == "overwrite")
+	r, err := s.PrepareMove(ctx, scope, source, target, reader, int64(current.Size), int64(f.Opt.MaxUpload), strategy == "overwrite")
 	closeErr := reader.Close()
 	if err != nil {
 		return nil, err
@@ -121,12 +115,12 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	if err = s.Save(r); err != nil {
 		return nil, err
 	}
-	requestErr := f.c.JSON(ctx, "PUT", "file", target, url.Values{"conflict_resolution_strategy": {strategy}}, map[string]string{"from": source}, nil)
+	requestErr := f.Client.JSON(ctx, "PUT", "file", target, url.Values{"conflict_resolution_strategy": {strategy}}, map[string]string{"from": source}, nil)
 	r.State = "MoveUnknown"
 	if err = s.Save(r); err != nil {
 		return nil, errors.Join(requestErr, err)
 	}
-	if err = recovery.Reconcile(ctx, s, f.c, r); err != nil {
+	if err = recovery.Reconcile(ctx, s, f.Client, r); err != nil {
 		return nil, errors.Join(requestErr, err)
 	}
 	return f.NewObject(ctx, remote)

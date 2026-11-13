@@ -1,0 +1,8 @@
+{
+  "state": "Committed",
+  "size": 65536,
+  "sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+  "retained_spool_matches": true,
+  "mount_reopened": true,
+  "normal_resources_verified_by": "successful authenticated cloud upload and full download, retained full spool, fresh mounted reopen"
+}

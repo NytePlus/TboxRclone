@@ -1,0 +1,8 @@
+{
+  "method": "normal unmount, fresh mount, xattr -p",
+  "attribute": "com.example.tbox.fixture",
+  "expected": "finder-easy-v1",
+  "actual": "finder-easy-v1",
+  "match": true,
+  "finder": "progress ended; returned to folder"
+}

@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-special-names-20260926/large.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/system-test-range-positive-20260926-1050/large.bin",
+  "remote_path": "/system-test-range-positive-20260926-1050/large.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

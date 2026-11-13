@@ -10,16 +10,16 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/nyte/TboxRclone/internal/instance"
-	"github.com/nyte/TboxRclone/internal/journal"
-	"github.com/nyte/TboxRclone/internal/recovery"
-	"github.com/nyte/TboxRclone/internal/smh"
-	"github.com/nyte/TboxRclone/internal/transfer"
+	"github.com/nyte/TboxRclone/internal/sjtu/journal"
+	"github.com/nyte/TboxRclone/internal/sjtu/ownership"
+	"github.com/nyte/TboxRclone/internal/sjtu/recovery"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
+	"github.com/nyte/TboxRclone/internal/sjtu/transfer"
 )
 
 func run() error {
 	dir := flag.String("state-dir", "", "private durable state directory")
-	ownership := flag.String("ownership-dir", os.Getenv("RCLONE_SJTU_OWNERSHIP_DIR"), "shared cloud-space ownership registry (same as service; defaults to RCLONE_SJTU_OWNERSHIP_DIR)")
+	ownershipDir := flag.String("ownership-dir", os.Getenv("RCLONE_SJTU_OWNERSHIP_DIR"), "shared cloud-space ownership registry (same as service; defaults to RCLONE_SJTU_OWNERSHIP_DIR)")
 	endpoint := flag.String("endpoint", "https://pan.sjtu.edu.cn", "SMH origin")
 	library := flag.String("library-id", "", "library ID")
 	space := flag.String("space-id", "", "space ID")
@@ -45,7 +45,7 @@ func run() error {
 		if err != nil {
 			return err
 		}
-		if err = instance.ClaimScope(*ownership, *dir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
+		if err = ownership.ClaimScope(*ownershipDir, *dir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
 			return err
 		}
 	}

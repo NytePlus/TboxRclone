@@ -6,7 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/nyte/TboxRclone/internal/faultproxy"
+	"github.com/nyte/TboxRclone/internal/testkit/faultproxy"
 	"net"
 	"net/http"
 	"os"

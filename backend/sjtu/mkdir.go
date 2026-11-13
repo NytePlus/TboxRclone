@@ -23,7 +23,7 @@ func (f *Fs) mkdirComponent(ctx context.Context, current string) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	key := directoryEnsureKey{f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space, current}
+	key := directoryEnsureKey{f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space, current}
 	directoryEnsures.Lock()
 	if active, ok := directoryEnsures.active[key]; ok {
 		directoryEnsures.Unlock()

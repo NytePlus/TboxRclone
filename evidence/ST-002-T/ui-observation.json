@@ -1,0 +1,8 @@
+{
+  "computer_use": "Finder",
+  "dialog": "此位置已经存在名称为‘plain.bin’的较旧项目。你要使用正在拷贝的较新项目进行替换吗？",
+  "available_actions": ["保留两者", "停止", "替换"],
+  "selected_action": "停止",
+  "after_action": "dialog closed and Finder returned to the source window",
+  "recording_coverage": "The dialog and Stop action occurred while the bounded 15-second full-desktop recording was active."
+}

@@ -1,0 +1,20 @@
+{
+  "target": "system-test-length-positive-retest-20260926-1030",
+  "requests": [
+    {
+      "case": "known_length",
+      "path": "known-length.bin",
+      "request_header": "Content-Length: 12",
+      "response_status": 201,
+      "payload": "known-length"
+    },
+    {
+      "case": "unknown_length",
+      "path": "unknown-length.bin",
+      "request_header": "Transfer-Encoding: chunked",
+      "response_status": 201,
+      "payload": "unknown-length"
+    }
+  ],
+  "scope": "Positive framing only. Malformed and failing streams remain ST-008-F."
+}

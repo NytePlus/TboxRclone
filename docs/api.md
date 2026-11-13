@@ -1,15 +1,15 @@
-# 交大云盘接口文档（研究版）
+# 交大云盘 API 约束
 
-产品使用范围见[单客户端并发约束](concurrency-contract.md)。本文记录的服务端条件参数被忽略等事实保持不变；新的产品范围不要求服务端保护外部多客户端写入，改由受控实例拒绝冲突访问。
+产品使用范围见[单客户端并发约束](concurrency-contract.md)。本文只记录当前后端依赖的接口和安全约束；实验运行状态以验收清单为准。
 
-## 1. 证据与边界
+## 1. 来源与边界
 
-- **C**：当前 Tbox 源码存在调用/DTO，不表示本次已实测。
-- **F**：交大当前公开网页 JS 中存在接口定义，不表示当前账户有权限，或该功能开关已启用。
-- **S**：公开 `smh-js-sdk@1.0.16` 定义；可能比交大部署更新。
-- **V**：登录后在隔离空间验证。本次已取得部分 V 级证据及明确不支持的行为，见 [真实接口实验](live-api-findings.md)。
+- **C**：原 Tbox 客户端源码中的调用或 DTO，不代表当前部署已验证。
+- **F**：交大公开网页前端中的接口定义，不代表当前账户有权限或功能已启用。
+- **S**：公开 `smh-js-sdk@1.0.16` 定义，可能比交大部署更新。
+- **V**：登录后在隔离空间验证；结论只适用于记录的服务版本和条件。
 
-Tbox 基线为 `4537e22adf241158783fe26661b8081f9bc45e94`。C 主要来源：原 Tbox 项目的 `Modules/Tbox/Services/TboxService.cs` 和 `Modules/Tbox/Models`（源码未包含在此仓库）。F 来源：[交大前端](https://pan.sjtu.edu.cn/js/index.41e36dd0.js)。S 来源：[npm 包](https://www.npmjs.com/package/smh-js-sdk) 与 [SDK 仓库](https://cnb.cool/tencent/cloud/smh/smh-javascript-sdk)。精确摘要在 `sources.json`；前端定义原文、偏移及 SDK operation 名在 `discovered-endpoints.json`。
+Tbox 参考基线为 `4537e22adf241158783fe26661b8081f9bc45e94`。C 主要来自原 Tbox 项目的 `Modules/Tbox/Services/TboxService.cs` 和 `Modules/Tbox/Models`；F 来源为[交大前端](https://pan.sjtu.edu.cn/js/index.41e36dd0.js)；S 来源为 [npm 包](https://www.npmjs.com/package/smh-js-sdk)与[公开 SDK 仓库](https://cnb.cool/tencent/cloud/smh/smh-javascript-sdk)。这些外部定义只用于交叉核对，实际请求和响应必须由当前测试重新验证。
 
 SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能当作服务器路径后缀。清单保留原文并另给去 fragment 的路径。本文的 `?info` 等表示 action 查询键，实际是否需要值 `1` 应按部署验证，不能只拼接参数名就假定通用。
 
@@ -80,7 +80,7 @@ SDK 生成代码中的 `#1`、`#2` 等是路径字面量中的 fragment，不能
 | P2 | GET `/api/v1/file-deletion-check/{L}/{S}/{Inode}` | 删除状态核对 | S |
 | P2 | GET `/api/v1/task-result/{L}/{S}/{taskId}` | 新版任务结果接口 | S |
 
-此外 SDK 还有 batch、share、search、favorite、quota、usage、HLS 等；完整原始操作清单随文档保存。管理组织、永久清空、历史清理、分享权限不属于最小网盘后端范围。
+此外 SDK 还有 batch、share、search、favorite、quota、usage、HLS 等接口；管理组织、永久清空、历史清理和分享权限不属于最小网盘后端范围。
 
 没有找到足以证明普通数据接口支持原子 compare-and-swap、POSIX fsync、持久锁或完整 xattr 的交大实测材料。`content_cas` 名称和 `ssn` 参数只构成调查线索。
 
@@ -116,7 +116,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 
 跨盘移动是复制、确认、删除两个阶段；只有目标已完整且达到约定持久边界才能删源。VFS 先确认本地缓存的挂载路径不能默认提供“目标已云端落盘才删本地源”的保证，必须有明确同步完成信号或使用经过验收的直接传输命令。
 
-## 7. 实施阶段补充核对（S 级，未实测）
+## 7. SDK schema 核对
 
 - SDK 1.0.16 `directory-api.js` 对 `directory_only=1/true` 的解释是“只删除目录对象本身，不级联删除子文件和子目录”。这不是“非空目录返回错误”的保证；仍须验证子项可达性与并发创建竞态。当前后端拒绝 Rmdir。
 - `multipart-upload-file201-response.d.ts` 声明顶层 `headers`、`uploadId`，没有分片签名 `parts` 字段；而已有 Tbox 研究使用分片授权列表。真实交大实例已确认使用逐片 parts 映射，不能直接照搬该 SDK。
@@ -124,7 +124,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 - `complete-file-upload-request.d.ts` 支持 `localCreationTime/localModificationTime`；这些是本地时间元数据，不等同于服务端 modificationTime，不应直接宣称支持 rclone SetModTime。
 - `complete-file-upload200-response.d.ts` 的覆盖标识为 `isOverwritten`，与已有研究记录的 DTO 拼写不同；实际解析应以交大响应为准。
 
-上述描述来自 sources.json 锁定的 SDK 包。后续交大实例探测已确认签名分片映射、上传状态参数要求，以及部分条件字段不起作用；以 [真实接口实验](live-api-findings.md) 的具体证据为准。
+SDK schema 不能覆盖交大部署差异；签名分片映射、上传状态参数和条件字段必须由隔离环境重新验证。
 
 ## 8. 小文件恢复和创建竞争的部署结论
 
@@ -132,7 +132,7 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 
 两个先初始化的同目标 ask 会话中，第一个 confirm 200，第二个 confirm 409 `SameNameDirectoryOrFileExists`，独立读取保持第一个内容。初始化现有文件 ask 仍 201，不能把初始化成功当作预留文件名；必须在 confirm 处继续使用 ask 并处理冲突。
 
-错误 `content_cas` 在 overwrite confirm 中返回 200 并实际替换内容；移动同时提供错误 query `content_cas` 和 body `contentCas` 也返回 200、源路径 404。这些实测不支持条件覆盖/条件移动。目录专用移动返回 204 并保留子文件，但其并发/未知结果契约仍未证明。`fs-delta/cursor` 本次返回 404。具体证据见 [真实实验](live-api-findings.md)。
+错误 `content_cas` 在 overwrite confirm 中返回 200 并实际替换内容；移动同时提供错误 query `content_cas` 和 body `contentCas` 也返回 200、源路径 404。这些实测不支持条件覆盖/条件移动。目录专用移动返回 204 并保留子文件，但其并发/未知结果契约仍未证明。`fs-delta/cursor` 在所测部署返回 404。
 
 ## 9. 中止响应不能单独证明未发布
 
@@ -142,11 +142,11 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 
 ### 空间令牌 local_sync_id 补充
 
-前端声明 personal 和 token/{spaceId} 两个 POST 空间令牌接口支持 `local_sync_id`。隔离登记实验中，本地 ID 和服务端 syncId 两组输入均可获得令牌，但均未产生 inode/ssn，目录 localSync 为 null。此参数的同步语义未验证，不能用于宣称 CAS。见 [令牌实验](live-api-findings.md#local_sync_id-令牌补充实验)。
+前端声明 personal 和 token/{spaceId} 两个 POST 空间令牌接口支持 `local_sync_id`。隔离登记实验中，本地 ID 和服务端 syncId 两组输入均可获得令牌，但均未产生 inode/ssn，目录 localSync 为 null。此参数的同步语义未验证，不能用于宣称 CAS。
 
 ### 目录游标类型
 
-当前部署的 `nextMarker` 在跨页时为 JSON 非负整数，不能只按字符串解码，也不能经过 float64 中转。客户端保留其精确十进制表示作为下一次 marker，并兼容 SDK 描述的不透明字符串游标。稳定 0/1/50/51/1000 项和每页 50 项的实测见 [目录规模实验](live-api-findings.md#整数目录游标与稳定目录规模)。
+当前部署的 `nextMarker` 在跨页时为 JSON 非负整数，不能只按字符串解码，也不能经过 float64 中转。客户端保留其精确十进制表示作为下一次 marker，并兼容 SDK 描述的不透明字符串游标。
 
 ### 回收站 ID 与恢复（真实隔离样本）
 
@@ -154,10 +154,10 @@ Ctrl+C/SIGTERM：停止新任务，取消可取消请求，在时限内落盘状
 
 `GET /api/v1/recycled/{L}/{S}?limit=100` 实测 200，返回 `totalNum` 和 `contents`。本次只匹配一项：`originalPath` 是包含文件名的完整路径数组，size 为十进制字符串，recycledItemId 为整数，另有 removalTime、remainingTime、authorityList。列表分页及保留时长契约仍未验证。
 
-仅对已匹配的本次测试条目调用 `POST /api/v1/recycled/{L}/{S}/{ID}?restore=1&conflict_resolution_strategy=ask&restore_path_strategy=originalPath`，body `{}`：原路径已有重建文件时返回 409，重建文件不变。随后改为 `rename` 返回 200 和最终 path，恢复在原实验目录下自动改名；独立下载的旧内容 SHA-256 正确，原路径的新内容仍完整。没有使用 overwrite 或 fallbackToRoot，也没有操作其他回收站条目。见 [恢复证据](evidence/2026-09-17/recycle-restore.json)。
+仅对已匹配的本次测试条目调用 `POST /api/v1/recycled/{L}/{S}/{ID}?restore=1&conflict_resolution_strategy=ask&restore_path_strategy=originalPath`，body `{}`：原路径已有重建文件时返回 409，重建文件不变。随后改为 `rename` 返回 200 和最终 path，恢复在原实验目录下自动改名；独立下载的旧内容 SHA-256 正确，原路径的新内容仍完整。没有使用 overwrite 或 fallbackToRoot，也没有操作其他回收站条目。见 恢复证据（旧格式证据已清理）。
 
 恢复属于修改操作，响应丢失不得盲目重放 rename，否则可能产生重复副本；本次尚未验证恢复丢响应/异步任务。客户端未提供产品级自动恢复命令，接口实验不代替 Finder 删除/撤销验收。
 
 ### 路径名称编码补充
 
-URL percent-encoding 不能让服务端接受禁止的名称。真实目录探测拒绝 `? " < > : * |`；后端使用独立的可逆名称编码后才逐段 URL 编码，详见 [名称实测与兼容边界](live-api-findings.md#文件名实测与可逆编码2026-09-17)。恢复日志保持云端编码路径，不能按当前配置再次编码。原始 SDK 拒绝无效 UTF-8，避免 JSON 静默替换名称字节。
+URL percent-encoding 不能让服务端接受禁止的名称。真实目录探测拒绝 `? " < > : * |`；后端使用独立的可逆名称编码后才逐段 URL 编码。恢复日志保持云端编码路径，不能按当前配置再次编码。原始 SDK 拒绝无效 UTF-8，避免 JSON 静默替换名称字节。

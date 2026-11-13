@@ -1,0 +1,25 @@
+{
+  "run_id": "finder-easy-v1-attributes-delete-enabled",
+  "scenario_id": "ST-015-T",
+  "versions": {
+    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
+    "backend": "f06f2b4 worktree with rclone b93b73b; overwrite and trash deletion enabled",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "normal_resources",
+      "status": "PASS",
+      "observation": "Same real Finder run as ST-014-T under normal permissions/token/capacity. Upload committed; independent cloud full hash matches; fresh mount reopens file; retained journal spool matches full content. No negative-resource claim.",
+      "artifacts": [
+        "durability.json",
+        "cloud-readback.json",
+        "reopen.json",
+        "drag.log",
+        "requests.log"
+      ]
+    }
+  ]
+}

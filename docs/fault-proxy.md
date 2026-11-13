@@ -19,6 +19,17 @@ docker compose --profile faults up -d webdav-faults
 
 缺少签名数据域名时代理会拒绝该连接，不能当作“数据面故障覆盖通过”。更改 allowlist 或重启代理后 CA 会变化，必须重启 `webdav-faults`，避免继续使用旧进程缓存的证书池。Docker 默认代理环境不等于接线证明；必须在 `/events` 中看到控制面及数据面两类 authority 的请求。
 
+## Docker DNS 覆盖
+
+当宿主 VPN 将 `pan.sjtu.edu.cn` 解析到与 Docker 网段冲突的地址时，叠加 `docker-compose.doh.yml`。它启动项目内 DNS relay，通过 `https://8.8.8.8/dns-query` 获取公共 DNS wire-format 响应；TLS 验证保持开启，云盘及数据面仍使用原主机名验证证书。
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.doh.yml run --rm go-tests \
+  sh -c 'getent ahostsv4 pan.sjtu.edu.cn; curl --fail --silent --show-error --max-time 10 -o /dev/null -w "%{http_code}\n" https://pan.sjtu.edu.cn'
+```
+
+运行 live/faults 服务、观察器和相关验证脚本时必须一致使用两个 `-f` 参数。项目 DNS 网段为 `10.253.253.0/29`，换环境前要确认它未与现有 Docker 网络冲突。relay 不发布宿主端口、不关闭证书检查、不固定云盘 IP，也不是生产 DNS 服务；私有域名必须使用组织认可的解析方案。恢复基础 Compose 配置前先卸载测试网盘，服务重启后重新挂载并核验。
+
 ## 请求已完成后丢响应
 
 把以下规则保存为 `.state/confirm-fault.json`：

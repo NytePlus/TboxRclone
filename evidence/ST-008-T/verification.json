@@ -1,0 +1,28 @@
+{
+  "target": "system-test-length-positive-retest-20260926-1030",
+  "mounted_and_independent_cloud_results": [
+    {
+      "path": "empty.bin",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "guard_receipt_remaining": false
+    },
+    {
+      "path": "known-length.bin",
+      "size": 12,
+      "sha256": "0c3b7dccd178c76b3a726de9ace6f279ce1602d8a600c94842cbf824f4d72b6f"
+    },
+    {
+      "path": "unknown-length.bin",
+      "size": 14,
+      "sha256": "15f5468ada6df5cb5febf0cc4851f55c1bb748b1293299c5ec825e6521c68522"
+    }
+  ],
+  "appledouble": {
+    "path": "._empty.bin",
+    "size": 4096,
+    "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8"
+  },
+  "original_failure": "The first Finder run completed in the UI but only ._empty.bin reached the cloud and empty.bin retained a pending guard receipt.",
+  "fixed_behavior": "A committed AppleDouble sibling may publish the empty main path only after a completed lock lifecycle and only if that path never attempted content PUT."
+}

@@ -1,0 +1,7 @@
+# Single-controlled-client Finder tests only; use an isolated TBOX_LAB_REMOTE.
+# Finder may replace both file contents and AppleDouble metadata.
+services:
+  webdav:
+    environment:
+      RCLONE_SJTU_LAB_OVERWRITE: 'true'
+      RCLONE_SJTU_LAB_DELETE: 'true'

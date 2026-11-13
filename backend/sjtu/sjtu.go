@@ -11,10 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nyte/TboxRclone/internal/instance"
-	"github.com/nyte/TboxRclone/internal/journal"
-	"github.com/nyte/TboxRclone/internal/smh"
-	"github.com/nyte/TboxRclone/internal/transfer"
+	"github.com/nyte/TboxRclone/internal/sjtu/journal"
+	"github.com/nyte/TboxRclone/internal/sjtu/ownership"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"github.com/rclone/rclone/backend/overview"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/config/configmap"
@@ -24,7 +23,7 @@ import (
 	"github.com/rclone/rclone/lib/encoder"
 )
 
-const defaultEncoding = encoder.Display | encoder.EncodeWin | encoder.EncodeBackSlash | encoder.EncodeInvalidUtf8
+const DefaultEncoding = encoder.Display | encoder.EncodeWin | encoder.EncodeBackSlash | encoder.EncodeInvalidUtf8
 
 func init() {
 	fs.Register(&fs.RegInfo{Name: "sjtu", Description: "SJTU cloud drive (experimental)", NewFs: NewFs,
@@ -33,7 +32,7 @@ func init() {
 			IntegrationTests: "Incomplete; destructive operations disabled",
 			DataIntegrity:    "Experimental; conditional overwrite not established",
 		}, Options: []fs.Option{
-			{Name: "encoding", Default: defaultEncoding, Advanced: true, Help: "Reversible cloud filename encoding. Keep fixed for an existing managed root."},
+			{Name: "encoding", Default: DefaultEncoding, Advanced: true, Help: "Reversible cloud filename encoding. Keep fixed for an existing managed root."},
 			{Name: "endpoint", Default: "https://pan.sjtu.edu.cn", Help: "SMH HTTPS origin."},
 			{Name: "library_id", Required: true, Help: "Library ID from personal space credentials."},
 			{Name: "space_id", Required: true, Help: "Space ID from personal space credentials."},
@@ -72,22 +71,22 @@ type Options struct {
 
 // Fs represents one SJTU directory.
 type Fs struct {
-	name, root string
-	opt        Options
-	c          *smh.Client
-	features   *fs.Features
+	BackendName, BackendRoot string
+	Opt                      Options
+	Client                   *smh.Client
+	FeatureSet               *fs.Features
 }
 
 // Object captures metadata for a specific remote content version.
 type Object struct {
-	f      *Fs
-	remote string
-	item   smh.Item
+	Backend    *Fs
+	RemotePath string
+	Item       smh.Item
 }
 
 // NewFs creates a backend. Destructive capabilities remain disabled until validated.
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
-	opt := Options{Enc: defaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, MaxSpool: 4 << 30, Organization: "1"}
+	opt := Options{Enc: DefaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, MaxSpool: 4 << 30, Organization: "1"}
 	if err := configstruct.Set(m, &opt); err != nil {
 		return nil, err
 	}
@@ -114,13 +113,17 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 	}
 	// Hold for the process lifetime, not an individual Fs: VFS handles and
 	// rclone shutdown callbacks may outlive that object's cached lifetime.
-	if err = instance.ClaimScope(opt.OwnershipDir, opt.StateDir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
+	if err = ownership.ClaimScope(opt.OwnershipDir, opt.StateDir, c.Endpoint+"/"+c.Library+"/"+c.Space); err != nil {
 		return nil, err
 	}
-	f := &Fs{name: name, root: root, opt: opt, c: c}
-	f.features = (&fs.Features{CanHaveEmptyDirectories: true, MoveOverwrites: opt.LabMove, NoDirMoveFallback: true}).Fill(ctx, f)
+	f := &Fs{BackendName: name, BackendRoot: root, Opt: opt, Client: c}
+	// SMH resolves names case-insensitively. Advertising the opposite lets the
+	// VFS cache hold both Case.bin and case.bin even though the second upload
+	// replaces the first cloud object. That hides the collision from clients
+	// such as Finder and leaves a stale entry in the mounted directory.
+	f.FeatureSet = (&fs.Features{CaseInsensitive: true, CanHaveEmptyDirectories: true, MoveOverwrites: opt.LabMove, NoDirMoveFallback: true}).Fill(ctx, f)
 	if !opt.LabMove {
-		f.features.Move = nil
+		f.FeatureSet.Move = nil
 	}
 	if root != "" {
 		i, e := c.Info(ctx, opt.Enc.FromStandardPath(root))
@@ -128,21 +131,21 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 			return nil, e
 		}
 		if e == nil && i.Type != "dir" {
-			f.root = path.Dir(root)
-			if f.root == "." {
-				f.root = ""
+			f.BackendRoot = path.Dir(root)
+			if f.BackendRoot == "." {
+				f.BackendRoot = ""
 			}
 			return f, fs.ErrorIsFile
 		}
 	}
 	return f, nil
 }
-func (f *Fs) Name() string             { return f.name }
-func (f *Fs) Root() string             { return f.root }
-func (f *Fs) String() string           { return "SJTU cloud drive " + f.root }
+func (f *Fs) Name() string             { return f.BackendName }
+func (f *Fs) Root() string             { return f.BackendRoot }
+func (f *Fs) String() string           { return "SJTU cloud drive " + f.BackendRoot }
 func (f *Fs) Precision() time.Duration { return fs.ModTimeNotSupported }
 func (f *Fs) Hashes() hash.Set         { return hash.NewHashSet() }
-func (f *Fs) Features() *fs.Features   { return f.features }
+func (f *Fs) Features() *fs.Features   { return f.FeatureSet }
 
 // Validate before joining: path.Join would silently erase traversal and empty segments.
 func validateStandardPath(p string, enc encoder.MultiEncoder) error {
@@ -155,21 +158,21 @@ func validateStandardPath(p string, enc encoder.MultiEncoder) error {
 	}
 	return smh.ValidatePath(enc.FromStandardPath(p))
 }
-func (f *Fs) full(p string) (string, error) {
-	if err := validateStandardPath(p, f.opt.Enc); err != nil {
+func (f *Fs) FullPath(p string) (string, error) {
+	if err := validateStandardPath(p, f.Opt.Enc); err != nil {
 		return "", err
 	}
-	if err := validateStandardPath(f.root, f.opt.Enc); err != nil {
+	if err := validateStandardPath(f.BackendRoot, f.Opt.Enc); err != nil {
 		return "", err
 	}
-	joined := f.root
+	joined := f.BackendRoot
 	if p != "" {
 		if joined != "" {
 			joined += "/"
 		}
 		joined += p
 	}
-	return f.opt.Enc.FromStandardPath(joined), nil
+	return f.Opt.Enc.FromStandardPath(joined), nil
 }
 func mapped(err, missing error) error {
 	if smh.IsStatus(err, 404) {
@@ -183,25 +186,25 @@ func mapped(err, missing error) error {
 
 // List returns all immediate children or an explicit pagination error.
 func (f *Fs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
-	p, e := f.full(dir)
+	p, e := f.FullPath(dir)
 	if e != nil {
 		return nil, e
 	}
-	release, e := f.acquireFile(p, false)
+	release, e := f.AcquireFile(p, false)
 	if e != nil {
 		return nil, e
 	}
 	defer release()
-	if e = journal.CheckPending(f.opt.StateDir, f.c.Endpoint+"/"+f.c.Library+"/"+f.c.Space, p); e != nil {
+	if e = journal.CheckPending(f.Opt.StateDir, f.Client.Endpoint+"/"+f.Client.Library+"/"+f.Client.Space, p); e != nil {
 		return nil, e
 	}
-	items, e := f.c.List(ctx, p)
+	items, e := f.Client.List(ctx, p)
 	if e != nil {
 		return nil, mapped(e, fs.ErrorDirNotFound)
 	}
 	out := make(fs.DirEntries, 0, len(items))
 	for _, i := range items {
-		remote := path.Join(dir, f.opt.Enc.ToStandardName(i.Name))
+		remote := path.Join(dir, f.Opt.Enc.ToStandardName(i.Name))
 		if i.Type == "dir" {
 			out = append(out, fs.NewDir(remote, i.Modified).SetID(i.Inode))
 		} else if i.Type == "file" || i.Type == "image" || i.Type == "video" {
@@ -215,11 +218,11 @@ func (f *Fs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
 
 // NewObject captures the current content validator.
 func (f *Fs) NewObject(ctx context.Context, remote string) (fs.Object, error) {
-	p, e := f.full(remote)
+	p, e := f.FullPath(remote)
 	if e != nil {
 		return nil, e
 	}
-	i, e := f.c.Info(ctx, p)
+	i, e := f.Client.Info(ctx, p)
 	if e != nil {
 		return nil, mapped(e, fs.ErrorObjectNotFound)
 	}
@@ -231,15 +234,15 @@ func (f *Fs) NewObject(ctx context.Context, remote string) (fs.Object, error) {
 	}
 	return &Object{f, remote, i}, nil
 }
-func (f *Fs) writeAllowed(remote string) error {
-	if !f.opt.LabWrites {
+func (f *Fs) WriteAllowed(remote string) error {
+	if !f.Opt.LabWrites {
 		return fs.ErrorPermissionDenied
 	}
-	full, err := f.full(remote)
+	FullPath, err := f.FullPath(remote)
 	if err != nil {
 		return err
 	}
-	if !strings.HasPrefix(full, "codex-api-lab/") || full == "codex-api-lab/" {
+	if !strings.HasPrefix(FullPath, "codex-api-lab/") || FullPath == "codex-api-lab/" {
 		return errors.New("write root is outside the isolated lab")
 	}
 	return nil
@@ -247,10 +250,10 @@ func (f *Fs) writeAllowed(remote string) error {
 
 // Mkdir creates missing ancestors without overwriting existing files.
 func (f *Fs) Mkdir(ctx context.Context, dir string) error {
-	if e := f.writeAllowed(dir); e != nil {
+	if e := f.WriteAllowed(dir); e != nil {
 		return e
 	}
-	p, e := f.full(dir)
+	p, e := f.FullPath(dir)
 	if e != nil {
 		return e
 	}
@@ -272,12 +275,12 @@ func (f *Fs) mkdirCloudPath(ctx context.Context, p string) error {
 }
 
 func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
-	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
+	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
 	check := func() (bool, error) {
-		if err := journal.CheckPending(f.opt.StateDir, scope, current); err != nil {
+		if err := journal.CheckPending(f.Opt.StateDir, scope, current); err != nil {
 			return false, fserrors.NoRetryError(err)
 		}
-		item, err := f.c.Info(ctx, current)
+		item, err := f.Client.Info(ctx, current)
 		if err == nil {
 			if item.Type != "dir" {
 				return false, fs.ErrorIsFile
@@ -291,7 +294,7 @@ func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
 	}
 	// Existing directories need no exclusive ownership: sibling uploads may
 	// independently ensure their shared ancestors without becoming conflicting.
-	releaseRead, err := f.acquireFile(current, false)
+	releaseRead, err := f.AcquireFile(current, false)
 	if err != nil {
 		return fserrors.NoRetryError(err)
 	}
@@ -300,7 +303,7 @@ func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
 	if err != nil || exists {
 		return err
 	}
-	release, err := f.acquireFile(current, true)
+	release, err := f.AcquireFile(current, true)
 	if err != nil {
 		return fserrors.NoRetryError(err)
 	}
@@ -309,9 +312,9 @@ func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
 	if exists, err := check(); err != nil || exists {
 		return err
 	}
-	err = f.c.JSON(ctx, "PUT", "directory", current, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, nil)
+	err = f.Client.JSON(ctx, "PUT", "directory", current, url.Values{"conflict_resolution_strategy": {"ask"}}, struct{}{}, nil)
 	if smh.IsStatus(err, 409) {
-		existing, checkErr := f.c.Info(ctx, current)
+		existing, checkErr := f.Client.Info(ctx, current)
 		if checkErr == nil {
 			if existing.Type == "dir" {
 				return nil
@@ -328,7 +331,7 @@ func (f *Fs) mkdirComponentOnce(ctx context.Context, current string) error {
 
 // Put preserves input before starting a create or explicitly enabled overwrite.
 func (f *Fs) Put(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) (fs.Object, error) {
-	o := &Object{f: f, remote: src.Remote()}
+	o := &Object{Backend: f, RemotePath: src.Remote()}
 	if e := o.Update(ctx, in, src, options...); e != nil {
 		return nil, e
 	}
@@ -339,125 +342,3 @@ func (f *Fs) Put(ctx context.Context, in io.Reader, src fs.ObjectInfo, options .
 func (f *Fs) PutStream(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) (fs.Object, error) {
 	return f.Put(ctx, in, src, options...)
 }
-func (o *Object) Fs() fs.Info    { return o.f }
-func (o *Object) Remote() string { return o.remote }
-func (o *Object) String() string {
-	if o == nil {
-		return "<nil>"
-	}
-	return o.remote
-}
-func (o *Object) Size() int64                                     { return int64(o.item.Size) }
-func (o *Object) ModTime(context.Context) time.Time               { return o.item.Modified }
-func (o *Object) Storable() bool                                  { return true }
-func (o *Object) Hash(context.Context, hash.Type) (string, error) { return "", hash.ErrUnsupported }
-func (o *Object) SetModTime(context.Context, time.Time) error     { return fs.ErrorCantSetModTime }
-
-// Open rejects unsupported mandatory options and invalid or unbound ranges.
-func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (io.ReadCloser, error) {
-	start, length := int64(0), int64(-1)
-	for _, opt := range options {
-		switch v := opt.(type) {
-		case *fs.RangeOption:
-			start, length = v.Decode(o.Size())
-		case *fs.SeekOption:
-			start = v.Offset
-		default:
-			if opt.Mandatory() {
-				return nil, fmt.Errorf("unsupported open option %T", opt)
-			}
-		}
-	}
-	p, e := o.f.full(o.remote)
-	if e != nil {
-		return nil, e
-	}
-	release, e := o.f.acquireFile(p, false)
-	if e != nil {
-		return nil, fserrors.NoRetryError(e)
-	}
-	if e = journal.CheckPending(o.f.opt.StateDir, o.f.c.Endpoint+"/"+o.f.c.Library+"/"+o.f.c.Space, p); e != nil {
-		release()
-		return nil, fserrors.NoRetryError(e)
-	}
-	r, e := o.f.c.Open(ctx, p, o.item, start, length)
-	if e != nil {
-		release()
-		return nil, e
-	}
-	return &ownedReader{ReadCloser: r, release: release}, nil
-}
-
-// Update implements durable uploads and opt-in sequential overwrite in the lab.
-func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, options ...fs.OpenOption) error {
-	f := o.f
-	if e := f.writeAllowed(o.remote); e != nil {
-		return e
-	}
-	p, e := f.full(o.remote)
-	if e != nil {
-		return e
-	}
-	// Acquire before waiting for the journal or accepting input. A competing
-	// write must fail now, never wait and become an unintended later overwrite.
-	release, e := f.acquireFile(p, true)
-	if e != nil {
-		return fserrors.NoRetryError(e)
-	}
-	defer release()
-	releaseSlot, e := f.acquireMutation(ctx)
-	if e != nil {
-		return fserrors.NoRetryError(e)
-	}
-	defer releaseSlot()
-	s, e := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
-	if e != nil {
-		return fserrors.NoRetryError(e)
-	}
-	defer s.Close()
-	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
-	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
-	r, e := s.Prepare(ctx, scope, p, in, src.Size(), int64(f.opt.MaxUpload))
-	if e != nil {
-		return fserrors.NoRetryError(e)
-	}
-	fail := func(err error) error {
-		return fserrors.NoRetryError(fmt.Errorf("operation %s (%s), local data retained: %w", r.ID, r.State, err))
-	}
-	if previous, infoErr := f.c.Info(ctx, p); infoErr == nil {
-		if previous.Type == "dir" {
-			return fail(fs.ErrorIsDir)
-		}
-		if !f.opt.LabOverwrite {
-			return fail(errors.New("overwrite requires explicit lab_overwrite and the single-controlled-client contract"))
-		}
-		if previous.ETag == "" {
-			return fail(errors.New("overwrite target has no content validator"))
-		}
-		r.Overwrite, r.OldETag, r.OldSize = true, previous.ETag, int64(previous.Size)
-		if e = s.Save(r); e != nil {
-			return fail(e)
-		}
-	} else if !smh.IsStatus(infoErr, 404) {
-		return fail(infoErr)
-	}
-	parent := path.Dir(o.remote)
-	if parent == "." {
-		parent = ""
-	}
-	if e = f.Mkdir(ctx, parent); e != nil {
-		return fail(e)
-	}
-	if e = transfer.StartWithRecovery(ctx, s, f.c, r); e != nil {
-		return fail(e)
-	}
-	o.item, e = f.c.Info(ctx, p)
-	if e != nil {
-		return fail(e)
-	}
-	return nil
-}
-
-var _ fs.Fs = (*Fs)(nil)
-var _ fs.Object = (*Object)(nil)
-var _ fs.PutStreamer = (*Fs)(nil)

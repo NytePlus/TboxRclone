@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-26T02:38:53Z",
+  "url": "http://127.0.0.1:8686/system-test-range-positive-20260926-1050/large.bin",
+  "etag": "\"18d8be7bd85cfe00100000\"",
+  "size": 1048576,
+  "full_sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83",
+  "expected_sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83",
+  "ranges": [
+    {
+      "start": 0,
+      "end": 4095,
+      "http_status": 206,
+      "content_range": "bytes 0-4095/1048576",
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "pass": true
+    },
+    {
+      "start": 522240,
+      "end": 526335,
+      "http_status": 206,
+      "content_range": "bytes 522240-526335/1048576",
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "pass": true
+    },
+    {
+      "start": 1044480,
+      "end": 1048575,
+      "http_status": 206,
+      "content_range": "bytes 1044480-1048575/1048576",
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

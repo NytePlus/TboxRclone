@@ -1,0 +1,25 @@
+{
+  "run_id": "finder-easy-v1-attributes-delete-enabled",
+  "scenario_id": "ST-014-T",
+  "versions": {
+    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
+    "backend": "f06f2b4 worktree with rclone b93b73b; overwrite and trash deletion enabled",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "ordinary_name",
+      "status": "PASS",
+      "observation": "Real Finder copy of ordinary filename carrying known xattr. Independent cloud content is 65536 bytes and matches source SHA256. Attribute remains finder-easy-v1 after native unmount and remount. Prior -36 with lab_delete=false retained as failure evidence.",
+      "artifacts": [
+        "cloud-readback.json",
+        "reopen.json",
+        "drag.log",
+        "requests.log",
+        "display-1.mov"
+      ]
+    }
+  ]
+}

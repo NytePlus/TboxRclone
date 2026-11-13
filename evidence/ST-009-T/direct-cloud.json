@@ -1,0 +1,15 @@
+{
+  "root": "codex-api-lab/finder-guard-20260918235817/system-test-range-positive-20260926-1050",
+  "method": "direct cloud full reads, bypass WebDAV",
+  "directories": [],
+  "files": {
+    "large.bin": {
+      "size": 1048576,
+      "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83"
+    },
+    "._large.bin": {
+      "size": 4096,
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8"
+    }
+  }
+}

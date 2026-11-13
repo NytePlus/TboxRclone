@@ -1,19 +1,19 @@
 #!/bin/sh
 set -eu
 
-FINDER_DRAG_VERSION='2026-09-20.2'
+FINDER_DRAG_VERSION='2026-11-12.1'
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-if [ "${1:-}" = '--record-repro' ]; then
+if [ "${1:-}" = '--record-overwrite' ]; then
   shift
-  exec sh "$root/scripts/finder-record.sh" --reproduce-pending "$@"
+  exec sh "$root/scripts/finder/record.sh" --allow-existing "$@"
 fi
 if [ "${1:-}" = '--record' ]; then
   shift
-  exec sh "$root/scripts/finder-record.sh" "$@"
+  exec sh "$root/scripts/finder/record.sh" "$@"
 fi
 if [ "${1:-}" = '--preflight' ]; then
   shift
-  exec python3 "$root/scripts/finder-preflight.py" "$@"
+  exec python3 "$root/scripts/finder/preflight.py" "$@"
 fi
 if [ "${1:-}" = '--open' ]; then
   [ "$#" -eq 3 ] || { echo "usage: $0 --open SOURCE_DIRECTORY TARGET_DIRECTORY" >&2; exit 2; }
@@ -29,16 +29,16 @@ on run paths
     set halfWidth to ((item 3 of screenBounds) - (item 1 of screenBounds)) div 2
     repeat with i from 1 to 2
       set folderRef to (POSIX file (item i of paths)) as alias
-      set w to missing value
+      set oldWindows to {}
       repeat with candidate in Finder windows
         try
-          if (target of candidate as alias) is folderRef then
-            set w to contents of candidate
-            exit repeat
-          end if
+          if (target of candidate as alias) is folderRef then set end of oldWindows to contents of candidate
         end try
       end repeat
-      if w is missing value then set w to make new Finder window to folderRef
+      repeat with candidate in oldWindows
+        close candidate
+      end repeat
+      set w to make new Finder window to folderRef
       set current view of w to list view
       set leftEdge to (item 1 of screenBounds) + (i - 1) * halfWidth
       set bounds of w to {leftEdge, 60, leftEdge + halfWidth, (item 4 of screenBounds) - 60}
@@ -57,6 +57,6 @@ fi
 cache=${TBOX_SWIFT_MODULE_CACHE:-/private/tmp/tboxrclone-swift-module-cache}
 mkdir -p "$cache"
 
-swiftc -parse "$root/scripts/finder-drag.swift"
+swiftc -parse "$root/scripts/finder/drag.swift"
 echo "finder_drag_wrapper_version=$FINDER_DRAG_VERSION"
-exec swift -module-cache-path "$cache" "$root/scripts/finder-drag.swift" "$@"
+exec swift -module-cache-path "$cache" "$root/scripts/finder/drag.swift" "$@"

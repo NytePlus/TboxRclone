@@ -4,7 +4,7 @@ set -eu
 service=$1
 shift
 case "$service" in
-  faultproxy|tboxrclone|tbox-webdav-guard) ;;
+  faultproxy|tboxrclone) ;;
   *) echo 'unsupported service' >&2; exit 2 ;;
 esac
 go build -o "/tmp/tbox-service-$service" "./cmd/$service"

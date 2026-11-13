@@ -4,9 +4,11 @@
 
 服务和恢复命令必须共享所有权注册目录与原状态目录。后端可设置 `ownership_dir`；`tbox-state` 使用相同 `--ownership-dir`。Compose 已设置 `RCLONE_SJTU_OWNERSHIP_DIR=/state/owners`，恢复命令也读取此环境变量。原生缺省位置为用户配置目录下的 `TboxRclone/owners`。一个空间首次绑定后，换 state_dir 会被拒绝，防止绕过未决数据；不要通过删除注册文件或换注册目录强行启动。跨宿主/容器迁移尚未提供自动流程。
 
-Go 实现的交大云盘实验性 rclone backend。rclone v1.75.1 通过 `third_party/rclone` Git submodule 固定，主项目通过 Go `replace` 引用；必要的上游修复保存在 `patches/rclone/`，按固定版本重放。
+Go 实现的交大云盘实验性 rclone backend。rclone 固定于上游提交 `b93b73b`（已包含 rclone/rclone#9935 与 #9937），通过 `third_party/rclone` Git submodule 引入，主项目通过 Go `replace` 引用；其余必要补丁保存在 `third_party/patches/rclone/`，按固定提交重放。
 
-**尚未达到 macOS 网盘发布标准。** 已执行部分真实云盘 API 实验；Finder、宿主机崩溃验收未完成。36 个系统验收分支没有任何一个被标记为通过。覆盖、文件删除和空目录删除默认关闭，非空目录递归删除仍拒绝；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（lab_overwrite=true）及文件/空目录回收站删除（lab_delete=true）。Compose 入口由 Tbox WebDAV guard 统一裁决请求冲突，内部 rclone WebDAV core 仍以 VFS cache off 和 no-recursive-delete 运行。功能阻塞项和测试结果见 [实施进度](docs/implementation.md)。
+首方代码按 `backend/`、`internal/`、`cmd/` 和 `scripts/` 分层；Finder 自动化的内部实现位于 `scripts/finder/`，稳定入口仍为 `scripts/finder-drag.sh`。除固定的 `third_party/rclone` 子模块外，源码文件不得超过 500 行，`python3 scripts/quality/check_source_layout.py` 和系统检查入口会执行该门禁。
+
+**尚未达到 macOS 网盘发布标准。** 当前 36 个系统验收分支中 5 个为 PASS，其余仍须按现架构执行。覆盖、文件删除和空目录删除默认关闭，非空目录递归删除仍拒绝；隔离实验目录可显式启用创建，以及单客户端契约下的实验性顺序覆盖（`lab_overwrite=true`）及文件/空目录回收站删除（`lab_delete=true`）。Compose 由 rclone WebDAV 直接暴露 `8686` 入口，继续使用 VFS cache off 和 no-recursive-delete。当前文档和测试状态见[文档索引](docs/README.md)及[机器清单](test-manifest.json)。
 
 ## 构建与离线测试
 
@@ -34,7 +36,7 @@ bin/tboxrclone-macos-mount mount --help
 
 构建成功不代表运行时可挂载：本机实测缺少 FUSE 运行库，返回 `cgofuse: cannot find FUSE`；脚本不安装驱动、不修改系统安全设置。
 
-**macOS 自带 WebDAV 文件系统当前只读路径已有实测，写入尚不可用。** 新文件操作会先在云端创建空文件，后续内容上传因后端禁止覆盖而失败。实测 `fsync` 报错但 `close` 成功、云端仍为空文件；完整内容保留在 Prepared 日志。不要将此实验版本用于需要“关闭即云端保存”的工作流。
+macOS 自带 WebDAV 文件系统仍须通过完整 Finder 验收。当前已有部分写入分支通过，但不能据此推断安全保存、故障恢复或所有覆盖场景可用；不要将实验版本用于正式数据。
 
 ## 配置实验环境
 
@@ -105,7 +107,7 @@ Compose 使用 `--vfs-cache-mode off`。这只是实验配置，不代表已经�
 
 ## 中断与对账
 
-日志目录必须为绝对路径且权限 0700。每个上传有 `<id>.json` 和 `<id>.data`，进程生命周期所有权锁排除第二服务或恢复进程。后端在持有路径占用后共享日志锁，不同文件可并行；同路径冲突立即拒绝。每个空间最多 4 个活跃变更，每个上传最多 4 个分片 worker；等待容量可取消。独立恢复仍独占日志锁。
+日志目录必须为绝对路径且权限 0700。每个上传有 `<id>.json` 和 `<id>.data`，进程生命周期所有权锁排除第二服务或恢复进程。后端在持有路径占用后共享日志锁，不同文件可并行；后端同路径变更冲突会拒绝，但 WebDAV 入口不再规定固定 `423`。每个空间最多 4 个活跃变更，每个上传最多 4 个分片 worker；等待容量可取消。独立恢复仍独占日志锁。
 
 ```sh
 go run ./cmd/tbox-state -state-dir /absolute/private/state
@@ -125,14 +127,14 @@ go run ./cmd/tbox-state -state-dir /absolute/private/state \
 # Mac 本机没有 Go 时先用 Docker 构建原生检查器
 # 此命令以 Apple Silicon 为例。
 docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o bin/davcheck ./cmd/davcheck
-bin/davcheck -url http://127.0.0.1:8686/ -allow-lab-writes > reports/webdav-check.json
+bin/davcheck -url http://127.0.0.1:8686/ -allow-lab-writes > evidence/reports/webdav-check.json
 ```
 
 检查器只接受 loopback IP，以随机目录创建固定测试数据并保留现场。任一 HTTP 状态或内容不满足契约就返回非零；固定上游原始版本曾有两项失败；应用当前补丁后实测 13/13 通过，重复 MKCOL 为 405、已有资源的 PUT If-None-Match:* 为 412。补丁只检查 VFS 可见状态，外部修改、缓存失效和其他条件头仍待验证。这是协议诊断，不是 Finder 验收，也不更新 manifest 为 PASS。
 
 ## 验收
 
-[原始调研](docs/README.md) · [接口](docs/api.md) · [验证规格](docs/verification.md) · [机器清单](test-manifest.json) · [证据格式](docs/evidence-format.md) · [HTTPS 故障代理](docs/fault-proxy.md)
+[文档索引](docs/README.md) · [接口](docs/api.md) · [验证规格与证据格式](docs/verification.md) · [机器清单](test-manifest.json) · [HTTPS 故障代理](docs/fault-proxy.md)
 
 ```sh
 # 运行完整上游 WebDAV 测试（上游本地后端；不是交大/Finder 验收）
@@ -142,15 +144,15 @@ docker compose run --rm go-tests go test github.com/rclone/rclone/cmd/serve/webd
 docker compose run --rm go-tests go run ./cmd/verify
 ```
 
-完整 SJTU `fstests` 使用 `backend/sjtu/integration_test.go`。必须显式提供 `TBOX_LIVE_REMOTE=TestSjtu:codex-api-lab/<run-id>` 及私有配置。未提供时显示 SKIP/BLOCKED，不能当成通过。真实全套入口已执行并观察到删除/清理相关失败，240 秒处超时，尚未覆盖全部子测试；不能通过筛掉失败项来改变结果。见 [真实接口实验](docs/live-api-findings.md)。
+完整 SJTU `fstests` 使用 `backend/sjtu/test/integration_test.go`。必须显式提供 `TBOX_LIVE_REMOTE=TestSjtu:codex-api-lab/<run-id>` 及私有配置。未提供时显示 SKIP/BLOCKED，不能当成通过；不能通过筛掉失败项来改变结果。
 
-Finder 测试入口固定版本 `2026-09-20.2` 支持先打开并排列两个独立列表窗口：
+Finder 测试入口固定版本 `2026-11-12.1` 支持先打开并排列两个独立列表窗口：
 
 ```sh
 scripts/finder-drag.sh --open SOURCE_DIRECTORY TARGET_DIRECTORY
 ```
 
-然后使用上述标题及文件名执行拖拽。2026-09-20 的 sequential-001 实测完成 Finder 拷贝，独立云端下载 65,536 字节与源 SHA-256 一致；用户确认全过程无弹窗。证据位于 `docs/evidence/2026-09-20/sequential-001`。这不代表全部系统场景或旧未决路径已通过。
+然后使用上述标题及文件名执行拖拽。单次拖拽成功不代表全部系统场景通过；必须按[Finder 测试流程](docs/verification.md#4-finder-系统测试执行)完成重新打开、独立云端读取和证据门禁。
 
 固定测试流程：
 
@@ -159,10 +161,11 @@ scripts/finder-drag.sh --preflight SOURCE TARGET FILE MOUNT
 scripts/finder-drag.sh --record SOURCE TARGET FILE MOUNT NEW_EVIDENCE_DIR
 ```
 
-预检拒绝复用已有目标文件或带未决 guard 记录的路径，不删除记录。录制模式先打开窗口，再启动所有活动显示器的 15 秒录屏，正常等待录制结束，并保存命令日志。文件存在仅证明录像已输出，还需验证可解码、审阅全过程、确认拷贝结束和内容一致；若录制结束时操作仍在进行，录像不能证明全过程无弹窗；须单独记录用户全程观察或其他完整证据。当前指定的 20260919125000 目标已有未决记录，预检会阻止重复基线测试。
+预检默认拒绝复用已有目标文件；顺序覆盖测试可显式允许已有目标。录制模式先打开窗口，再启动所有活动显示器的 15 秒录屏，正常等待录制结束，并保存命令日志。文件存在仅证明录像已输出，还需验证可解码、审阅全过程、确认拷贝结束和内容一致；若录制结束时操作仍在进行，录像不能证明全过程无弹窗；须单独记录用户全程观察或其他完整证据。
 
 录制入口退出码：`1` 表示执行或录制失败，`2` 表示预检或参数阻止执行，`3` 表示证据已采集但尚待完整审阅和内容校验。录制入口不会返回代表验收通过的 `0`。
 
-若目的是复现原路径的未决记录错误，可显式使用 `finder-drag.sh --record-repro SOURCE TARGET FILE MOUNT NEW_EVIDENCE_DIR`。它只放行未决记录这一项前置条件，记录警告和 `fresh_acceptance_eligible=false`；不删除记录，也不构成正式验收。录屏不可用时仍会在拖拽前停止。
+当前服务不使用 zero-byte barrier 或 guard receipt。Finder 的初始空 PUT 会直接进入 rclone；保存完成后的重开内容和独立云端 SHA-256 才是验收信号。
 
-该已验证服务配置要求启用零字节 guard 及 `TBOX_LAB_OVERWRITE=true`，仅用于既定单客户端隔离测试根。覆盖使用持久日志和内容校验，旧未决状态不得清除。
+
+需要顺序覆盖时使用 `scripts/finder-drag.sh --record-overwrite SOURCE TARGET FILE MOUNT NEW_EVIDENCE_DIR`，并在 Finder 确认替换隔离测试文件。带扩展属性的 Finder 测试还需受控回收站删除，使用 `docker-compose.finder-tests.yml`；必须指定隔离的 `TBOX_LAB_REMOTE`，保留未决状态。

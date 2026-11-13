@@ -2,13 +2,14 @@
 /bin/
 /.secrets/
 /.state/
-/evidence/
-/reports/
+/evidence/reports/
 *.test
 coverage.out
+__pycache__/
+*.pyc
 
 # Local desktop recordings and screenshots (may contain personal information).
-/docs/evidence/**/*.mov
-/docs/evidence/**/*.mp4
-/docs/evidence/**/*.png
-/docs/evidence/**/*.jpg
+/evidence/**/*.mov
+/evidence/**/*.mp4
+/evidence/**/*.png
+/evidence/**/*.jpg

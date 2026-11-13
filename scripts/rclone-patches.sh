@@ -5,7 +5,7 @@ mode=${1:---check}
 case "$mode" in --apply|--check) ;; *) echo 'usage: rclone-patches.sh [--apply|--check]' >&2; exit 2;; esac
 project_dir=$(cd "$(dirname "$0")/.." && pwd)
 upstream_dir="$project_dir/third_party/rclone"
-patch_dir="$project_dir/patches/rclone"
+patch_dir="$project_dir/third_party/patches/rclone"
 base=$(cat "$patch_dir/base")
 actual=$(git -C "$upstream_dir" rev-parse HEAD)
 if [ "$actual" != "$base" ]; then

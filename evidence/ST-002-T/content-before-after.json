@@ -1,0 +1,20 @@
+{
+  "source": {
+    "bytes": 65536,
+    "sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+    "unchanged_after_cancel": true
+  },
+  "target_before": {
+    "method": "two direct cloud full reads bypassing WebDAV",
+    "bytes": 62464,
+    "sha256": "cd89ee1b8f4567cf722ec920dc736d929eae0efe068f1496d5d5bfbc8fe89be8",
+    "complete_reads": 2
+  },
+  "target_after": {
+    "method": "mounted full read plus two direct cloud full reads bypassing WebDAV",
+    "bytes": 62464,
+    "sha256": "cd89ee1b8f4567cf722ec920dc736d929eae0efe068f1496d5d5bfbc8fe89be8",
+    "direct_cloud_complete_reads": 2
+  },
+  "verdict": "The overwrite was cancelled before confirmation; the old target and local source both remained intact."
+}

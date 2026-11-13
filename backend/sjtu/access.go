@@ -4,20 +4,21 @@ import (
 	"context"
 	"errors"
 	"io"
-	"strings"
 	"sync"
+
+	"github.com/nyte/TboxRclone/internal/pathclaims"
 )
 
 // ErrPathBusy is a conflict, not an invitation to queue a later overwrite.
 var ErrPathBusy = errors.New("path busy: conflicting file access")
 
-type accessRequest struct {
-	path        string
-	write, tree bool
+type AccessRequest struct {
+	Path        string
+	Write, Tree bool
 }
 type accessLease struct {
 	scope    string
-	requests []accessRequest
+	requests []AccessRequest
 }
 
 // A lease installs all source/destination claims atomically. Distinct reader
@@ -27,12 +28,12 @@ var fileAccess = struct {
 	leases map[*accessLease]bool
 }{leases: make(map[*accessLease]bool)}
 
-func (f *Fs) acquireFile(p string, write bool) (func(), error) { return f.acquirePath(p, write, false) }
-func (f *Fs) acquirePath(p string, write, tree bool) (func(), error) {
-	return f.acquirePaths(accessRequest{p, write, tree})
+func (f *Fs) AcquireFile(p string, write bool) (func(), error) { return f.AcquirePath(p, write, false) }
+func (f *Fs) AcquirePath(p string, write, tree bool) (func(), error) {
+	return f.AcquirePaths(AccessRequest{p, write, tree})
 }
-func (f *Fs) acquirePaths(requests ...accessRequest) (func(), error) {
-	lease := &accessLease{scope: f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space, requests: append([]accessRequest(nil), requests...)}
+func (f *Fs) AcquirePaths(requests ...AccessRequest) (func(), error) {
+	lease := &accessLease{scope: f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space, requests: append([]AccessRequest(nil), requests...)}
 	fileAccess.Lock()
 	defer fileAccess.Unlock()
 	for active := range fileAccess.leases {
@@ -41,8 +42,7 @@ func (f *Fs) acquirePaths(requests ...accessRequest) (func(), error) {
 		}
 		for _, a := range active.requests {
 			for _, b := range lease.requests {
-				overlap := a.path == b.path || (a.tree && strings.HasPrefix(b.path, a.path+"/")) || (b.tree && strings.HasPrefix(a.path, b.path+"/"))
-				if overlap && (a.write || b.write) {
+				if pathclaims.Conflict("/"+a.Path, a.Write, a.Tree, "/"+b.Path, b.Write, b.Tree) {
 					return nil, ErrPathBusy
 				}
 			}
@@ -72,13 +72,13 @@ func (r *ownedReader) Close() error {
 
 // Bound complete mutation lifetimes (spool/backup through reconciliation), not
 // individual parts. Four uploads each use at most four data-plane workers.
-const maxActiveMutations = 4
+const MaxActiveMutations = 4
 
 var mutationSlots sync.Map
 
-func (f *Fs) acquireMutation(ctx context.Context) (func(), error) {
-	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
-	value, _ := mutationSlots.LoadOrStore(scope, make(chan struct{}, maxActiveMutations))
+func (f *Fs) AcquireMutation(ctx context.Context) (func(), error) {
+	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
+	value, _ := mutationSlots.LoadOrStore(scope, make(chan struct{}, MaxActiveMutations))
 	slots := value.(chan struct{})
 	if err := ctx.Err(); err != nil {
 		return nil, err

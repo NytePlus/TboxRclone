@@ -1,0 +1,17 @@
+{
+  "tool": "Computer Use",
+  "application": "Finder",
+  "target": "system-test-range-positive-20260926-1050/large.bin",
+  "copy_progress_observed": [
+    "preparing large.bin",
+    "copying large.bin",
+    "progress window closed after completion"
+  ],
+  "quick_look": {
+    "opened": true,
+    "visible_name": "large.bin",
+    "visible_size": "1 MB",
+    "visible_modified": "2026-09-26 10:38:03"
+  },
+  "screenshot": "quicklook.png"
+}

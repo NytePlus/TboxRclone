@@ -1,0 +1,20 @@
+{
+  "scenario": "ST-012-T/valid_lock_token",
+  "path_sha256": "6e427eee90db7d4f65b1152af43c3f1028afba6f61acde1a0038a37c25971ffa",
+  "observed_requests": [
+    {"id": 76, "method": "LOCK", "status": 200},
+    {"id": 77, "method": "GET", "status": 200, "response_bytes": 0},
+    {"id": 78, "method": "PUT", "has_if": true, "request_bytes": 65536, "status": 201},
+    {"id": 113, "method": "UNLOCK", "status": 204},
+    {"id": 115, "method": "LOCK", "status": 200},
+    {"id": 116, "method": "GET", "status": 200, "response_bytes": 65536},
+    {"id": 117, "method": "UNLOCK", "status": 204}
+  ],
+  "content_verification": {
+    "source_bytes": 65536,
+    "remote_bytes": 65536,
+    "sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+    "fresh_remount_read": true
+  },
+  "lock_scope": "The token is issued and enforced by the Tbox WebDAV guard for the controlled client session. This evidence does not claim a persistent lock in the remote cloud API."
+}

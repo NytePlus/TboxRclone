@@ -1,0 +1,33 @@
+{
+  "run_id": "finder-easy-v1-directory-retry",
+  "scenario_id": "ST-013-T",
+  "versions": {
+    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
+    "backend": "f06f2b4 deployed service; lab_overwrite=true",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "file_destination_absent",
+      "status": "PASS",
+      "observation": "Recorded plain.bin Finder copy to absent destination; independent cloud full reads match.",
+      "artifacts": [
+        "plain-cloud-observations.jsonl",
+        "plain-requests.log"
+      ]
+    },
+    {
+      "id": "directory_destination_absent",
+      "status": "PASS",
+      "observation": "Real Finder directory drag to fresh destination after remount. All nested content and empty directory match independent cloud inventory; source unchanged. AppleDouble files inventoried.",
+      "artifacts": [
+        "cloud-tree.json",
+        "tree-verification.json",
+        "drag.log",
+        "display-1.mov"
+      ]
+    }
+  ]
+}

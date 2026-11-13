@@ -1,0 +1,7 @@
+{
+  "script": "2026-09-20.3-rc2",
+  "mouse_release": "finder_mouse_released logged; no external release needed",
+  "replacement": "Computer Use observed exact plain.bin replacement prompt and clicked Replace",
+  "copy": "Finder displayed 0/62 KB progress; progress window later closed; independent cloud verified 62464 bytes",
+  "recording": "Native full desktop,15-second bound; decoded frame at10s shows replacement prompt. Upload finishes after recording; no claim of full-operation no-popup coverage."
+}

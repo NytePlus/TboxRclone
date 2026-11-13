@@ -82,7 +82,8 @@ func validateEvidence(test scenario, required []string) error {
 func run() int {
 	source := flag.String("manifest", "test-manifest.json", "acceptance manifest")
 	casesFile := flag.String("cases", "docs/acceptance-cases.json", "required subcase catalog")
-	output := flag.String("output", "reports", "generated reports directory")
+	output := flag.String("output", "evidence/reports", "generated reports directory")
+	scopeFile := flag.String("scope", "", "optional selected-branch scope JSON; still report all branches")
 	flag.Parse()
 	b, e := os.ReadFile(*source)
 	if e != nil {
@@ -104,6 +105,29 @@ func run() int {
 		fmt.Fprintln(os.Stderr, "invalid subcase catalog")
 		return 2
 	}
+	selected := map[string]bool{}
+	if *scopeFile != "" {
+		var scope struct {
+			Selected []string `json:"selected"`
+		}
+		data, err := os.ReadFile(*scopeFile)
+		if err != nil || json.Unmarshal(data, &scope) != nil || len(scope.Selected) == 0 {
+			fmt.Fprintln(os.Stderr, "invalid scope")
+			return 2
+		}
+		for _, id := range scope.Selected {
+			if selected[id] || len(required[id]) == 0 {
+				fmt.Fprintln(os.Stderr, "invalid scope ID", id)
+				return 2
+			}
+			selected[id] = true
+		}
+	} else {
+		for id := range required {
+			selected[id] = true
+		}
+	}
+	selectedPassed := 0
 	seen := map[string]bool{}
 	results := []result{}
 	passed := 0
@@ -130,6 +154,9 @@ func run() int {
 				reason = err.Error()
 			} else {
 				passed++
+				if selected[test.ID] {
+					selectedPassed++
+				}
 			}
 		case "FAIL", "BLOCKED", "NOT_RUN":
 		default:
@@ -163,7 +190,8 @@ func run() int {
 		}
 	}
 	fmt.Printf("Acceptance: %d/%d PASS; report: %s\n", passed, len(results), *output)
-	if passed != len(results) {
+	fmt.Printf("Selected scope: %d/%d PASS\n", selectedPassed, len(selected))
+	if selectedPassed != len(selected) {
 		return 1
 	}
 	return 0

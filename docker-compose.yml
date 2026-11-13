@@ -10,7 +10,7 @@ services:
     environment:
       RCLONE_CONFIG: /nonexistent
     command: [go, test, -race, ./...]
-  webdav-core:
+  webdav:
     profiles: [live]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
@@ -22,33 +22,16 @@ services:
       - ./.secrets:/secrets:ro
       - ./.state:/state
     environment:
-      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
+      RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
+      RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
       RCLONE_LOG_LEVEL: '${TBOX_LOG_LEVEL:-NOTICE}'
       RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
       RCLONE_SJTU_LAB_DELETE: '${TBOX_LAB_DELETE:-false}'
       RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8685', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
-    healthcheck:
-      test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8685${TBOX_WEBDAV_BASE_URL:-}/']
-      interval: 5s
-      timeout: 2s
-      retries: 30
-  webdav:
-    profiles: [live]
-    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
-    working_dir: /src
-    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
-    depends_on:
-      webdav-core:
-        condition: service_healthy
-    volumes:
-      - .:/src:ro
-      - go-modules:/go/pkg/mod
-      - go-build:/root/.cache/go-build
-      - ./.state/webdav-guard:/state/guard
     ports:
       - 127.0.0.1:8686:8686
-    command: [sh, /src/scripts/run-go-service.sh, tbox-webdav-guard, --addr, ':8686', --upstream, 'http://webdav-core:8685', --base-url, '${TBOX_WEBDAV_BASE_URL:-}', --stage-zero-dir, /state/guard, '--trace-requests=${TBOX_WEBDAV_TRACE:-false}']
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
     healthcheck:
       test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8686${TBOX_WEBDAV_BASE_URL:-}/']
       interval: 5s
@@ -72,7 +55,7 @@ services:
       interval: 2s
       timeout: 2s
       retries: 60
-  webdav-faults-core:
+  webdav-faults:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
     working_dir: /src
@@ -87,33 +70,19 @@ services:
       - go-build:/root/.cache/go-build
       - ./.secrets:/secrets:ro
       - ./.state:/state
-      - ./.state/webdav-guard-faults:/state/guard
     environment:
-      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
+      RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
+      RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8685', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
     healthcheck:
-      test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8685${TBOX_WEBDAV_BASE_URL:-}/']
+      test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8686${TBOX_WEBDAV_BASE_URL:-}/']
       interval: 2s
       timeout: 2s
       retries: 60
-  webdav-faults:
-    profiles: [faults]
-    image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
-    working_dir: /src
-    entrypoint: [sh, /src/scripts/with-rclone-patches.sh]
-    network_mode: service:fault-proxy
-    depends_on:
-      webdav-faults-core:
-        condition: service_healthy
-    volumes:
-      - .:/src:ro
-      - go-modules:/go/pkg/mod
-      - go-build:/root/.cache/go-build
-      - ./.state/webdav-guard-faults:/state/guard
-    command: [sh, /src/scripts/run-go-service.sh, tbox-webdav-guard, --addr, ':8686', --upstream, 'http://127.0.0.1:8685', --base-url, '${TBOX_WEBDAV_BASE_URL:-}', --stage-zero-dir, /state/guard, '--trace-requests=${TBOX_WEBDAV_TRACE:-false}']
   fault-client:
     profiles: [faults]
     image: golang:1.26.0-bookworm@sha256:2a0ba12e116687098780d3ce700f9ce3cb340783779646aafbabed748fa6677c
@@ -130,7 +99,9 @@ services:
       - ./.secrets:/secrets:ro
       - ./.state:/state
     environment:
-      RCLONE_SJTU_OWNERSHIP_DIR: /state/owners
+      RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
+      RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem

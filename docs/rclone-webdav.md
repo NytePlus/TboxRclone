@@ -8,7 +8,7 @@
 
 不建议把当前 Tbox 放在原生 backend 下游：否则旧实现的重试、缓存、覆盖和取消问题依然保留。现有 C# 作为请求格式来源，不作为正确性 oracle。
 
-固定参考 [rclone v1.75.1](https://github.com/rclone/rclone/tree/v1.75.1)，不要依赖会变化的 master。源码 go.mod 要求 Go 1.26.0。原始 Tbox 参考项目为 C#。当前 TboxRclone 已建立 Go 实验后端与 Docker Compose，见 [实施状态](implementation.md)；以下是完整目标契约，不能因当前功能缺失而降低要求。
+固定参考 [rclone v1.75.1](https://github.com/rclone/rclone/tree/v1.75.1)，不要依赖会变化的 master。源码 go.mod 要求 Go 1.26.0。原始 Tbox 参考项目为 C#。以下是完整目标契约，不能因当前功能缺失而降低要求。
 
 ## 2. 后端必要接口映射
 
@@ -49,13 +49,13 @@ rclone v1.75.1 内置 hash 集合没有通用的 SMH CRC64 类型；先将 CRC64
 | U06 | Range 200/206/416、远端忽略 Range、内容变化、ctx cancel 和响应体释放 |
 | U07 | 持久日志恢复、缓存不足、错误校验和；既有文件不被失败上传破坏 |
 | U08 | 分页游标重复/空页/末页、条目新增删除，避免死循环和误认完整 |
-| U09 | 同路径双写/读写拒绝、第二实例拒绝、未决路径跨重启占用、abort 与 confirm 竞争 |
+| U09 | 后端同路径变更保护、第二实例拒绝、未决操作恢复、abort 与 confirm 竞争；不要求 WebDAV 入口固定返回 423 |
 
 用 Go `httptest`/可控 fake transport、故障点与可注入时钟；关键状态机用 `go test -race`。mock 可以验证客户端行为，不能证明真实服务器的原子性。
 
 ### 3.2 上游已有集成测试的最小关注集合
 
-名称已经核对 [fstest/fstests/fstests.go](https://github.com/rclone/rclone/blob/v1.75.1/fstest/fstests/fstests.go)。多数是嵌套子测试，具有共享准备与清理；**初次验收运行整个 TestIntegration**，不能用一长串平铺 regex 跳过父测试建立的数据。
+名称已经核对 [fstest/fstests/fstests.go](https://github.com/rclone/rclone/blob/v1.75.1/fstest/fstests/fstests.go)。多数是嵌套子测试，具有共享准备与清理；**初次验收运行整个 TestLiveIntegration**，不能用一长串平铺 regex 跳过父测试建立的数据。
 
 | 必要能力 | 已有子测试名称 |
 |---|---|
@@ -69,10 +69,10 @@ rclone v1.75.1 内置 hash 集合没有通用的 SMH CRC64 类型；先将 CRC64
 
 未注册能力而 SKIP，不算该能力通过。未知长度允许按后端合同返回错误的测试，也不等于 Finder 未知长度写入需求已满足。分片大小配置需要接入 fstests 的相关选项，单纯内部实现 multipart 不保证 chunk 测试实际覆盖边界。
 
-后端集成测试采用下述完整接线；实际入口见 `backend/sjtu/integration_test.go`，必须配置隔离空间后显式运行：
+后端集成测试采用下述完整接线；实际入口见 `backend/sjtu/test/integration_test.go`，必须配置隔离空间后显式运行：
 
 ```go
-func TestIntegration(t *testing.T) {
+func TestLiveIntegration(t *testing.T) {
     fstests.Run(t, &fstests.Opt{
         RemoteName: "TestSjtu:",
         NilObject:  (*sjtu.Object)(nil),
@@ -84,11 +84,11 @@ func TestIntegration(t *testing.T) {
 
 ```sh
 go test -race ./...
-go test ./backend/sjtu -run '^TestIntegration$' -count=1 -v
+go test ./backend/sjtu/test -run '^TestLiveIntegration$' -count=1 -v
 go test github.com/rclone/rclone/cmd/serve/webdav github.com/rclone/rclone/vfs/... -count=1
 ```
 
-第一条会运行 backend/sjtu、SMH、日志、恢复和故障代理等离线测试；未配置真实空间时 TestIntegration 明确跳过。日常精简回归须保留父层，例如上游短 EOF 的路径是 `TestIntegration/FsMkdir/FsPutShortEOF`；运行记录应核对实际 RUN/PASS/SKIP 数，不能以“没有跑任何测试的 exit 0”过关。
+第一条会运行 backend/sjtu、SMH、日志、恢复和故障代理等离线测试；未配置真实空间时 TestLiveIntegration 明确跳过。日常精简回归须保留父层，例如上游短 EOF 的路径是 `TestLiveIntegration/FsMkdir/FsPutShortEOF`；运行记录应核对实际 RUN/PASS/SKIP 数，不能以“没有跑任何测试的 exit 0”过关。
 
 ### 3.3 已有 WebDAV 回归
 
@@ -108,7 +108,7 @@ go test github.com/rclone/rclone/cmd/serve/webdav github.com/rclone/rclone/vfs/.
 | DELETE | 完成后 204；权限/锁错误正确；异步远端任务尚未完成不能返回成功 |
 | MOVE | Destination 校验，Overwrite 缺省 T，F 时已有目标 412；创建 201/覆盖 204；父目录/后代环路/文件与目录冲突；源与目标均检查条件/锁 |
 | COPY | 文件与目录、Depth、Overwrite、部分失败明确；不能只创建空目录却声称复制完成 |
-| LOCK/UNLOCK | exclusive write 最小支持、刷新、Timeout、未存在资源锁定、Depth 锁、If token、423；跨请求强制检查；发现信息真实 |
+| LOCK/UNLOCK | rclone 进程内 exclusive write 最小支持、刷新、Timeout、未存在资源锁定、Depth 锁、If token 和标准冲突响应；发现信息真实；重启后客户端重新取得锁 |
 | PROPPATCH | 支持的属性真正持久化；不支持按属性报告失败；单请求失败遵循原子处理和 failed dependency，不能 DTO 修改即报成功 |
 
 额外验收：`.DS_Store`、`._` AppleDouble 文件、隐藏文件、扩展名、拖拽目录、快速查看、应用“临时文件+重命名”安全保存。不能声称完整 POSIX ACL、xattr、hardlink 或 symlink 兼容；支持范围由对应实测决定，不静默丢失元数据。

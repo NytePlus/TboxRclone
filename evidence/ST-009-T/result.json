@@ -1,0 +1,28 @@
+{
+  "run_id": "finder-fixed-range-20260926",
+  "scenario_id": "ST-009-T",
+  "versions": {
+    "client": "finder-drag 2026-09-26.1; Computer Use; webdav-range-verify",
+    "backend": "TboxRclone working-tree WebDAV guard; isolated live service",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "stable_version_range",
+      "status": "PASS",
+      "observation": "Real Finder dragged a deterministic 1 MiB file to a fresh isolated target, showed copy progress, and completed. Computer Use opened Finder Quick Look, which displayed large.bin as 1 MB. A fixed ETag was then used with If-Match for first, middle, and last 4096-byte reads; all returned 206, exact Content-Range and the bytes from the complete expected object. The full WebDAV read and an independent direct-cloud full read both matched the source SHA-256.",
+      "artifacts": [
+        "upload-recorded-after-unlock/preflight.json",
+        "upload-recorded-after-unlock/drag.log",
+        "upload-recorded-after-unlock/timeline.jsonl",
+        "upload-recorded-after-unlock/display-1.mov",
+        "quicklook.png",
+        "ui-observation.json",
+        "finder-range.json",
+        "direct-cloud.json"
+      ]
+    }
+  ]
+}

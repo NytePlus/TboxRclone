@@ -1,0 +1,12 @@
+{
+  "expected_directories_match": true,
+  "all_file_sizes_and_hashes_match": true,
+  "source_unchanged": true,
+  "additional_files": [
+    "._empty-directory",
+    "._first.txt",
+    "._nested",
+    "nested/._second.txt"
+  ],
+  "additional_files_role": "Finder AppleDouble metadata, independently downloaded and hashed in cloud-tree.json"
+}

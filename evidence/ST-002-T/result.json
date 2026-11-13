@@ -1,0 +1,26 @@
+{
+  "run_id": "finder-cancel-before-confirm-20260926",
+  "scenario_id": "ST-002-T",
+  "versions": {
+    "client": "finder-drag 2026-09-20.3; Computer Use",
+    "backend": "TboxRclone working tree; controlled live service",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "cancel_before_confirm",
+      "status": "PASS",
+      "observation": "A real Finder drag of a distinct same-name 65,536-byte source displayed the native replace confirmation. Computer Use selected Stop during the 15-second full-desktop recording. The original 62,464-byte target matched the same SHA-256 in the mounted view and in two independent cloud reads after cancellation; the local source also remained unchanged.",
+      "artifacts": [
+        "ui-observation.json",
+        "content-before-after.json",
+        "copy/drag.log",
+        "copy/timeline.jsonl",
+        "copy/display-1.mov",
+        "copy/preflight.json"
+      ]
+    }
+  ]
+}

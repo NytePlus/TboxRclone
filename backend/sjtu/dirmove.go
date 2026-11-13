@@ -8,10 +8,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/nyte/TboxRclone/internal/journal"
-	"github.com/nyte/TboxRclone/internal/recovery"
-	"github.com/nyte/TboxRclone/internal/smh"
-	"github.com/nyte/TboxRclone/internal/treebackup"
+	"github.com/nyte/TboxRclone/internal/sjtu/recovery"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
+	"github.com/nyte/TboxRclone/internal/sjtu/treebackup"
 	"github.com/rclone/rclone/fs"
 	"github.com/rclone/rclone/fs/fserrors"
 )
@@ -29,56 +28,51 @@ func (f *Fs) DirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	return nil
 }
 func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string) error {
-	if err := f.writeAllowed(dstRemote); err != nil {
+	if err := f.WriteAllowed(dstRemote); err != nil {
 		return err
 	}
-	if !f.opt.LabMove {
+	if !f.Opt.LabMove {
 		return errors.New("directory move requires lab_move; whole-tree fallback is disabled")
 	}
 	old, ok := src.(*Fs)
 	if !ok {
 		return errors.New("directory move requires the same backend")
 	}
-	if err := old.writeAllowed(srcRemote); err != nil {
+	if err := old.WriteAllowed(srcRemote); err != nil {
 		return err
 	}
-	scope := f.c.Endpoint + "/" + f.c.Library + "/" + f.c.Space
-	if scope != old.c.Endpoint+"/"+old.c.Library+"/"+old.c.Space || f.opt.StateDir != old.opt.StateDir {
+	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
+	if scope != old.Client.Endpoint+"/"+old.Client.Library+"/"+old.Client.Space || f.Opt.StateDir != old.Opt.StateDir {
 		return errors.New("directory move requires the same space and state directory")
 	}
-	source, err := old.full(srcRemote)
+	source, err := old.FullPath(srcRemote)
 	if err != nil {
 		return err
 	}
-	target, err := f.full(dstRemote)
+	target, err := f.FullPath(dstRemote)
 	if err != nil {
 		return err
 	}
 	if strings.HasPrefix(source, target+"/") || strings.HasPrefix(target, source+"/") {
 		return errors.New("directory move source and destination overlap")
 	}
-	release, err := f.acquirePaths(accessRequest{source, true, true}, accessRequest{target, true, true})
+	release, err := f.AcquirePaths(AccessRequest{source, true, true}, AccessRequest{target, true, true})
 	if err != nil {
 		return err
 	}
 	defer release()
-	releaseSlot, err := f.acquireMutation(ctx)
+	session, err := f.BeginMutation(ctx)
 	if err != nil {
 		return err
 	}
-	defer releaseSlot()
-	s, err := journal.OpenConcurrentContext(ctx, f.opt.StateDir)
-	if err != nil {
-		return err
-	}
-	defer s.Close()
-	s.MaxSpoolBytes = int64(f.opt.MaxSpool)
+	defer session.Close()
+	s := session.Store
 	for _, p := range []string{source, target} {
 		if err = s.PendingSubtree(scope, p); err != nil {
 			return err
 		}
 	}
-	info, err := f.c.Info(ctx, source)
+	info, err := f.Client.Info(ctx, source)
 	if err != nil {
 		return mapped(err, fs.ErrorDirNotFound)
 	}
@@ -88,7 +82,7 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	if source == target {
 		return fs.ErrorDirExists
 	}
-	if _, err = f.c.Info(ctx, target); err == nil {
+	if _, err = f.Client.Info(ctx, target); err == nil {
 		return fs.ErrorDirExists
 	} else if !smh.IsStatus(err, 404) {
 		return err
@@ -97,11 +91,11 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	input, output := io.Pipe()
 	done := make(chan error, 1)
 	go func() {
-		err := treebackup.Write(backupCtx, f.c, source, output)
+		err := treebackup.Write(backupCtx, f.Client, source, output)
 		output.CloseWithError(err)
 		done <- err
 	}()
-	r, err := s.PrepareDirectoryMove(ctx, scope, source, target, input, int64(f.opt.MaxUpload))
+	r, err := s.PrepareDirectoryMove(ctx, scope, source, target, input, int64(f.Opt.MaxUpload))
 	input.CloseWithError(err)
 	cancel()
 	backupErr := <-done
@@ -120,12 +114,12 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	if err = s.Save(r); err != nil {
 		return err
 	}
-	requestErr := f.c.JSON(ctx, "PUT", "directory", target, url.Values{"conflict_resolution_strategy": {"ask"}}, map[string]string{"from": source}, nil)
+	requestErr := f.Client.JSON(ctx, "PUT", "directory", target, url.Values{"conflict_resolution_strategy": {"ask"}}, map[string]string{"from": source}, nil)
 	r.State = "MoveUnknown"
 	if err = s.Save(r); err != nil {
 		return errors.Join(requestErr, err)
 	}
-	if err = recovery.Reconcile(ctx, s, f.c, r); err != nil {
+	if err = recovery.Reconcile(ctx, s, f.Client, r); err != nil {
 		return errors.Join(requestErr, err)
 	}
 	return nil
