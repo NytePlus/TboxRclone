@@ -1,0 +1,141 @@
+{
+  "acceptance" : "REQUIRES_CONTENT_AND_ERROR_CHECKS",
+  "elapsed_seconds" : 49.019706010818481,
+  "observations" : [
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:35:38Z",
+      "scan_seconds" : 7.4085980653762817,
+      "scan_started_at" : "2026-11-14T09:35:30Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:35:45Z",
+      "scan_seconds" : 5.7658219337463379,
+      "scan_started_at" : "2026-11-14T09:35:39Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:35:52Z",
+      "scan_seconds" : 6.5481109619140625,
+      "scan_started_at" : "2026-11-14T09:35:46Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:35:57Z",
+      "scan_seconds" : 4.1784470081329346,
+      "scan_started_at" : "2026-11-14T09:35:53Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:36:05Z",
+      "scan_seconds" : 6.5800670385360718,
+      "scan_started_at" : "2026-11-14T09:35:58Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:36:10Z",
+      "scan_seconds" : 4.221593976020813,
+      "scan_started_at" : "2026-11-14T09:36:06Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“high-rtt.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:36:15Z",
+      "scan_seconds" : 4.1533030271530151,
+      "scan_started_at" : "2026-11-14T09:36:11Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:36:20Z",
+      "scan_seconds" : 3.1444319486618042,
+      "scan_started_at" : "2026-11-14T09:36:16Z",
+      "transfer_windows" : [
+
+      ]
+    }
+  ],
+  "progress_disappeared" : true,
+  "saw_progress" : true,
+  "started_at" : "2026-11-14T09:35:30Z"
+}

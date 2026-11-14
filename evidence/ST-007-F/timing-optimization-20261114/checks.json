@@ -1,0 +1,30 @@
+{
+  "sample_coverage": "0..179, exactly once",
+  "sheets": 18,
+  "pixels": [
+    1280,
+    2250
+  ],
+  "cloud_fail_closed": [
+    {
+      "file": "..",
+      "exit_code": 1,
+      "no_success_json": true
+    },
+    {
+      "file": "../escape",
+      "exit_code": 1,
+      "no_success_json": true
+    },
+    {
+      "file": "/absolute",
+      "exit_code": 1,
+      "no_success_json": true
+    },
+    {
+      "file": "missing-timing-probe-20261114.bin",
+      "exit_code": 1,
+      "no_success_json": true
+    }
+  ]
+}

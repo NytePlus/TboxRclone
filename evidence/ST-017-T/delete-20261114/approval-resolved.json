@@ -1,0 +1,6 @@
+{
+  "status": "COMPLETED_AFTER_EXPLICIT_USER_CONFIRMATION",
+  "user_answer": "确认删除此测试文件",
+  "prior_pending_record": "pending-approval.json",
+  "delete_receipt": "after-confirm-receipt-check.json"
+}

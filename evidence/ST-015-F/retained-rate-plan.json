@@ -1,0 +1,62 @@
+[
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-auth-20261114-0204/finder/display-1.mov",
+    "offset": 0,
+    "duration": 44.98166666666667
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-auth-20261114-0204/recovery/finder/completion-followup.mov",
+    "offset": 44.98166666666667,
+    "duration": 29.968333333333334
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-auth-20261114-0204/recovery/finder/display-1.mov",
+    "offset": 74.95,
+    "duration": 90.00166666666667
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-quota-fixed-20261114-0157/finder/display-1.mov",
+    "offset": 164.95166666666665,
+    "duration": 45.01833333333333
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-quota-fixed-20261114-0157/recovery/finder/display-1.mov",
+    "offset": 209.97,
+    "duration": 89.97
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-forbidden-clean-20261114/finder/display-1.mov",
+    "offset": 389.995,
+    "duration": 45.041666666666664
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-forbidden-clean-20261114/recovery/finder/display-1.mov",
+    "offset": 435.0366666666667,
+    "duration": 120.10166666666667
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-forbidden-clean-20261114/recovery/completion-followup.mov",
+    "offset": 555.1383333333333,
+    "duration": 60.045
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/finder/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/finder/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-followup.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-followup.mov"
+  }
+]

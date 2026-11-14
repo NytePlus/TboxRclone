@@ -1,0 +1,33 @@
+{
+  "reason": "All61 sampled frames reviewed; retained movie and index allow regeneration",
+  "removed": [
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.20.png",
+      "bytes": 700498
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.30.png",
+      "bytes": 700579
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.0.png",
+      "bytes": 722441
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.40.png",
+      "bytes": 699975
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.50.png",
+      "bytes": 700436
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.60.png",
+      "bytes": 128755
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-fixed-20261114/recovery/completion-review.10.png",
+      "bytes": 796323
+    }
+  ]
+}

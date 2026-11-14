@@ -1,0 +1,15 @@
+{
+  "compose_environment": {
+    "TBOX_LAB_DELETE": "false",
+    "TBOX_LAB_MOVE": "false",
+    "TBOX_LAB_OVERWRITE": "true",
+    "TBOX_LAB_REMOTE": "sjtu:codex-api-lab/finder-direct-20261113-2049",
+    "TBOX_LOG_LEVEL": "DEBUG",
+    "TBOX_MAX_SPOOL": "4G",
+    "TBOX_OWNERSHIP_DIR": "/state/owners-finder-direct-20261113-2049",
+    "TBOX_RCLONE_CONFIG": "/secrets/rclone-finder.conf",
+    "TBOX_STATE_DIR": "/state/finder-direct-20261113-2049",
+    "TBOX_WEBDAV_BASE_URL": ""
+  },
+  "present": true
+}

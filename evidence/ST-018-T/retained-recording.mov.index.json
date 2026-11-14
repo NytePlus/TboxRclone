@@ -1,0 +1,14 @@
+{
+  "duration_seconds" : 90.109999999999999,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-T\/phased-20261114\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 90.109999999999999,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-T\/phased-20261114\/finder\/display-1.mov",
+      "start_seconds" : 0
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

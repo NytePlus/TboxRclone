@@ -1,0 +1,14 @@
+{
+  "dialogs" : [
+
+  ],
+  "incomplete" : false,
+  "observed_at" : "2026-11-14T11:11:34Z",
+  "scan_seconds" : 2.4833019971847534,
+  "scan_started_at" : "2026-11-14T11:11:31Z",
+  "transfer_windows" : [
+
+  ],
+  "view_ready" : true,
+  "visual_review_required" : true
+}

@@ -1,0 +1,25 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "length-finder-20261114-0142/finder-control.txt",
+      "source": {
+        "size": 6016,
+        "sha256": "c1779aa910b2cb59e8eb3fee72d49b29f87aacb8af38f4635d460e93236f1b30"
+      },
+      "mounted": {
+        "size": 6016,
+        "sha256": "c1779aa910b2cb59e8eb3fee72d49b29f87aacb8af38f4635d460e93236f1b30"
+      },
+      "raw_cloud_name": "length-finder-20261114-0142/finder-control.txt",
+      "cloud": {
+        "sha256": "c1779aa910b2cb59e8eb3fee72d49b29f87aacb8af38f4635d460e93236f1b30",
+        "size": 6016
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

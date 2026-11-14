@@ -1,0 +1,26 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "sequential.txt",
+      "source": {
+        "size": 1152,
+        "sha256": "ca03340f8d4b3e00e0334c49238f79c3692910bbfb77335fa86f18e04d3bcb23"
+      },
+      "mounted": {
+        "size": 1152,
+        "sha256": "ca03340f8d4b3e00e0334c49238f79c3692910bbfb77335fa86f18e04d3bcb23"
+      },
+      "raw_cloud_name": "sequential.txt",
+      "cloud": {
+        "sha256": "ca03340f8d4b3e00e0334c49238f79c3692910bbfb77335fa86f18e04d3bcb23",
+        "size": 1152
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}
+Content verified. Review the ten-second samples and the mandatory final task state; record the UI verdict separately.

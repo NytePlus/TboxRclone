@@ -1,0 +1,78 @@
+{
+  "run_id": "range-faults-20261114",
+  "scenario_id": "ST-009-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "ignored_range",
+      "status": "NOT_RUN",
+      "observation": "Protocol supplement passes; native Finder evidence still required.",
+      "artifacts": [
+        "ignored-range-20261114-0255/review.md",
+        "ignored-range-20261114-0255/result.json",
+        "ignored-range-20261114-0255/control.json",
+        "ignored-range-20261114-0255/range-control.json",
+        "ignored-range-20261114-0255/fault.json",
+        "ignored-range-20261114-0255/recovery.json",
+        "ignored-range-20261114-0255/events.json"
+      ]
+    },
+    {
+      "id": "range_416",
+      "status": "PASS",
+      "observation": "Post-fix native download under injected416 reports visible Finder100004; clear fault and retry without service restart/remount succeeds. Local download and mounted reopen match full9MiB independent cloud SHA-256. Final follow-up video confirms no progress/error. Historical failed recovery and recording gaps preserved; protocol regression confirms502 rather than premature206 on failed lazy open.",
+      "artifacts": [
+        "range-416-20261114-0226/review.md",
+        "range-416-20261114-0226/result.json",
+        "range-416-20261114-0226/control.json",
+        "range-416-20261114-0226/range-control.json",
+        "range-416-20261114-0226/fault.json",
+        "range-416-20261114-0226/recovery.json",
+        "range-416-20261114-0226/events.json",
+        "native-416-selected-20261114/review.md",
+        "native-416-selected-20261114/facts.json",
+        "native-416-selected-20261114/final-error.json",
+        "native-416-selected-20261114/cloud-before.json",
+        "native-416-selected-20261114/recovery-content.json",
+        "native-416-selected-20261114/recovery-diagnostic.json",
+        "native-416-selected-20261114/events-after-recovery.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json",
+        "read-header-regression-20261114/README.md",
+        "read-header-regression-20261114/after.log",
+        "read-header-regression-20261114/race-vet.log",
+        "read-header-regression-20261114/patch-replay.json",
+        "read-header-regression-20261114/pending-after.json",
+        "range-416-header-fixed-20261114/result.json",
+        "range-416-header-fixed-20261114/fault.json",
+        "range-416-header-fixed-20261114/recovery.json",
+        "range-416-header-fixed-20261114/events.json",
+        "native-416-armed-20261114/review.md",
+        "native-416-armed-20261114/facts.json",
+        "native-416-armed-20261114/cloud-before.json",
+        "native-416-armed-20261114/recovery-content.json",
+        "native-416-armed-20261114/completion-review.index.json",
+        "native-416-armed-20261114/finder/timeline.jsonl",
+        "range416-before-fixed-native.json"
+      ]
+    },
+    {
+      "id": "replace_during_read",
+      "status": "NOT_RUN",
+      "observation": "Protocol supplement reproduced stale reopen and now passes after captured-object binding and fresh directory metadata; native Finder acceptance remains required.",
+      "artifacts": [
+        "replace-during-read-20261114-0308/protocol.json",
+        "replace-during-read-20261114-fixed/protocol.json",
+        "read-snapshot-regression-20261114/before.log",
+        "read-snapshot-regression-20261114/after.log",
+        "read-snapshot-regression-20261114/vfs-unprivileged-race.log"
+      ]
+    }
+  ]
+}

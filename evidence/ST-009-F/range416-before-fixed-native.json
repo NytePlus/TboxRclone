@@ -1,0 +1,32 @@
+{
+  "id": "range_416",
+  "status": "FAIL",
+  "observation": "Native download under injected416 reports -8084. After rules cleared, fresh Finder retry still fails; direct WebDAV returns correct9MiB but mounted read returns294912 bytes. Persistent mount recovery defect under investigation; recording interruption and follow-up gap documented. Lazy-open HTTP success-header defect reproduced and fixed; WebDAV race/vet and real-cloud protocol retest pass (fault now502, subsequent full read correct). Native post-fix recovery not yet verified; FAIL retained.",
+  "artifacts": [
+    "range-416-20261114-0226/review.md",
+    "range-416-20261114-0226/result.json",
+    "range-416-20261114-0226/control.json",
+    "range-416-20261114-0226/range-control.json",
+    "range-416-20261114-0226/fault.json",
+    "range-416-20261114-0226/recovery.json",
+    "range-416-20261114-0226/events.json",
+    "native-416-selected-20261114/review.md",
+    "native-416-selected-20261114/facts.json",
+    "native-416-selected-20261114/final-error.json",
+    "native-416-selected-20261114/cloud-before.json",
+    "native-416-selected-20261114/recovery-content.json",
+    "native-416-selected-20261114/recovery-diagnostic.json",
+    "native-416-selected-20261114/events-after-recovery.json",
+    "retained-recording.mov",
+    "retained-recording.mov.index.json",
+    "read-header-regression-20261114/README.md",
+    "read-header-regression-20261114/after.log",
+    "read-header-regression-20261114/race-vet.log",
+    "read-header-regression-20261114/patch-replay.json",
+    "read-header-regression-20261114/pending-after.json",
+    "range-416-header-fixed-20261114/result.json",
+    "range-416-header-fixed-20261114/fault.json",
+    "range-416-header-fixed-20261114/recovery.json",
+    "range-416-header-fixed-20261114/events.json"
+  ]
+}

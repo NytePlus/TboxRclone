@@ -1,0 +1,15 @@
+{
+  "dialogs" : [
+    {
+      "app" : "com.apple.finder",
+      "buttons" : [
+        "好"
+      ],
+      "texts" : [
+        "无法完成此操作，因为项目“resource-control.txt”正在使用中。"
+      ]
+    }
+  ],
+  "marker" : "resource-control.txt",
+  "observed_at" : "2026-11-14T07:23:11Z"
+}

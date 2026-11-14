@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "headers": {
+    "Accept-Ranges": "bytes",
+    "Content-Length": "43",
+    "Content-Type": "text/plain; charset=utf-8",
+    "Etag": "\"18e7aac8d09468002b\"",
+    "Last-Modified": "Fri, 13 Nov 2026 17:25:56 GMT",
+    "Server": "rclone/v1.76.0-DEV",
+    "Date": "Fri, 13 Nov 2026 17:30:25 GMT"
+  },
+  "error": "IncompleteRead(0 bytes read, 43 more expected)",
+  "elapsed_seconds": 0.971570709021762
+}

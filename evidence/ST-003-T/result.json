@@ -1,0 +1,31 @@
+{
+  "run_id": "finder-term-20261114-0048",
+  "scenario_id": "ST-003-T",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "sigterm",
+      "status": "PASS",
+      "observation": "Finder data upload interrupted by SIGTERM after full durable spool and held second data part. Service exited 143; separate resume preserved operation/upload/confirm identity and reached Committed. All 153 one-second recording samples reviewed. Interrupted mount disappeared; explicit remount then source/mount/independent cloud full hashes matched. This proves explicit recovery, not transparent Finder continuation or host power-loss resilience.",
+      "artifacts": [
+        "finder-term-20261114-0048/ui-review.md",
+        "finder-term-20261114-0048/finder/display-1.mov",
+        "finder-term-20261114-0048/finder/capture-coverage.json",
+        "finder-term-20261114-0048/signal.json",
+        "finder-term-20261114-0048/journal-timeline.jsonl",
+        "finder-term-20261114-0048/resume.log",
+        "finder-term-20261114-0048/verification/cloud.json",
+        "finder-term-20261114-0048/verification/result.json",
+        "finder-term-20261114-0048/remount-reopen.json",
+        "finder-term-20261114-0048/remount-check.txt",
+        "finder-term-20261114-0048/remounted-finder.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "scenario_id": "ST-006-T",
+  "finding": "Finder Replace sends DELETE of old main file before PUT of new version. Backend rejects because lab_delete=false; this is the cause of the permission dialog.",
+  "request_log": "requests.log",
+  "decisive_lines": [
+    122,
+    123,
+    124,
+    125
+  ],
+  "policy": "Keep deletion disabled until final deletion test batch; no server bypass or fabricated success.",
+  "coverage_note": "Retry recording ended before confirmation; request log provides diagnosis, not complete UI acceptance evidence."
+}

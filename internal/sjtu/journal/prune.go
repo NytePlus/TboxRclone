@@ -3,8 +3,6 @@ package journal
 import (
 	"context"
 	"errors"
-	"os"
-	"path/filepath"
 )
 
 // PruneCommitted releases one completed operation's local content, retaining its
@@ -49,12 +47,11 @@ func (s *Store) PruneCommitted(ctx context.Context, id string) error {
 		if err = ctx.Err(); err != nil {
 			return err
 		}
-		name := filepath.Join(s.Dir, id+".data")
-		err = os.Remove(name)
-		if err != nil && !errors.Is(err, os.ErrNotExist) {
+		spool, err := spoolFor(&r)
+		if err != nil {
 			return err
 		}
-		return s.syncDirectory(s.Dir)
+		return spool.Release(s, &r)
 	}
 	return errors.New("operation ID not found")
 }

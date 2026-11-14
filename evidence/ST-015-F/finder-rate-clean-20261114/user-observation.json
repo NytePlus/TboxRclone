@@ -1,0 +1,7 @@
+{
+  "source": "User-provided screenshot and statement that they switched screens",
+  "visible_error": "无法完成此操作，因为发生意外错误（错误代码-50）。",
+  "source_file_visible": true,
+  "destination_window_empty": true,
+  "limitation": "Follow-up recording showed Codex; screenshot establishes the later Finder state, not continuous capture or exact error onset."
+}

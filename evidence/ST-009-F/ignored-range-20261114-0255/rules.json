@@ -1,0 +1,482 @@
+[
+  {
+    "id": "read-ignore-range-0",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-1",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-2",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-3",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-4",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-5",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-6",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-7",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-8",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-9",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-10",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-11",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-12",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-13",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-14",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-15",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-16",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-17",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-18",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-19",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-20",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-21",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-22",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-23",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-24",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-25",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-26",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-27",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-28",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-29",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-30",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-31",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-32",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-33",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-34",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-35",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-36",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-37",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-38",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-39",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-40",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-41",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-42",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-43",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-44",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-45",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-46",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-47",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-48",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-49",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-50",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-51",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-52",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-53",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-54",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-55",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-56",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-57",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-58",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  },
+  {
+    "id": "read-ignore-range-59",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "ignore_range"
+  }
+]

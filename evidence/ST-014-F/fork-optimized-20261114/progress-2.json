@@ -1,0 +1,17 @@
+{
+  "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+  "observed_at" : "2026-11-14T08:49:54Z",
+  "transfer_windows" : [
+    {
+      "progress_indicators" : 1,
+      "texts" : [
+        "拷贝",
+        "“访达”项目",
+        "正在将3个项目拷贝到“tboxrclone-webdav-501”",
+        "",
+        "停止进程",
+        "913 字节\/2 KB - 大约3分钟"
+      ]
+    }
+  ]
+}

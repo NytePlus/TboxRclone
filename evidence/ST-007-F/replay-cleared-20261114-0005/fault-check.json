@@ -1,0 +1,17 @@
+{
+  "matching_transport_errors": [
+    {
+      "sequence": 935,
+      "request": 310,
+      "at": "2026-11-13T16:06:32.193092881Z",
+      "phase": "replay_same_etag",
+      "rule": "cut-part-2-32066a8c34424ed7a165af3c80eac471-1",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "PUT",
+      "status": 200,
+      "bytes": 4194304
+    }
+  ],
+  "expected_phase": "replay_same_etag",
+  "fault_observed": true
+}

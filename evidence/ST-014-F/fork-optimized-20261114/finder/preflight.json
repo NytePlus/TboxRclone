@@ -1,0 +1,12 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "direction": "upload",
+  "source": "/private/tmp/tbox-fork-optimized-20261114/ForkOptimized",
+  "target": "/private/tmp/tboxrclone-webdav-501/ForkOptimized",
+  "remote_path": "/ForkOptimized",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

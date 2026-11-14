@@ -1,0 +1,17 @@
+{
+  "source": "/private/tmp/tbox-fork-probe-source/ForkProbe/opaque.dat",
+  "mounted": "/private/tmp/tboxrclone-webdav-501/ForkProbe/opaque.dat",
+  "attributes": [
+    {
+      "attribute": "com.apple.ResourceFork",
+      "source_hex": "74626f782d7265736f757263652d666f726b2d3230323631313133",
+      "mounted_hex": null,
+      "errors": [
+        null,
+        "xattr: /private/tmp/tboxrclone-webdav-501/ForkProbe/opaque.dat: No such xattr: com.apple.ResourceFork"
+      ],
+      "pass": false
+    }
+  ],
+  "pass": false
+}

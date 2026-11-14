@@ -1,0 +1,42 @@
+{
+  "run_id": "instance-exclusion-20261114",
+  "scenario_id": "ST-006-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "same_path_two_writers_rejected",
+      "status": "NOT_RUN",
+      "observation": "Native Finder overlap/restart acceptance still required.",
+      "artifacts": []
+    },
+    {
+      "id": "read_write_conflict_rejected",
+      "status": "NOT_RUN",
+      "observation": "Native Finder overlap/restart acceptance still required.",
+      "artifacts": []
+    },
+    {
+      "id": "second_service_instance_rejected",
+      "status": "PASS",
+      "observation": "Independent real service startup rejected for identical state, different state and overlapping root; active service PID and all durable file hashes unchanged.",
+      "artifacts": [
+        "instance-exclusion-20261114/result.json",
+        "instance-exclusion-20261114/same_state.log",
+        "instance-exclusion-20261114/different_state.log",
+        "instance-exclusion-20261114/overlapping_root.log"
+      ]
+    },
+    {
+      "id": "pending_path_reserved_after_restart",
+      "status": "NOT_RUN",
+      "observation": "Native Finder overlap/restart acceptance still required.",
+      "artifacts": []
+    }
+  ]
+}

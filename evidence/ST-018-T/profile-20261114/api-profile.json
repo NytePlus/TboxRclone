@@ -1,0 +1,520 @@
+{
+  "bytes": 268435456,
+  "bytes_per_second": 11363360.441489695,
+  "operation_id": "7455059345328c02f33321055595f228",
+  "pass": true,
+  "remote_path": "codex-api-lab/perf-profile-20261114-1920/payload.bin",
+  "request_counts": {
+    "GET": 4,
+    "POST": 3,
+    "PUT": 64
+  },
+  "request_timings": [
+    {
+      "method": "POST",
+      "kind": "upload-control",
+      "start_seconds": 0.2288925,
+      "headers_seconds": 0.058023625,
+      "total_seconds": 0.064074917
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.29420625,
+      "headers_seconds": 1.831689834,
+      "total_seconds": 1.831717584
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.294131125,
+      "headers_seconds": 1.836484167,
+      "total_seconds": 1.836500126
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.29427175,
+      "headers_seconds": 1.853123542,
+      "total_seconds": 1.8531346260000001
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.294245917,
+      "headers_seconds": 1.936923126,
+      "total_seconds": 1.9369427510000001
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.1531262509999998,
+      "headers_seconds": 0.413851417,
+      "total_seconds": 0.413866708
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.140200751,
+      "headers_seconds": 0.527100458,
+      "total_seconds": 0.527106083
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.1307145419999998,
+      "headers_seconds": 0.540211334,
+      "total_seconds": 0.540232459
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.232714418,
+      "headers_seconds": 0.514481458,
+      "total_seconds": 0.514485708
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.569736834,
+      "headers_seconds": 0.438885792,
+      "total_seconds": 0.438912792
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.669003459,
+      "headers_seconds": 0.508801001,
+      "total_seconds": 0.508824209
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.675945251,
+      "headers_seconds": 0.5203325,
+      "total_seconds": 0.520346334
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.748187418,
+      "headers_seconds": 0.527413333,
+      "total_seconds": 0.527419
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.011015085,
+      "headers_seconds": 0.42854775,
+      "total_seconds": 0.428575291
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.180556418,
+      "headers_seconds": 0.450367959,
+      "total_seconds": 0.450397084
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.200947751,
+      "headers_seconds": 0.466132959,
+      "total_seconds": 0.466137334
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.276990168,
+      "headers_seconds": 0.496232834,
+      "total_seconds": 0.496237167
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.44245646,
+      "headers_seconds": 0.57669625,
+      "total_seconds": 0.576709333
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.668801377,
+      "headers_seconds": 0.53947625,
+      "total_seconds": 0.53949125
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.633368793,
+      "headers_seconds": 0.609351584,
+      "total_seconds": 0.609356792
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.774706627,
+      "headers_seconds": 0.751401167,
+      "total_seconds": 0.751414958
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.021424252,
+      "headers_seconds": 0.519968167,
+      "total_seconds": 0.519982792
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.210466127,
+      "headers_seconds": 0.474972917,
+      "total_seconds": 0.474992125
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.244318502,
+      "headers_seconds": 0.492931375,
+      "total_seconds": 0.492936375
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.528512127,
+      "headers_seconds": 0.491548459,
+      "total_seconds": 0.491564667
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.553799335,
+      "headers_seconds": 0.569325084,
+      "total_seconds": 0.569339584
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.68795571,
+      "headers_seconds": 0.462317251,
+      "total_seconds": 0.462321584
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.73865346,
+      "headers_seconds": 0.436026834,
+      "total_seconds": 0.436030209
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.022778294,
+      "headers_seconds": 0.518948875,
+      "total_seconds": 0.518961625
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.154882544,
+      "headers_seconds": 0.459504542,
+      "total_seconds": 0.459510292
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.176078794,
+      "headers_seconds": 0.455837333,
+      "total_seconds": 0.455842667
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.125249086,
+      "headers_seconds": 0.535353083,
+      "total_seconds": 0.53535625
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.545031669,
+      "headers_seconds": 0.484768,
+      "total_seconds": 0.484785667
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.616135669,
+      "headers_seconds": 0.454349792,
+      "total_seconds": 0.454354709
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.662410169,
+      "headers_seconds": 0.465499042,
+      "total_seconds": 0.465504417
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.638756961,
+      "headers_seconds": 0.512541167,
+      "total_seconds": 0.512543208
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.071939628,
+      "headers_seconds": 0.433638042,
+      "total_seconds": 0.433651083
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.032429128,
+      "headers_seconds": 0.564033,
+      "total_seconds": 0.564054042
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.152204253,
+      "headers_seconds": 0.45517175,
+      "total_seconds": 0.455174875
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.129100919,
+      "headers_seconds": 0.595607626,
+      "total_seconds": 0.595612334
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.5087186280000005,
+      "headers_seconds": 0.450967792,
+      "total_seconds": 0.450983417
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.614330128,
+      "headers_seconds": 0.432249125,
+      "total_seconds": 0.432253583
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.598742753,
+      "headers_seconds": 0.518177709,
+      "total_seconds": 0.518181167
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.726319253,
+      "headers_seconds": 0.53932175,
+      "total_seconds": 0.539329209
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.96207667,
+      "headers_seconds": 0.4886045,
+      "total_seconds": 0.488819375
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.048107961,
+      "headers_seconds": 0.447376042,
+      "total_seconds": 0.447379459
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.118255337,
+      "headers_seconds": 0.461919041,
+      "total_seconds": 0.461936
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.267296628,
+      "headers_seconds": 0.522002876,
+      "total_seconds": 0.522015959
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.45450792,
+      "headers_seconds": 0.461798167,
+      "total_seconds": 0.461817459
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.496559295,
+      "headers_seconds": 0.453896542,
+      "total_seconds": 0.45390475
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.582248295,
+      "headers_seconds": 0.489325167,
+      "total_seconds": 0.489341667
+    },
+    {
+      "method": "POST",
+      "kind": "metadata",
+      "start_seconds": 8.074071462,
+      "headers_seconds": 0.015429375,
+      "total_seconds": 0.015881292
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.090098712,
+      "headers_seconds": 0.404316417,
+      "total_seconds": 0.40434625
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.090294879,
+      "headers_seconds": 0.443106917,
+      "total_seconds": 0.443114292
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.090296545,
+      "headers_seconds": 0.814546251,
+      "total_seconds": 0.814572459
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.090781545,
+      "headers_seconds": 0.878416334,
+      "total_seconds": 0.878431792
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.501021462,
+      "headers_seconds": 0.838074084,
+      "total_seconds": 0.838089501
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.539130545999999,
+      "headers_seconds": 0.937626167,
+      "total_seconds": 0.937643042
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.916333004,
+      "headers_seconds": 0.575749542,
+      "total_seconds": 0.575762834
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.974286546,
+      "headers_seconds": 0.555340583,
+      "total_seconds": 0.555348167
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.341677463,
+      "headers_seconds": 0.44453675,
+      "total_seconds": 0.4445535
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.496612463,
+      "headers_seconds": 0.434170208,
+      "total_seconds": 0.434184083
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.479739254,
+      "headers_seconds": 0.482213917,
+      "total_seconds": 0.482217417
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.530782796,
+      "headers_seconds": 0.578996209,
+      "total_seconds": 0.579020459
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.788357213,
+      "headers_seconds": 0.444385292,
+      "total_seconds": 0.444402625
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.934864796,
+      "headers_seconds": 0.4534025,
+      "total_seconds": 0.453419167
+    },
+    {
+      "method": "POST",
+      "kind": "confirm",
+      "start_seconds": 10.55234063,
+      "headers_seconds": 0.152766875,
+      "total_seconds": 0.152952125
+    },
+    {
+      "method": "GET",
+      "kind": "upload-control",
+      "start_seconds": 10.850423005,
+      "headers_seconds": 0.0116385,
+      "total_seconds": 0.011686333
+    },
+    {
+      "method": "GET",
+      "kind": "metadata",
+      "start_seconds": 10.862272755,
+      "headers_seconds": 0.016750583,
+      "total_seconds": 0.016810917
+    },
+    {
+      "method": "GET",
+      "kind": "metadata",
+      "start_seconds": 10.879192422,
+      "headers_seconds": 0.0584875,
+      "total_seconds": 0.058631708
+    },
+    {
+      "method": "GET",
+      "kind": "content",
+      "start_seconds": 10.937829547,
+      "headers_seconds": 0.124263708,
+      "total_seconds": 11.498849671
+    }
+  ],
+  "scope": "direct SMH transfer engine, no rclone/WebDAV; includes confirm and independent full readback",
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "source": "/fixture/phased.bin",
+  "source_retained": true,
+  "staging_seconds": 0.916568959,
+  "started_at": "2026-11-14T11:19:29.820671213Z",
+  "state": "Committed",
+  "total_seconds": 23.622893719,
+  "transfer_and_verification_seconds": 22.70632476
+}

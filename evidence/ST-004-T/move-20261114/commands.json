@@ -1,0 +1,63 @@
+[
+  {
+    "action": "prepare directories",
+    "command": [
+      "mkdir",
+      "-p",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/left/tree/nested",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/right"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 16.440153958043084
+  },
+  {
+    "action": "prepare file",
+    "command": [
+      "cp",
+      "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-004-T/move-20261114/source/MoveCases/right/file.txt",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/left/file.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 11.711968459188938
+  },
+  {
+    "action": "prepare nested file",
+    "command": [
+      "cp",
+      "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-004-T/move-20261114/source/MoveCases/right/tree/nested/keep.txt",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/left/tree/nested/keep.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 13.484068457968533
+  },
+  {
+    "action": "move file",
+    "command": [
+      "mv",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/left/file.txt",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/right/file.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 3.4927435000427067
+  },
+  {
+    "action": "move directory",
+    "command": [
+      "mv",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/left/tree",
+      "/private/tmp/tboxrclone-webdav-501/MoveCases/right/tree"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 6.294834166066721
+  }
+]

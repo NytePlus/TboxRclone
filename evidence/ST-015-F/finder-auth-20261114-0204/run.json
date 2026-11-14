@@ -1,0 +1,11 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-auth-20261114-0204",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-auth-20261114-0204",
+  "status": 401,
+  "quota": false,
+  "source_before": {
+    "size": 8832,
+    "sha256": "7de313cc477a573442c7f1cd907c3b8df0a292492d046ffd06cd2f05b006d235"
+  }
+}

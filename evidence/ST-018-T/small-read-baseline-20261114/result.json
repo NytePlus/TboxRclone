@@ -1,0 +1,273 @@
+{
+  "scope": "small-file protocol baseline; whole-service events may include ambient Finder traffic",
+  "phases": [
+    {
+      "method": "HEAD",
+      "workers": 1,
+      "samples": [
+        {
+          "method": "HEAD",
+          "status": 404,
+          "headers_seconds": 1.0069624579045922,
+          "content_length": "9",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": false,
+          "seconds": 1.007003374863416
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 1.7344960828777403,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 1.7345756660215557
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.646540709072724,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.646601292071864
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.9338338749948889,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.9339207918383181
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.6546569999773055,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.6547118749003857
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 1.0961385420523584,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 1.0961980421561748
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.9379603331908584,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.9379980000667274
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.6352423338685185,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.6352733748499304
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.69152995897457,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.6915841668378562
+        },
+        {
+          "method": "HEAD",
+          "status": 200,
+          "headers_seconds": 0.7030419169459492,
+          "content_length": "23552",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "correct": true,
+          "seconds": 0.7030947089660913
+        }
+      ],
+      "elapsed_seconds": 9.042051374912262,
+      "p50_seconds": 0.7030947089660913,
+      "p95_seconds": 1.7345756660215557,
+      "bytes_per_second": 0.0
+    },
+    {
+      "method": "GET",
+      "workers": 1,
+      "samples": [
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.033286790829152,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.0334248328581452
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.420469750184566,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.4205829580314457
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.305049499962479,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.3051086249761283
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.053805625066161,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.0539081660099328
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.1469875839538872,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.1470826249569654
+        }
+      ],
+      "elapsed_seconds": 10.960806249873713,
+      "p50_seconds": 2.1470826249569654,
+      "p95_seconds": 2.4205829580314457,
+      "bytes_per_second": 10743.735206646574
+    },
+    {
+      "method": "GET",
+      "workers": 4,
+      "samples": [
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.1061140410602093,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.1061929159332067
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 3.169854125007987,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 3.1699696250725538
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 4.961379333166406,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 4.9616403330583125
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 3.1695172081235796,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 3.1696181250736117
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.8552540419623256,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.855480874888599
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 3.440695208031684,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 3.4409178330097347
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 2.5028267500456423,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 2.502933292184025
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "headers_seconds": 1.6490840001497418,
+          "content_length": "23552",
+          "bytes": 23552,
+          "sha256": "8438dc66a55e2f1e33510b0e983719075f7888f379385d44c8634ac18143557a",
+          "correct": true,
+          "seconds": 1.6492717079818249
+        }
+      ],
+      "elapsed_seconds": 6.611547749955207,
+      "p50_seconds": 2.855480874888599,
+      "p95_seconds": 4.9616403330583125,
+      "bytes_per_second": 28498.016973601454
+    }
+  ],
+  "all_content_correct": false,
+  "service_requests": {
+    "pan.sjtu.edu.cn:443 GET": 36,
+    "pan.sjtu.edu.cn:443 POST": 1,
+    "s3pan4.jcloud.sjtu.edu.cn:443 GET": 13
+  },
+  "event_sequence_complete": true,
+  "performance_acceptance": "NOT_RUN: large files, multiple distinct files, network faults and Finder interaction still required"
+}

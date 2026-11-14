@@ -1,0 +1,16 @@
+{
+  "matching_transport_errors": [
+    {
+      "sequence": 2362,
+      "request": 785,
+      "at": "2026-11-13T17:02:28.463954963Z",
+      "phase": "held",
+      "rule": "cut-part-2-e7d3584fd17342f186e54012c62e9300-5",
+      "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+      "method": "PUT",
+      "status": 200
+    }
+  ],
+  "expected_phase": "held",
+  "fault_observed": true
+}

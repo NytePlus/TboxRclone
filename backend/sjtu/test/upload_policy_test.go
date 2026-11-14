@@ -34,7 +34,7 @@ func TestMkdirConcurrentCreation(t *testing.T) {
 					return
 				}
 				infoCalls++
-				if infoCalls <= 2 {
+				if puts == 0 {
 					w.WriteHeader(404)
 					return
 				}
@@ -50,7 +50,7 @@ func TestMkdirConcurrentCreation(t *testing.T) {
 			if kind == "file" && !errors.Is(err, fs.ErrorIsFile) {
 				t.Fatalf("file conflict accepted: %v", err)
 			}
-			if puts != 1 || infoCalls != 3 {
+			if puts != 1 || infoCalls != 4 {
 				t.Fatalf("puts=%d info=%d", puts, infoCalls)
 			}
 		})
@@ -222,5 +222,57 @@ func TestAggregateQuotaRejectsBeforeUploadInitialization(t *testing.T) {
 	f.Opt.MaxSpool = 4
 	if _, err := f.Put(context.Background(), strings.NewReader("safe"), src); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestPendingUploadExposesLockedWithoutReinitializing(t *testing.T) {
+	for _, state := range []string{"Prepared", "InitSent", "Uploading", "CommitSent", "Unknown"} {
+		t.Run(state, func(t *testing.T) {
+			f, sim := newSimulator(t, false)
+			ctx := context.Background()
+			s, err := journal.Open(f.Opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			r, err := s.Prepare(ctx, f.Client.Endpoint+"/l/s", f.BackendRoot+"/file", strings.NewReader("retained"), 8, 20)
+			if err != nil {
+				s.Close()
+				t.Fatal(err)
+			}
+			r.State = state
+			if err = s.Save(r); err != nil {
+				s.Close()
+				t.Fatal(err)
+			}
+			s.Close()
+			fresh := *f
+			src := object.NewStaticObjectInfo("file", time.Now(), 3, true, nil, &fresh)
+			_, err = fresh.Put(ctx, strings.NewReader("new"), src)
+			var status interface{ HTTPStatus() int }
+			if !errors.Is(err, journal.ErrPending) || !errors.As(err, &status) || status.HTTPStatus() != http.StatusLocked {
+				t.Fatalf("pending upload must expose423, not an opaque405/permission failure: %v", err)
+			}
+			if sim.init != 0 || sim.confirm != 0 {
+				t.Fatal("pending retry mutated cloud")
+			}
+			s, err = journal.Open(f.Opt.StateDir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer s.Close()
+			records, err := s.Records()
+			if err != nil || len(records) != 1 || records[0].State != state {
+				t.Fatal(records, err)
+			}
+			data, err := s.Data(&records[0])
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer data.Close()
+			bytes, err := io.ReadAll(data)
+			if err != nil || string(bytes) != "retained" {
+				t.Fatal("retained input changed", err)
+			}
+		})
 	}
 }

@@ -1,0 +1,49 @@
+{
+  "duration_seconds" : 116.23333333333333,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 15.92,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-selected-20261114\/finder\/display-1.mov",
+      "start_seconds" : 0
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 15.92,
+      "duration_seconds" : 5.083333333333333,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-selected-20261114\/error-visible.mov",
+      "start_seconds" : 15.92
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 21.003333333333334,
+      "duration_seconds" : 30.071666666666665,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-selected-20261114\/recovery\/display-1.mov",
+      "start_seconds" : 21.003333333333334
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 30.101666666666667,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/finder\/display-1.mov",
+      "start_seconds" : 51.075000000000003
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/recovery\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 30.063333333333333,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/recovery\/display-1.mov",
+      "start_seconds" : 81.176666666666662
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/completion.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 4.9933333333333332,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-009-F\/native-416-armed-20261114\/completion.mov",
+      "start_seconds" : 111.23999999999999
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "recorder graceful-stop helper test only; no Finder action or system acceptance",
+  "exit_code": 0,
+  "total_seconds": 6.0549909172113985,
+  "after_signal_seconds": 3.211644958006218,
+  "expected_stop": true,
+  "log": "RECORDING_STARTED\nRECORDING_FINISHED requested=45.0 duration=5.11 display=1\nEXPECTED_ERROR_CAPTURE_FINISHED\n"
+}

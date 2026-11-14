@@ -1,0 +1,26 @@
+{
+  "matching_transport_errors": [
+    {
+      "sequence": 1123,
+      "request": 376,
+      "at": "2026-11-13T15:32:03.861831841Z",
+      "phase": "origin_transport_error",
+      "rule": "cut-part-1-1",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "PUT"
+    }
+  ],
+  "fault_observed": true,
+  "excluded_previous_run_errors": [
+    {
+      "sequence": 313,
+      "request": 105,
+      "at": "2026-11-13T15:19:50.782319543Z",
+      "phase": "origin_transport_error",
+      "rule": "cut-part-1-1",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "PUT"
+    }
+  ],
+  "time_filter": "CAPTURE_LAUNCH_BEGIN through CAPTURE_WAIT_FINISHED in finder/timeline.jsonl"
+}

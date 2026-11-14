@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-part-fault-last-20261113-2325/cut-part-3-last-20261113-2325.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/cut-part-3-last-20261113-2325.bin",
+  "remote_path": "/cut-part-3-last-20261113-2325.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

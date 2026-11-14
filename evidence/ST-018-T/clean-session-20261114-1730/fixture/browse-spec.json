@@ -1,0 +1,10 @@
+{
+  "timeout_seconds": 15,
+  "cases": [
+    {
+      "path": "/private/tmp/tboxrclone-webdav-501/browse",
+      "expected_count": 6,
+      "expected_last": "item-05.txt"
+    }
+  ]
+}

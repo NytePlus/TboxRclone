@@ -1,0 +1,18 @@
+{
+  "scenario_id": "ST-014-F",
+  "status": "FAIL",
+  "observations": [
+    "Single selection verified before drag; Finder copy progress disappeared by continuation recording end.",
+    "All 9 main files and 5 directories match source, mounted reopen and independent cloud reads after explicit filename encoding/NFC-to-NFD mapping.",
+    "Required custom xattr survives fresh remount; source resource-fork marker is missing both before and after remount. AppleDouble exists but lacks marker. Cause not yet established; compare local Finder control and valid resource-fork fixture before attributing to server.",
+    "Same-directory case collision and Finder rename/application-save actions remain untested."
+  ],
+  "artifacts": [
+    "copy-single-selection/display-1.mov",
+    "copy-single-selection/continuation.mov",
+    "retry-cloud-second.json",
+    "retry-hashes-normalization.json",
+    "metadata-after-remount.json",
+    "appledouble-structure.json"
+  ]
+}

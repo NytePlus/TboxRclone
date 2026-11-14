@@ -1,0 +1,30 @@
+{
+  "scenario_id": "ST-014-F",
+  "scope": "small-file native performance diagnostic, not full scenario acceptance",
+  "last_active_at": "2026-11-14T08:59:08Z",
+  "first_no_progress_at": "2026-11-14T08:59:11Z",
+  "copy_seconds_lower_bound": 110.17965698242188,
+  "copy_seconds_upper_bound": 113.17965698242188,
+  "main_files": 6,
+  "main_file_hashes_match": true,
+  "pending_bytes_unchanged": true,
+  "resource_forks": {
+    "valid.bin": true,
+    "valid.dat": true,
+    "opaque.bin": false,
+    "opaque.dat": false,
+    "opaque.txt": false
+  },
+  "native_recording": "../retained-recording.mov (indexed segments; gap between initial capture and continuation)",
+  "changes": [
+    "live full-parent lookup",
+    "5s directory cache",
+    "bounded read-only transport retries",
+    "normal copy uses direct cloud access"
+  ],
+  "not_claimed": [
+    "large-file throughput acceptance",
+    "opaque resource fork preservation",
+    "all system scenarios passed"
+  ]
+}

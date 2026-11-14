@@ -1,0 +1,54 @@
+{
+  "method": "source + verified mount reopen + independent cloud inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "empty.bin",
+      "source": {
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "mounted": {
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "cloud": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "matched": true
+    },
+    {
+      "file": "known-length.bin",
+      "source": {
+        "size": 12,
+        "sha256": "0c3b7dccd178c76b3a726de9ace6f279ce1602d8a600c94842cbf824f4d72b6f"
+      },
+      "mounted": {
+        "size": 12,
+        "sha256": "0c3b7dccd178c76b3a726de9ace6f279ce1602d8a600c94842cbf824f4d72b6f"
+      },
+      "cloud": {
+        "sha256": "0c3b7dccd178c76b3a726de9ace6f279ce1602d8a600c94842cbf824f4d72b6f",
+        "size": 12
+      },
+      "matched": true
+    },
+    {
+      "file": "unknown-length.bin",
+      "source": {
+        "size": 14,
+        "sha256": "15f5468ada6df5cb5febf0cc4851f55c1bb748b1293299c5ec825e6521c68522"
+      },
+      "mounted": {
+        "size": 14,
+        "sha256": "15f5468ada6df5cb5febf0cc4851f55c1bb748b1293299c5ec825e6521c68522"
+      },
+      "cloud": {
+        "sha256": "15f5468ada6df5cb5febf0cc4851f55c1bb748b1293299c5ec825e6521c68522",
+        "size": 14
+      },
+      "matched": true
+    }
+  ]
+}

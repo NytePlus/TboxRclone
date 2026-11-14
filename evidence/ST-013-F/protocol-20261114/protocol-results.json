@@ -1,0 +1,88 @@
+[
+  {
+    "id": "overwrite_default",
+    "method": "COPY",
+    "status": 204,
+    "expected_status": 204,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "overwrite_T",
+    "method": "COPY",
+    "status": 204,
+    "expected_status": 204,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "overwrite_F",
+    "method": "COPY",
+    "status": 412,
+    "expected_status": 412,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "file_directory_conflict",
+    "method": "COPY",
+    "direction": "file-to-directory",
+    "status": 403,
+    "sentinels_intact": true,
+    "passed": true
+  },
+  {
+    "id": "file_directory_conflict",
+    "method": "COPY",
+    "direction": "directory-to-file",
+    "status": 403,
+    "sentinels_intact": true,
+    "passed": true
+  },
+  {
+    "id": "overwrite_default",
+    "method": "MOVE",
+    "status": 204,
+    "expected_status": 204,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "overwrite_T",
+    "method": "MOVE",
+    "status": 204,
+    "expected_status": 204,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "overwrite_F",
+    "method": "MOVE",
+    "status": 412,
+    "expected_status": 412,
+    "target_matches": true,
+    "source_matches": true,
+    "passed": true
+  },
+  {
+    "id": "file_directory_conflict",
+    "method": "MOVE",
+    "direction": "file-to-directory",
+    "status": 403,
+    "sentinels_intact": true,
+    "passed": true
+  },
+  {
+    "id": "file_directory_conflict",
+    "method": "MOVE",
+    "direction": "directory-to-file",
+    "status": 403,
+    "sentinels_intact": true,
+    "passed": true
+  }
+]

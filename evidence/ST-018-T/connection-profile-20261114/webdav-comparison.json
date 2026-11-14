@@ -1,0 +1,32 @@
+{
+  "scope": "code-driven performance regression check; not Finder acceptance",
+  "minimum_throughput_ratio": 0.8,
+  "api_evidence": "evidence/ST-018-T/connection-profile-20261114/result.json",
+  "webdav_evidence": "evidence/ST-018-T/code-baseline-20261114/result.json",
+  "size": 268435456,
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "cases": [
+    {
+      "mode": "chunked",
+      "samples": 1,
+      "median_seconds": 24.058202584041283,
+      "api_seconds": 22.665332635,
+      "throughput_ratio": 0.9421041557790677,
+      "passed": true
+    },
+    {
+      "mode": "length",
+      "samples": 1,
+      "median_seconds": 22.607002540957183,
+      "api_seconds": 22.665332635,
+      "throughput_ratio": 1.002580178152196,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "The operator must establish comparable code, hardware and network conditions.",
+    "A single API sample and few WebDAV repetitions do not establish statistical significance.",
+    "Does not measure Finder/webdavfs input, desktop responsiveness, or UI completion."
+  ]
+}

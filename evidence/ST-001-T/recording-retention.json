@@ -1,0 +1,28 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-001-T/direct-20261113-2116/display-1.mov",
+      "bytes": 6789582,
+      "sha256": "6c6ca42da36005b553f01f4cdfb045d67adb15ceccf3f6b648aabffd48ced76a",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-001-T/direct-20261113-2120/display-1.mov",
+      "bytes": 38941459,
+      "sha256": "a3445f1f1506a51183367d2256e28562d1bdc312a50a2bd5751e1458a4a5634c",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-001-T/plain-upload/display-1.mov",
+      "bytes": 14638583,
+      "sha256": "cbe515ed4cbd7a066e91f5fc4421be31df7c2b5487d2728f3d3c3b18d1582f9d",
+      "retained_segment": false
+    }
+  ],
+  "retained_bytes": 38941459,
+  "freed_bytes": 21428165,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

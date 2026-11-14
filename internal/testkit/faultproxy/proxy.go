@@ -26,21 +26,27 @@ import (
 	"time"
 )
 
-// Rule injects a single fault on the Nth matching request. Host includes the port.
+// Rule injects a fault on the Nth matching request. Slow-network rules may repeat.
+// Host includes the port.
 // ActionKey matches a query key without persisting its value. PartNumber may
 // match the non-secret multipart index; events still omit all query values.
 type Rule struct {
-	ID         string `json:"id"`
-	Host       string `json:"host"`
-	Method     string `json:"method"`
-	PathPrefix string `json:"path_prefix"`
-	ActionKey  string `json:"action_key,omitempty"`
-	PartNumber int    `json:"part_number,omitempty"`
-	Nth        int    `json:"nth"`
-	Action     string `json:"action"`
-	Bytes      int64  `json:"bytes,omitempty"`
-	Status     int    `json:"status,omitempty"`
-	Code       string `json:"code,omitempty"`
+	Repeat           bool     `json:"repeat,omitempty"`
+	DelayMS          int      `json:"delay_ms,omitempty"`
+	BytesPerSecond   int64    `json:"bytes_per_second,omitempty"`
+	ID               string   `json:"id"`
+	Host             string   `json:"host"`
+	Method           string   `json:"method"`
+	PathPrefix       string   `json:"path_prefix"`
+	ActionKey        string   `json:"action_key,omitempty"`
+	PartNumber       int      `json:"part_number,omitempty"`
+	MinContentLength int64    `json:"min_content_length,omitempty"`
+	AfterAny         []string `json:"after_any,omitempty"`
+	Nth              int      `json:"nth"`
+	Action           string   `json:"action"`
+	Bytes            int64    `json:"bytes,omitempty"`
+	Status           int      `json:"status,omitempty"`
+	Code             string   `json:"code,omitempty"`
 }
 
 // Event records timing and phase without URLs, bodies, query values or credentials.
@@ -120,40 +126,6 @@ func New(authorities []string, transport http.RoundTripper) (*Proxy, error) {
 // CAPEM returns the public CA certificate, never the private key.
 func (p *Proxy) CAPEM() []byte { return append([]byte(nil), p.caPEM...) }
 
-// SetRules replaces the fault plan. Pending responses must first be released.
-func (p *Proxy) SetRules(rules []Rule) error {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	if p.closed || len(p.pending) > 0 {
-		return errors.New("proxy closed or held responses pending")
-	}
-	if len(rules) > 100 {
-		return errors.New("too many fault rules")
-	}
-	seen := map[string]bool{}
-	for _, r := range rules {
-		if r.ID == "" || len(r.ID) > 64 || strings.ContainsAny(r.ID, "\r\n?&=") || seen[r.ID] || !p.allowed[strings.ToLower(r.Host)] || r.Nth < 1 || r.Method == "" || !strings.HasPrefix(r.PathPrefix, "/") || r.Bytes < 0 || r.PartNumber < 0 || r.PartNumber > 10000 || r.PartNumber != 0 && r.Method != http.MethodPut {
-			return errors.New("invalid fault rule")
-		}
-		seen[r.ID] = true
-		switch r.Action {
-		case "observe", "drop_request", "drop_response", "hold_response", "cut_upload", "cut_download":
-			if r.Status != 0 || r.Code != "" {
-				return errors.New("status and code are only valid for respond_status")
-			}
-		case "respond_status":
-			if r.Status < 400 || r.Status > 599 || r.Bytes != 0 || r.Code != "" && r.Code != "QuotaLimitReached" {
-				return errors.New("respond_status requires a 400..599 status and no byte limit")
-			}
-		default:
-			return errors.New("unknown fault action")
-		}
-	}
-	p.rules = append([]Rule(nil), rules...)
-	p.hits = map[string]int{}
-	return nil
-}
-
 // Events returns a bounded event snapshot; sequence gaps indicate expired records.
 func (p *Proxy) Events(after uint64) []Event {
 	p.mu.Lock()
@@ -177,27 +149,6 @@ func (p *Proxy) record(e Event) {
 		p.events = p.events[:4095]
 	}
 	p.events = append(p.events, e)
-}
-func (p *Proxy) match(host string, r *http.Request) *Rule {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	for _, rule := range p.rules {
-		if !strings.EqualFold(rule.Host, host) || rule.Method != r.Method || !strings.HasPrefix(r.URL.Path, rule.PathPrefix) || (rule.ActionKey != "" && !r.URL.Query().Has(rule.ActionKey)) {
-			continue
-		}
-		if rule.PartNumber != 0 {
-			number, err := strconv.Atoi(r.URL.Query().Get("partNumber"))
-			if err != nil || number != rule.PartNumber {
-				continue
-			}
-		}
-		p.hits[rule.ID]++
-		if p.hits[rule.ID] == rule.Nth {
-			c := rule
-			return &c
-		}
-	}
-	return nil
 }
 
 // Release forwards (true) or discards (false) a held complete upstream response.
@@ -312,8 +263,12 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	request.URL.Scheme = "https"
 	request.URL.Host = authority
 	request.RequestURI = ""
-	request.Close = true
+	// Reuse upstream connections for reads: forcing a fresh remote TLS session
+	// for every metadata lookup overwhelms small Finder copies. Keep mutation
+	// connections one-shot and never supply a replayable request body.
+	request.Close = request.Method != http.MethodGet && request.Method != http.MethodHead
 	request.GetBody = nil
+	request.Header.Del("Connection")
 	request.Header.Del("Proxy-Authorization")
 	request.Header.Del("Proxy-Connection")
 	id := p.requests.Add(1)
@@ -363,6 +318,39 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rule != nil && rule.Action == "cut_upload" {
 		request.Body = &cutReader{ReadCloser: request.Body, left: rule.Bytes}
 	}
+	if rule != nil && rule.Action == "ignore_range" {
+		request.Header.Del("Range")
+		request.Header.Del("If-Match")
+		emit("range_ignored")
+	}
+	var replayBody []byte
+	if rule != nil && rule.Action == "replay_part" {
+		// This external-event fixture is restricted to bounded numbered parts.
+		// Never replay a control-plane mutation or an unbounded stream.
+		if request.URL.Query().Get("uploadId") == "" || request.ContentLength < 0 || request.ContentLength > 8<<20 {
+			emit("replay_rejected")
+			return
+		}
+		replayBody, e = io.ReadAll(io.LimitReader(request.Body, (8<<20)+1))
+		if e != nil || int64(len(replayBody)) != request.ContentLength || len(replayBody) > 8<<20 {
+			emit("replay_rejected")
+			return
+		}
+		request.Body.Close()
+		request.Body = io.NopCloser(bytes.NewReader(replayBody))
+	}
+	if rule != nil && rule.Action == "delay_request" {
+		emit("delay_started")
+		if waitDelay(ctx, time.Duration(rule.DelayMS)*time.Millisecond) != nil {
+			emit("delay_cancelled")
+			return
+		}
+		emit("delay_finished")
+	}
+	if rule != nil && rule.Action == "throttle_upload" {
+		request.Body = &pacedReader{ReadCloser: request.Body, ctx: ctx, rate: rule.BytesPerSecond}
+		emit("upload_throttled")
+	}
 	response, e := p.transport.RoundTrip(request)
 	if e != nil {
 		emit("origin_transport_error")
@@ -371,6 +359,35 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 	event.Status = response.StatusCode
 	emit("origin_headers")
+	if rule != nil && rule.Action == "replay_part" {
+		body, readErr := io.ReadAll(io.LimitReader(response.Body, (1<<20)+1))
+		if readErr != nil || len(body) > 1<<20 || response.StatusCode < 200 || response.StatusCode >= 300 || response.Header.Get("ETag") == "" {
+			emit("replay_original_not_successful")
+			return
+		}
+		response.Body.Close()
+		emit("origin_response_complete")
+		replay := request.Clone(ctx)
+		replay.Body = io.NopCloser(bytes.NewReader(replayBody))
+		emit("replay_sent")
+		second, replayErr := p.transport.RoundTrip(replay)
+		if replayErr != nil {
+			emit("replay_transport_error")
+			return
+		}
+		received, readErr := io.Copy(io.Discard, io.LimitReader(second.Body, (1<<20)+1))
+		second.Body.Close()
+		event.Status = second.StatusCode
+		event.Bytes = int64(len(replayBody))
+		if readErr != nil || received > 1<<20 || second.StatusCode < 200 || second.StatusCode >= 300 || second.Header.Get("ETag") != response.Header.Get("ETag") {
+			emit("replay_not_equivalent")
+			return
+		}
+		emit("replay_same_etag")
+		response.Body = io.NopCloser(bytes.NewReader(body))
+		response.ContentLength = int64(len(body))
+		response.TransferEncoding = nil
+	}
 	if rule != nil && (rule.Action == "drop_response" || rule.Action == "hold_response") {
 		body, readErr := io.ReadAll(io.LimitReader(response.Body, (1<<20)+1))
 		event.Bytes = int64(len(body))
@@ -416,78 +433,4 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	emit("forwarded")
-}
-
-type bufferedConn struct {
-	net.Conn
-	reader *bufio.Reader
-}
-
-func httpsAuthority(host string) string {
-	if _, _, err := net.SplitHostPort(host); err == nil {
-		return host
-	}
-	return net.JoinHostPort(strings.Trim(host, "[]"), "443")
-}
-
-func (c *bufferedConn) Read(b []byte) (int, error) { return c.reader.Read(b) }
-
-type cutReader struct {
-	io.ReadCloser
-	left int64
-}
-
-func (r *cutReader) Read(b []byte) (int, error) {
-	if len(b) == 0 {
-		return 0, nil
-	}
-	if r.left == 0 {
-		return 0, io.ErrUnexpectedEOF
-	}
-	if int64(len(b)) > r.left {
-		b = b[:r.left]
-	}
-	n, e := r.ReadCloser.Read(b)
-	r.left -= int64(n)
-	return n, e
-}
-
-// ControlHandler serves rule setup, redacted event retrieval and response release.
-// Bind this handler to a separate loopback-only listener, never the public network.
-func (p *Proxy) ControlHandler() http.Handler {
-	mux := http.NewServeMux()
-	mux.HandleFunc("PUT /rules", func(w http.ResponseWriter, r *http.Request) {
-		var rules []Rule
-		dec := json.NewDecoder(http.MaxBytesReader(w, r.Body, 65536))
-		dec.DisallowUnknownFields()
-		if dec.Decode(&rules) != nil {
-			http.Error(w, "invalid rules", 400)
-			return
-		}
-		if e := p.SetRules(rules); e != nil {
-			http.Error(w, e.Error(), 409)
-			return
-		}
-		w.WriteHeader(204)
-	})
-	mux.HandleFunc("GET /events", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(p.Events(0))
-	})
-	mux.HandleFunc("POST /release", func(w http.ResponseWriter, r *http.Request) {
-		var input struct {
-			Request uint64 `json:"request"`
-			Forward *bool  `json:"forward"`
-		}
-		if json.NewDecoder(http.MaxBytesReader(w, r.Body, 1024)).Decode(&input) != nil || input.Forward == nil {
-			http.Error(w, "invalid release", 400)
-			return
-		}
-		if e := p.Release(input.Request, *input.Forward); e != nil {
-			http.Error(w, e.Error(), 404)
-			return
-		}
-		w.WriteHeader(204)
-	})
-	return mux
 }

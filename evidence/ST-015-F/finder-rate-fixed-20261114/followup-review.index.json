@@ -1,0 +1,29 @@
+{
+  "duration_seconds" : 30.103333333333332,
+  "frames" : 31,
+  "generation_seconds" : 0.60523605346679688,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "followup-review.0.png",
+      "first_second" : 0,
+      "last_second" : 9
+    },
+    {
+      "file" : "followup-review.10.png",
+      "first_second" : 10,
+      "last_second" : 19
+    },
+    {
+      "file" : "followup-review.20.png",
+      "first_second" : 20,
+      "last_second" : 29
+    },
+    {
+      "file" : "followup-review.30.png",
+      "first_second" : 30,
+      "last_second" : 30
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

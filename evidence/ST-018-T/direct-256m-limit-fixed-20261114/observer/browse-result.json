@@ -1,0 +1,16 @@
+{
+  "cases" : [
+    {
+      "elapsedSeconds" : 8.670331954956055,
+      "expectedCount" : 6,
+      "expectedLast" : "valid.dat",
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/ForkDirect",
+      "status" : "FAIL"
+    }
+  ],
+  "elapsedSeconds" : 8.671925067901611,
+  "kind" : "real-finder-accessibility-browse",
+  "pass" : false,
+  "startedAt" : "2026-11-14T09:19:20Z",
+  "windowID" : 143245
+}

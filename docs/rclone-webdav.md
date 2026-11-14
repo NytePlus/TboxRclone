@@ -10,6 +10,8 @@
 
 固定参考 [rclone v1.75.1](https://github.com/rclone/rclone/tree/v1.75.1)，不要依赖会变化的 master。源码 go.mod 要求 Go 1.26.0。原始 Tbox 参考项目为 C#。以下是完整目标契约，不能因当前功能缺失而降低要求。
 
+Compose 默认使用 5 秒目录元数据缓存（`TBOX_DIR_CACHE_TIME` 可覆盖；设为 `0s` 可关闭）。本客户端写入由 VFS 更新目录项；外部客户端的目录变更可能延迟至缓存过期后的查询才可见。内容缓存仍为 `off`，上传成功仍要求云端确认和独立内容核对。已有父目录每次直接查询完整路径，保留所有祖先的本地路径锁与未决日志检查，减少小文件写入的远程往返。 控制面只读 GET/HEAD 遇到传输失败时最多尝试 3 次（重试前分别等待 200/400 毫秒并响应取消）；HTTP 错误、协议错误和所有变更请求不自动重试。
+
 ## 2. 后端必要接口映射
 
 来源：[fs/types.go](https://github.com/rclone/rclone/blob/v1.75.1/fs/types.go)、[fs/features.go](https://github.com/rclone/rclone/blob/v1.75.1/fs/features.go)。
@@ -125,6 +127,10 @@ go test github.com/rclone/rclone/cmd/serve/webdav github.com/rclone/rclone/vfs/.
 
 初始实验矩阵：1 KiB/4 MiB/256 MiB/2 GiB 文件；1/4/8 文件并发；1/2/4/8 分片并发；4/16/32 MiB 分片（先验证服务端允许）；目录 0/1/50/51/1000 项。记录直连原始 API、rclone copy、WebDAV、Finder 四条路径。
 
+Compose 默认单文件上限 `TBOX_MAX_UPLOAD=2G`、总 spool 预算 `TBOX_MAX_SPOOL=4G`。Finder 的未知长度 PUT 按单文件上限预留逻辑预算；超过上限会中止输入，不能将 Finder 的等待或 -36 错误当作吞吐结果。提高单文件上限时也需评估总预算与并发数。
+
 指标：端到端吞吐、首字节、p50/p95 元数据延迟、API 次数、重试字节、RSS、CPU、缓存占用、恢复时间、残留 session 数。建议初始大文件吞吐目标为同条件直连 API 的 ≥80%，属于待测工程目标，不是当前性能结论。元数据操作与大文件传输应独立限流，防止 Finder 列目录被大上传挤死。
 
 通过门槛：完整内容 SHA-256 一致；P0 场景无数据丢失/静默损坏/错误成功；Unknown 均可收敛或明确保留冲突；缓存容量不足不误报成功；源不会在目标达到约定持久边界前被适配器删除；所有 skip 与未验证能力显式列出；最后在真实 macOS/Finder 版本上验收。Linux Docker 测试不能替代 macOS webdavfs 与进程信号行为。
+
+2026-11-14验收边界更新：用户明确不要求 AppleDouble 元数据保留，因此完整 xattr/resource fork 往返不作为上线阻断项。现有支持保留；Finder 复制 opaque resource fork 时存在丢失，历史失败证据保留在 `evidence/ST-014-F/`。该决定不豁免文件主体内容和文件名完整性。

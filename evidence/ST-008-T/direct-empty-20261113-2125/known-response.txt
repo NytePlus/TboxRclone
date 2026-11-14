@@ -1,0 +1,8 @@
+HTTP/1.1 201 Created
+Accept-Ranges: bytes
+Etag: "18e79dac8fa01200c"
+Server: rclone/v1.76.0-DEV
+Date: Fri, 13 Nov 2026 13:25:42 GMT
+Content-Length: 7
+Content-Type: text/plain; charset=utf-8
+

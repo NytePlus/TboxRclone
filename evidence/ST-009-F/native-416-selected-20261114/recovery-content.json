@@ -1,0 +1,12 @@
+{
+  "expected": {
+    "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+    "size": 9437184
+  },
+  "actual": {
+    "size": 9437184,
+    "sha256": "32e968f05e7d7afbfde5721c2189650edae4f5a10f922112948f05f737c475c7"
+  },
+  "matched": false,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

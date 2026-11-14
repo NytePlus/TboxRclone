@@ -1,0 +1,115 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "ForkDirect/fixture.json",
+      "source": {
+        "size": 834,
+        "sha256": "6a02a872724b3bd4558dabd59bb40e3d8eb05c222e5f1b8f3c6be61a4f886f46"
+      },
+      "mounted": {
+        "size": 834,
+        "sha256": "6a02a872724b3bd4558dabd59bb40e3d8eb05c222e5f1b8f3c6be61a4f886f46"
+      },
+      "raw_cloud_name": "fixture.json",
+      "cloud": {
+        "sha256": "6a02a872724b3bd4558dabd59bb40e3d8eb05c222e5f1b8f3c6be61a4f886f46",
+        "size": 834
+      },
+      "matched": true
+    },
+    {
+      "file": "ForkDirect/opaque.bin",
+      "source": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "mounted": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "raw_cloud_name": "opaque.bin",
+      "cloud": {
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75",
+        "size": 25
+      },
+      "matched": true
+    },
+    {
+      "file": "ForkDirect/opaque.dat",
+      "source": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "mounted": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "raw_cloud_name": "opaque.dat",
+      "cloud": {
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75",
+        "size": 25
+      },
+      "matched": true
+    },
+    {
+      "file": "ForkDirect/opaque.txt",
+      "source": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "mounted": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "raw_cloud_name": "opaque.txt",
+      "cloud": {
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75",
+        "size": 25
+      },
+      "matched": true
+    },
+    {
+      "file": "ForkDirect/valid.bin",
+      "source": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "mounted": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "raw_cloud_name": "valid.bin",
+      "cloud": {
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75",
+        "size": 25
+      },
+      "matched": true
+    },
+    {
+      "file": "ForkDirect/valid.dat",
+      "source": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "mounted": {
+        "size": 25,
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75"
+      },
+      "raw_cloud_name": "valid.dat",
+      "cloud": {
+        "sha256": "0cdc6f93450dacb357bc6b11b7d79eda1bd633b8d1b5a8eab6a442982d142c75",
+        "size": 25
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "ForkDirect",
+      "matched": true
+    }
+  ]
+}

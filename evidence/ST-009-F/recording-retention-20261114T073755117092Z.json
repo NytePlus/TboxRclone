@@ -1,0 +1,19 @@
+{
+  "movie": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/retained-recording.mov",
+  "segments": 3,
+  "removed": [
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/finder/display-1.mov",
+      "bytes": 1666063
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/error-visible.mov",
+      "bytes": 1747272
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/recovery/display-1.mov",
+      "bytes": 1612130
+    }
+  ],
+  "mode": "separate recordings with gaps; not continuous coverage"
+}

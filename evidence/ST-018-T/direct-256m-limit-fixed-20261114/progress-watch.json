@@ -1,0 +1,57 @@
+{
+  "acceptance" : "REQUIRES_CONTENT_AND_ERROR_CHECKS",
+  "elapsed_seconds" : 23.316897034645081,
+  "observations" : [
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:19:25Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large-256m-fixed.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "268.4 MB\/268.4 MB - 大约5秒钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:19:39Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large-256m-fixed.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "268.4 MB\/268.4 MB - 大约5秒钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:19:47Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:19:48Z",
+      "transfer_windows" : [
+
+      ]
+    }
+  ],
+  "progress_disappeared" : true,
+  "saw_progress" : true,
+  "started_at" : "2026-11-14T09:19:25Z"
+}

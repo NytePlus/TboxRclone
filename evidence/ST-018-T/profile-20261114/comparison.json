@@ -1,0 +1,17 @@
+{
+  "same_source_sha256": true,
+  "before_seconds": 23.622893719,
+  "experiment_seconds": 24.372069011,
+  "before_requests": {
+    "GET": 4,
+    "POST": 3,
+    "PUT": 64
+  },
+  "experiment_requests": {
+    "GET": 66,
+    "POST": 3,
+    "PUT": 64
+  },
+  "decision": "Reject parallel readback: no measured gain; restore serial full SHA256 verification. Two measurements are diagnostic, not statistical proof of regression.",
+  "next": "Investigate Finder WebDAV input/staging overhead without weakening durability."
+}

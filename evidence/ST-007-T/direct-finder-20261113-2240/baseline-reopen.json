@@ -1,0 +1,24 @@
+{
+  "method": "source + verified mount reopen + independent cloud inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "baseline-recovery.bin",
+      "source": {
+        "size": 9437184,
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb"
+      },
+      "mounted": {
+        "size": 9437184,
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb"
+      },
+      "raw_cloud_name": "baseline-recovery.bin",
+      "cloud": {
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+        "size": 9437184
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

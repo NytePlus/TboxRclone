@@ -1,0 +1,302 @@
+[
+  {
+    "id": "slow-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-1",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-2",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-3",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-4",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-5",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-6",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-7",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-8",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-9",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-10",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-11",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-12",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-13",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-14",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-15",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-16",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-17",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-18",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-19",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-20",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-21",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-22",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-23",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-24",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-25",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-26",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "HEAD",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-27",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-28",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  },
+  {
+    "id": "slow-29",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PROPFIND",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "delay_request",
+    "delay_ms": 250
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-13T13:33:07Z",
+  "base": "listing-20261113-2133",
+  "concurrency": 12,
+  "cases": [
+    {
+      "path": "listing-20261113-2133/list-0000",
+      "expected": 0,
+      "observed": 0,
+      "pass": true
+    },
+    {
+      "path": "listing-20261113-2133/list-0001",
+      "expected": 1,
+      "observed": 1,
+      "pass": true
+    },
+    {
+      "path": "listing-20261113-2133/list-0050",
+      "expected": 50,
+      "observed": 50,
+      "pass": true
+    },
+    {
+      "path": "listing-20261113-2133/list-0051",
+      "expected": 51,
+      "observed": 51,
+      "pass": true
+    },
+    {
+      "path": "listing-20261113-2133/list-1000",
+      "expected": 1000,
+      "observed": 1000,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

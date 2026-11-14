@@ -1,0 +1,15 @@
+{
+  "movie": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-006-T/retained-recording.mov",
+  "segments": 2,
+  "removed": [
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-006-T/ops-retest-20261114/v1/finder/display-1.mov",
+      "bytes": 2278785
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-006-T/ops-retest-20261114/v2/finder/display-1.mov",
+      "bytes": 2850052
+    }
+  ],
+  "mode": "latest supplied evidence only"
+}

@@ -1,0 +1,49 @@
+[
+  {
+    "action": "prepare directories",
+    "command": [
+      "mkdir",
+      "-p",
+      "/private/tmp/tboxrclone-webdav-501/RmdirCases/empty",
+      "/private/tmp/tboxrclone-webdav-501/RmdirCases/populated"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 9.473974250024185
+  },
+  {
+    "action": "prepare sentinel",
+    "command": [
+      "cp",
+      "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-011-T/rmdir-20261114/source/RmdirCases/populated/keep.txt",
+      "/private/tmp/tboxrclone-webdav-501/RmdirCases/populated/keep.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 9.74702779087238
+  },
+  {
+    "action": "nonempty rmdir",
+    "command": [
+      "rmdir",
+      "/private/tmp/tboxrclone-webdav-501/RmdirCases/populated"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "rmdir: /private/tmp/tboxrclone-webdav-501/RmdirCases/populated: Directory not empty\n",
+    "seconds": 0.0140432498883456
+  },
+  {
+    "action": "empty rmdir",
+    "command": [
+      "rmdir",
+      "/private/tmp/tboxrclone-webdav-501/RmdirCases/empty"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 0.2805167499464005
+  }
+]

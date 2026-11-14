@@ -1,0 +1,12 @@
+=== RUN   TestPropfindBoundedListingsAndFreshNextRequest
+=== RUN   TestPropfindBoundedListingsAndFreshNextRequest/#00
+    propfind_listing_test.go:59: backend listings: 1
+    propfind_listing_test.go:59: backend listings: 1
+=== RUN   TestPropfindBoundedListingsAndFreshNextRequest/parent/child
+    propfind_listing_test.go:59: backend listings: 3
+    propfind_listing_test.go:59: backend listings: 3
+--- PASS: TestPropfindBoundedListingsAndFreshNextRequest (0.03s)
+    --- PASS: TestPropfindBoundedListingsAndFreshNextRequest/#00 (0.02s)
+    --- PASS: TestPropfindBoundedListingsAndFreshNextRequest/parent/child (0.01s)
+PASS
+ok  	github.com/rclone/rclone/cmd/serve/webdav	1.110s

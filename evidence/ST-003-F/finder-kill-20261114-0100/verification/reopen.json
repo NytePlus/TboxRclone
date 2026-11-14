@@ -1,0 +1,25 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "cut-part-2-finder-kill-20261114-0100.bin",
+      "source": {
+        "size": 9437184,
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb"
+      },
+      "mounted": {
+        "size": 9437184,
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb"
+      },
+      "raw_cloud_name": "cut-part-2-finder-kill-20261114-0100.bin",
+      "cloud": {
+        "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+        "size": 9437184
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

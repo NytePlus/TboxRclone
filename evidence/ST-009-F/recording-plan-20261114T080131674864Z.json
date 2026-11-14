@@ -1,0 +1,32 @@
+[
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/finder/display-1.mov",
+    "offset": 0,
+    "duration": 15.92
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/error-visible.mov",
+    "offset": 15.92,
+    "duration": 5.083333333333333
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-selected-20261114/recovery/display-1.mov",
+    "offset": 21.003333333333334,
+    "duration": 30.071666666666665
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/finder/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/recovery/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/recovery/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/completion.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/completion.mov"
+  }
+]

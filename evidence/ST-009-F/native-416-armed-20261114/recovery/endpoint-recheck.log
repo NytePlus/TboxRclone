@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tboxrclone-webdav-501 target=tbox-download-416-fixed-recovery-20261114 item=cut-part-1-first-complete-20261113-2329.bin
+finder_windows_found
+source_window=142733 target_window=142808
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 195.0) end=(1410.75, 576.0)
+visibility_check source_expected=142733 source_top=142733 source_hit=true target_expected=142808 target_top=142808 target_hit=true
+finder_drag_endpoints_visible

@@ -1,0 +1,6 @@
+{
+  "prepared": true,
+  "requires_native_finder_delete": "/private/tmp/tboxrclone-webdav-501/DeleteCases/delete-me.txt",
+  "remote_root": "codex-api-lab/ops-correctness-20261114",
+  "acceptance": "REQUIRES_INDEPENDENT_CLOUD_AND_FINAL_STATE_REVIEW"
+}

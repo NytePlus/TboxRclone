@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "path": "BatchPerformance/alpha.bin",
+      "size": 67108864,
+      "sha256": "dbfaca2662cb70b69dfefd5ac95d1f54a73663092d46cefdc9609dc695a12c98"
+    },
+    {
+      "path": "BatchPerformance/beta.bin",
+      "size": 67108864,
+      "sha256": "07a1e6f3b84e57fbffcbc20ed126f43ceeaec19b8a1cdc0e63b3a75421e6dc54"
+    }
+  ]
+}

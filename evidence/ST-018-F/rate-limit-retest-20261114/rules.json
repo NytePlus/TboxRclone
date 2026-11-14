@@ -1,0 +1,62 @@
+[
+  {
+    "id": "slow-0",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "throttle_upload",
+    "bytes_per_second": 2097152,
+    "min_content_length": 65536,
+    "action_key": "partNumber"
+  },
+  {
+    "id": "slow-1",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "throttle_upload",
+    "bytes_per_second": 2097152,
+    "min_content_length": 65536,
+    "action_key": "partNumber"
+  },
+  {
+    "id": "slow-2",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "throttle_upload",
+    "bytes_per_second": 2097152,
+    "min_content_length": 65536,
+    "action_key": "partNumber"
+  },
+  {
+    "id": "slow-3",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "throttle_upload",
+    "bytes_per_second": 2097152,
+    "min_content_length": 65536,
+    "action_key": "partNumber"
+  },
+  {
+    "id": "slow-4",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "nth": 1,
+    "repeat": true,
+    "action": "throttle_upload",
+    "bytes_per_second": 2097152,
+    "min_content_length": 65536,
+    "action_key": "partNumber"
+  }
+]

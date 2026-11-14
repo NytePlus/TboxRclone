@@ -4,7 +4,6 @@ package journal
 import (
 	"context"
 	"crypto/rand"
-	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -21,25 +20,27 @@ import (
 
 // Record is the durable upload state; it contains no access token or signed URL.
 type Record struct {
-	SpoolReleased bool   `json:"spool_released,omitempty"`
-	ID            string `json:"id"`
-	Kind          string `json:"kind,omitempty"`
-	SourcePath    string `json:"source_path,omitempty"`
-	RecycledID    string `json:"recycled_item_id,omitempty"`
-	Scope         string `json:"scope"`
-	Path          string `json:"path"`
-	Size          int64  `json:"size"`
-	SHA256        string `json:"sha256"`
-	State         string `json:"state"`
-	ConfirmKey    string `json:"confirm_key,omitempty"`
-	OldCAS        string `json:"old_cas,omitempty"`
-	Overwrite     bool   `json:"overwrite,omitempty"`
-	OldETag       string `json:"old_etag,omitempty"`
-	OldSize       int64  `json:"old_size,omitempty"`
-	UploadID      string `json:"upload_id,omitempty"`
-	UploadPath    string `json:"upload_path,omitempty"`
-	PartSize      int64  `json:"part_size,omitempty"`
-	Parts         []Part `json:"parts,omitempty"`
+	SpoolKind     string          `json:"spool_kind,omitempty"`
+	Source        *SourceIdentity `json:"spool_source,omitempty"`
+	SpoolReleased bool            `json:"spool_released,omitempty"`
+	ID            string          `json:"id"`
+	Kind          string          `json:"kind,omitempty"`
+	SourcePath    string          `json:"source_path,omitempty"`
+	RecycledID    string          `json:"recycled_item_id,omitempty"`
+	Scope         string          `json:"scope"`
+	Path          string          `json:"path"`
+	Size          int64           `json:"size"`
+	SHA256        string          `json:"sha256"`
+	State         string          `json:"state"`
+	ConfirmKey    string          `json:"confirm_key,omitempty"`
+	OldCAS        string          `json:"old_cas,omitempty"`
+	Overwrite     bool            `json:"overwrite,omitempty"`
+	OldETag       string          `json:"old_etag,omitempty"`
+	OldSize       int64           `json:"old_size,omitempty"`
+	UploadID      string          `json:"upload_id,omitempty"`
+	UploadPath    string          `json:"upload_path,omitempty"`
+	PartSize      int64           `json:"part_size,omitempty"`
+	Parts         []Part          `json:"parts,omitempty"`
 }
 
 // Part records immutable spool identity and acknowledged remote content.
@@ -259,6 +260,16 @@ func (s *Store) PrepareDeletion(ctx context.Context, scope, p, kind string) (*Re
 }
 
 func (s *Store) prepare(ctx context.Context, scope, p string, in io.Reader, size, max int64, kind, source string, overwrite bool) (*Record, error) {
+	return s.prepareWith(ctx, scope, p, in, size, max, kind, source, overwrite, DurableFileSpool{})
+}
+
+// PrepareSource records an existing local file without copying its bytes. The
+// caller must keep the source unchanged until independent remote verification.
+func (s *Store) PrepareSource(ctx context.Context, scope, p, source string, max int64) (*Record, error) {
+	return s.prepareWith(ctx, scope, p, nil, -1, max, "upload", "", false, SourceFileSpool{Path: source})
+}
+
+func (s *Store) prepareWith(ctx context.Context, scope, p string, in io.Reader, size, max int64, kind, source string, overwrite bool, spool Spool) (*Record, error) {
 	if max < 0 || size > max {
 		return nil, errors.New("upload exceeds configured spool limit")
 	}
@@ -270,60 +281,11 @@ func (s *Store) prepare(ctx context.Context, scope, p string, in io.Reader, size
 		return nil, e
 	}
 	r := &Record{ID: hex.EncodeToString(id[:]), Scope: scope, Path: p, State: "Prepared", Kind: kind, SourcePath: source, Overwrite: overwrite}
-	file := filepath.Join(s.Dir, r.ID+".data")
-	f, e := os.OpenFile(file, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
-	if e != nil {
-		return nil, e
+	if err := spool.Prepare(ctx, s, r, in, size, max); err != nil {
+		return nil, err
 	}
-	keep := false
-	defer func() {
-		if !keep {
-			os.Remove(file)
-		}
-	}()
-	reserved := max
-	if size >= 0 {
-		reserved = size
-	}
-	if e = s.reserveSpool(ctx, f, reserved); e != nil {
-		f.Close()
-		return nil, e
-	}
-	var output io.Writer = f
-	if s.MaxSpoolBytes != 0 {
-		output = &boundedSpool{f: f, remaining: reserved}
-	}
-	h := sha256.New()
-	n, e := io.Copy(io.MultiWriter(output, h), io.LimitReader(&contextReader{ctx, in}, max+1))
-	if e == nil && n > max {
-		e = errors.New("upload exceeds configured spool limit")
-	}
-	if e == nil && size >= 0 && n != size {
-		e = fmt.Errorf("input length mismatch: expected %d received %d", size, n)
-	}
-	if e == nil {
-		e = f.Truncate(n)
-	}
-	if e == nil {
-		e = f.Sync()
-	}
-	ce := f.Close()
-	if e == nil {
-		e = ce
-	}
-	if e != nil {
-		return nil, e
-	}
-	r.Size = n
-	r.SHA256 = hex.EncodeToString(h.Sum(nil))
-	if e = s.syncDirectory(s.Dir); e != nil {
-		return nil, e
-	}
-	// Save may publish the record before a later fsync fails. Its spool must
-	// survive any ambiguous publication outcome, even if this leaves an orphan.
-	keep = true
-	if e = s.Save(r); e != nil {
-		return nil, e
+	if err := s.Save(r); err != nil {
+		return nil, err
 	}
 	return r, nil
 }
@@ -340,27 +302,17 @@ func (r *contextReader) Read(p []byte) (int, error) {
 	return r.r.Read(p)
 }
 
-// Data verifies the spool's hash before returning a reader positioned at byte zero.
-func (s *Store) Data(r *Record) (*os.File, error) {
+// Data validates content before opening a spool through its storage contract.
+func (s *Store) Data(r *Record) (SpoolReader, error) {
 	if r.SpoolReleased {
 		return nil, errors.New("committed spool explicitly released")
 	}
 	if !validID(r.ID) {
 		return nil, errors.New("invalid operation ID")
 	}
-	f, e := os.Open(filepath.Join(s.Dir, r.ID+".data"))
-	if e != nil {
-		return nil, e
+	spool, err := spoolFor(r)
+	if err != nil {
+		return nil, err
 	}
-	h := sha256.New()
-	n, e := io.Copy(h, f)
-	if e != nil || n != r.Size || hex.EncodeToString(h.Sum(nil)) != r.SHA256 {
-		f.Close()
-		return nil, errors.New("spool checksum mismatch")
-	}
-	if _, e = f.Seek(0, 0); e != nil {
-		f.Close()
-		return nil, e
-	}
-	return f, nil
+	return spool.Open(s, r)
 }

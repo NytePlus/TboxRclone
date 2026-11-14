@@ -1,0 +1,114 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-015-F/finder-auth-20261114-0204/finder/display-1.mov",
+      "bytes": 40436390,
+      "sha256": "1f5ae76b2d666cf020a70478916e474e5f1a7d5d2547bc034c0f2a0972b28d1c",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-auth-20261114-0204/recovery/finder/completion-followup.mov",
+      "bytes": 540521,
+      "sha256": "f0455707115f4188e6c669705e2d786e0ab5513c10f683df2dc6a4d77c444842",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-auth-20261114-0204/recovery/finder/display-1.mov",
+      "bytes": 68054501,
+      "sha256": "d73fd359c0d239f64656cca45bdcf0527243543f6db73b294286ba081629d343",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0212/finder/display-1.mov",
+      "bytes": 6539302,
+      "sha256": "d1410589a15f41ed20003c7acbeb16e1b62184d0344706d7e40e965ba4b3e57f",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0215/finder/display-1.mov",
+      "bytes": 45049473,
+      "sha256": "68fa4198159a0f3abb1da6566f89d75cff9ce9e1cb7661d911e703d6453f1c72",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0215/recovery/finder/display-1.mov",
+      "bytes": 492205,
+      "sha256": "e0c1959856748ae9191698bae7dfdc151dd45e21f3abe6df5fb535b8c4f7e7b6",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0227/finder/display-1.mov",
+      "bytes": 39986446,
+      "sha256": "7212621dbec2bb5670267213adcc9ec71e3962e41b1b825aeb0313513ffdf488",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0227/recovery/finder/display-1.mov",
+      "bytes": 42167916,
+      "sha256": "53554b03bc5a3c35ebe38f6e4568d867e17944b37e643df0ef91d03cc2e12547",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0236/finder/display-1.mov",
+      "bytes": 3330546,
+      "sha256": "2002ed8455a8ad0fcae76423fdac0bbe1451377ef8b3c5805a4309683fe1fe84",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-20261114-0236/recovery/finder/display-1.mov",
+      "bytes": 5643464,
+      "sha256": "7c997db8797f68789de9b9e6feb05b6c648ad73b8d1af55ca83aa825c840c04c",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-unlocked-20261114/finder/display-1.mov",
+      "bytes": 3482018,
+      "sha256": "ca3eb072c59ad13923394d45ea42e184750b526548b6993698a50dad5ea84e94",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-forbidden-unlocked-20261114/recovery/finder/display-1.mov",
+      "bytes": 5795527,
+      "sha256": "c9ac3710e23368bb4dd7e05e21722e1a52f5b946d513a282a1b9ace49ba80d01",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-quota-20261114-0148/finder/display-1.mov",
+      "bytes": 7001410,
+      "sha256": "f3451e081538947dd6ee2120bd0f56b5a912463c48ccba3c904c04a42ea34110",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-015-F/finder-quota-fixed-20261114-0157/finder/display-1.mov",
+      "bytes": 4464179,
+      "sha256": "0875ec9bc6d2e52e07d0c69de2ff221fcf54b85f54f094ba7ba9f0f1746be1d2",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-quota-fixed-20261114-0157/recovery/finder/display-1.mov",
+      "bytes": 60141203,
+      "sha256": "e2bfd398d7d7eb52005a29b9c7cc24485c115b6605802842ff3bb999b767b69a",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-20261114-0242/finder/display-1.mov",
+      "bytes": 817360,
+      "sha256": "c6650c03af9bc358cad972387fcf8f2ff0310f3d2c62373217a4fb8ea7969a3f",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-20261114-0242/recovery/finder/display-1.mov",
+      "bytes": 3992832,
+      "sha256": "fb7b32bb8ad318a8242128fec74ca08f51183bc1cb58a00cafd22e8461631a67",
+      "retained_segment": false
+    }
+  ],
+  "retained_bytes": 228281265,
+  "freed_bytes": 109654028,
+  "note": "Original cleanup ledger is historical; current movie/index replace obsolete403 clips with latest rejection/recovery/follow-up evidence. Segments remain separate recordings, not continuous capture.",
+  "current_retained_bytes": 186442211,
+  "current_revision": "finder-forbidden-clean-20261114"
+}

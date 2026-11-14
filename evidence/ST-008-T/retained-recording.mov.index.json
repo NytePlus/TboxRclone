@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-008-T/direct-empty-20261113-2125/display-1.mov",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "0166e9281c3aab83eda2b86de7ed0de7e6ae7dcfe00819f907785f86c5fcfe8f"
+}

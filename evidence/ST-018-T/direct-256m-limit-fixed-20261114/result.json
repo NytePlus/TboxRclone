@@ -1,0 +1,23 @@
+{
+  "status": "PARTIAL_NOT_SYSTEM_PASS",
+  "upload": "Committed; source, mount and independent cloud SHA-256 match",
+  "file_bytes": 268435456,
+  "drag_delivered_utc": "2026-11-14T09:19:00.994930Z",
+  "committed_observed_utc": "2026-11-14T09:19:39.869293Z",
+  "drag_to_committed_observation_seconds": 38.874363,
+  "progress_absent_observed_utc": "2026-11-14T09:19:47Z",
+  "api_baseline_seconds": 20.612327093,
+  "browse_result": "FAIL; native automation did not establish expected listing during upload; cause unresolved",
+  "pending_preserved": true,
+  "ui_review": "Sampled recording seconds 40..59; no error dialog, target listed. Not full-video acceptance.",
+  "checks": [
+    "Docker race tests backend/sjtu/test, journal, transfer PASS",
+    "Python compile PASS",
+    "git diff --check PASS"
+  ],
+  "remaining": [
+    "Finder end-to-end throughput below 80% API target",
+    "directory browse acceptance unresolved",
+    "full ST-018 matrix not complete"
+  ]
+}

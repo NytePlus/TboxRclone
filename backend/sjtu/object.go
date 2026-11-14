@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path"
 	"strings"
@@ -92,8 +93,29 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	defer session.Close()
 	s := session.Store
 	scope := session.Scope
-	r, e := s.Prepare(ctx, scope, p, in, src.Size(), int64(f.Opt.MaxUpload))
+	// Emit one bounded diagnostic per upload, including failures. These phase
+	// durations distinguish WebDAV input/staging from cloud work without logging
+	// signed URLs, credentials, or per-part request bodies.
+	timingStart := time.Now()
+	inputTiming := &timedUploadInput{reader: in}
+	phaseStart := timingStart
+	phase := "staging"
+	durations := make(map[string]time.Duration, 4)
+	nextPhase := func(next string) {
+		now := time.Now()
+		durations[phase] += now.Sub(phaseStart)
+		phase, phaseStart = next, now
+	}
+	defer func() {
+		nextPhase("done")
+		fs.Infof(o, "upload timing: bytes=%d staging=%s input_read=%s input_reads=%d preflight=%s transfer_verify=%s final_info=%s total=%s", src.Size(),
+			durations["staging"], inputTiming.elapsed, inputTiming.calls, durations["preflight"], durations["transfer_verify"], durations["final_info"], time.Since(timingStart))
+	}()
+	r, e := s.Prepare(ctx, scope, p, inputTiming, src.Size(), int64(f.Opt.MaxUpload))
 	if e != nil {
+		if errors.Is(e, journal.ErrPending) {
+			return fserrors.NoRetryError(httpStatusError{status: http.StatusLocked, err: e})
+		}
 		if errors.Is(e, journal.ErrQuota) || errors.Is(e, syscall.ENOSPC) || errors.Is(e, syscall.EDQUOT) {
 			return fserrors.NoRetryError(httpStatusError{status: 507, err: e})
 		}
@@ -102,6 +124,7 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	fail := func(err error) error {
 		return fserrors.NoRetryError(fmt.Errorf("operation %s (%s), local data retained: %w", r.ID, r.State, err))
 	}
+	nextPhase("preflight")
 	if previous, infoErr := f.Client.Info(ctx, p); infoErr == nil {
 		if previous.Type == "dir" {
 			return fail(fs.ErrorIsDir)
@@ -163,17 +186,35 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 	if e = f.Mkdir(ctx, parent); e != nil {
 		return fail(e)
 	}
+	nextPhase("transfer_verify")
 	if e = transfer.StartWithRecovery(ctx, s, f.Client, r); e != nil {
 		if smh.IsStatus(e, 409) {
 			return fail(errors.Join(os.ErrExist, e))
 		}
 		return fail(e)
 	}
+	nextPhase("final_info")
 	o.Item, e = f.Client.Info(ctx, p)
 	if e != nil {
 		return fail(e)
 	}
 	return nil
+}
+
+// Only the staging goroutine reads this wrapper. Time inside Read separates
+// upstream input waiting from local spool writes, hashing and sync work.
+type timedUploadInput struct {
+	reader  io.Reader
+	elapsed time.Duration
+	calls   int
+}
+
+func (r *timedUploadInput) Read(p []byte) (int, error) {
+	start := time.Now()
+	n, err := r.reader.Read(p)
+	r.elapsed += time.Since(start)
+	r.calls++
+	return n, err
 }
 
 var _ fs.Fs = (*Fs)(nil)

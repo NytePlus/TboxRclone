@@ -1,0 +1,32 @@
+{
+  "observed_at": "2026-11-14T06:06:37.223403+00:00",
+  "ui_verdict": "NOT_A_UI_ACCEPTANCE_TEST",
+  "probes": [
+    {
+      "kind": "mounted",
+      "relative": "",
+      "exit_code": 124,
+      "stderr": "helper timed out after 15s; no acceptance result\nhelper still unreaped after SIGKILL: pid=9435; mount recovery may be required",
+      "elapsed_seconds": 21.042526625096798
+    },
+    {
+      "kind": "mounted",
+      "relative": "finder-rate-clean-20261114",
+      "exit_code": 124,
+      "stderr": "helper timed out after 15s; no acceptance result\nhelper still unreaped after SIGKILL: pid=9434; mount recovery may be required",
+      "elapsed_seconds": 21.042316541075706
+    },
+    {
+      "kind": "webdav",
+      "relative": "",
+      "error": "TimeoutError: timed out",
+      "elapsed_seconds": 15.00441441591829
+    },
+    {
+      "kind": "webdav",
+      "relative": "finder-rate-clean-20261114",
+      "error": "TimeoutError: timed out",
+      "elapsed_seconds": 15.004536041989923
+    }
+  ]
+}

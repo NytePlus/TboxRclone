@@ -1,0 +1,26 @@
+{
+  "item-00.txt": {
+    "size": 31,
+    "sha256": "0a9697c3e89638e27395244207df25e0317c2caea1cbab628ad1d90e0af2d23d"
+  },
+  "item-01.txt": {
+    "size": 31,
+    "sha256": "0c1457ded7a86960971116f3bbe5948178d791a6a7fe67e9f1fe501aa013cafb"
+  },
+  "item-02.txt": {
+    "size": 31,
+    "sha256": "66a56de4148750de70ef97d7473b652f20d47a783a93d99e279118f31857b2d4"
+  },
+  "item-03.txt": {
+    "size": 31,
+    "sha256": "23c5143fe38c9ca6388223adfdfbccb3c453a272d3b3f5509109bb0528963a2d"
+  },
+  "item-04.txt": {
+    "size": 31,
+    "sha256": "f5b0e9f52501df17f7049115c8cc54dfddd602a5b36e7e8c4e2af45b1704899f"
+  },
+  "item-05.txt": {
+    "size": 31,
+    "sha256": "103e1667a567dbe2d5ae84aa0ff24b3ec97a05f1657ba3ceeb8c5afdccd0645b"
+  }
+}

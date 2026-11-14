@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -86,10 +87,13 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 	}
 	u, err := c.MultipartStrategy(ctx, r.Path, r.Size, min(int(count), batchSize), strategy(r))
 	if err != nil {
-		// The API rejected this create before issuing an upload identity. A 409
-		// is therefore a known duplicate-name result, not an ambiguous remote
-		// mutation. Keep the spool for diagnosis/retry but release the path.
-		if smh.IsStatus(err, 409) {
+		// Explicit authentication, permission/quota, duplicate and rate-limit
+		// rejections issue no upload identity. Retain the input for retry while
+		// releasing the path. Ambiguous transport and server failures stay pending.
+		var rejected *smh.Error
+		if !errors.Is(err, smh.ErrUnknown) && errors.As(err, &rejected) &&
+			(rejected.Status == http.StatusUnauthorized || rejected.Status == http.StatusForbidden ||
+				rejected.Status == http.StatusConflict || rejected.Status == http.StatusTooManyRequests) {
 			r.State = "Rejected"
 			return errors.Join(err, s.Save(r))
 		}
@@ -269,6 +273,15 @@ func uploadAndCommit(ctx context.Context, s *journal.Store, c *smh.Client, r *jo
 		if previous.ETag != r.OldETag || int64(previous.Size) != r.OldSize || previous.Type == "dir" {
 			return errors.New("overwrite target changed; old and pending data retained")
 		}
+	}
+	// Revalidate the spool after all part reads and before publishing. In
+	// particular, a borrowed source may have changed while workers were active.
+	verified, verifyErr := s.Data(r)
+	if verifyErr != nil {
+		return verifyErr
+	}
+	if verifyErr = verified.Close(); verifyErr != nil {
+		return verifyErr
 	}
 	r.State = "CommitSent"
 	if err = s.Save(r); err != nil {

@@ -1,0 +1,542 @@
+[
+  {
+    "id": "read-cut-0",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-1",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-2",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-3",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-4",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-5",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-6",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-7",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-8",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-9",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-10",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-11",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-12",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-13",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-14",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-15",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-16",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-17",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-18",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-19",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-20",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-21",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-22",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-23",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-24",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-25",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-26",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-27",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-28",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-29",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-30",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-31",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-32",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-33",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-34",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-35",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-36",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-37",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-38",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-39",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-40",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-41",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-42",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-43",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-44",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-45",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-46",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-47",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-48",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-49",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-50",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-51",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-52",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-53",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-54",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-55",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-56",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-57",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-58",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  },
+  {
+    "id": "read-cut-59",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "path_prefix": "/",
+    "nth": 1,
+    "action": "cut_download",
+    "bytes": 1
+  }
+]

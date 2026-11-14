@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-part-fault-finder-kill-20261114-0100/cut-part-2-finder-kill-20261114-0100.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/cut-part-2-finder-kill-20261114-0100.bin",
+  "remote_path": "/cut-part-2-finder-kill-20261114-0100.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

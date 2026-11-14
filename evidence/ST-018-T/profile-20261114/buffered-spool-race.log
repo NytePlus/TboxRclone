@@ -1,0 +1,34 @@
+time="2026-11-14T19:32:41+08:00" level=warning msg="Found orphan containers ([tboxrclone-performance-webdav-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container tboxrclone-lab-dns-1  Running
+?   	github.com/nyte/TboxRclone/backend/sjtu	[no test files]
+ok  	github.com/nyte/TboxRclone/backend/sjtu/test	15.874s
+?   	github.com/nyte/TboxRclone/cmd/davcheck	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/faultproxy	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-fixture	(cached)
+?   	github.com/nyte/TboxRclone/cmd/finder-inspect	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-list-fixture	(cached)
+?   	github.com/nyte/TboxRclone/cmd/finder-observe	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-verify	(cached)
+?   	github.com/nyte/TboxRclone/cmd/multipart-replay-verify	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/read-change-verify	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/tbox-state	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/tboxrclone	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/upload-benchmark	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/verify	(cached)
+ok  	github.com/nyte/TboxRclone/cmd/webdav-length-fault	(cached)
+ok  	github.com/nyte/TboxRclone/cmd/webdav-range-verify	(cached)
+ok  	github.com/nyte/TboxRclone/internal/durablefile	(cached)
+ok  	github.com/nyte/TboxRclone/internal/pathclaims	(cached)
+--- FAIL: TestQuotaProcessDeath (0.03s)
+    quota_test.go:197: crash spool damaged: "\x00\x00\x00\x00\x00\x00\x00\x00" <nil>
+FAIL
+FAIL	github.com/nyte/TboxRclone/internal/sjtu/journal	2.302s
+ok  	github.com/nyte/TboxRclone/internal/sjtu/ownership	(cached)
+?   	github.com/nyte/TboxRclone/internal/sjtu/recovery	[no test files]
+ok  	github.com/nyte/TboxRclone/internal/sjtu/smh	(cached)
+ok  	github.com/nyte/TboxRclone/internal/sjtu/transfer	10.453s
+ok  	github.com/nyte/TboxRclone/internal/sjtu/treebackup	(cached)
+ok  	github.com/nyte/TboxRclone/internal/testkit/faultproxy	(cached)
+ok  	github.com/nyte/TboxRclone/internal/verifyutil	(cached)
+FAIL
+

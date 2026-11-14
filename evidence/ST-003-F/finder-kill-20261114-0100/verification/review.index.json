@@ -1,0 +1,104 @@
+{
+  "duration_seconds" : 180.00166666666667,
+  "frames" : 181,
+  "generation_seconds" : 5.927960991859436,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "review.0.png",
+      "first_second" : 0,
+      "last_second" : 9
+    },
+    {
+      "file" : "review.10.png",
+      "first_second" : 10,
+      "last_second" : 19
+    },
+    {
+      "file" : "review.20.png",
+      "first_second" : 20,
+      "last_second" : 29
+    },
+    {
+      "file" : "review.30.png",
+      "first_second" : 30,
+      "last_second" : 39
+    },
+    {
+      "file" : "review.40.png",
+      "first_second" : 40,
+      "last_second" : 49
+    },
+    {
+      "file" : "review.50.png",
+      "first_second" : 50,
+      "last_second" : 59
+    },
+    {
+      "file" : "review.60.png",
+      "first_second" : 60,
+      "last_second" : 69
+    },
+    {
+      "file" : "review.70.png",
+      "first_second" : 70,
+      "last_second" : 79
+    },
+    {
+      "file" : "review.80.png",
+      "first_second" : 80,
+      "last_second" : 89
+    },
+    {
+      "file" : "review.90.png",
+      "first_second" : 90,
+      "last_second" : 99
+    },
+    {
+      "file" : "review.100.png",
+      "first_second" : 100,
+      "last_second" : 109
+    },
+    {
+      "file" : "review.110.png",
+      "first_second" : 110,
+      "last_second" : 119
+    },
+    {
+      "file" : "review.120.png",
+      "first_second" : 120,
+      "last_second" : 129
+    },
+    {
+      "file" : "review.130.png",
+      "first_second" : 130,
+      "last_second" : 139
+    },
+    {
+      "file" : "review.140.png",
+      "first_second" : 140,
+      "last_second" : 149
+    },
+    {
+      "file" : "review.150.png",
+      "first_second" : 150,
+      "last_second" : 159
+    },
+    {
+      "file" : "review.160.png",
+      "first_second" : 160,
+      "last_second" : 169
+    },
+    {
+      "file" : "review.170.png",
+      "first_second" : 170,
+      "last_second" : 179
+    },
+    {
+      "file" : "review.180.png",
+      "first_second" : 180,
+      "last_second" : 180
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

@@ -1,0 +1,58 @@
+{
+  "run_id": "finder-expiry-replay-20261113",
+  "scenario_id": "ST-007-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "signature_expired",
+      "status": "PASS",
+      "observation": "Synthetic part-2 403 followed by recovery; all one-second video samples 0..89 reviewed and source/mount/independent cloud hashes match. This is controlled rejection, not elapsed-time signature expiry.",
+      "artifacts": [
+        "signature-finder-20261113-2256/ui-review.md",
+        "retained-recording.mov",
+        "signature-finder-20261113-2256/rules.json",
+        "signature-finder-20261113-2256/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "session_expired",
+      "status": "PASS",
+      "observation": "Gated data-part 403 then upload-query 404; complete 9 MiB operation rebuilt session and committed three parts. All one-second samples 0..179 reviewed; Finder completed at 155s without errors. Source/mount/independent cloud hashes match. Controlled expiry responses, not elapsed provider expiry.",
+      "artifacts": [
+        "session-complete-20261114-0021/ui-review.md",
+        "retained-recording.mov",
+        "session-complete-20261114-0021/rules.json",
+        "session-complete-20261114-0021/fault-check.json",
+        "session-complete-20261114-0021/journal-timeline.jsonl",
+        "session-complete-20261114-0021/journal.json",
+        "session-complete-20261114-0021/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "replay_identical_part",
+      "status": "PASS",
+      "observation": "Second 4 MiB part replayed once with identical ETag; three-part operation Committed. All 180 one-second samples reviewed; Finder copy completed at 67s and remained visible without errors through 158s before foreground switched to Codex. Source/mount/independent cloud hashes match.",
+      "artifacts": [
+        "replay-cleared-20261114-0005/ui-review.md",
+        "retained-recording.mov",
+        "replay-cleared-20261114-0005/fault-check.json",
+        "replay-cleared-20261114-0005/events.json",
+        "replay-cleared-20261114-0005/journal.json",
+        "replay-cleared-20261114-0005/journal-timeline.jsonl",
+        "replay-cleared-20261114-0005/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    }
+  ]
+}

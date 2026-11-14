@@ -1,0 +1,8 @@
+{
+  "finding": "Previous progress scans took7..10seconds despite a1second inter-scan sleep; timestamp preceded scan. Treat disappearance as an interval, not precise completion time.",
+  "old_last_present_scan_started": "2026-11-14T09:26:25Z",
+  "old_first_absent_scan_started": "2026-11-14T09:26:32Z",
+  "fix": "Batch AX attributes per node; report scan start,end,duration.",
+  "new_idle_scan_seconds": 1.8262710571289062,
+  "not_a_product_speedup": true
+}

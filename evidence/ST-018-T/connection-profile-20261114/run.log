@@ -1,0 +1,664 @@
+time="2026-11-14T19:38:46+08:00" level=warning msg="Found orphan containers ([tboxrclone-performance-webdav-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container tboxrclone-lab-dns-1  Running
+{
+  "bytes": 268435456,
+  "bytes_per_second": 11843437.743573183,
+  "operation_id": "d42b4c22be153202b53a81c978f770c6",
+  "pass": true,
+  "remote_path": "codex-api-lab/perf-code-connections-20261114/payload.bin",
+  "request_counts": {
+    "GET": 4,
+    "POST": 3,
+    "PUT": 64
+  },
+  "request_timings": [
+    {
+      "method": "POST",
+      "kind": "upload-control",
+      "start_seconds": 0.24622175,
+      "headers_seconds": 0.143995167,
+      "total_seconds": 0.15107975,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.399442417,
+      "headers_seconds": 1.618825167,
+      "total_seconds": 1.618842667,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.399355792,
+      "headers_seconds": 1.639844542,
+      "total_seconds": 1.639853876,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.399013125,
+      "headers_seconds": 1.667244876,
+      "total_seconds": 1.667259376,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 0.399412417,
+      "headers_seconds": 1.729444084,
+      "total_seconds": 1.729448542,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.044847876,
+      "headers_seconds": 0.49386475,
+      "total_seconds": 0.493874959,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.068217459,
+      "headers_seconds": 0.470495167,
+      "total_seconds": 0.470719334,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.021096584,
+      "headers_seconds": 0.586477251,
+      "total_seconds": 0.586480834,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.130740959,
+      "headers_seconds": 0.485798292,
+      "total_seconds": 0.485800501,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.5516714179999997,
+      "headers_seconds": 0.4372445,
+      "total_seconds": 0.437261292,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.541152126,
+      "headers_seconds": 0.525614125,
+      "total_seconds": 0.525617875,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.6195743350000003,
+      "headers_seconds": 0.550523917,
+      "total_seconds": 0.550527417,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.60890096,
+      "headers_seconds": 0.571140125,
+      "total_seconds": 0.571142417,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 2.991726876,
+      "headers_seconds": 0.532735292,
+      "total_seconds": 0.532749251,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.18497721,
+      "headers_seconds": 0.477909625,
+      "total_seconds": 0.477922833,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.171263543,
+      "headers_seconds": 0.491637875,
+      "total_seconds": 0.4916425,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.067860501,
+      "headers_seconds": 0.623915876,
+      "total_seconds": 0.623919792,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.66502021,
+      "headers_seconds": 0.464197667,
+      "total_seconds": 0.464212167,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.52708321,
+      "headers_seconds": 0.624561792,
+      "total_seconds": 0.624568959,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.676782543,
+      "headers_seconds": 0.490513876,
+      "total_seconds": 0.490518751,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 3.69572221,
+      "headers_seconds": 0.511554834,
+      "total_seconds": 0.511557792,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.15607096,
+      "headers_seconds": 0.490586501,
+      "total_seconds": 0.490599876,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.169758627,
+      "headers_seconds": 0.499549917,
+      "total_seconds": 0.499563125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.131735877,
+      "headers_seconds": 0.542440584,
+      "total_seconds": 0.54244425,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.208308669,
+      "headers_seconds": 0.489761583,
+      "total_seconds": 0.489765708,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.648990544,
+      "headers_seconds": 0.472576208,
+      "total_seconds": 0.472591125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.6797500020000005,
+      "headers_seconds": 0.487709125,
+      "total_seconds": 0.487712792,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.700780627,
+      "headers_seconds": 0.505418501,
+      "total_seconds": 0.505422667,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 4.674415711,
+      "headers_seconds": 0.557593208,
+      "total_seconds": 0.557595125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.124126544,
+      "headers_seconds": 0.491295,
+      "total_seconds": 0.491307459,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.207146211,
+      "headers_seconds": 0.426598292,
+      "total_seconds": 0.426605917,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.168630127,
+      "headers_seconds": 0.481668251,
+      "total_seconds": 0.481671251,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.232793378,
+      "headers_seconds": 0.582350125,
+      "total_seconds": 0.582353875,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.6383010030000005,
+      "headers_seconds": 0.444915458,
+      "total_seconds": 0.444929625,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.653937086,
+      "headers_seconds": 0.464975209,
+      "total_seconds": 0.464981917,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.617984086,
+      "headers_seconds": 0.52228525,
+      "total_seconds": 0.522287625,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 5.817032794,
+      "headers_seconds": 0.549660376,
+      "total_seconds": 0.549674334,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.086432128,
+      "headers_seconds": 0.515766959,
+      "total_seconds": 0.515785667,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.120206795,
+      "headers_seconds": 0.55356625,
+      "total_seconds": 0.55357,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.144756336,
+      "headers_seconds": 0.529025292,
+      "total_seconds": 0.529027459,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.60496892,
+      "headers_seconds": 0.528456875,
+      "total_seconds": 0.528473125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.369446461,
+      "headers_seconds": 0.811945626,
+      "total_seconds": 0.811948959,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.675418587,
+      "headers_seconds": 0.563339583,
+      "total_seconds": 0.563344708,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 6.683720545,
+      "headers_seconds": 0.568012792,
+      "total_seconds": 0.568019833,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.13525542,
+      "headers_seconds": 0.409347625,
+      "total_seconds": 0.409356084,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.182614878,
+      "headers_seconds": 0.542447542,
+      "total_seconds": 0.542452792,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.255407378,
+      "headers_seconds": 0.469656834,
+      "total_seconds": 0.469660751,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.239871837,
+      "headers_seconds": 0.512118125,
+      "total_seconds": 0.512123,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.547007545,
+      "headers_seconds": 0.504209667,
+      "total_seconds": 0.504231459,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.726301962,
+      "headers_seconds": 0.430141209,
+      "total_seconds": 0.43015,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 7.735226629,
+      "headers_seconds": 0.496465083,
+      "total_seconds": 0.496479542,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "POST",
+      "kind": "metadata",
+      "start_seconds": 8.234693962,
+      "headers_seconds": 0.024525625,
+      "total_seconds": 0.024956959,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.260090337,
+      "headers_seconds": 0.405543834,
+      "total_seconds": 0.405556667,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.259812212,
+      "headers_seconds": 0.416485584,
+      "total_seconds": 0.416498376,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.260238462,
+      "headers_seconds": 0.830814084,
+      "total_seconds": 0.830829334,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.260111004,
+      "headers_seconds": 0.86527375,
+      "total_seconds": 0.865293792,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.688923088,
+      "headers_seconds": 0.744467667,
+      "total_seconds": 0.74448175,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 8.672776838,
+      "headers_seconds": 0.888210208,
+      "total_seconds": 0.888224292,
+      "new_connections": 1,
+      "reused_connections": 0
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.128479796,
+      "headers_seconds": 0.464538667,
+      "total_seconds": 0.464543459,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.094342796,
+      "headers_seconds": 0.570077542,
+      "total_seconds": 0.570080042,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.43601913,
+      "headers_seconds": 0.583841583,
+      "total_seconds": 0.583897958,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.598601088,
+      "headers_seconds": 0.4769155,
+      "total_seconds": 0.476925125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.563944088,
+      "headers_seconds": 0.566771625,
+      "total_seconds": 0.566775125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 9.667410213,
+      "headers_seconds": 0.538324209,
+      "total_seconds": 0.538344667,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 10.077046463,
+      "headers_seconds": 0.367501459,
+      "total_seconds": 0.367517125,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "PUT",
+      "kind": "content",
+      "start_seconds": 10.023018546,
+      "headers_seconds": 0.443050417,
+      "total_seconds": 0.443056917,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "POST",
+      "kind": "confirm",
+      "start_seconds": 10.626164088,
+      "headers_seconds": 0.129147167,
+      "total_seconds": 0.129267917,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "GET",
+      "kind": "upload-control",
+      "start_seconds": 10.897704172,
+      "headers_seconds": 0.012281917,
+      "total_seconds": 0.012316917,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "GET",
+      "kind": "metadata",
+      "start_seconds": 10.910157755,
+      "headers_seconds": 0.015577792,
+      "total_seconds": 0.01563925,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "GET",
+      "kind": "metadata",
+      "start_seconds": 10.925926464,
+      "headers_seconds": 0.095420458,
+      "total_seconds": 0.095471333,
+      "new_connections": 0,
+      "reused_connections": 1
+    },
+    {
+      "method": "GET",
+      "kind": "content",
+      "start_seconds": 11.021407714,
+      "headers_seconds": 0.02899475,
+      "total_seconds": 9.980250421000001,
+      "new_connections": 0,
+      "reused_connections": 1
+    }
+  ],
+  "scope": "direct SMH transfer engine, no rclone/WebDAV; includes confirm and independent full readback",
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "source": "/fixture/phased.bin",
+  "source_retained": true,
+  "staging_seconds": 1.511901875,
+  "started_at": "2026-11-14T11:38:48.011224805Z",
+  "state": "Committed",
+  "total_seconds": 22.665332635,
+  "transfer_and_verification_seconds": 21.15343076
+}

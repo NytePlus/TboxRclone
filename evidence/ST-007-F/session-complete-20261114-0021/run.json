@@ -1,0 +1,8 @@
+{
+  "source_directory": "/private/tmp/tbox-part-fault-session-complete-20261114-0021",
+  "filename": "cut-part-2-session-complete-20261114-0021.bin",
+  "part": 2,
+  "mode": "session-expired",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

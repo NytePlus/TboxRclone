@@ -1,0 +1,15 @@
+{
+  "movie": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+  "segments": 18,
+  "removed": [
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-cache-fast-clean-20261114/recovery/finder/display-1.mov",
+      "bytes": 3390073
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-cache-fast-clean-20261114/recovery/final-content/completion.mov",
+      "bytes": 307212
+    }
+  ],
+  "mode": "separate recordings with gaps; not continuous coverage"
+}

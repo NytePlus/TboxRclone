@@ -1,0 +1,25 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "large-256m-fixed.bin",
+      "source": {
+        "size": 268435456,
+        "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0"
+      },
+      "mounted": {
+        "size": 268435456,
+        "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0"
+      },
+      "raw_cloud_name": "large-256m-fixed.bin",
+      "cloud": {
+        "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+        "size": 268435456
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

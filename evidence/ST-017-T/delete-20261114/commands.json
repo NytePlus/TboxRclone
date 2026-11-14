@@ -1,0 +1,37 @@
+[
+  {
+    "action": "prepare directory",
+    "command": [
+      "mkdir",
+      "/private/tmp/tboxrclone-webdav-501/DeleteCases"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 3.4528004589956254
+  },
+  {
+    "action": "prepare sentinel",
+    "command": [
+      "cp",
+      "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-017-T/delete-20261114/source/DeleteCases/keep.txt",
+      "/private/tmp/tboxrclone-webdav-501/DeleteCases/keep.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 9.174010792048648
+  },
+  {
+    "action": "prepare deletion fixture",
+    "command": [
+      "cp",
+      "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-017-T/delete-20261114/reference/delete-me.txt",
+      "/private/tmp/tboxrclone-webdav-501/DeleteCases/delete-me.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "seconds": 8.063856250140816
+  }
+]

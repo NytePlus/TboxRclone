@@ -1,0 +1,105 @@
+{
+  "duration_seconds" : 790.57666666666671,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 44.981666666666669,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-auth-20261114-0204\/finder\/display-1.mov",
+      "start_seconds" : 0
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 44.981666666666669,
+      "duration_seconds" : 29.968333333333334,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-auth-20261114-0204\/recovery\/finder\/completion-followup.mov",
+      "start_seconds" : 44.981666666666669
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 74.950000000000003,
+      "duration_seconds" : 90.001666666666665,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-auth-20261114-0204\/recovery\/finder\/display-1.mov",
+      "start_seconds" : 74.950000000000003
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 164.95166666666665,
+      "duration_seconds" : 45.018333333333331,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-quota-fixed-20261114-0157\/finder\/display-1.mov",
+      "start_seconds" : 164.95166666666665
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 209.97,
+      "duration_seconds" : 89.969999999999999,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-quota-fixed-20261114-0157\/recovery\/finder\/display-1.mov",
+      "start_seconds" : 209.97
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 299.94,
+      "duration_seconds" : 45.041666666666664,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-forbidden-clean-20261114\/finder\/display-1.mov",
+      "start_seconds" : 299.94
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 344.98166666666668,
+      "duration_seconds" : 120.10166666666667,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-forbidden-clean-20261114\/recovery\/finder\/display-1.mov",
+      "start_seconds" : 344.98166666666668
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 465.08333333333331,
+      "duration_seconds" : 60.045000000000002,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-forbidden-clean-20261114\/recovery\/completion-followup.mov",
+      "start_seconds" : 465.08333333333331
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 525.12833333333333,
+      "duration_seconds" : 60.093333333333334,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-rate-fixed-20261114\/finder\/display-1.mov",
+      "start_seconds" : 525.12833333333333
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 585.22166666666669,
+      "duration_seconds" : 30.103333333333332,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-rate-fixed-20261114\/rejection-followup.mov",
+      "start_seconds" : 585.22166666666669
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 615.32500000000005,
+      "duration_seconds" : 35.325000000000003,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-rate-fixed-20261114\/recovery\/finder\/display-1.mov",
+      "start_seconds" : 615.32500000000005
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 650.64999999999998,
+      "duration_seconds" : 60.018333333333331,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-rate-fixed-20261114\/recovery\/completion-followup.mov",
+      "start_seconds" : 650.64999999999998
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 710.66833333333329,
+      "duration_seconds" : 60.075000000000003,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-503-20261114\/finder\/display-1.mov",
+      "start_seconds" : 710.66833333333329
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-503-20261114\/recovery\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 19.833333333333332,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-015-F\/finder-503-20261114\/recovery\/finder\/display-1.mov",
+      "start_seconds" : 770.74333333333334
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

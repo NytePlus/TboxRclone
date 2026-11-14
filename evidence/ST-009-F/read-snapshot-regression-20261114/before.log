@@ -1,0 +1,39 @@
+ Container tboxrclone-lab-dns-1  Running
+2026/11/13 19:07:20 NOTICE: Config file "/nonexistent" not found - using defaults
+--- FAIL: TestReadHandleKeepsCapturedObject (0.00s)
+    --- FAIL: TestReadHandleKeepsCapturedObject/pending-open (0.00s)
+        run.go:198: Remote "Local file system at /tmp/rclone144291703", Local "Local file system at /tmp/rclone3379513485", Modify Window "1ns"
+        read_snapshot_test.go:63: 
+            	Error Trace:	/src/third_party/rclone/vfs/read_snapshot_test.go:63
+            	Error:      	Not equal: 
+            	            	expected: "0123"
+            	            	actual  : "ABCD"
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1 +1 @@
+            	            	-0123
+            	            	+ABCD
+            	Test:       	TestReadHandleKeepsCapturedObject/pending-open
+            	Messages:   	existing handle switched content versions
+    --- FAIL: TestReadHandleKeepsCapturedObject/retry-open (0.00s)
+        run.go:198: Remote "Local file system at /tmp/rclone144291703", Local "Local file system at /tmp/rclone3379513485", Modify Window "1ns"
+        read_snapshot_test.go:63: 
+            	Error Trace:	/src/third_party/rclone/vfs/read_snapshot_test.go:63
+            	Error:      	Not equal: 
+            	            	expected: "89ab"
+            	            	actual  : "IJKL"
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1 +1 @@
+            	            	-89ab
+            	            	+IJKL
+            	Test:       	TestReadHandleKeepsCapturedObject/retry-open
+            	Messages:   	existing handle switched content versions
+FAIL
+FAIL	github.com/rclone/rclone/vfs	0.019s
+FAIL
+

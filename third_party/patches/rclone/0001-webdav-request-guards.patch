@@ -1,5 +1,5 @@
 diff --git a/cmd/serve/webdav/webdav.go b/cmd/serve/webdav/webdav.go
-index f3cf2aa..c69dbbe 100644
+index f3cf2aa..da53b88 100644
 --- a/cmd/serve/webdav/webdav.go
 +++ b/cmd/serve/webdav/webdav.go
 @@ -2,9 +2,12 @@
@@ -15,7 +15,15 @@ index f3cf2aa..c69dbbe 100644
  	"mime"
  	"net"
  	"net/http"
-@@ -43,6 +46,10 @@ var OptionsInfo = fs.Options{{
+@@ -12,6 +15,7 @@ import (
+ 	"path"
+ 	"strconv"
+ 	"strings"
++	"sync"
+ 	"time"
+ 
+ 	chi "github.com/go-chi/chi/v5"
+@@ -43,6 +47,10 @@ var OptionsInfo = fs.Options{{
  	Name:    "disable_dir_list",
  	Default: false,
  	Help:    "Disable HTML directory list on GET request for a directory",
@@ -26,7 +34,7 @@ index f3cf2aa..c69dbbe 100644
  }, {
  	Name:    "disable_zip",
  	Default: false,
-@@ -54,12 +61,13 @@ var OptionsInfo = fs.Options{{
+@@ -54,12 +62,13 @@ var OptionsInfo = fs.Options{{
  
  // Options required for http server
  type Options struct {
@@ -46,25 +54,56 @@ index f3cf2aa..c69dbbe 100644
  }
  
  // Opt is options set by command line flags
-@@ -351,12 +359,35 @@ func (w *WebDAV) auth(r *http.Request, user, pass string) (value any, err error)
+@@ -351,12 +360,66 @@ func (w *WebDAV) auth(r *http.Request, user, pass string) (value any, err error)
  
  type webdavRW struct {
  	http.ResponseWriter
 -	status int
-+	status     int
-+	deferWrite bool
-+	body       bytes.Buffer
++	status             int
++	deferWrite         bool
++	body               bytes.Buffer
++	readResult         *webdavRequestResult
++	replaceBody        bool
++	replacementWritten bool
++	delayRead          bool
++	readPending        bool
  }
  
  func (rw *webdavRW) WriteHeader(statusCode int) {
++	if statusCode == http.StatusNotFound && rw.readResult != nil {
++		mapped := readMetadataStatus(rw.readResult.err)
++		if mapped != statusCode {
++			statusCode = mapped
++			rw.replaceBody = true
++			rw.Header().Del("Content-Length")
++		}
++	}
  	rw.status = statusCode
 -	rw.ResponseWriter.WriteHeader(statusCode)
++	if rw.delayRead && statusCode >= 200 && statusCode < 300 {
++		rw.readPending = true
++		return
++	}
++	rw.readPending = false
 +	if !rw.deferWrite {
 +		rw.ResponseWriter.WriteHeader(statusCode)
 +	}
 +}
 +
 +func (rw *webdavRW) Write(p []byte) (int, error) {
++	if rw.readPending {
++		rw.readPending = false
++		rw.ResponseWriter.WriteHeader(rw.status)
++	}
++	if rw.replaceBody {
++		if !rw.replacementWritten {
++			rw.replacementWritten = true
++			if _, err := io.WriteString(rw.ResponseWriter, http.StatusText(rw.status)); err != nil {
++				return 0, err
++			}
++		}
++		return len(p), nil
++	}
 +	if rw.deferWrite {
 +		if rw.status == 0 {
 +			rw.status = http.StatusOK
@@ -84,7 +123,7 @@ index f3cf2aa..c69dbbe 100644
  }
  
  func (rw *webdavRW) isSuccessfull() bool {
-@@ -395,7 +426,63 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
+@@ -395,7 +458,68 @@ func (w *WebDAV) postprocess(r *http.Request, remote string) {
  	}
  }
  
@@ -94,7 +133,9 @@ index f3cf2aa..c69dbbe 100644
 +type webdavRequestResultKey struct{}
 +
 +type webdavRequestResult struct {
-+	err error
++	err     error
++	readMu  sync.Mutex
++	readErr error
 +}
 +
 +type copyRequest struct {
@@ -131,6 +172,9 @@ index f3cf2aa..c69dbbe 100644
 +}
 +
  func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
++	if r.Method == "PROPFIND" {
++		r = r.WithContext(context.WithValue(r.Context(), propfindNodesKey{}, &propfindNodes{nodes: make(map[string]vfs.Node)}))
++	}
 +	requestResult := &webdavRequestResult{}
 +	r = r.WithContext(context.WithValue(r.Context(), webdavRequestResultKey{}, requestResult))
 +	if r.Method == "COPY" {
@@ -148,7 +192,7 @@ index f3cf2aa..c69dbbe 100644
  	urlPath := r.URL.Path
  	isDir := strings.HasSuffix(urlPath, "/")
  	remote := strings.Trim(urlPath, "/")
-@@ -403,6 +490,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -403,6 +527,46 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  		w.serveDir(rw, r, remote)
  		return
  	}
@@ -195,7 +239,7 @@ index f3cf2aa..c69dbbe 100644
  	// Work around bug in x/net/webdav which handles Overwrite incorrectly
  	// See: https://github.com/golang/go/issues/66059
  	// Remove when the above bug is fixed.
-@@ -412,14 +539,50 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+@@ -412,14 +576,55 @@ func (w *WebDAV) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
  	// Add URL Prefix back to path since webdavhandler needs to
  	// return absolute references.
  	r.URL.Path = w.opt.HTTP.BaseURL + r.URL.Path
@@ -204,7 +248,12 @@ index f3cf2aa..c69dbbe 100644
 +	// response so an os.ErrExist returned by the backend can retain its actual
 +	// duplicate-name meaning at the HTTP boundary.
 +	wrw := &webdavRW{ResponseWriter: rw, deferWrite: r.Method == "PUT"}
++	if r.Method == "GET" || r.Method == "HEAD" {
++		wrw.readResult = requestResult
++	}
++	wrw.delayRead = r.Method == "GET"
  	w.webdavhandler.ServeHTTP(wrw, r)
++	wrw.finishRead()
 +	if wrw.deferWrite {
 +		if wrw.status == http.StatusMethodNotAllowed {
 +			status := putCloseErrorStatus(requestResult.err)
@@ -247,7 +296,7 @@ index f3cf2aa..c69dbbe 100644
  // serveDir serves a directory index at dirRemote
  // This is similar to serveDir in serve http.
  func (w *WebDAV) serveDir(rw http.ResponseWriter, r *http.Request, dirRemote string) {
-@@ -511,6 +674,9 @@ func (w *WebDAV) Shutdown() error {
+@@ -511,6 +716,9 @@ func (w *WebDAV) Shutdown() error {
  
  // logRequest is called by the webdav module on every request
  func (w *WebDAV) logRequest(r *http.Request, err error) {
@@ -257,7 +306,7 @@ index f3cf2aa..c69dbbe 100644
  	fs.Infof(r.URL.Path, "%s from %s", r.Method, r.RemoteAddr)
  }
  
-@@ -521,6 +687,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+@@ -521,6 +729,13 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
  	if err != nil {
  		return err
  	}
@@ -271,11 +320,32 @@ index f3cf2aa..c69dbbe 100644
  	dir, leaf, err := VFS.StatParent(name)
  	if err != nil {
  		return err
-@@ -540,7 +713,18 @@ func (w *WebDAV) OpenFile(ctx context.Context, name string, flags int, perm os.F
+@@ -531,16 +746,38 @@ func (w *WebDAV) Mkdir(ctx context.Context, name string, perm os.FileMode) (err
+ 
+ // OpenFile opens a file or a directory
+ func (w *WebDAV) OpenFile(ctx context.Context, name string, flags int, perm os.FileMode) (file webdav.File, err error) {
++	defer func() {
++		if result, ok := ctx.Value(webdavRequestResultKey{}).(*webdavRequestResult); ok && err != nil {
++			result.err = err
++		}
++	}()
+ 	// defer log.Trace(name, "flags=%v, perm=%v", flags, perm)("err = %v", &err)
+ 	VFS, err := w.getVFS(ctx)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	f, err := VFS.OpenFile(name, flags, perm)
++	var f vfs.Handle
++	if node := propfindNode(ctx, name); node != nil && flags == os.O_RDONLY {
++		f, err = node.Open(flags)
++	} else {
++		f, err = VFS.OpenFile(name, flags, perm)
++	}
  	if err != nil {
  		return nil, err
  	}
 -	return Handle{Handle: f, w: w, ctx: ctx}, nil
++	rememberPropfindNode(ctx, name, f.Node())
 +	h := Handle{Handle: f, w: w, ctx: ctx}
 +	if copying, ok := ctx.Value(copyRequestKey{}).(*copyRequest); ok {
 +		if flags&(os.O_WRONLY|os.O_RDWR) != 0 {
@@ -291,7 +361,7 @@ index f3cf2aa..c69dbbe 100644
  }
  
  // RemoveAll removes a file or a directory and its contents
-@@ -554,7 +738,33 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
+@@ -554,7 +791,33 @@ func (w *WebDAV) RemoveAll(ctx context.Context, name string) (err error) {
  	if err != nil {
  		return err
  	}
@@ -326,7 +396,26 @@ index f3cf2aa..c69dbbe 100644
  	if err != nil {
  		return err
  	}
-@@ -588,8 +798,41 @@ func (w *WebDAV) Stat(ctx context.Context, name string) (fi os.FileInfo, err err
+@@ -573,6 +836,9 @@ func (w *WebDAV) Rename(ctx context.Context, oldName, newName string) (err error
+ 
+ // Stat returns info about the file or directory
+ func (w *WebDAV) Stat(ctx context.Context, name string) (fi os.FileInfo, err error) {
++	if node := propfindNode(ctx, name); node != nil {
++		return FileInfo{FileInfo: node, w: w}, nil
++	}
+ 	// defer log.Trace(name, "")("fi=%+v, err = %v", &fi, &err)
+ 	VFS, err := w.getVFS(ctx)
+ 	if err != nil {
+@@ -582,14 +848,58 @@ func (w *WebDAV) Stat(ctx context.Context, name string) (fi os.FileInfo, err err
+ 	if err != nil {
+ 		return nil, err
+ 	}
++	if node, ok := fi.(vfs.Node); ok {
++		rememberPropfindNode(ctx, name, node)
++	}
+ 	return FileInfo{FileInfo: fi, w: w}, nil
+ }
+ 
  // Handle represents an open file
  type Handle struct {
  	vfs.Handle
@@ -343,7 +432,15 @@ index f3cf2aa..c69dbbe 100644
 +	if h.copyReader != nil {
 +		return h.copyReader.Read(p)
 +	}
-+	return h.Handle.Read(p)
++	n, err := h.Handle.Read(p)
++	if err != nil && err != io.EOF {
++		if result, ok := h.ctx.Value(webdavRequestResultKey{}).(*webdavRequestResult); ok {
++			result.readMu.Lock()
++			result.readErr = err
++			result.readMu.Unlock()
++		}
++	}
++	return n, err
 +}
 +
 +// Close rejects interrupted PUT and COPY input before allowing VFS publication.
@@ -370,7 +467,17 @@ index f3cf2aa..c69dbbe 100644
  }
  
  // Readdir reads directory entries from the handle
-@@ -723,3 +966,53 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
+@@ -600,6 +910,9 @@ func (h Handle) Readdir(count int) (fis []os.FileInfo, err error) {
+ 	}
+ 	// Wrap each FileInfo
+ 	for i := range fis {
++		if node, ok := fis[i].(vfs.Node); ok {
++			rememberPropfindNode(h.ctx, node.Path(), node)
++		}
+ 		fis[i] = FileInfo{FileInfo: fis[i], w: h.w}
+ 	}
+ 	return fis, nil
+@@ -723,3 +1036,53 @@ func (fi FileInfo) ContentType(ctx context.Context) (contentType string, err err
  	fs.Errorf(fi, "Expecting fs.Object or fs.Directory, got %T", entry)
  	return "application/octet-stream", nil
  }
@@ -933,4 +1040,370 @@ index 0254ea2..8f5fb80 100644
 +			}
 +		})
 +	}
++}
+diff --git a/cmd/serve/webdav/read_error.go b/cmd/serve/webdav/read_error.go
+new file mode 100644
+index 0000000..783eb54
+--- /dev/null
++++ b/cmd/serve/webdav/read_error.go
+@@ -0,0 +1,53 @@
++package webdav
++
++import (
++	"errors"
++	"net/http"
++	"os"
++
++	"github.com/rclone/rclone/fs"
++)
++
++// x/net/webdav reports every failed GET/HEAD OpenFile as 404. Preserve actual
++// absence, but distinguish access failures and unavailable metadata. This runs
++// before response headers, without buffering successful download bodies.
++func readMetadataStatus(err error) int {
++	if err == nil || os.IsNotExist(err) || errors.Is(err, fs.ErrorObjectNotFound) || errors.Is(err, fs.ErrorDirNotFound) {
++		return http.StatusNotFound
++	}
++	if errors.Is(err, fs.ErrorPermissionDenied) || os.IsPermission(err) {
++		return http.StatusForbidden
++	}
++	var statusError interface{ HTTPStatus() int }
++	if errors.As(err, &statusError) {
++		status := statusError.HTTPStatus()
++		if status == http.StatusUnauthorized {
++			return http.StatusForbidden
++		}
++		if status >= 400 && status <= 599 {
++			return status
++		}
++	}
++	return http.StatusInternalServerError
++}
++
++// finishRead rejects a failed lazy open before committing successful headers.
++// Successful bodies stream directly once the first bytes become available.
++func (rw *webdavRW) finishRead() {
++	if !rw.readPending {
++		return
++	}
++	rw.readPending = false
++	rw.readResult.readMu.Lock()
++	err := rw.readResult.readErr
++	rw.readResult.readMu.Unlock()
++	if err != nil {
++		rw.status = http.StatusBadGateway
++		for _, key := range []string{"Content-Length", "Content-Range", "ETag", "Last-Modified", "Accept-Ranges", "Content-Type"} {
++			rw.Header().Del(key)
++		}
++		http.Error(rw.ResponseWriter, http.StatusText(rw.status), rw.status)
++		return
++	}
++	rw.ResponseWriter.WriteHeader(rw.status)
++}
+diff --git a/cmd/serve/webdav/read_error_test.go b/cmd/serve/webdav/read_error_test.go
+new file mode 100644
+index 0000000..99662ba
+--- /dev/null
++++ b/cmd/serve/webdav/read_error_test.go
+@@ -0,0 +1,57 @@
++package webdav
++
++import (
++	"context"
++	"errors"
++	"net/http"
++	"net/http/httptest"
++	"testing"
++
++	"github.com/rclone/rclone/cmd/serve/proxy"
++	"github.com/rclone/rclone/fs"
++	"github.com/rclone/rclone/vfs/vfscommon"
++	"github.com/stretchr/testify/require"
++)
++
++type listingErrorFs struct {
++	fs.Fs
++	err   error
++	calls int
++}
++
++func (f *listingErrorFs) List(context.Context, string) (fs.DirEntries, error) {
++	f.calls++
++	return nil, f.err
++}
++
++func TestReadMetadataErrorStatus(t *testing.T) {
++	for _, method := range []string{"GET", "HEAD"} {
++		for _, tc := range []struct {
++			name   string
++			err    error
++			status int
++		}{
++			{"permission", fs.ErrorPermissionDenied, 403},
++			{"unavailable", errors.New("metadata temporarily unavailable"), 500},
++			{"absent", fs.ErrorDirNotFound, 404},
++		} {
++			t.Run(method+"/"+tc.name, func(t *testing.T) {
++				base, err := fs.NewFs(context.Background(), t.TempDir())
++				require.NoError(t, err)
++				f := &listingErrorFs{Fs: base, err: tc.err}
++				opt := Opt
++				opt.HTTP.ListenAddr = []string{testBindAddress}
++				w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++				require.NoError(t, err)
++				defer w.Shutdown()
++				out := httptest.NewRecorder()
++				w.ServeHTTP(out, httptest.NewRequest(method, "http://fixture/existing", nil))
++				require.Positive(t, f.calls, "must actually exercise failed metadata lookup")
++				require.Equal(t, tc.status, out.Code)
++				if method == "GET" && tc.status != 404 {
++					require.Equal(t, http.StatusText(tc.status), out.Body.String())
++				}
++			})
++		}
++	}
++}
+diff --git a/cmd/serve/webdav/propfind_listing.go b/cmd/serve/webdav/propfind_listing.go
+new file mode 100644
+index 0000000..0abc286
+--- /dev/null
++++ b/cmd/serve/webdav/propfind_listing.go
+@@ -0,0 +1,36 @@
++package webdav
++
++import (
++	"context"
++	"path"
++	"sync"
++
++	"github.com/rclone/rclone/vfs"
++)
++
++type propfindNodesKey struct{}
++
++// x/net/webdav opens each listed child repeatedly to collect properties.
++// Reuse the nodes enumerated by this request, not the global directory cache:
++// a new request must still refresh metadata when DirCacheTime is zero.
++type propfindNodes struct {
++	mu    sync.Mutex
++	nodes map[string]vfs.Node
++}
++
++func propfindNode(ctx context.Context, name string) vfs.Node {
++	if cache, ok := ctx.Value(propfindNodesKey{}).(*propfindNodes); ok {
++		cache.mu.Lock()
++		defer cache.mu.Unlock()
++		return cache.nodes[path.Clean("/"+name)]
++	}
++	return nil
++}
++
++func rememberPropfindNode(ctx context.Context, name string, node vfs.Node) {
++	if cache, ok := ctx.Value(propfindNodesKey{}).(*propfindNodes); ok {
++		cache.mu.Lock()
++		defer cache.mu.Unlock()
++		cache.nodes[path.Clean("/"+name)] = node
++	}
++}
+diff --git a/cmd/serve/webdav/propfind_listing_test.go b/cmd/serve/webdav/propfind_listing_test.go
+new file mode 100644
+index 0000000..9ccb384
+--- /dev/null
++++ b/cmd/serve/webdav/propfind_listing_test.go
+@@ -0,0 +1,68 @@
++package webdav
++
++import (
++	"context"
++	"fmt"
++	"net/http/httptest"
++	"os"
++	"path/filepath"
++	"sync/atomic"
++	"testing"
++
++	"github.com/rclone/rclone/cmd/serve/proxy"
++	"github.com/rclone/rclone/fs"
++	"github.com/rclone/rclone/vfs/vfscommon"
++	"github.com/stretchr/testify/require"
++)
++
++type countedListFs struct {
++	fs.Fs
++	calls atomic.Int64
++}
++
++func (f *countedListFs) List(ctx context.Context, dir string) (fs.DirEntries, error) {
++	f.calls.Add(1)
++	return f.Fs.List(ctx, dir)
++}
++
++func TestPropfindBoundedListingsAndFreshNextRequest(t *testing.T) {
++	for _, directory := range []string{"", "parent/child"} {
++		t.Run(directory, func(t *testing.T) { checkPropfindListings(t, directory) })
++	}
++}
++
++func checkPropfindListings(t *testing.T, directory string) {
++	root := t.TempDir()
++	fixture := filepath.Join(root, directory)
++	require.NoError(t, os.MkdirAll(fixture, 0700))
++	for i := 0; i < 20; i++ {
++		require.NoError(t, os.WriteFile(filepath.Join(fixture, fmt.Sprintf("file-%02d.txt", i)), []byte("fixture"), 0600))
++	}
++	base, err := fs.NewFs(context.Background(), root)
++	require.NoError(t, err)
++	f := &countedListFs{Fs: base}
++	opt := Opt
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	vopt := vfscommon.Opt
++	vopt.DirCacheTime = 0
++	w, err := newWebDAV(context.Background(), f, &opt, &vopt, &proxy.Opt)
++	require.NoError(t, err)
++	defer w.Shutdown()
++	query := func() string {
++		f.calls.Store(0)
++		req := httptest.NewRequest("PROPFIND", "http://fixture/"+directory, nil)
++		req.Header.Set("Depth", "1")
++		out := httptest.NewRecorder()
++		w.ServeHTTP(out, req)
++		require.Equal(t, 207, out.Code)
++		require.LessOrEqual(t, f.calls.Load(), int64(4), "one directory response must not relist for every child")
++		t.Logf("backend listings: %d", f.calls.Load())
++		return out.Body.String()
++	}
++	body := query()
++	require.Contains(t, body, "file-19.txt")
++	require.NoError(t, os.Rename(filepath.Join(fixture, "file-19.txt"), filepath.Join(fixture, "changed.txt")))
++	body = query()
++	require.Contains(t, body, "changed.txt")
++	require.NotContains(t, body, "file-19.txt")
++}
+diff --git a/cmd/serve/webdav/read_stream_test.go b/cmd/serve/webdav/read_stream_test.go
+new file mode 100644
+index 0000000..51cc89f
+--- /dev/null
++++ b/cmd/serve/webdav/read_stream_test.go
+@@ -0,0 +1,122 @@
++package webdav
++
++import (
++	"context"
++	"errors"
++	"io"
++	"net/http/httptest"
++	"os"
++	"sync/atomic"
++	"testing"
++
++	"github.com/rclone/rclone/cmd/serve/proxy"
++	"github.com/rclone/rclone/fs"
++	"github.com/rclone/rclone/vfs/vfscommon"
++	"github.com/stretchr/testify/require"
++)
++
++type unavailableReadFs struct {
++	fs.Fs
++	failed atomic.Bool
++	opens  atomic.Int32
++}
++
++func (f *unavailableReadFs) List(ctx context.Context, path string) (fs.DirEntries, error) {
++	entries, err := f.Fs.List(ctx, path)
++	for i, entry := range entries {
++		if o, ok := entry.(fs.Object); ok {
++			entries[i] = &unavailableReadObject{Object: o, owner: f}
++		}
++	}
++	return entries, err
++}
++func (f *unavailableReadFs) NewObject(ctx context.Context, path string) (fs.Object, error) {
++	o, err := f.Fs.NewObject(ctx, path)
++	if err != nil {
++		return nil, err
++	}
++	return &unavailableReadObject{Object: o, owner: f}, nil
++}
++
++type unavailableReadObject struct {
++	fs.Object
++	owner *unavailableReadFs
++}
++
++func (o *unavailableReadObject) Open(ctx context.Context, opts ...fs.OpenOption) (io.ReadCloser, error) {
++	o.owner.opens.Add(1)
++	if o.owner.failed.Load() {
++		return nil, errors.New("upstream read unavailable")
++	}
++	return o.Object.Open(ctx, opts...)
++}
++
++func TestReadOpenFailureDoesNotSendSuccess(t *testing.T) {
++	for _, span := range []string{"", "bytes=2-7"} {
++		t.Run(span, func(t *testing.T) {
++			root := t.TempDir()
++			require.NoError(t, os.WriteFile(root+"/file.bin", []byte("0123456789abcdef"), 0600))
++			base, err := fs.NewFs(context.Background(), root)
++			require.NoError(t, err)
++			f := &unavailableReadFs{Fs: base}
++			f.failed.Store(true)
++			opt := Opt
++			opt.HTTP.ListenAddr = []string{testBindAddress}
++			vopt := vfscommon.Opt
++			vopt.ReadWait = 0
++			w, err := newWebDAV(context.Background(), f, &opt, &vopt, &proxy.Opt)
++			require.NoError(t, err)
++			defer w.Shutdown()
++			request := func() *httptest.ResponseRecorder {
++				r := httptest.NewRequest("GET", "http://fixture/file.bin", nil)
++				r.Header.Set("Range", span)
++				out := httptest.NewRecorder()
++				w.ServeHTTP(out, r)
++				return out
++			}
++			out := request()
++			require.Positive(t, f.opens.Load())
++			require.GreaterOrEqual(t, out.Code, 500, "unavailable data must not look like a successful empty/truncated representation")
++			require.Empty(t, out.Header().Get("Content-Range"))
++			f.failed.Store(false)
++			out = request()
++			if span == "" {
++				require.Equal(t, 200, out.Code)
++				require.Equal(t, "0123456789abcdef", out.Body.String())
++			} else {
++				require.Equal(t, 206, out.Code)
++				require.Equal(t, "234567", out.Body.String())
++			}
++		})
++	}
++}
++
++func TestDeferredReadHeadersPreserveBodylessResponses(t *testing.T) {
++	root := t.TempDir()
++	require.NoError(t, os.WriteFile(root+"/empty.bin", nil, 0600))
++	require.NoError(t, os.WriteFile(root+"/file.bin", []byte("content"), 0600))
++	base, err := fs.NewFs(context.Background(), root)
++	require.NoError(t, err)
++	f := &unavailableReadFs{Fs: base}
++	f.failed.Store(true)
++	opt := Opt
++	opt.HTTP.ListenAddr = []string{testBindAddress}
++	w, err := newWebDAV(context.Background(), f, &opt, &vfscommon.Opt, &proxy.Opt)
++	require.NoError(t, err)
++	defer w.Shutdown()
++	for _, tc := range []struct {
++		method, path, span string
++		status             int
++	}{
++		{"HEAD", "/file.bin", "", 200},
++		{"GET", "/empty.bin", "", 200},
++		{"GET", "/file.bin", "bytes=99-100", 416},
++	} {
++		r := httptest.NewRequest(tc.method, "http://fixture"+tc.path, nil)
++		r.Header.Set("Range", tc.span)
++		out := httptest.NewRecorder()
++		w.ServeHTTP(out, r)
++		require.Equal(t, tc.status, out.Code)
++	}
++	require.Zero(t, f.opens.Load(), "bodyless responses must not open remote content")
 +}

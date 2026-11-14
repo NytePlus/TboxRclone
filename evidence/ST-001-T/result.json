@@ -1,10 +1,10 @@
 {
-  "run_id": "finder-easy-v1-plain",
+  "run_id": "finder-direct-20261113-2120",
   "scenario_id": "ST-001-T",
   "versions": {
-    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
-    "backend": "f06f2b4 deployed service; lab_overwrite=true",
-    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "client": "finder-drag 2026-11-12.1, capture extended to 45s; native webdavfs",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree spool interface changes; direct rclone serve webdav, no adapter",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
     "macos": "26.5.2",
     "finder": "26.4"
   },
@@ -12,13 +12,17 @@
     {
       "id": "normal_upload",
       "status": "PASS",
-      "observation": "Real Finder drag. Direct cloud sampling: 75 absent, 2 complete, 0 invalid, 0 read errors. Both complete samples and mounted reopen match 65536 bytes SHA256 7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2. Finite observations do not prove universal atomicity. Extended-attribute fixture remains a separate failing case.",
+      "observation": "Real Finder drag of a fresh 65536-byte baseline.bin through direct rclone. Recording shows progress at 11-17 seconds, completed target at 18 seconds and stable through 44 seconds, no error dialog. Mounted reopening and independent full cloud download match SHA-256 7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2. Earlier 15-second capture ended during progress and is retained as incomplete evidence, not used for acceptance. One-second contact sheets support review; original full recording is retained.",
       "artifacts": [
-        "plain-cloud-observations.jsonl",
-        "plain-upload/drag.log",
-        "plain-upload/timeline.jsonl",
-        "plain-upload/display-1.mov",
-        "plain-requests.log"
+        "retained-recording.mov",
+        "direct-20261113-2120/drag.log",
+        "direct-20261113-2120/timeline.jsonl",
+        "direct-20261113-2120/cloud.json",
+        "direct-20261113-2120/mounted-read.txt",
+        "direct-20261113-2120/frames.10.png",
+        "direct-20261113-2120/frames.40.png",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
       ]
     }
   ]

@@ -1,0 +1,22 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-013-T/direct-tree-20261113-2130/display-1.mov",
+      "bytes": 80324287,
+      "sha256": "2dead0210f9f9615926154f9bfaa91b4c472c202d3f6d96e9559a6fca5d56d82",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-013-T/display-1.mov",
+      "bytes": 8295993,
+      "sha256": "1518669e49913989781c379a43da81e51d5f1bffd1cefe9c151dc500dd47f4af",
+      "retained_segment": false
+    }
+  ],
+  "retained_bytes": 80324287,
+  "freed_bytes": 8295993,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

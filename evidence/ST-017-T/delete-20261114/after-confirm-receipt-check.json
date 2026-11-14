@@ -1,0 +1,39 @@
+{
+  "path": "codex-api-lab/ops-correctness-20261114/DeleteCases/delete-me.txt",
+  "records": [
+    {
+      "id": "0d6255f636fd84fb867f097891aa2b6f",
+      "kind": null,
+      "path": "codex-api-lab/ops-correctness-20261114/DeleteCases/delete-me.txt",
+      "state": "Committed",
+      "recycled_item_id": null,
+      "old_size": null
+    },
+    {
+      "id": "301fc068891040a1294b602821a750d0",
+      "kind": null,
+      "path": "codex-api-lab/ops-correctness-20261114/DeleteCases/delete-me.txt",
+      "state": "Committed",
+      "recycled_item_id": null,
+      "old_size": null
+    },
+    {
+      "id": "4872c0b05f654fa9130ae1e90ece41df",
+      "kind": "delete",
+      "path": "codex-api-lab/ops-correctness-20261114/DeleteCases/delete-me.txt",
+      "state": "Committed",
+      "recycled_item_id": "61182908",
+      "old_size": 33
+    }
+  ],
+  "checks": {
+    "one_delete_receipt": true,
+    "delete_committed": true,
+    "recycle_identifier_recorded": true,
+    "no_pending_exact_path": true,
+    "webdav_reports_absent_not_busy": true
+  },
+  "head_status": 404,
+  "passed": true,
+  "limits": "Recycle ID is traceability evidence, not a restore test. HEAD and terminal journal state do not test a subsequent write. Independent cloud/mount absence and final UI review required separately."
+}

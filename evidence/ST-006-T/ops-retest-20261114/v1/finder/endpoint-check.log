@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=v1 target=tboxrclone-webdav-501 item=sequential.txt
+finder_windows_found
+source_window=144055 target_window=144057
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 155.0) end=(1410.75, 590.5)
+visibility_check source_expected=144055 source_top=144055 source_hit=true target_expected=144057 target_top=144057 target_hit=true
+finder_drag_endpoints_visible

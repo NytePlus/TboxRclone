@@ -1,0 +1,22 @@
+{
+  "duration_seconds" : 449.96833333333331,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "duration_seconds" : 179.99166666666667,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-007-F\/replay-cleared-20261114-0005\/finder\/display-1.mov",
+      "start_seconds" : 0
+    },
+    {
+      "duration_seconds" : 179.99333333333334,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-007-F\/session-complete-20261114-0021\/finder\/display-1.mov",
+      "start_seconds" : 179.99166666666667
+    },
+    {
+      "duration_seconds" : 89.983333333333334,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-007-F\/signature-finder-20261113-2256\/finder\/display-1.mov",
+      "start_seconds" : 359.98500000000001
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

@@ -1,0 +1,80 @@
+{
+  "records": [
+    {
+      "id": "7f46af5e22c3399b104f49a98e38d389",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/._resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "etag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+        }
+      ],
+      "upload_id_sha256": "e6c42cdb935c1f4bfdf4ec616f41d24f1deb8b91a9a7cb89d4077cfd866901e1",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "a65749bbdcbf48bb1a66cf69dd551c5b",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/._resource-control.txt",
+      "size": 4096,
+      "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 4096,
+          "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+          "etag": "\"d47183172d8ab43badd204c41670e58b\""
+        }
+      ],
+      "upload_id_sha256": "cde633ac99a24f3a32605dfc4d06df07b7f737095b63fba4dc01ad7ea947de69",
+      "spool_sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8",
+      "spool_size": 4096
+    },
+    {
+      "id": "cca1adb02329a6a5803f95d50e15b6f9",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/._resource-control.txt",
+      "size": 4096,
+      "sha256": "5b41d3ae4707cd48f69debe04179d998695b3339217f2191da2bd490c766bfbd",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 4096,
+          "sha256": "5b41d3ae4707cd48f69debe04179d998695b3339217f2191da2bd490c766bfbd",
+          "etag": "\"cf1958c5ae16f5887feae78bd1d736f5\""
+        }
+      ],
+      "upload_id_sha256": "82d6472376d5500b96536de1bf3690f343773c905eb999b0c3ffb6433c8d98ab",
+      "spool_sha256": "5b41d3ae4707cd48f69debe04179d998695b3339217f2191da2bd490c766bfbd",
+      "spool_size": 4096
+    },
+    {
+      "id": "fcda87add71ed8d98597b64ba2776aa4",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/._resource-control.txt",
+      "size": 4096,
+      "sha256": "8d1bf156d009518a4d40e77ce0bf96b2c81ce9e9063b2765a1bbbc80552ea59e",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 4096,
+          "sha256": "8d1bf156d009518a4d40e77ce0bf96b2c81ce9e9063b2765a1bbbc80552ea59e",
+          "etag": "\"501aca365583bb4f399a3349718f8338\""
+        }
+      ],
+      "upload_id_sha256": "0ace6e3929a61b79ebe8472391724d83be3d5fe8ce553a0a63552fb4975d0b12",
+      "spool_sha256": "8d1bf156d009518a4d40e77ce0bf96b2c81ce9e9063b2765a1bbbc80552ea59e",
+      "spool_size": 4096
+    }
+  ]
+}

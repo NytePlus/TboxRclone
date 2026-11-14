@@ -24,6 +24,7 @@ services:
     environment:
       RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
       RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_UPLOAD: '${TBOX_MAX_UPLOAD:-2G}'
       RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
       RCLONE_LOG_LEVEL: '${TBOX_LOG_LEVEL:-NOTICE}'
       RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
@@ -31,7 +32,7 @@ services:
       RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
     ports:
       - 127.0.0.1:8686:8686
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --dir-cache-time, '${TBOX_DIR_CACHE_TIME:-5s}', --no-recursive-delete, --cache-dir, /state/vfs]
     healthcheck:
       test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8686${TBOX_WEBDAV_BASE_URL:-}/']
       interval: 5s
@@ -48,7 +49,7 @@ services:
       - go-build:/root/.cache/go-build
       - ./.state:/state
     ports:
-      - 127.0.0.1:8687:8686
+      - 127.0.0.1:${TBOX_FAULT_WEBDAV_PORT:-8687}:8686
     command: [sh, /src/scripts/run-go-service.sh, faultproxy, --ca-file, /state/faultproxy-ca.pem, --allow-hosts, '${TBOX_FAULT_HOSTS:-pan.sjtu.edu.cn:443}']
     healthcheck:
       test: [CMD, curl, --fail, --silent, http://127.0.0.1:8788/events]
@@ -73,11 +74,16 @@ services:
     environment:
       RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
       RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_UPLOAD: '${TBOX_MAX_UPLOAD:-2G}'
       RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
+      RCLONE_LOG_LEVEL: '${TBOX_LOG_LEVEL:-NOTICE}'
+      RCLONE_SJTU_LAB_OVERWRITE: '${TBOX_LAB_OVERWRITE:-false}'
+      RCLONE_SJTU_LAB_DELETE: '${TBOX_LAB_DELETE:-false}'
+      RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''
       SSL_CERT_FILE: /state/faultproxy-ca.pem
-    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --no-recursive-delete, --cache-dir, /state/vfs]
+    command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:codex-api-lab/fault-run}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --dir-cache-time, '${TBOX_DIR_CACHE_TIME:-5s}', --no-recursive-delete, --cache-dir, /state/vfs]
     healthcheck:
       test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8686${TBOX_WEBDAV_BASE_URL:-}/']
       interval: 2s
@@ -101,6 +107,7 @@ services:
     environment:
       RCLONE_SJTU_OWNERSHIP_DIR: '${TBOX_OWNERSHIP_DIR:-/state/owners}'
       RCLONE_CONFIG_SJTU_STATE_DIR: '${TBOX_STATE_DIR:-/state/sjtu}'
+      RCLONE_SJTU_MAX_UPLOAD: '${TBOX_MAX_UPLOAD:-2G}'
       RCLONE_SJTU_MAX_SPOOL: '${TBOX_MAX_SPOOL:-4G}'
       HTTPS_PROXY: http://127.0.0.1:8787
       NO_PROXY: ''

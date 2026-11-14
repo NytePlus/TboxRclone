@@ -1,10 +1,10 @@
 {
-  "run_id": "finder-easy-v1-directory-retry",
+  "run_id": "finder-direct-tree-20261113-2130",
   "scenario_id": "ST-013-T",
   "versions": {
-    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
-    "backend": "f06f2b4 deployed service; lab_overwrite=true",
-    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "client": "finder-drag 2026-11-12.1, capture extended to 45s; native webdavfs",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree spool interface changes; direct rclone serve webdav, no adapter",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
     "macos": "26.5.2",
     "finder": "26.4"
   },
@@ -12,21 +12,24 @@
     {
       "id": "file_destination_absent",
       "status": "PASS",
-      "observation": "Recorded plain.bin Finder copy to absent destination; independent cloud full reads match.",
+      "observation": "Fresh baseline.bin was dragged with Finder through direct rclone in the ST-001-T run. Independent full cloud read and mounted reopen match 65536 bytes and SHA-256. Its original recording remains under ST-001-T.",
       "artifacts": [
-        "plain-cloud-observations.jsonl",
-        "plain-requests.log"
+        "direct-tree-20261113-2130/file-baseline-cloud.json",
+        "direct-tree-20261113-2130/file-baseline-mounted-read.txt"
       ]
     },
     {
       "id": "directory_destination_absent",
       "status": "PASS",
-      "observation": "Real Finder directory drag to fresh destination after remount. All nested content and empty directory match independent cloud inventory; source unchanged. AppleDouble files inventoried.",
+      "observation": "Real Finder drag of CopyTree to absent destination through direct rclone. Recording covers active copy and completed idle state; Computer Use observed Finder after completion. Both files match source, mounted reopen and independent cloud SHA-256; nested and empty directories exist. Source retained.",
       "artifacts": [
-        "cloud-tree.json",
-        "tree-verification.json",
-        "drag.log",
-        "display-1.mov"
+        "retained-recording.mov",
+        "direct-tree-20261113-2130/drag.log",
+        "direct-tree-20261113-2130/cloud.json",
+        "direct-tree-20261113-2130/tree-verification.json",
+        "direct-tree-20261113-2130/frames.80.png",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
       ]
     }
   ]

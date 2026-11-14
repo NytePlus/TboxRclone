@@ -1,0 +1,735 @@
+[
+  {
+    "sequence": 1,
+    "request": 1,
+    "at": "2026-11-13T21:21:08.182496798Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST"
+  },
+  {
+    "sequence": 2,
+    "request": 1,
+    "at": "2026-11-13T21:21:09.165267549Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "sequence": 3,
+    "request": 1,
+    "at": "2026-11-13T21:21:09.165574049Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "sequence": 4,
+    "request": 2,
+    "at": "2026-11-13T21:21:09.168560424Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 5,
+    "request": 2,
+    "at": "2026-11-13T21:21:09.819526966Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 6,
+    "request": 2,
+    "at": "2026-11-13T21:21:09.820255132Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 7,
+    "request": 3,
+    "at": "2026-11-13T21:21:11.9699423Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 8,
+    "request": 3,
+    "at": "2026-11-13T21:21:12.888593634Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 9,
+    "request": 3,
+    "at": "2026-11-13T21:21:12.888760051Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 10,
+    "request": 4,
+    "at": "2026-11-13T21:21:12.910047926Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 11,
+    "request": 4,
+    "at": "2026-11-13T21:21:13.814864384Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 12,
+    "request": 4,
+    "at": "2026-11-13T21:21:13.815215801Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 13,
+    "request": 5,
+    "at": "2026-11-13T21:21:13.863429426Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 14,
+    "request": 5,
+    "at": "2026-11-13T21:21:14.780609301Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 15,
+    "request": 5,
+    "at": "2026-11-13T21:21:14.781010718Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 16,
+    "request": 6,
+    "at": "2026-11-13T21:21:14.82532551Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 17,
+    "request": 6,
+    "at": "2026-11-13T21:21:15.443026927Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 18,
+    "request": 6,
+    "at": "2026-11-13T21:21:15.44341001Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 19,
+    "request": 7,
+    "at": "2026-11-13T21:21:15.477312427Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 20,
+    "request": 7,
+    "at": "2026-11-13T21:21:16.30524351Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 21,
+    "request": 7,
+    "at": "2026-11-13T21:21:16.30563076Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 22,
+    "request": 8,
+    "at": "2026-11-13T21:21:16.365927219Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 23,
+    "request": 8,
+    "at": "2026-11-13T21:21:17.033175719Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 24,
+    "request": 8,
+    "at": "2026-11-13T21:21:17.034658302Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 25,
+    "request": 9,
+    "at": "2026-11-13T21:21:17.062833011Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 26,
+    "request": 9,
+    "at": "2026-11-13T21:21:17.962663886Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 27,
+    "request": 9,
+    "at": "2026-11-13T21:21:17.96357372Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 28,
+    "request": 10,
+    "at": "2026-11-13T21:21:17.994053511Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 29,
+    "request": 10,
+    "at": "2026-11-13T21:21:18.706770595Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 30,
+    "request": 10,
+    "at": "2026-11-13T21:21:18.70754972Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 31,
+    "request": 11,
+    "at": "2026-11-13T21:21:18.749869303Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 32,
+    "request": 11,
+    "at": "2026-11-13T21:21:19.377311304Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 33,
+    "request": 11,
+    "at": "2026-11-13T21:21:19.378192179Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 34,
+    "request": 12,
+    "at": "2026-11-13T21:21:19.429058345Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 35,
+    "request": 13,
+    "at": "2026-11-13T21:21:19.429079595Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 36,
+    "request": 12,
+    "at": "2026-11-13T21:21:20.113553762Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 37,
+    "request": 12,
+    "at": "2026-11-13T21:21:20.113913429Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 38,
+    "request": 13,
+    "at": "2026-11-13T21:21:20.116797304Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 39,
+    "request": 13,
+    "at": "2026-11-13T21:21:20.117020096Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 40,
+    "request": 14,
+    "at": "2026-11-13T21:21:20.117945096Z",
+    "phase": "received",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 41,
+    "request": 15,
+    "at": "2026-11-13T21:21:20.149587137Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 42,
+    "request": 14,
+    "at": "2026-11-13T21:21:20.969054513Z",
+    "phase": "origin_headers",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 43,
+    "request": 14,
+    "at": "2026-11-13T21:21:20.969579763Z",
+    "phase": "forwarded",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 44,
+    "request": 16,
+    "at": "2026-11-13T21:21:21.010994179Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 45,
+    "request": 16,
+    "at": "2026-11-13T21:21:21.107755971Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 46,
+    "request": 16,
+    "at": "2026-11-13T21:21:21.108001596Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 47,
+    "request": 15,
+    "at": "2026-11-13T21:21:21.109453346Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 48,
+    "request": 15,
+    "at": "2026-11-13T21:21:21.109640179Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 49,
+    "request": 17,
+    "at": "2026-11-13T21:21:21.109784471Z",
+    "phase": "received",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 50,
+    "request": 18,
+    "at": "2026-11-13T21:21:21.130501304Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 51,
+    "request": 18,
+    "at": "2026-11-13T21:21:21.796125846Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 52,
+    "request": 18,
+    "at": "2026-11-13T21:21:21.796517096Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 53,
+    "request": 17,
+    "at": "2026-11-13T21:21:22.050720347Z",
+    "phase": "origin_headers",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 54,
+    "request": 17,
+    "at": "2026-11-13T21:21:22.051055722Z",
+    "phase": "forwarded",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 55,
+    "request": 19,
+    "at": "2026-11-13T21:21:22.096111555Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 56,
+    "request": 19,
+    "at": "2026-11-13T21:21:22.686322347Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 57,
+    "request": 19,
+    "at": "2026-11-13T21:21:22.68675918Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 58,
+    "request": 20,
+    "at": "2026-11-13T21:21:22.726028389Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 59,
+    "request": 20,
+    "at": "2026-11-13T21:21:23.308153083Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 60,
+    "request": 20,
+    "at": "2026-11-13T21:21:23.308508333Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 61,
+    "request": 21,
+    "at": "2026-11-13T21:21:23.311605833Z",
+    "phase": "received",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 62,
+    "request": 21,
+    "at": "2026-11-13T21:21:24.247909875Z",
+    "phase": "origin_headers",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 63,
+    "request": 21,
+    "at": "2026-11-13T21:21:24.25339925Z",
+    "phase": "forwarded",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 64,
+    "request": 22,
+    "at": "2026-11-13T21:21:24.287857708Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 65,
+    "request": 22,
+    "at": "2026-11-13T21:21:24.952777875Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 66,
+    "request": 22,
+    "at": "2026-11-13T21:21:24.9536575Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 67,
+    "request": 23,
+    "at": "2026-11-13T21:21:24.95787625Z",
+    "phase": "received",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 68,
+    "request": 23,
+    "at": "2026-11-13T21:21:25.741895334Z",
+    "phase": "origin_headers",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 69,
+    "request": 23,
+    "at": "2026-11-13T21:21:25.746717334Z",
+    "phase": "forwarded",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 70,
+    "request": 24,
+    "at": "2026-11-13T21:21:34.660070672Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 71,
+    "request": 24,
+    "at": "2026-11-13T21:21:35.509782172Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 72,
+    "request": 24,
+    "at": "2026-11-13T21:21:35.51011788Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 73,
+    "request": 25,
+    "at": "2026-11-13T21:21:35.543816422Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 74,
+    "request": 25,
+    "at": "2026-11-13T21:21:36.314062006Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 75,
+    "request": 25,
+    "at": "2026-11-13T21:21:36.314422297Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 302
+  },
+  {
+    "sequence": 76,
+    "request": 26,
+    "at": "2026-11-13T21:21:36.317491464Z",
+    "phase": "received",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 77,
+    "request": 26,
+    "at": "2026-11-13T21:21:36.899285298Z",
+    "phase": "origin_headers",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 78,
+    "request": 26,
+    "at": "2026-11-13T21:21:36.905848089Z",
+    "phase": "forwarded",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 206
+  },
+  {
+    "sequence": 79,
+    "request": 27,
+    "at": "2026-11-13T21:21:37.110018464Z",
+    "phase": "received",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 80,
+    "request": 27,
+    "at": "2026-11-13T21:21:37.777415923Z",
+    "phase": "origin_headers",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 81,
+    "request": 27,
+    "at": "2026-11-13T21:21:37.777791131Z",
+    "phase": "forwarded",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "sequence": 82,
+    "request": 28,
+    "at": "2026-11-13T21:21:37.817313215Z",
+    "phase": "received",
+    "rule": "read-status-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET"
+  },
+  {
+    "sequence": 83,
+    "request": 28,
+    "at": "2026-11-13T21:21:37.81734334Z",
+    "phase": "synthetic_status",
+    "rule": "read-status-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 403,
+    "bytes": 25
+  },
+  {
+    "sequence": 84,
+    "request": 28,
+    "at": "2026-11-13T21:21:37.817394965Z",
+    "phase": "forwarded",
+    "rule": "read-status-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "GET",
+    "status": 403,
+    "bytes": 25
+  }
+]

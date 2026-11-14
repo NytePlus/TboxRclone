@@ -1,0 +1,91 @@
+{
+  "at": "2026-11-14T13:58:28.017635",
+  "movie": "evidence/ST-015-F/retained-recording.mov",
+  "segments": 13,
+  "removed": [
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/rejection-followup.mov",
+      "bytes": 5934010
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-followup.mov",
+      "bytes": 6430053
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/finder/display-1.mov",
+      "bytes": 1238554
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/finder/display-1.mov",
+      "bytes": 5968739
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/review.10.png",
+      "bytes": 676449
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/review.0.png",
+      "bytes": 705042
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/review.30.png",
+      "bytes": 669892
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/review.20.png",
+      "bytes": 669822
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/review.40.png",
+      "bytes": 400929
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-review.20.png",
+      "bytes": 900556
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-review.30.png",
+      "bytes": 112816
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-review.0.png",
+      "bytes": 834976
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-review.10.png",
+      "bytes": 783166
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.60.png",
+      "bytes": 246144
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.10.png",
+      "bytes": 786824
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.0.png",
+      "bytes": 683519
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.30.png",
+      "bytes": 648139
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.20.png",
+      "bytes": 644185
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.50.png",
+      "bytes": 641657
+    },
+    {
+      "path": "evidence/ST-015-F/finder-rate-clean-20261114/recovery/verification-after-interruption/review.40.png",
+      "bytes": 640746
+    }
+  ],
+  "reclaimed_bytes": 29616218,
+  "note": "Latest429 replaces previous429 clips. Wrong-foreground rejection followup excluded; original screenshot preserved. Segments are separate recordings with explicit gaps.",
+  "final_observation_merged": true,
+  "fixed_browse_merged": true
+}

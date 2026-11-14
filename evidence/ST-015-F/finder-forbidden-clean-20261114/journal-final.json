@@ -1,0 +1,60 @@
+{
+  "records": [
+    {
+      "id": "260a0e117a08490e140a5e04cd83e73d",
+      "state": "Rejected",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-forbidden-clean-20261114/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "upload_id_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "de97878859be475f838e7d71fcee9eb9",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-forbidden-clean-20261114/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "etag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+        }
+      ],
+      "upload_id_sha256": "32a1370a4f28d166e4c52c5bdf942002b42702f5ed151dfa7335063f080cbfaa",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "e89e5bc42d08301b8c2198bbbc49c35b",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-forbidden-clean-20261114/resource-control.txt",
+      "size": 9600,
+      "sha256": "a933b87e5908d2c8a9f88e24be2e80a1e24fd44f51bef57a231c32afff5ac6f1",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 9600,
+          "sha256": "a933b87e5908d2c8a9f88e24be2e80a1e24fd44f51bef57a231c32afff5ac6f1",
+          "etag": "\"541914c621e53b83bb6305fe48e278e9\""
+        }
+      ],
+      "upload_id_sha256": "38fa9831972d61f437f8c5af796bb530e975faf00658e466cc1b3f6811cfc5f7",
+      "spool_sha256": "a933b87e5908d2c8a9f88e24be2e80a1e24fd44f51bef57a231c32afff5ac6f1",
+      "spool_size": 9600
+    }
+  ]
+}

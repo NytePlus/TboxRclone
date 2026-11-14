@@ -1,0 +1,25 @@
+{
+  "status": "FAIL_PERFORMANCE_TARGET_NOT_MET",
+  "bytes": 268435456,
+  "content_verified": true,
+  "ui_review": "90.11s recording sampled every10s and final task screenshot reviewed; target phased.bin268.4MB; no visible error or progress dialog at end.",
+  "main_update_seconds": 27.354490846,
+  "staging_seconds": 6.830447128,
+  "preflight_seconds": 0.057794583,
+  "transfer_and_verification_seconds": 20.452529593,
+  "final_info_seconds": 0.013718667,
+  "drag_to_observed_committed_seconds": 32.573222,
+  "historical_api_baseline_seconds": 20.612327093,
+  "performance": {
+    "blocking_dialog_detected": false,
+    "committed": true,
+    "browse_started_while_uploading": true,
+    "browse_exit_code": 0,
+    "samples": 29,
+    "metadata_p95_seconds": 0.7218781250994653,
+    "metadata_all_200": true,
+    "elapsed_seconds": 61.005275833187625,
+    "acceptance": "REQUIRES_NATIVE_REVIEW_AND_INDEPENDENT_CONTENT_CHECK"
+  },
+  "interpretation": "Staging includes WebDAV input and disk work; timing alone cannot distinguish those costs. Historical API comparison is not a simultaneous controlled benchmark. No speedup claimed."
+}

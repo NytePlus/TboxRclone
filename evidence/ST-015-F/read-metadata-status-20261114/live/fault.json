@@ -1,0 +1,13 @@
+{
+  "transport_complete": false,
+  "status": 200,
+  "declared_bytes": "23552",
+  "requested_range": null,
+  "content_range": null,
+  "etag": "\"18e7b08bcc011e005c00\"",
+  "error": "truncated body: 0 of 23552 bytes",
+  "bytes": 0,
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elapsed_seconds": 0.7307749169413,
+  "matches_expected": false
+}

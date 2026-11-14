@@ -1,10 +1,10 @@
 {
-  "run_id": "finder-length-positive-20260926",
+  "run_id": "finder-direct-empty-20261113-2125",
   "scenario_id": "ST-008-T",
   "versions": {
-    "client": "finder-drag 2026-09-26.1; Computer Use; curl protocol supplement",
-    "backend": "TboxRclone working-tree WebDAV guard; isolated live service",
-    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "client": "finder-drag 2026-11-12.1, capture extended to 45s; native webdavfs",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree spool interface changes; direct rclone serve webdav, no adapter",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
     "macos": "26.5.2",
     "finder": "26.4"
   },
@@ -12,32 +12,36 @@
     {
       "id": "zero_bytes",
       "status": "PASS",
-      "observation": "A real Finder drag completed and displayed empty.bin as one 0-byte item. Mounted and independent cloud reads both reported size 0 and the standard empty-content SHA-256; no matching guard receipt remained. The original failed run, where only ._empty.bin was published, is retained separately.",
+      "observation": "Real Finder drag of empty.bin through direct rclone. Recording shows progress through 16 seconds then an idle completed 0-byte target at 17 seconds. Fixture, mounted reopen and independent full cloud download all match the empty SHA-256.",
       "artifacts": [
-        "verification.json",
-        "empty-finder-fixed/preflight.json",
-        "empty-finder-fixed/drag.log",
-        "empty-finder-fixed/timeline.jsonl",
-        "empty-finder-fixed/display-1.mov",
-        "empty-finder/display-1.mov"
+        "retained-recording.mov",
+        "direct-empty-20261113-2125/drag.log",
+        "direct-empty-20261113-2125/timeline.jsonl",
+        "direct-empty-20261113-2125/frames.10.png",
+        "direct-empty-20261113-2125/content-verification.json",
+        "direct-empty-20261113-2125/cloud.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
       ]
     },
     {
       "id": "known_length",
       "status": "PASS",
-      "observation": "A protocol-level supplement sent Content-Length: 12, received HTTP 201, and both the mounted path and independent cloud read contained exactly 12 bytes with the expected complete SHA-256.",
+      "observation": "Protocol supplement with explicit Content-Length uploaded exactly 12 bytes; HTTP 201. Source, mounted reopen and independent cloud content hashes match.",
       "artifacts": [
-        "protocol-positive.json",
-        "verification.json"
+        "direct-empty-20261113-2125/known-response.txt",
+        "direct-empty-20261113-2125/content-verification.json",
+        "direct-empty-20261113-2125/cloud.json"
       ]
     },
     {
       "id": "unknown_length",
       "status": "PASS",
-      "observation": "A protocol-level supplement sent Transfer-Encoding: chunked, received HTTP 201, and both the mounted path and independent cloud read contained exactly 14 bytes with the expected complete SHA-256.",
+      "observation": "Protocol supplement with chunked Transfer-Encoding uploaded exactly 14 bytes; HTTP 201. Source, mounted reopen and independent cloud content hashes match.",
       "artifacts": [
-        "protocol-positive.json",
-        "verification.json"
+        "direct-empty-20261113-2125/unknown-response.txt",
+        "direct-empty-20261113-2125/content-verification.json",
+        "direct-empty-20261113-2125/cloud.json"
       ]
     }
   ]

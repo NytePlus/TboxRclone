@@ -1,0 +1,17 @@
+{
+  "compose_environment": {
+    "TBOX_DIR_CACHE_TIME": "5s",
+    "TBOX_LAB_DELETE": "false",
+    "TBOX_LAB_MOVE": "false",
+    "TBOX_LAB_OVERWRITE": "true",
+    "TBOX_LAB_REMOTE": "sjtu:codex-api-lab/finder-resume-20261113-2240",
+    "TBOX_LOG_LEVEL": "INFO",
+    "TBOX_MAX_SPOOL": "4G",
+    "TBOX_MAX_UPLOAD": "2G",
+    "TBOX_OWNERSHIP_DIR": "/state/owners-finder-fault-finder-resume-20261113-2240",
+    "TBOX_RCLONE_CONFIG": "/secrets/rclone-finder.conf",
+    "TBOX_STATE_DIR": "/state/finder-fault-finder-resume-20261113-2240",
+    "TBOX_WEBDAV_BASE_URL": ""
+  },
+  "present": true
+}

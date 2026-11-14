@@ -1,0 +1,38 @@
+[
+  {
+    "id": "4a48994ed091f0b1b334a17b1439dd57",
+    "kind": "move",
+    "state": "Committed",
+    "path": "codex-api-lab/ops-correctness-20261114/MoveCases/right/._tree",
+    "source_path": "codex-api-lab/ops-correctness-20261114/MoveCases/left/._tree",
+    "size": 4096,
+    "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8"
+  },
+  {
+    "id": "45cc1c29dadebffdb0c12d09bd8f6e4b",
+    "kind": "move",
+    "state": "Committed",
+    "path": "codex-api-lab/ops-correctness-20261114/MoveCases/right/._file.txt",
+    "source_path": "codex-api-lab/ops-correctness-20261114/MoveCases/left/._file.txt",
+    "size": 4096,
+    "sha256": "c81718df32db5428db46a6103d124811323821665853cef8c0e7bdf078cd4fb8"
+  },
+  {
+    "id": "2786dbf035dfad257e0f47ef6eeee7b9",
+    "kind": "move",
+    "state": "Committed",
+    "path": "codex-api-lab/ops-correctness-20261114/MoveCases/right/file.txt",
+    "source_path": "codex-api-lab/ops-correctness-20261114/MoveCases/left/file.txt",
+    "size": 30,
+    "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673"
+  },
+  {
+    "id": "35360206a98ffa9cffcb77890589d87d",
+    "kind": "dirmove",
+    "state": "Committed",
+    "path": "codex-api-lab/ops-correctness-20261114/MoveCases/right/tree",
+    "source_path": "codex-api-lab/ops-correctness-20261114/MoveCases/left/tree",
+    "size": 12288,
+    "sha256": "b00724edbb93f8d2026efad3886f51e9363ad7ca4278f24b75345eca0dda6af5"
+  }
+]

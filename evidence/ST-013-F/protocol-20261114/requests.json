@@ -1,0 +1,494 @@
+[
+  {
+    "method": "PROPFIND",
+    "path": "OverwriteCases-1794653948954795000/",
+    "headers": {
+      "Depth": "0"
+    },
+    "status": 404,
+    "seconds": 1.196617417037487
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.15649687498807907
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-default",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.19062062492594123
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-default/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 2.1366167089436203
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-default/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.850913249887526
+  },
+  {
+    "method": "COPY",
+    "path": "OverwriteCases-1794653948954795000/copy-default/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/copy-default/target.txt"
+    },
+    "status": 204,
+    "seconds": 1.9931262081954628
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-default/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.04199220798909664
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-default/source.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.5989249579142779
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-T",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.0331212079618126
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-T/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.086292834021151
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-T/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.04784783301875
+  },
+  {
+    "method": "COPY",
+    "path": "OverwriteCases-1794653948954795000/copy-T/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/copy-T/target.txt",
+      "Overwrite": "T"
+    },
+    "status": 204,
+    "seconds": 1.6038012078497559
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-T/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.037844874896109104
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-T/source.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.614877917105332
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-F",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.025824208976701
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-F/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9028918750118464
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-F/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8666522910352796
+  },
+  {
+    "method": "COPY",
+    "path": "OverwriteCases-1794653948954795000/copy-F/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/copy-F/target.txt",
+      "Overwrite": "F"
+    },
+    "status": 412,
+    "seconds": 0.0026680000592023134
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-F/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.05416125012561679
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-F/source.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.6188697919715196
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9598003330174834
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/file.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.1367810000665486
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/tree",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.2577372919768095
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/tree/keep.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9509251248091459
+  },
+  {
+    "method": "COPY",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/file.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/copy-file-to-directory/tree",
+      "Overwrite": "T"
+    },
+    "status": 403,
+    "seconds": 0.0010766671039164066
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/file.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.055262000067159534
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-file-to-directory/tree/keep.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.5982175001408905
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8514964170753956
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/file.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9074136249255389
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.2430773749947548
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree/keep.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.688865290954709
+  },
+  {
+    "method": "COPY",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/copy-directory-to-file/file.txt",
+      "Overwrite": "T"
+    },
+    "status": 403,
+    "seconds": 0.0018684158567339182
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/file.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.05217479192651808
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree/keep.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.6125337497796863
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-default",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.7853245420847088
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-default/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8889166670851409
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-default/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.921225082827732
+  },
+  {
+    "method": "MOVE",
+    "path": "OverwriteCases-1794653948954795000/move-default/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/move-default/target.txt"
+    },
+    "status": 204,
+    "seconds": 1.8304515001364052
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-default/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.04195895907469094
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-default/source.txt",
+    "headers": {},
+    "status": 404,
+    "seconds": 0.0009439999703317881
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-T",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.7729205000214279
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-T/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.868486792081967
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-T/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9055807499680668
+  },
+  {
+    "method": "MOVE",
+    "path": "OverwriteCases-1794653948954795000/move-T/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/move-T/target.txt",
+      "Overwrite": "T"
+    },
+    "status": 204,
+    "seconds": 1.4938568328507245
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-T/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.052860750118270516
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-T/source.txt",
+    "headers": {},
+    "status": 404,
+    "seconds": 0.0018691669683903456
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-F",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.0510147497989237
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-F/source.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9786335420794785
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-F/target.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8356333328410983
+  },
+  {
+    "method": "MOVE",
+    "path": "OverwriteCases-1794653948954795000/move-F/source.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/move-F/target.txt",
+      "Overwrite": "F"
+    },
+    "status": 412,
+    "seconds": 0.002061458071693778
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-F/target.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.05543683283030987
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-F/source.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.6129227080382407
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.7707255410496145
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/file.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8936582910828292
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/tree",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.2509706250857562
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/tree/keep.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 1.1475387499667704
+  },
+  {
+    "method": "MOVE",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/file.txt",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/move-file-to-directory/tree",
+      "Overwrite": "T"
+    },
+    "status": 403,
+    "seconds": 0.0015104170888662338
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/file.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.047723542200401425
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-file-to-directory/tree/keep.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.6087379581294954
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.7712944590020925
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/file.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.9077993750106543
+  },
+  {
+    "method": "MKCOL",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/tree",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.24657254200428724
+  },
+  {
+    "method": "PUT",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/tree/keep.txt",
+    "headers": {},
+    "status": 201,
+    "seconds": 0.8685073340311646
+  },
+  {
+    "method": "MOVE",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/tree",
+    "headers": {
+      "Destination": "http://127.0.0.1:8686/OverwriteCases-1794653948954795000/move-directory-to-file/file.txt",
+      "Overwrite": "T"
+    },
+    "status": 403,
+    "seconds": 0.07236183295026422
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/file.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.05561645911075175
+  },
+  {
+    "method": "GET",
+    "path": "OverwriteCases-1794653948954795000/move-directory-to-file/tree/keep.txt",
+    "headers": {},
+    "status": 200,
+    "seconds": 0.6112495840061456
+  }
+]

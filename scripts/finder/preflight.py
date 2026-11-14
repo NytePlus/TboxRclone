@@ -15,6 +15,7 @@ parser.add_argument('target', type=Path)
 parser.add_argument('filename')
 parser.add_argument('mount', type=Path)
 parser.add_argument('--allow-existing', action='store_true', help='Explicit sequential overwrite test')
+parser.add_argument('--download', action='store_true', help='Copy from verified WebDAV mount to a local directory')
 args = parser.parse_args()
 errors = []
 source, target, mount = (p.resolve() for p in (args.source, args.target, args.mount))
@@ -41,14 +42,19 @@ if item.is_dir():
 if (target / args.filename).exists() and not args.allow_existing:
     errors.append('Destination already exists; this is not a fresh-copy baseline')
 mounts = subprocess.run(['/sbin/mount'], capture_output=True, text=True, check=True).stdout
-if not any(f' on {mount} (webdav,' in line for line in mounts.splitlines()):
-    errors.append('Expected mount is not mounted as WebDAV')
+expected_mount = f'http://127.0.0.1:8686/ on {mount} (webdav,'
+if not any(line.startswith(expected_mount) for line in mounts.splitlines()):
+    errors.append('Expected loopback URL is not mounted here as WebDAV')
 try:
-    remote = '/' + (target / args.filename).relative_to(mount).as_posix()
+    remote_item = item if args.download else target / args.filename
+    remote = '/' + remote_item.relative_to(mount).as_posix()
+    if args.download and target.is_relative_to(mount):
+        errors.append('Download destination must be outside the WebDAV mount')
 except ValueError:
-    errors.append('Target is outside the specified mount')
+    errors.append('Download source or upload target is outside the specified mount')
     remote = None
 print(json.dumps({'status': 'BLOCKED' if errors else 'READY_FOR_RECORDED_UI_TEST',
+                  'direction': 'download' if args.download else 'upload',
                   'source': str(item), 'target': str(target / args.filename),
                   'remote_path': remote, 'errors': errors, 'warnings': [],
                   'fresh_acceptance_eligible': not args.allow_existing,

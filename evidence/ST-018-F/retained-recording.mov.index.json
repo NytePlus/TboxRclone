@@ -1,0 +1,28 @@
+{
+  "duration_seconds" : 269.89666666666665,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 89.778333333333336,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/high-rtt-20261114\/finder\/display-1.mov",
+      "start_seconds" : 0
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 89.778333333333336,
+      "duration_seconds" : 90.064999999999998,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/multiple-files-20261114\/finder\/display-1.mov",
+      "start_seconds" : 89.778333333333336
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/rate-limit-retest-20261114\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 90.053333333333327,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-018-F\/rate-limit-retest-20261114\/finder\/display-1.mov",
+      "start_seconds" : 179.84333333333333
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

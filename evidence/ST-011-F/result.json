@@ -1,0 +1,27 @@
+{
+  "run_id": "rmdir-20261114",
+  "scenario_id": "ST-011-F",
+  "versions": {
+    "client": "native macOS mkdir/cp/rmdir on verified webdavfs mount; final Finder screenshot reviewed",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone, no adapter",
+    "server": "rclone development build; SJTU SMH version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "nonempty_directory",
+      "status": "PASS",
+      "observation": "Native rmdir exited1 with Directory not empty; populated directory and sentinel survive; source/mount/cloud hashes agree.",
+      "final_state_image": "rmdir-20261114/finish/final-task-state-preview.png",
+      "final_state_reviewed": true,
+      "artifacts": [
+        "rmdir-20261114/commands.json",
+        "rmdir-20261114/absence.json",
+        "rmdir-20261114/deletion-journal.json",
+        "rmdir-20261114/finish/content/reopen.json",
+        "rmdir-20261114/finish/final-task-state-preview.png"
+      ]
+    }
+  ]
+}

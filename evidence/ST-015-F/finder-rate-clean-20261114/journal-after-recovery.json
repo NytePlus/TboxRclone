@@ -1,0 +1,60 @@
+{
+  "records": [
+    {
+      "id": "0332226543e3f46de9c3a7d63d0c5bc7",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "etag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+        }
+      ],
+      "upload_id_sha256": "1d54bcc337a6f7050f9b6be818f8aa2412bbcdff1902d97dd9c5b8f535e7efae",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "4cb67d032609de6d509419202531dad8",
+      "state": "Rejected",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "upload_id_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "dba611784a30add781a20b3d4fe4c4c2",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+      "size": 8960,
+      "sha256": "a496bb13299434fc00509196d12d48d1ffc389f55127f1ed62c3b86e154df88d",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 8960,
+          "sha256": "a496bb13299434fc00509196d12d48d1ffc389f55127f1ed62c3b86e154df88d",
+          "etag": "\"1acef7ece19fe448a09e3c1f54e6e75d\""
+        }
+      ],
+      "upload_id_sha256": "0314e28841721deb9008a280eb70b27af16b8e813a69f916882d86b2bc3b5cd2",
+      "spool_sha256": "a496bb13299434fc00509196d12d48d1ffc389f55127f1ed62c3b86e154df88d",
+      "spool_size": 8960
+    }
+  ]
+}

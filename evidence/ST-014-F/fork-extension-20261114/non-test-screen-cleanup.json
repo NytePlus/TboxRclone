@@ -1,0 +1,17 @@
+{
+  "reason": "Completion clip showed Codex after screen switch, not Finder; no acceptance evidence.",
+  "removed": [
+    {
+      "file": "evidence/ST-014-F/fork-extension-20261114/completion.mov",
+      "bytes": 872280
+    },
+    {
+      "file": "evidence/ST-014-F/fork-extension-20261114/completion-review.0.png",
+      "bytes": 485427
+    },
+    {
+      "file": "evidence/ST-014-F/fork-extension-20261114/completion-review.index.json",
+      "bytes": 308
+    }
+  ]
+}

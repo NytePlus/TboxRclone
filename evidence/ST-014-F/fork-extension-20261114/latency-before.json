@@ -1,0 +1,14 @@
+{
+  "scope": "whole-service requests during native copy, includes ambient Finder reads",
+  "requests_by_method": {
+    "GET": 911,
+    "PUT": 36,
+    "POST": 70
+  },
+  "header_samples": 1014,
+  "origin_headers_p50_seconds": 0.6151174306869507,
+  "origin_headers_p95_seconds": 0.874704122543335,
+  "transfer_complete": false,
+  "event_buffer_truncated": true,
+  "request_counts_are_lower_bounds": true
+}

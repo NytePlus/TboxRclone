@@ -1,0 +1,12 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-quota-fixed-20261114-0157",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157",
+  "status": 403,
+  "quota": true,
+  "source_before": {
+    "size": 9728,
+    "sha256": "8d97eb42acd7f8c3c2df9b75a155b3c92b4ec7232d940cc3374b4c041aa5dc39"
+  },
+  "mount_subtree": "finder-quota-fixed-20261114-0157"
+}

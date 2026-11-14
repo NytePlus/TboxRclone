@@ -1,0 +1,160 @@
+{
+  "scope": "protocol supplement, not Finder acceptance",
+  "fixture": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a",
+  "cases": [
+    {
+      "id": "missing_token",
+      "pass": true,
+      "http_status": 423,
+      "original_preserved": true
+    },
+    {
+      "id": "wrong_token",
+      "pass": true,
+      "http_status": 412,
+      "original_preserved": true
+    },
+    {
+      "id": "valid_lock_token",
+      "pass": true,
+      "http_status": 201,
+      "sha256": "8bb69efe92d4d11c7f868479963f61f3d1760cb7f912dcd15a7eda5c66571900"
+    },
+    {
+      "id": "expired_token",
+      "pass": true,
+      "http_status": 412,
+      "accepted_content_preserved": true
+    },
+    {
+      "id": "parent_lock",
+      "pass": true,
+      "rejected_http": 423,
+      "absent_after_rejection": true,
+      "valid_token_http": 201
+    }
+  ],
+  "requests": [
+    {
+      "method": "MKCOL",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a",
+      "status": 201,
+      "elapsed_seconds": 3.822487625060603
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 201,
+      "elapsed_seconds": 10.177356667118147
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 1.4701353751588613
+    },
+    {
+      "method": "LOCK",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 0.002571833087131381
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 423,
+      "elapsed_seconds": 0.0025860839523375034
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 1.4264694158919156
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 412,
+      "elapsed_seconds": 0.002211791928857565
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 1.2852449580095708
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 201,
+      "elapsed_seconds": 10.850901624886319
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 1.4185761660337448
+    },
+    {
+      "method": "UNLOCK",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 204,
+      "elapsed_seconds": 0.0008550002239644527
+    },
+    {
+      "method": "LOCK",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 0.0009529581293463707
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 412,
+      "elapsed_seconds": 0.0036310828290879726
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/file.txt",
+      "status": 200,
+      "elapsed_seconds": 1.3882619999349117
+    },
+    {
+      "method": "LOCK",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/",
+      "status": 200,
+      "elapsed_seconds": 0.0017713748384267092
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/child.txt",
+      "status": 423,
+      "elapsed_seconds": 0.0013381659518927336
+    },
+    {
+      "method": "HEAD",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/child.txt",
+      "status": 404,
+      "elapsed_seconds": 0.0014406670816242695
+    },
+    {
+      "method": "PUT",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/child.txt",
+      "status": 201,
+      "elapsed_seconds": 9.225677374983206
+    },
+    {
+      "method": "GET",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/child.txt",
+      "status": 200,
+      "elapsed_seconds": 1.7292103751096874
+    },
+    {
+      "method": "UNLOCK",
+      "path": "/lock-contract-3101a4fb98764142a4a8bb8c0a57a30a/",
+      "status": 204,
+      "elapsed_seconds": 0.0026056249625980854
+    }
+  ],
+  "pass": true
+}

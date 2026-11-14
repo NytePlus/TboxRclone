@@ -1,0 +1,12 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-cache-fast-20261114",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-cache-fast-20261114",
+  "status": null,
+  "quota": false,
+  "cache_full": true,
+  "source_before": {
+    "size": 8960,
+    "sha256": "c86ed1ff0a2626177663ba6bb806ea7d5c31b145bca59ce20f9fdd0dbb07f7fd"
+  }
+}

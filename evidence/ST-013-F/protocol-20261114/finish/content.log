@@ -1,0 +1,376 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-F/source.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "copy-F/source.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-F/target.txt",
+      "source": {
+        "size": 39,
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b"
+      },
+      "mounted": {
+        "size": 39,
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b"
+      },
+      "raw_cloud_name": "copy-F/target.txt",
+      "cloud": {
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b",
+        "size": 39
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-T/source.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "copy-T/source.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-T/target.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "copy-T/target.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-default/source.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "copy-default/source.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-default/target.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "copy-default/target.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-directory-to-file/file.txt",
+      "source": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "mounted": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "raw_cloud_name": "copy-directory-to-file/file.txt",
+      "cloud": {
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568",
+        "size": 23
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree/keep.txt",
+      "source": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "mounted": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "raw_cloud_name": "copy-directory-to-file/tree/keep.txt",
+      "cloud": {
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688",
+        "size": 28
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-file-to-directory/file.txt",
+      "source": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "mounted": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "raw_cloud_name": "copy-file-to-directory/file.txt",
+      "cloud": {
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568",
+        "size": 23
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/copy-file-to-directory/tree/keep.txt",
+      "source": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "mounted": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "raw_cloud_name": "copy-file-to-directory/tree/keep.txt",
+      "cloud": {
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688",
+        "size": 28
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-F/source.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "move-F/source.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-F/target.txt",
+      "source": {
+        "size": 39,
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b"
+      },
+      "mounted": {
+        "size": 39,
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b"
+      },
+      "raw_cloud_name": "move-F/target.txt",
+      "cloud": {
+        "sha256": "7040c2d4f305c3e2d3a1baa6e6e9e9759acb352c26040a5b427888d7a28b0e8b",
+        "size": 39
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-T/target.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "move-T/target.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-default/target.txt",
+      "source": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "raw_cloud_name": "move-default/target.txt",
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-directory-to-file/file.txt",
+      "source": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "mounted": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "raw_cloud_name": "move-directory-to-file/file.txt",
+      "cloud": {
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568",
+        "size": 23
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-directory-to-file/tree/keep.txt",
+      "source": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "mounted": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "raw_cloud_name": "move-directory-to-file/tree/keep.txt",
+      "cloud": {
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688",
+        "size": 28
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-file-to-directory/file.txt",
+      "source": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "mounted": {
+        "size": 23,
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568"
+      },
+      "raw_cloud_name": "move-file-to-directory/file.txt",
+      "cloud": {
+        "sha256": "abb27e8abf732a3ce82e64de33b6843c65ff4c7c838ed6bee45916222a5aa568",
+        "size": 23
+      },
+      "matched": true
+    },
+    {
+      "file": "OverwriteCases-1794653948954795000/move-file-to-directory/tree/keep.txt",
+      "source": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "mounted": {
+        "size": 28,
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688"
+      },
+      "raw_cloud_name": "move-file-to-directory/tree/keep.txt",
+      "cloud": {
+        "sha256": "518d58d9040108d6aa10cfd8a39c678d577553299ea5dbe190988dbb71d0e688",
+        "size": 28
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "OverwriteCases-1794653948954795000",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-directory-to-file",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-default",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-directory-to-file",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-default",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-file-to-directory",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-F",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-T",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-file-to-directory",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-T",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-F",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-directory-to-file/tree",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-directory-to-file/tree",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/copy-file-to-directory/tree",
+      "matched": true
+    },
+    {
+      "directory": "OverwriteCases-1794653948954795000/move-file-to-directory/tree",
+      "matched": true
+    }
+  ]
+}
+Content verified. Review the ten-second samples and the mandatory final task state; record the UI verdict separately.

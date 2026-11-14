@@ -1,0 +1,11 @@
+{
+  "movie": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/retained-recording.mov",
+  "segments": 3,
+  "removed": [
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/rate-limit-retest-20261114/finder/display-1.mov",
+      "bytes": 5915961
+    }
+  ],
+  "mode": "separate recordings with gaps; not continuous coverage"
+}

@@ -169,6 +169,26 @@ func directoryUIReady(_ window: AXUIElement) -> Bool {
     }
     return hasList
 }
+
+// A click on an already selected row can preserve a multiple selection.
+// Verify the actual Finder selection before sending any drag event.
+func singleSelectionMatches(_ window: AXUIElement, _ wanted: String) -> Bool {
+    var queue = [window]
+    while let element = queue.popLast() {
+        var identifier: CFTypeRef?
+        _ = AXUIElementCopyAttributeValue(element, "AXIdentifier" as CFString, &identifier)
+        if (identifier as? String) == "ListView" {
+            var selected: CFTypeRef?
+            guard AXUIElementCopyAttributeValue(element, kAXSelectedRowsAttribute as CFString, &selected) == .success,
+                  let rows = selected as? [AXUIElement], rows.count == 1 else { return false }
+            return findFileRow(rows[0], wanted) != nil
+        }
+        var children: CFTypeRef?
+        if AXUIElementCopyAttributeValue(element, kAXChildrenAttribute as CFString, &children) == .success,
+           let children = children as? [AXUIElement] { queue.append(contentsOf: children) }
+    }
+    return false
+}
 guard directoryUIReady(source.ax), directoryUIReady(target.ax) else {
     fputs("finder_not_ready: list unavailable or loading indicator present; no drag sent\n", stderr)
     exit(2)
@@ -195,10 +215,12 @@ print("drag_coordinates start=\(start) end=\(end)")
 let eventSource = CGEventSource(stateID: .combinedSessionState)
 eventSource?.localEventsSuppressionInterval = 0
 var mouseNumber: Int64 = 1
-func post(_ type: CGEventType, _ point: CGPoint) {
+func post(_ type: CGEventType, _ point: CGPoint, copy: Bool = false) {
     guard let event = CGEvent(mouseEventSource: eventSource, mouseType: type, mouseCursorPosition: point, mouseButton: .left) else {
         fatalError("could not create mouse event")
     }
+    // Never inherit Command/Shift from a preceding scripted view shortcut.
+    event.flags = copy ? .maskAlternate : []
     event.setIntegerValueField(.mouseEventNumber, value: mouseNumber)
     event.setDoubleValueField(.mouseEventPressure, value: type == .leftMouseUp ? 0 : 1)
     if type == .leftMouseDown {
@@ -231,7 +253,8 @@ print("visibility_check source_expected=\(source.id) source_top=\(topWindow(at: 
 guard finderReceivesHit(at: start), finderReceivesHit(at: end),
       source.bounds.contains(start), target.bounds.contains(end),
       topWindowMatches(sourceTitle, at: start), topWindowMatches(targetTitle, at: end) else {
-    fatalError("drag endpoints are obscured or not on the active desktop; no mouse events sent")
+    fputs("drag endpoints are obscured or not on the active desktop; no mouse events sent\n", stderr)
+    exit(2)
 }
 print("finder_drag_endpoints_visible")
 if ProcessInfo.processInfo.environment["TBOX_FINDER_CHECK_ONLY"] == "1" { exit(0) }
@@ -247,15 +270,22 @@ post(.leftMouseDown, start)
 post(.leftMouseUp, start)
 mouseNumber += 1
 Thread.sleep(forTimeInterval: 0.6)
+if let filename {
+    guard singleSelectionMatches(source.ax, filename) else {
+        fputs("single_selection_unconfirmed: no drag sent\n", stderr)
+        exit(2)
+    }
+    print("finder_single_selection_verified item=\(filename)")
+}
 post(.leftMouseDown, start)
 Thread.sleep(forTimeInterval: 0.08)
 for step in 1...40 {
     let fraction = Double(step) / 40.0
     post(.leftMouseDragged, CGPoint(x: start.x + (end.x - start.x) * fraction,
-                                    y: start.y + (end.y - start.y) * fraction))
+                                    y: start.y + (end.y - start.y) * fraction), copy: true)
     Thread.sleep(forTimeInterval: 0.03)
 }
-post(.leftMouseUp, end)
+post(.leftMouseUp, end, copy: true)
 // Posting is asynchronous. Keep the process alive until the release has had
 // time to reach WindowServer, and never report delivery with a held button.
 Thread.sleep(forTimeInterval: 0.5)

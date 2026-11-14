@@ -1,0 +1,49 @@
+{
+  "elapsed_seconds": 23.137356832856312,
+  "phases": [
+    {
+      "phase": "journal",
+      "elapsed_seconds": 0.124581707874313,
+      "exit_code": 0
+    },
+    {
+      "phase": "video",
+      "elapsed_seconds": 1.2338979172054678,
+      "exit_code": 0
+    },
+    {
+      "phase": "native-inspection",
+      "elapsed_seconds": 2.8645959170535207,
+      "exit_code": 0
+    },
+    {
+      "phase": "reveal",
+      "elapsed_seconds": 3.2031435419339687,
+      "exit_code": 0
+    },
+    {
+      "phase": "final-screenshot",
+      "elapsed_seconds": 0.4331423749681562,
+      "exit_code": 0
+    },
+    {
+      "phase": "final-preview",
+      "elapsed_seconds": 0.12701941607519984,
+      "exit_code": 0
+    },
+    {
+      "phase": "content",
+      "elapsed_seconds": 23.136000000173226,
+      "exit_code": 0
+    }
+  ],
+  "errors": [],
+  "review_images": [
+    "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finish/review.0.png",
+    "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finish/final-task-state-preview.png"
+  ],
+  "required_final_image": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finish/final-task-state-preview.png",
+  "original_final_image": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finish/final-task-state.png",
+  "acceptance": "REQUIRES_10_SECOND_SAMPLES_AND_FINAL_TASK_STATE_REVIEW",
+  "note": "No automatic PASS; missing video coverage or active transfer remains incomplete."
+}

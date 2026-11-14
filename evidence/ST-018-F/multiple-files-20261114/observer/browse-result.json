@@ -1,0 +1,20 @@
+{
+  "cases" : [
+    {
+      "busyAtEnd" : false,
+      "elapsedSeconds" : 1.5414990186691284,
+      "expectedCount" : 6,
+      "expectedLast" : "item-05.txt",
+      "lastVisible" : true,
+      "observedCount" : 6,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/browse",
+      "status" : "PASS",
+      "statusTextAtEnd" : "6个项目，--可用"
+    }
+  ],
+  "elapsedSeconds" : 2.8402020931243896,
+  "kind" : "real-finder-accessibility-browse",
+  "pass" : true,
+  "startedAt" : "2026-11-14T09:56:41Z",
+  "windowID" : 143611
+}

@@ -1,0 +1,13 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-503-20261114",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-503-20261114",
+  "status": 503,
+  "quota": false,
+  "cache_full": false,
+  "source_before": {
+    "size": 8064,
+    "sha256": "21fa42743c4dc473e0197727e5b4783577713199b29777e968f4abc404555761"
+  },
+  "mount_subtree": "finder-503-20261114"
+}

@@ -1,0 +1,22 @@
+{
+  "source_preserved": true,
+  "cache_full": false,
+  "live_spool_limit": "4G",
+  "retained_spool_bytes_before": 142209426,
+  "injected_responses": [
+    {
+      "sequence": 7116,
+      "request": 2374,
+      "at": "2026-11-14T05:30:44.27539993Z",
+      "phase": "synthetic_status",
+      "rule": "finder-forbidden-clean-20261114-0",
+      "host": "pan.sjtu.edu.cn:443",
+      "method": "POST",
+      "status": 403,
+      "bytes": 25
+    }
+  ],
+  "elapsed_seconds": 71.56960883294232,
+  "recording_exit": 3,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/retained-recording.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/high-rtt-20261114/finder/display-1.mov",
+    "offset": 0,
+    "duration": 89.77833333333334
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-018-F/multiple-files-20261114/finder/display-1.mov"
+  }
+]

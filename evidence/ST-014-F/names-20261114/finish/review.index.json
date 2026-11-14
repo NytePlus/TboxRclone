@@ -1,0 +1,21 @@
+{
+  "duration_seconds" : 16.638333333333332,
+  "final_frame" : {
+    "actual_second" : 16.483333333333334,
+    "file" : "review.final.png",
+    "required_review" : true
+  },
+  "frames" : 3,
+  "generation_seconds" : 0.36941194534301758,
+  "sample_interval_seconds" : 10,
+  "sheets" : [
+    {
+      "file" : "review.0.png",
+      "seconds" : [
+        0,
+        10
+      ]
+    }
+  ],
+  "ui_verdict" : "REQUIRES_10_SECOND_SAMPLES_AND_FINAL_TASK_STATE_REVIEW"
+}

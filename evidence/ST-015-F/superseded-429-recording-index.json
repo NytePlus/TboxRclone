@@ -1,0 +1,40 @@
+{
+  "reason": "Superseded by complete post-fix429 run; historical diagnoses retained as JSON and markdown",
+  "removed_segments": [
+    {
+      "copied_from_file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+      "copied_from_start_seconds": 525.1283333333333,
+      "duration_seconds": 45.00833333333333,
+      "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/finder/display-1.mov",
+      "start_seconds": 525.1283333333333
+    },
+    {
+      "copied_from_file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+      "copied_from_start_seconds": 570.1366666666667,
+      "duration_seconds": 62.48166666666667,
+      "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/finder/display-1.mov",
+      "start_seconds": 570.1366666666667
+    },
+    {
+      "copied_from_file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+      "copied_from_start_seconds": 632.6183333333333,
+      "duration_seconds": 30.076666666666668,
+      "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/completion-followup.mov",
+      "start_seconds": 632.6183333333333
+    },
+    {
+      "copied_from_file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+      "copied_from_start_seconds": 662.695,
+      "duration_seconds": 15.083333333333334,
+      "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/final-observation.mov",
+      "start_seconds": 662.695
+    },
+    {
+      "copied_from_file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/retained-recording.mov",
+      "copied_from_start_seconds": 677.7783333333333,
+      "duration_seconds": 15.043333333333333,
+      "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-015-F/finder-rate-clean-20261114/recovery/fixed-browse.mov",
+      "start_seconds": 677.7783333333333
+    }
+  ]
+}

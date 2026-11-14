@@ -1,0 +1,13 @@
+{
+  "marker": "sequential.txt",
+  "button": "替换",
+  "action_performed": true,
+  "seconds": 0.43574454193003476,
+  "attempts": [
+    {
+      "exit_code": 0,
+      "stdout": "matched_dialog_action=替换 expected_text=sequential.txt\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-012-T/direct-traced-20261114-0124/finder/display-1.mov",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "40894f94512c4760471688e7e10ebc763fe6739e3287781fedbe46c8f7a25803"
+}

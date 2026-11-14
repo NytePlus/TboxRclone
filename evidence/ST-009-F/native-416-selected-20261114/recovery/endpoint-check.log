@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tboxrclone-webdav-501 target=tbox-download-416-recovery-20261114 item=cut-part-1-first-complete-20261113-2329.bin
+finder_windows_found
+source_window=142532 target_window=142681
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 195.0) end=(584.75, 605.0)
+visibility_check source_expected=142532 source_top=142532 source_hit=true target_expected=142681 target_top=142532 target_hit=true
+drag endpoints are obscured or not on the active desktop; no mouse events sent

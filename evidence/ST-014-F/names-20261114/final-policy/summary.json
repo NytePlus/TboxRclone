@@ -1,0 +1,42 @@
+{
+  "elapsed_seconds": 11.943824040936306,
+  "phases": [
+    {
+      "phase": "journal",
+      "elapsed_seconds": 0.07313220808282495,
+      "exit_code": 0
+    },
+    {
+      "phase": "native-inspection",
+      "elapsed_seconds": 4.236857708077878,
+      "exit_code": 0
+    },
+    {
+      "phase": "final-screenshot",
+      "elapsed_seconds": 0.39910399983637035,
+      "exit_code": 0
+    },
+    {
+      "phase": "final-preview",
+      "elapsed_seconds": 0.07724991720169783,
+      "exit_code": 0
+    },
+    {
+      "phase": "content",
+      "elapsed_seconds": 11.942468000110239,
+      "exit_code": 0
+    }
+  ],
+  "errors": [],
+  "review_images": [
+    "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/names-20261114/final-policy/final-task-state-preview.png"
+  ],
+  "required_final_image": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/names-20261114/final-policy/final-task-state-preview.png",
+  "original_final_image": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/names-20261114/final-policy/final-task-state.png",
+  "video": {
+    "status": "skipped",
+    "reason": "interrupted, unavailable, or explicitly skipped; final state review required"
+  },
+  "acceptance": "REQUIRES_FINAL_TASK_STATE_REVIEW_AND_FACT_VERIFICATION",
+  "note": "No automatic PASS. Recording is supplementary; interruption alone does not fail acceptance. Active transfer is not completion."
+}

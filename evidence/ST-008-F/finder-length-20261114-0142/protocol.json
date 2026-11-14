@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-13T17:37:49Z",
+  "base": "length-finder-20261114-0142",
+  "control_verified": true,
+  "cases": [
+    {
+      "id": "short_eof",
+      "path": "length-finder-20261114-0142/short-eof.bin",
+      "response_line": "HTTP/1.1 405 Method Not Allowed",
+      "head_status": 404,
+      "published": false,
+      "pass": true,
+      "elapsed_seconds": 0.001652958
+    },
+    {
+      "id": "excess_bytes",
+      "path": "length-finder-20261114-0142/excess-bytes.bin",
+      "response_line": "HTTP/1.1 405 Method Not Allowed",
+      "head_status": 404,
+      "published": false,
+      "pass": true,
+      "elapsed_seconds": 0.000819959
+    },
+    {
+      "id": "reader_failure",
+      "path": "length-finder-20261114-0142/reader-failure.bin",
+      "response_line": "HTTP/1.1 405 Method Not Allowed",
+      "head_status": 404,
+      "published": false,
+      "pass": true,
+      "elapsed_seconds": 0.000534834
+    }
+  ],
+  "pass": true
+}

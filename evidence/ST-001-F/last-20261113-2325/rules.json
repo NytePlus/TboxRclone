@@ -1,0 +1,57 @@
+[
+  {
+    "id": "cut-part-3-1",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 3,
+    "nth": 1,
+    "action": "cut_upload",
+    "bytes": 65536,
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-3-2",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 3,
+    "nth": 1,
+    "action": "cut_upload",
+    "bytes": 65536,
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-3-3",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 3,
+    "nth": 1,
+    "action": "cut_upload",
+    "bytes": 65536,
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-3-4",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 3,
+    "nth": 1,
+    "action": "cut_upload",
+    "bytes": 65536,
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-3-5",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 3,
+    "nth": 1,
+    "action": "cut_upload",
+    "bytes": 65536,
+    "min_content_length": 1048576
+  }
+]

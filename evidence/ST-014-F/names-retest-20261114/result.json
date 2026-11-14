@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "scope": "four special filename branches only; excludes AppleDouble metadata",
+  "content_verified": true,
+  "committed_journal_verified": true,
+  "final_state_reviewed": true,
+  "final_state_image": "final-policy/final-task-state-preview.png",
+  "recording": "supplementary; skipped under user policy, no rerun required",
+  "artifacts": [
+    "final-policy/content/reopen.json",
+    "final-policy/journal.json",
+    "final-policy/native-state.json"
+  ]
+}

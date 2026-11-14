@@ -1,0 +1,44 @@
+{
+  "duration_seconds" : 60.018333333333331,
+  "frames" : 61,
+  "generation_seconds" : 0.99641895294189453,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "completion-review.0.png",
+      "first_second" : 0,
+      "last_second" : 9
+    },
+    {
+      "file" : "completion-review.10.png",
+      "first_second" : 10,
+      "last_second" : 19
+    },
+    {
+      "file" : "completion-review.20.png",
+      "first_second" : 20,
+      "last_second" : 29
+    },
+    {
+      "file" : "completion-review.30.png",
+      "first_second" : 30,
+      "last_second" : 39
+    },
+    {
+      "file" : "completion-review.40.png",
+      "first_second" : 40,
+      "last_second" : 49
+    },
+    {
+      "file" : "completion-review.50.png",
+      "first_second" : 50,
+      "last_second" : 59
+    },
+    {
+      "file" : "completion-review.60.png",
+      "first_second" : 60,
+      "last_second" : 60
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

@@ -1,0 +1,2 @@
+performance-webdav-1  | 2026/11/14 11:34:51 INFO  : length-1.bin: upload timing: bytes=-1 staging=1.841258584s input_read=942.159257ms input_reads=261 preflight=159.116458ms transfer_verify=22.628827844s final_info=990.930375ms total=25.620135886s
+performance-webdav-1  | 2026/11/14 11:35:27 INFO  : chunked-1.bin: upload timing: bytes=-1 staging=1.819696834s input_read=1.00900509s input_reads=261 preflight=30.551917ms transfer_verify=22.34839726s final_info=715.192667ms total=24.913840803s

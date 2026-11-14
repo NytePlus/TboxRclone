@@ -1,0 +1,32 @@
+{
+  "observed_at": "2026-11-14T06:07:09.050679+00:00",
+  "ui_verdict": "NOT_A_UI_ACCEPTANCE_TEST",
+  "probes": [
+    {
+      "kind": "mounted",
+      "relative": "",
+      "exit_code": 124,
+      "stderr": "helper timed out after 15s; no acceptance result",
+      "elapsed_seconds": 119.1530460419599
+    },
+    {
+      "kind": "mounted",
+      "relative": "finder-rate-clean-20261114",
+      "exit_code": 124,
+      "stderr": "helper timed out after 15s; no acceptance result",
+      "elapsed_seconds": 119.15282995905727
+    },
+    {
+      "kind": "webdav",
+      "relative": "",
+      "error": "TimeoutError: timed out",
+      "elapsed_seconds": 15.005534541094676
+    },
+    {
+      "kind": "webdav",
+      "relative": "finder-rate-clean-20261114",
+      "error": "TimeoutError: timed out",
+      "elapsed_seconds": 15.004240166861564
+    }
+  ]
+}

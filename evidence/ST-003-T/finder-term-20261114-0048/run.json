@@ -1,0 +1,8 @@
+{
+  "source_directory": "/private/tmp/tbox-part-fault-finder-term-20261114-0048",
+  "filename": "cut-part-2-finder-term-20261114-0048.bin",
+  "part": 2,
+  "mode": "service-term",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

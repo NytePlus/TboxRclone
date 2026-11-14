@@ -1,0 +1,5 @@
+{
+  "scope": "diagnostic timing only; not system acceptance",
+  "final_finder_state_reviewed": false,
+  "note": "Passive final screenshot did not show the task and was discarded. No further Finder actions after user requested code-only performance tuning. Recording not reviewed because display session changed."
+}

@@ -1,0 +1,32 @@
+{
+  "run_id": "finder-resume-20261113-2240",
+  "scenario_id": "ST-007-T",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "resume_valid_session",
+      "status": "PASS",
+      "observation": "Real Finder 9 MiB copy recovered after part 2 response was held for 34.5 seconds then dropped. Same session committed, existing receipts reused, no data PUT after drop. Progress cleared at approximately recording t=103s and no error appeared in one-second samples through t=169s. Source, mounted reopen and independent full cloud read match size and SHA-256. See ui-review.md for scope and sampling limits.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-finder-20261113-2240/fault/drag.log",
+        "direct-finder-20261113-2240/fault/timeline.jsonl",
+        "direct-finder-20261113-2240/rules.json",
+        "direct-finder-20261113-2240/journal-held.json",
+        "direct-finder-20261113-2240/journal-after-drop.json",
+        "direct-finder-20261113-2240/events-final.json",
+        "direct-finder-20261113-2240/fault-cloud.json",
+        "direct-finder-20261113-2240/fault-reopen.json",
+        "direct-finder-20261113-2240/ui-review.md",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    }
+  ]
+}

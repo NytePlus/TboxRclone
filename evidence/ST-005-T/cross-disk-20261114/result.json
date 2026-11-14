@@ -1,0 +1,40 @@
+{
+  "source_sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+  "bytes": 9437184,
+  "source_device": 16777227,
+  "mount_device": 922746916,
+  "held_record_states": [
+    "CommitSent"
+  ],
+  "source_intact_while_confirm_held": true,
+  "mv_running_while_confirm_held": true,
+  "mv_exit_code": 0,
+  "observations": [
+    {
+      "at": 1794653227.907389,
+      "source_present": true,
+      "states": [
+        "CommitSent"
+      ]
+    },
+    {
+      "at": 1794653229.8215082,
+      "source_present": true,
+      "states": [
+        "Committed"
+      ]
+    },
+    {
+      "at": 1794653229.8706748,
+      "source_present": false,
+      "states": [
+        "Committed"
+      ]
+    }
+  ],
+  "source_removed": true,
+  "mounted_sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+  "committed": true,
+  "pass": true,
+  "acceptance": "REQUIRES_FINAL_STATE_AND_INDEPENDENT_CLOUD_VERIFICATION"
+}

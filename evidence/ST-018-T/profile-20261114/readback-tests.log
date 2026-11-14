@@ -1,0 +1,4 @@
+ Container tboxrclone-lab-dns-1  Running
+ok  	github.com/nyte/TboxRclone/internal/sjtu/recovery	1.572s
+ok  	github.com/nyte/TboxRclone/internal/sjtu/transfer	9.880s
+ok  	github.com/nyte/TboxRclone/internal/sjtu/smh	(cached)

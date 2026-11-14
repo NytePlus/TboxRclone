@@ -1,0 +1,29 @@
+{
+  "id": "http_429",
+  "status": "FAIL",
+  "observation": "Injected429 rejected visibly with source retained. Same-path retry commits8960 matching source/mount/cloud bytes, but native recovery is not usable: progress lingers, mount root appears blank, exact-folder opening times out, and bounded mounted/direct depth1 directory reads time out. Data integrity passes; usable Finder recovery fails pending diagnosis. Request-local PROPFIND node reuse subsequently restores listing/Finder browsing after restart; fresh429 end-to-end rerun remains required.",
+  "artifacts": [
+    "finder-rate-clean-20261114/ui-review.md",
+    "finder-rate-clean-20261114/facts.json",
+    "finder-rate-clean-20261114/cloud-before-retry.json",
+    "finder-rate-clean-20261114/user-provided-error.png",
+    "finder-rate-clean-20261114/user-observation.json",
+    "finder-rate-clean-20261114/journal-after-recovery.json",
+    "finder-rate-clean-20261114/recovery/verification-after-interruption/reopen.json",
+    "finder-rate-clean-20261114/recovery/finder/capture-coverage.json",
+    "finder-rate-clean-20261114/recovery/finder/display-1.log",
+    "retained-recording.mov",
+    "retained-recording.mov.index.json",
+    "finder-rate-clean-20261114/events-after-recovery.json",
+    "finder-rate-clean-20261114/finder-wait-sample.txt",
+    "finder-rate-clean-20261114/webdav-wait-sample.txt",
+    "finder-rate-clean-20261114/list-diagnosis-bounded.json",
+    "finder-rate-clean-20261114/journal-sidecar-after-recovery.json",
+    "finder-rate-clean-20261114/events-list-timeout.json",
+    "rate-recording-retention.json",
+    "finder-rate-clean-20261114/propfind-fix.json",
+    "finder-rate-clean-20261114/propfind-regression.txt",
+    "finder-rate-clean-20261114/list-diagnosis-fixed.json",
+    "finder-rate-clean-20261114/recovery/verification-fixed/reopen.json"
+  ]
+}

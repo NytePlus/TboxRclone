@@ -1,0 +1,90 @@
+{
+  "scope": "mount and independent cloud fact check; UI reviewed separately",
+  "mounted_listing": [
+    "copy-F",
+    "copy-T",
+    "copy-default",
+    "copy-directory-to-file",
+    "copy-file-to-directory",
+    "move-F",
+    "move-T",
+    "move-default",
+    "move-directory-to-file",
+    "move-file-to-directory"
+  ],
+  "cloud_listing": [
+    "copy-F",
+    "copy-F/source.txt",
+    "copy-F/target.txt",
+    "copy-T",
+    "copy-T/source.txt",
+    "copy-T/target.txt",
+    "copy-default",
+    "copy-default/source.txt",
+    "copy-default/target.txt",
+    "copy-directory-to-file",
+    "copy-directory-to-file/file.txt",
+    "copy-directory-to-file/tree",
+    "copy-directory-to-file/tree/keep.txt",
+    "copy-file-to-directory",
+    "copy-file-to-directory/file.txt",
+    "copy-file-to-directory/tree",
+    "copy-file-to-directory/tree/keep.txt",
+    "move-F",
+    "move-F/source.txt",
+    "move-F/target.txt",
+    "move-T",
+    "move-T/target.txt",
+    "move-default",
+    "move-default/target.txt",
+    "move-directory-to-file",
+    "move-directory-to-file/file.txt",
+    "move-directory-to-file/tree",
+    "move-directory-to-file/tree/keep.txt",
+    "move-file-to-directory",
+    "move-file-to-directory/file.txt",
+    "move-file-to-directory/tree",
+    "move-file-to-directory/tree/keep.txt"
+  ],
+  "absent": [
+    {
+      "name": "move-default/source.txt",
+      "mount_absent": true,
+      "cloud_absent": true,
+      "pass": true
+    },
+    {
+      "name": "move-T/source.txt",
+      "mount_absent": true,
+      "cloud_absent": true,
+      "pass": true
+    }
+  ],
+  "present": [
+    {
+      "name": "move-default/target.txt",
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "pass": true
+    },
+    {
+      "name": "move-T/target.txt",
+      "mounted": {
+        "size": 29,
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444"
+      },
+      "cloud": {
+        "sha256": "95cc9761f192e7356bee45c761901caedf536abb764daf1d0fffc04f3f6ec444",
+        "size": 29
+      },
+      "pass": true
+    }
+  ],
+  "pass": true
+}

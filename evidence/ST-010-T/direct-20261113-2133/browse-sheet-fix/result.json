@@ -1,0 +1,52 @@
+{
+  "cases" : [
+    {
+      "elapsedSeconds" : 0.15434300899505615,
+      "expectedCount" : 0,
+      "observedCount" : 0,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/listing-20261113-2133\/list-0000",
+      "status" : "PASS"
+    },
+    {
+      "elapsedSeconds" : 3.826353907585144,
+      "expectedCount" : 1,
+      "expectedLast" : "dir-0000",
+      "lastVisible" : true,
+      "observedCount" : 1,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/listing-20261113-2133\/list-0001",
+      "status" : "PASS"
+    },
+    {
+      "elapsedSeconds" : 6.4841920137405396,
+      "expectedCount" : 50,
+      "expectedLast" : "dir-0049",
+      "lastVisible" : true,
+      "observedCount" : 50,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/listing-20261113-2133\/list-0050",
+      "status" : "PASS"
+    },
+    {
+      "elapsedSeconds" : 4.18989098072052,
+      "expectedCount" : 51,
+      "expectedLast" : "dir-0050",
+      "lastVisible" : true,
+      "observedCount" : 51,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/listing-20261113-2133\/list-0051",
+      "status" : "PASS"
+    },
+    {
+      "elapsedSeconds" : 32.55528700351715,
+      "expectedCount" : 1000,
+      "expectedLast" : "dir-0999",
+      "lastVisible" : true,
+      "observedCount" : 1000,
+      "path" : "\/private\/tmp\/tboxrclone-webdav-501\/listing-20261113-2133\/list-1000",
+      "status" : "PASS"
+    }
+  ],
+  "elapsedSeconds" : 47.21137595176697,
+  "kind" : "real-finder-accessibility-browse",
+  "pass" : true,
+  "startedAt" : "2026-11-13T13:39:57Z",
+  "windowID" : 139462
+}

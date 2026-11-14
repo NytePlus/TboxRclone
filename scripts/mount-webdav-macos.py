@@ -35,7 +35,15 @@ if action == 'mount' and not present:
     present = mounted()
 elif action == 'unmount':
     if present:
-        subprocess.run(['/sbin/umount', str(mountpoint)], check=True)
+        result = subprocess.run(['/sbin/umount', str(mountpoint)], capture_output=True, text=True)
+        if result.returncode:
+            # Finder can retain ordinary handles after a completed operation.
+            # Use Disk Arbitration's normal unmount, never a forced detach.
+            if 'Resource busy' not in result.stderr:
+                sys.exit(result.stderr.strip() or 'unmount failed')
+            subprocess.run(['/usr/sbin/diskutil', 'unmount', str(mountpoint)], check=True)
+        if mounted():
+            sys.exit('unmount returned success but WebDAV is still mounted')
     print(f'unmounted: {mountpoint}; local directory retained')
     sys.exit(0)
 if not present:

@@ -1,0 +1,5 @@
+# Metadata failures must not look like absence
+
+The small-read performance baseline observed upstream directory HTTP403 and downstream HEAD404. The six local backend fixtures reproduce GET/HEAD permission403 and opaque failure500 being incorrectly mapped to404; genuine absence remains404. before.log records four failing assertions. The fix retains the OpenFile error for the response writer and replaces only the erroneous404 status/body before headers are sent, without buffering successful downloads or leaking backend error text. Full WebDAV race/vet and body assertions pass. Patch replay matches the pinned upstream plus the patch.
+
+The first live probe targeted /api/v1/file rather than /api/v1/directory, so it failed after data-response headers were already sent:200 with zero of23552 bytes. It is retained in live/ and does not establish metadata status behavior. The corrected directory probe in live-directory/ injected a directory403, observed downstream403 and then recovered to the independently established23552-byte SHA-256. Rules were cleared and no responses remain held. These are protocol supplements, not native Finder resource-failure acceptance.

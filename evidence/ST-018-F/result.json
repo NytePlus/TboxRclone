@@ -1,0 +1,51 @@
+{
+  "run_id": "slow-network-20261114",
+  "scenario_id": "ST-018-F",
+  "versions": {
+    "client": "native Finder/webdavfs; existing finder-drag and browse scripts",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone, no adapter",
+    "server": "rclone development build; SJTU SMH version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "high_rtt",
+      "status": "PASS",
+      "observation": "256MiB native upload and simultaneous browse passed under179 actual250ms delays;64parts, three-way SHA match; full90frame review covers completion despite later recording stop.",
+      "artifacts": [
+        "high-rtt-20261114/result.json",
+        "high-rtt-20261114/events.json",
+        "high-rtt-20261114/journal.json",
+        "high-rtt-20261114/verification/reopen.json",
+        "high-rtt-20261114/observer/browse-result.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    },
+    {
+      "id": "multiple_files",
+      "status": "PASS",
+      "observation": "Native directory copy of two64MiB files and simultaneous browse passed; both files committed and three-way full content checks match; complete90s recording and final task state reviewed.",
+      "artifacts": [
+        "multiple-files-20261114/result.json",
+        "multiple-files-20261114/finish/content/reopen.json",
+        "multiple-files-20261114/finish/final-task-state-preview.png",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    },
+    {
+      "id": "rate_limit",
+      "status": "PASS",
+      "observation": "64 paced parts; source/mount/cloud hashes match; simultaneous browse passed; complete90s recording and final task screenshot reviewed.",
+      "artifacts": [
+        "rate-limit-retest-20261114/result.json",
+        "rate-limit-retest-20261114/finish/content/reopen.json",
+        "rate-limit-retest-20261114/finish/events.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    }
+  ]
+}

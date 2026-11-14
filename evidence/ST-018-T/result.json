@@ -1,0 +1,26 @@
+{
+  "run_id": "phased-20261114",
+  "scenario_id": "ST-018-T",
+  "versions": {
+    "client": "native Finder/webdavfs; existing finder-drag and browse scripts",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone, no adapter",
+    "server": "rclone development build; SJTU SMH version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "single_file_low_latency",
+      "status": "FAIL",
+      "observation": "256MiB direct Finder copy verified; main update27.35s includes6.83s staging and20.45s cloud transfer/verification. Drag to observedCommitted32.57s; historical API baseline20.61s. Performance target still unmet; complete90s recording and final state reviewed.",
+      "artifacts": [
+        "phased-20261114/result.json",
+        "phased-20261114/upload-timings.log",
+        "phased-20261114/finish/content/reopen.json",
+        "phased-20261114/finish/final-task-state-preview.png",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    }
+  ]
+}

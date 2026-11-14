@@ -1,0 +1,422 @@
+[
+  {
+    "at": "2026-11-14T11:26:48.620212+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.07471537496894598,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.18%",
+      "MemUsage": "80.12MiB / 15.6GiB",
+      "MemPerc": "0.50%",
+      "NetIO": "175kB / 87.6kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "13"
+    }
+  },
+  {
+    "at": "2026-11-14T11:26:50.920704+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.004685957916080952,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.00%",
+      "MemUsage": "80.04MiB / 15.6GiB",
+      "MemPerc": "0.50%",
+      "NetIO": "176kB / 88.2kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "13"
+    }
+  },
+  {
+    "at": "2026-11-14T11:26:52.921306+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0029780841432511806,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.15%",
+      "MemUsage": "80.79MiB / 15.6GiB",
+      "MemPerc": "0.51%",
+      "NetIO": "177kB / 90.1kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "13"
+    }
+  },
+  {
+    "at": "2026-11-14T11:26:54.940901+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.13981316704303026,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "4.04%",
+      "MemUsage": "81.05MiB / 15.6GiB",
+      "MemPerc": "0.51%",
+      "NetIO": "186kB / 94.5kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:26:57.039075+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.002664291998371482,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.88%",
+      "MemUsage": "80.38MiB / 15.6GiB",
+      "MemPerc": "0.50%",
+      "NetIO": "198kB / 101kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:26:58.997334+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0023833750747144222,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "2.80%",
+      "MemUsage": "80.19MiB / 15.6GiB",
+      "MemPerc": "0.50%",
+      "NetIO": "230kB / 119kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:01.013227+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.5215152918826789,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "2.21%",
+      "MemUsage": "80.31MiB / 15.6GiB",
+      "MemPerc": "0.50%",
+      "NetIO": "339kB / 172kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:03.274462+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0019829589873552322,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.41%",
+      "MemUsage": "80.82MiB / 15.6GiB",
+      "MemPerc": "0.51%",
+      "NetIO": "386kB / 199kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:05.285562+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0022372500970959663,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.28%",
+      "MemUsage": "81.56MiB / 15.6GiB",
+      "MemPerc": "0.51%",
+      "NetIO": "398kB / 210kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:07.301948+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.024307499872520566,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.00%",
+      "MemUsage": "82.32MiB / 15.6GiB",
+      "MemPerc": "0.52%",
+      "NetIO": "400kB / 211kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:09.310661+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.002912083873525262,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.28%",
+      "MemUsage": "82.48MiB / 15.6GiB",
+      "MemPerc": "0.52%",
+      "NetIO": "401kB / 212kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:11.326793+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0021992919500917196,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "0.00%",
+      "MemUsage": "82.9MiB / 15.6GiB",
+      "MemPerc": "0.52%",
+      "NetIO": "404kB / 215kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:13.332608+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.023786082863807678,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.56%",
+      "MemUsage": "84.61MiB / 15.6GiB",
+      "MemPerc": "0.53%",
+      "NetIO": "413kB / 219kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:15.342033+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.001392166130244732,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.74%",
+      "MemUsage": "84.44MiB / 15.6GiB",
+      "MemPerc": "0.53%",
+      "NetIO": "449kB / 239kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:17.351366+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0022658330854028463,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.85%",
+      "MemUsage": "86.98MiB / 15.6GiB",
+      "MemPerc": "0.54%",
+      "NetIO": "1.19MB / 270kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "14"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:19.368447+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.07033258397132158,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "34.05%",
+      "MemUsage": "94.32MiB / 15.6GiB",
+      "MemPerc": "0.59%",
+      "NetIO": "160MB / 644kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:21.410394+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.001457582926377654,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "14.37%",
+      "MemUsage": "94.18MiB / 15.6GiB",
+      "MemPerc": "0.59%",
+      "NetIO": "271MB / 905kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:23.419331+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.001505957916378975,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "1.20%",
+      "MemUsage": "93.75MiB / 15.6GiB",
+      "MemPerc": "0.59%",
+      "NetIO": "271MB / 934kB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:25.429366+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.5592835831921548,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "32.38%",
+      "MemUsage": "93.75MiB / 15.6GiB",
+      "MemPerc": "0.59%",
+      "NetIO": "271MB / 9.39MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:27.725990+00:00",
+    "uploading": true,
+    "metadata_seconds": 0.0014065839350223541,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "16.26%",
+      "MemUsage": "95.64MiB / 15.6GiB",
+      "MemPerc": "0.60%",
+      "NetIO": "274MB / 136MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:31.926632+00:00",
+    "uploading": true,
+    "metadata_seconds": 0.0017098751850426197,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "14.67%",
+      "MemUsage": "101.1MiB / 15.6GiB",
+      "MemPerc": "0.63%",
+      "NetIO": "275MB / 192MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:33.937953+00:00",
+    "uploading": true,
+    "metadata_seconds": 0.7154471660032868,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "12.93%",
+      "MemUsage": "98.37MiB / 15.6GiB",
+      "MemPerc": "0.62%",
+      "NetIO": "276MB / 241MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:36.387196+00:00",
+    "uploading": true,
+    "metadata_seconds": 0.0036027920432388783,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "32.74%",
+      "MemUsage": "100.2MiB / 15.6GiB",
+      "MemPerc": "0.63%",
+      "NetIO": "277MB / 271MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:38.394671+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.029740208061411977,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "26.40%",
+      "MemUsage": "99.54MiB / 15.6GiB",
+      "MemPerc": "0.62%",
+      "NetIO": "324MB / 271MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:40.469679+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.029150540940463543,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "19.74%",
+      "MemUsage": "99.65MiB / 15.6GiB",
+      "MemPerc": "0.62%",
+      "NetIO": "377MB / 272MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:42.466610+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.003911749925464392,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "26.34%",
+      "MemUsage": "99.76MiB / 15.6GiB",
+      "MemPerc": "0.62%",
+      "NetIO": "429MB / 272MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:44.482384+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0387425001244992,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "15.45%",
+      "MemUsage": "99.55MiB / 15.6GiB",
+      "MemPerc": "0.62%",
+      "NetIO": "475MB / 272MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:46.479882+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.03096704208292067,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "30.46%",
+      "MemUsage": "99.87MiB / 15.6GiB",
+      "MemPerc": "0.63%",
+      "NetIO": "531MB / 272MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:48.486134+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.0013157078064978123,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "7.57%",
+      "MemUsage": "95.6MiB / 15.6GiB",
+      "MemPerc": "0.60%",
+      "NetIO": "560MB / 277MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  },
+  {
+    "at": "2026-11-14T11:27:50.494444+00:00",
+    "uploading": false,
+    "metadata_seconds": 0.6381332080345601,
+    "metadata_status": 200,
+    "resources": {
+      "CPUPerc": "2.09%",
+      "MemUsage": "95.55MiB / 15.6GiB",
+      "MemPerc": "0.60%",
+      "NetIO": "560MB / 277MB",
+      "BlockIO": "0B / 29.1MB",
+      "PIDs": "15"
+    }
+  }
+]

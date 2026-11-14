@@ -1,0 +1,11 @@
+{
+  "transport_complete": true,
+  "status": 206,
+  "declared_bytes": "3968",
+  "requested_range": "bytes=128-4095",
+  "content_range": "bytes 128-4095/9728",
+  "bytes": 3968,
+  "sha256": "41a0ebff9bbafb689476489be46a541fe0fd418135d27f3819b4fd328c08d495",
+  "elapsed_seconds": 4.059671791968867,
+  "matches_expected": true
+}

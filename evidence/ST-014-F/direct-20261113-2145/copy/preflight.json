@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tboxrclone-finder-direct-20261113-2049/SpecialNames",
+  "target": "/private/tmp/tboxrclone-webdav-501/SpecialNames",
+  "remote_path": "/SpecialNames",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

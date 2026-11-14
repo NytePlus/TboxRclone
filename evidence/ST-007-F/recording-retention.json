@@ -1,0 +1,58 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-007-F/replay-clean-20261114-0010/finder/display-1.mov",
+      "bytes": 60583207,
+      "sha256": "a91f27ebf63f9dda9a052a4d0053e16b4f9a8d5058b16f1f416a015845c9c8d8",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-F/replay-cleared-20261114-0005/finder/display-1.mov",
+      "bytes": 120550386,
+      "sha256": "6afa755dd80efdacdd468a6b450f7f2415645a5b6477ec0c0016f31813e546c5",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-007-F/replay-finder-20261113-2357/finder/display-1.mov",
+      "bytes": 640227,
+      "sha256": "022643725a74d45bc5479baa8e65bbd25f16d838a5b77d8d2b5f5acd5c172450",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-F/session-cleared-20261114-0014/finder/display-1.mov",
+      "bytes": 55477491,
+      "sha256": "0a8685288223a653e953b09b6091881856d3380a33543bebddcbd06135438664",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-F/session-complete-20261114-0021/finder/display-1.mov",
+      "bytes": 155032837,
+      "sha256": "ea4c8e2b3e29d09d10acd63bcffdfd671c18b1bd60fcc348a9716d2ec187005c",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-007-F/session-finder-20261113-2344/finder/display-1.mov",
+      "bytes": 14553115,
+      "sha256": "317f12a6f94cd0fa8fc023028f26559110328a6c6f7ea0cce4ceb827c6e2e78e",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-F/session-gated-20261113-2353/finder/display-1.mov",
+      "bytes": 86727953,
+      "sha256": "d4aeda6165e9cfeaa285ffc0f5c4e69d749e3ebeead273544270d5fc9486b7a4",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-F/signature-finder-20261113-2256/finder/display-1.mov",
+      "bytes": 90868424,
+      "sha256": "36d5020c12d60cf0c7adb23ae371e56a16e343b81c2adf26ffbba0ecaf755796",
+      "retained_segment": true
+    }
+  ],
+  "retained_bytes": 366442370,
+  "freed_bytes": 217991270,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

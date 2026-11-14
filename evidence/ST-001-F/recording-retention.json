@@ -1,0 +1,40 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-001-F/first-20261113-2314/finder/display-1.mov",
+      "bytes": 59201591,
+      "sha256": "52abea733bdabd106e52afc7cf3735e66332955471c7580ff20f8d55f5a5c2fc",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-001-F/first-complete-20261113-2329/finder/display-1.mov",
+      "bytes": 80419231,
+      "sha256": "a8760daea8b852f4f3db8d514ab45d344d3734d65aa61172a3652ae052e2197e",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-001-F/first-filtered-20261113-2319/finder/display-1.mov",
+      "bytes": 36534093,
+      "sha256": "8ea18a2c5c137dec33b8252456825da8e4647767a6d8e04c5c7f3049f9555a37",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-001-F/last-20261113-2325/finder/display-1.mov",
+      "bytes": 71245477,
+      "sha256": "7ff48e57ec5b007c5c86b5fda4a5b46080af716a6be39c5c394e561027279fff",
+      "retained_segment": true
+    },
+    {
+      "path": "evidence/ST-001-F/middle-20261113-2322/finder/display-1.mov",
+      "bytes": 64059621,
+      "sha256": "74caacb6f13f5727604ae3d481d364af3415d8e2ce85c13d0c08d7c528bba1ca",
+      "retained_segment": true
+    }
+  ],
+  "retained_bytes": 215721912,
+  "freed_bytes": 95738101,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

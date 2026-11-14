@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-010-T/direct-20261113-2133/browse-sheet-fix/finder.mp4",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "76ba8fc9d49ae423833d9ea48f0dc1bca618e5fefe9b5e3a4502293c4ad90bb4"
+}

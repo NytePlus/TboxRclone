@@ -1,0 +1,17 @@
+{
+  "dialogs" : [
+    {
+      "app" : "com.apple.finder",
+      "buttons" : [
+        "取消",
+        "删除"
+      ],
+      "texts" : [
+        "确定要删除“delete-me.txt”吗？",
+        "将立即删除此项目。此操作无法撤销。"
+      ]
+    }
+  ],
+  "marker" : "delete-me.txt",
+  "observed_at" : "2026-11-14T11:07:40Z"
+}

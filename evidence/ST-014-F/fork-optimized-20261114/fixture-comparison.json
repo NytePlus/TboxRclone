@@ -1,0 +1,50 @@
+[
+  {
+    "name": "fixture.json",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  },
+  {
+    "name": "opaque.bin",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  },
+  {
+    "name": "opaque.dat",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  },
+  {
+    "name": "opaque.txt",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  },
+  {
+    "name": "valid.bin",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  },
+  {
+    "name": "valid.dat",
+    "content_matched": true,
+    "attributes_matched": {
+      "com.apple.ResourceFork": true,
+      "com.tboxrclone.acceptance": true
+    }
+  }
+]

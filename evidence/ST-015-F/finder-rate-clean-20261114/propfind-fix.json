@@ -1,0 +1,22 @@
+{
+  "problem": "PROPFIND amplified backend listings with DirCacheTime=0",
+  "before": {
+    "fixture_files": 20,
+    "backend_lists": 61,
+    "regression": "TestPropfindBoundedListingsAndFreshNextRequest fails"
+  },
+  "after": {
+    "root_backend_lists": 1,
+    "nested_backend_lists": 3,
+    "fresh_external_rename_next_request": true
+  },
+  "checks": [
+    "WebDAV package race tests passed",
+    "WebDAV vet passed",
+    "main project race tests passed",
+    "main project vet passed",
+    "all4 upstream patches replay byte-identically across11 files"
+  ],
+  "live": "list-diagnosis-fixed.json; service restarted preserving4 pending records",
+  "limitation": "Original429 recovery failed; post-fix browsing is a repair check, not a fresh end-to-end429 failure/retry run"
+}

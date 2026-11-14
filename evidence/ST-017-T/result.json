@@ -1,0 +1,29 @@
+{
+  "run_id": "delete-20261114",
+  "scenario_id": "ST-017-T",
+  "versions": {
+    "client": "Native Finder Command-Delete and exact-name Delete confirmation after explicit user authorization; direct rclone WebDAV",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e dirty worktree",
+    "server": "rclone v1.76.0-DEV; live SJTU version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "delete_without_recreation",
+      "status": "PASS",
+      "observation": "Native Finder deletion confirmed by user. Target absent from reopened mount and independent cloud inventory; neighboring keep.txt matches local reference. Exactly one delete journal receipt is Committed with recycle ID 61182908; no pending exact-path record; WebDAV HEAD returns404. Final Finder screenshot reviewed: keep.txt visible, deleted file absent, no dialog or progress. Recycle ID proves traceability, not tested restore; no subsequent write/recreation performed.",
+      "final_state_reviewed": true,
+      "final_state_image": "delete-20261114/finish/final-task-state-preview.png",
+      "artifacts": [
+        "delete-20261114/delete-action-4.log",
+        "delete-20261114/delete-confirm-authorized.log",
+        "delete-20261114/after-confirm-receipt-check.json",
+        "delete-20261114/absence.json",
+        "delete-20261114/finish/content/cloud.json",
+        "delete-20261114/finish/content/reopen.json",
+        "delete-20261114/finish/final-task-state-preview.png"
+      ]
+    }
+  ]
+}

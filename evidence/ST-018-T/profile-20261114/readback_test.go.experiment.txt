@@ -1,0 +1,107 @@
+package recovery
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
+	"io"
+	"sync"
+	"sync/atomic"
+	"testing"
+)
+
+type closeReader struct {
+	io.Reader
+	closed func()
+	err    error
+}
+
+func (r closeReader) Close() error { r.closed(); return r.err }
+
+func TestParallelReadback(t *testing.T) {
+	data := make([]byte, readbackChunk*4+137)
+	for i := range data {
+		data[i] = byte(i / 7919)
+	}
+	digest := sha256.Sum256(data)
+	for _, mode := range []string{"valid", "corrupt", "short", "excess", "close-error", "etag-error"} {
+		t.Run(mode, func(t *testing.T) {
+			var active, peak, closed, opened atomic.Int32
+			var mu sync.Mutex
+			seen := map[int64]bool{}
+			gate := make(chan struct{})
+			var once sync.Once
+			err := verifyContent(context.Background(), int64(len(data)), hex.EncodeToString(digest[:]), func(ctx context.Context, off, length int64) (io.ReadCloser, error) {
+				if length <= 0 || length > readbackChunk || off < 0 || off+length > int64(len(data)) {
+					t.Errorf("invalid range %d,%d", off, length)
+					return nil, errors.New("invalid range")
+				}
+				mu.Lock()
+				if seen[off] {
+					t.Error("range repeated")
+				}
+				seen[off] = true
+				mu.Unlock()
+				n := active.Add(1)
+				for old := peak.Load(); n > old && !peak.CompareAndSwap(old, n); old = peak.Load() {
+				}
+				// Make later ranges start before the first can return.
+				if opened.Add(1) == 4 {
+					once.Do(func() { close(gate) })
+				}
+				if off == 0 {
+					select {
+					case <-gate:
+					case <-ctx.Done():
+						active.Add(-1)
+						return nil, ctx.Err()
+					}
+				}
+				if mode == "etag-error" && off == readbackChunk {
+					active.Add(-1)
+					return nil, errors.New("content validator changed")
+				}
+				buf := data[off : off+length]
+				if off == readbackChunk {
+					switch mode {
+					case "corrupt":
+						buf = bytes.Clone(buf)
+						buf[1] ^= 0xff
+					case "short":
+						buf = buf[:len(buf)-1]
+					case "excess":
+						buf = append(bytes.Clone(buf), 0)
+					}
+				}
+				var closeErr error
+				if mode == "close-error" && off == readbackChunk {
+					closeErr = errors.New("close failed")
+				}
+				return closeReader{Reader: bytes.NewReader(buf), closed: func() { active.Add(-1); closed.Add(1) }, err: closeErr}, nil
+			})
+			if (err == nil) != (mode == "valid") {
+				t.Fatalf("mode %s: %v", mode, err)
+			}
+			if active.Load() != 0 || peak.Load() > 4 {
+				t.Fatalf("leaked or excess readers: active=%d peak=%d", active.Load(), peak.Load())
+			}
+			if mode == "valid" && (len(seen) != 5 || closed.Load() != 5 || peak.Load() < 2) {
+				t.Fatalf("incomplete or serial read: ranges=%d closed=%d peak=%d", len(seen), closed.Load(), peak.Load())
+			}
+		})
+	}
+}
+
+func TestReadbackCanceled(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	err := verifyContent(ctx, readbackChunk*4, "", func(context.Context, int64, int64) (io.ReadCloser, error) {
+		t.Fatal("opened after cancellation")
+		return nil, nil
+	})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatal(err)
+	}
+}

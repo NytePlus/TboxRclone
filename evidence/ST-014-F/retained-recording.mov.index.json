@@ -1,0 +1,49 @@
+{
+  "duration_seconds" : 450.37,
+  "mode" : "passthrough concatenation; segments are separate historical runs, not continuous capture",
+  "segments" : [
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/retained-recording.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 90,
+      "source" : "evidence\/ST-014-F\/resource-control-20261113\/webdav-probe\/display-1.mov",
+      "start_seconds" : 0
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-extension-20261114\/finder-native\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 30.109999999999999,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-extension-20261114\/finder-native\/display-1.mov",
+      "start_seconds" : 90
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-extension-20261114\/followup.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 15.085000000000001,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-extension-20261114\/followup.mov",
+      "start_seconds" : 120.11
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-optimized-20261114\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 180.09166666666667,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-optimized-20261114\/finder\/display-1.mov",
+      "start_seconds" : 135.19499999999999
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-direct-20261114\/finder\/display-1.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 90.048333333333332,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-direct-20261114\/finder\/display-1.mov",
+      "start_seconds" : 315.28666666666669
+    },
+    {
+      "copied_from_file" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-direct-20261114\/continuation.mov",
+      "copied_from_start_seconds" : 0,
+      "duration_seconds" : 45.034999999999997,
+      "source" : "\/Users\/nyte\/Documents\/ChatGPT\/TboxRclone\/evidence\/ST-014-F\/fork-direct-20261114\/continuation.mov",
+      "start_seconds" : 405.33499999999998
+    }
+  ],
+  "validation" : "duration and first\/last frame decode of each segment"
+}

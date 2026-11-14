@@ -1,0 +1,87 @@
+{
+  "scope": "code-driven performance experiment; not Finder acceptance",
+  "source": "/private/tmp/tbox-perf-20261114/input/phased.bin",
+  "size": 268435456,
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "remote_root": "codex-api-lab/perf-code-repeated-20261114",
+  "cases": [
+    {
+      "mode": "length",
+      "repetition": 1,
+      "filename": "length-1.bin",
+      "status": 201,
+      "send_seconds": 1.9104708340018988,
+      "total_seconds": 23.60297791706398,
+      "bytes_per_second": 11372948.656869786,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "chunked",
+      "repetition": 1,
+      "filename": "chunked-1.bin",
+      "status": 201,
+      "send_seconds": 1.888934292132035,
+      "total_seconds": 26.324672834016383,
+      "bytes_per_second": 10197105.114754982,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "length",
+      "repetition": 2,
+      "filename": "length-2.bin",
+      "status": 201,
+      "send_seconds": 1.8870711668860167,
+      "total_seconds": 23.345228208927438,
+      "bytes_per_second": 11498514.968354335,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "chunked",
+      "repetition": 2,
+      "filename": "chunked-2.bin",
+      "status": 201,
+      "send_seconds": 1.8397511669900268,
+      "total_seconds": 26.104173624888062,
+      "bytes_per_second": 10283238.989188692,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "length",
+      "repetition": 3,
+      "filename": "length-3.bin",
+      "status": 201,
+      "send_seconds": 1.869580457918346,
+      "total_seconds": 23.853697374928743,
+      "bytes_per_second": 11253410.814297374,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "chunked",
+      "repetition": 3,
+      "filename": "chunked-3.bin",
+      "status": 201,
+      "send_seconds": 2.3624221661593765,
+      "total_seconds": 25.13363004103303,
+      "bytes_per_second": 10680329.724029267,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    }
+  ],
+  "passed": true,
+  "source_unchanged": true,
+  "median_seconds": {
+    "length": 23.60297791706398,
+    "chunked": 26.104173624888062
+  }
+}

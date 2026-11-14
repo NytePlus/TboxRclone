@@ -1,0 +1,28 @@
+ Container tboxrclone-lab-dns-1  Running
+?   	github.com/nyte/TboxRclone/backend/sjtu	[no test files]
+ok  	github.com/nyte/TboxRclone/backend/sjtu/test	15.055s
+?   	github.com/nyte/TboxRclone/cmd/davcheck	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/faultproxy	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-fixture	(cached)
+?   	github.com/nyte/TboxRclone/cmd/finder-inspect	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-list-fixture	(cached)
+?   	github.com/nyte/TboxRclone/cmd/finder-observe	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/finder-verify	(cached)
+?   	github.com/nyte/TboxRclone/cmd/multipart-replay-verify	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/read-change-verify	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/tbox-state	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/tboxrclone	[no test files]
+?   	github.com/nyte/TboxRclone/cmd/upload-benchmark	[no test files]
+ok  	github.com/nyte/TboxRclone/cmd/verify	1.008s
+ok  	github.com/nyte/TboxRclone/cmd/webdav-length-fault	(cached)
+ok  	github.com/nyte/TboxRclone/cmd/webdav-range-verify	(cached)
+ok  	github.com/nyte/TboxRclone/internal/durablefile	(cached)
+ok  	github.com/nyte/TboxRclone/internal/pathclaims	(cached)
+ok  	github.com/nyte/TboxRclone/internal/sjtu/journal	(cached)
+ok  	github.com/nyte/TboxRclone/internal/sjtu/ownership	(cached)
+?   	github.com/nyte/TboxRclone/internal/sjtu/recovery	[no test files]
+ok  	github.com/nyte/TboxRclone/internal/sjtu/smh	(cached)
+ok  	github.com/nyte/TboxRclone/internal/sjtu/transfer	(cached)
+ok  	github.com/nyte/TboxRclone/internal/sjtu/treebackup	(cached)
+ok  	github.com/nyte/TboxRclone/internal/testkit/faultproxy	(cached)
+ok  	github.com/nyte/TboxRclone/internal/verifyutil	(cached)

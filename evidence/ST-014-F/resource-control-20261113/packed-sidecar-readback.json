@@ -1,0 +1,6 @@
+{
+  "method": "explicit native-packed AppleDouble PUT, reopened mount read",
+  "expected_sha256": "6750af72846b7a4dd2f0342c0d5e72f8b60403c0a9da557be01e571b2002eaf4",
+  "actual_sha256": "6750af72846b7a4dd2f0342c0d5e72f8b60403c0a9da557be01e571b2002eaf4",
+  "matched": true
+}

@@ -1,0 +1,34 @@
+{
+  "run_id": "direct-20261113-2226",
+  "scenario_id": "ST-006-T",
+  "versions": {
+    "client": "Finder via finder-drag 2026-11-12.1 with single-selection and Option-copy guards",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e dirty worktree",
+    "server": "rclone v1.76.0-DEV; live SJTU version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "sequential_save_and_reopen",
+      "status": "FAIL",
+      "observation": "First Finder save: 608-byte version A matches mounted reopen and independent cloud SHA-256. Second Finder drag and exact-name Replace confirmation produced permission dialog: 无法完成此操作，因为你没有访问一些项目的许可。 Requested 1824-byte version B was not published; mount and cloud retain intact version A. Live overwrite enabled; delete and move disabled. Delete-policy dependency suspected, not proven without request trace. No deletion policy change or cleanup performed. Follow-up request trace confirms DELETE before new PUT, rejected by lab_delete=false.",
+      "artifacts": [
+        "direct-20261113-2226/fixtures.json",
+        "direct-20261113-2226/live-config.json",
+        "retained-recording.mov",
+        "direct-20261113-2226/first/drag.log",
+        "direct-20261113-2226/first-reopen.json",
+        "direct-20261113-2226/first-cloud.json",
+        "direct-20261113-2226/second/drag.log",
+        "direct-20261113-2226/second/error-detail.png",
+        "direct-20261113-2226/second-reopen.json",
+        "direct-20261113-2226/second-cloud.json",
+        "request-trace-20261113/requests.log",
+        "request-trace-20261113/diagnosis.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    }
+  ]
+}

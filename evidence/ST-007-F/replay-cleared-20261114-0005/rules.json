@@ -1,0 +1,52 @@
+[
+  {
+    "id": "cut-part-2-32066a8c34424ed7a165af3c80eac471-1",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "nth": 1,
+    "action": "replay_part",
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-2-32066a8c34424ed7a165af3c80eac471-2",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "nth": 1,
+    "action": "replay_part",
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-2-32066a8c34424ed7a165af3c80eac471-3",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "nth": 1,
+    "action": "replay_part",
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-2-32066a8c34424ed7a165af3c80eac471-4",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "nth": 1,
+    "action": "replay_part",
+    "min_content_length": 1048576
+  },
+  {
+    "id": "cut-part-2-32066a8c34424ed7a165af3c80eac471-5",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "nth": 1,
+    "action": "replay_part",
+    "min_content_length": 1048576
+  }
+]

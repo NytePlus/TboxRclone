@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-part-fault-replay-cleared-20261114-0005/cut-part-2-replay-cleared-20261114-0005.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/cut-part-2-replay-cleared-20261114-0005.bin",
+  "remote_path": "/cut-part-2-replay-cleared-20261114-0005.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

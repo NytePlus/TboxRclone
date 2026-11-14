@@ -1,0 +1,15 @@
+{
+  "dialogs" : [
+    {
+      "app" : "com.apple.finder",
+      "buttons" : [
+        "好"
+      ],
+      "texts" : [
+        "不能拷贝项目“resource-control.txt”，因为没有足够的可用空间。"
+      ]
+    }
+  ],
+  "marker" : "resource-control.txt",
+  "observed_at" : "2026-11-14T07:09:06Z"
+}

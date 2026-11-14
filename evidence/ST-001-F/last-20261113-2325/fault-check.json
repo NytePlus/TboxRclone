@@ -1,0 +1,14 @@
+{
+  "matching_transport_errors": [
+    {
+      "sequence": 836,
+      "request": 279,
+      "at": "2026-11-13T15:27:03.580553049Z",
+      "phase": "origin_transport_error",
+      "rule": "cut-part-3-3",
+      "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+      "method": "PUT"
+    }
+  ],
+  "fault_observed": true
+}

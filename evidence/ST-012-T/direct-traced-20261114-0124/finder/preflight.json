@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-lock-traced-20261114-0124/lock-traced-20261114-0124.txt",
+  "target": "/private/tmp/tboxrclone-webdav-501/lock-traced-20261114-0124.txt",
+  "remote_path": "/lock-traced-20261114-0124.txt",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

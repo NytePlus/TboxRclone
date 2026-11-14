@@ -1,0 +1,25 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "resource-control.txt",
+      "source": {
+        "size": 8832,
+        "sha256": "7de313cc477a573442c7f1cd907c3b8df0a292492d046ffd06cd2f05b006d235"
+      },
+      "mounted": {
+        "size": 8832,
+        "sha256": "7de313cc477a573442c7f1cd907c3b8df0a292492d046ffd06cd2f05b006d235"
+      },
+      "raw_cloud_name": "resource-control.txt",
+      "cloud": {
+        "sha256": "7de313cc477a573442c7f1cd907c3b8df0a292492d046ffd06cd2f05b006d235",
+        "size": 8832
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

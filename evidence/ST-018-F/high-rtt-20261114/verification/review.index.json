@@ -1,0 +1,54 @@
+{
+  "duration_seconds" : 89.778333333333336,
+  "frames" : 90,
+  "generation_seconds" : 1.4188499450683594,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "review.0.png",
+      "first_second" : 0,
+      "last_second" : 9
+    },
+    {
+      "file" : "review.10.png",
+      "first_second" : 10,
+      "last_second" : 19
+    },
+    {
+      "file" : "review.20.png",
+      "first_second" : 20,
+      "last_second" : 29
+    },
+    {
+      "file" : "review.30.png",
+      "first_second" : 30,
+      "last_second" : 39
+    },
+    {
+      "file" : "review.40.png",
+      "first_second" : 40,
+      "last_second" : 49
+    },
+    {
+      "file" : "review.50.png",
+      "first_second" : 50,
+      "last_second" : 59
+    },
+    {
+      "file" : "review.60.png",
+      "first_second" : 60,
+      "last_second" : 69
+    },
+    {
+      "file" : "review.70.png",
+      "first_second" : 70,
+      "last_second" : 79
+    },
+    {
+      "file" : "review.80.png",
+      "first_second" : 80,
+      "last_second" : 89
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

@@ -1,0 +1,6 @@
+{
+  "status": "INCOMPLETE",
+  "content_verified": true,
+  "final_task_state_reviewed": true,
+  "reason": "macOS stopped recording at17.63s before copy completion; final screenshot cannot fill the gap"
+}

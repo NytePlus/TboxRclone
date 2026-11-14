@@ -1,0 +1,15 @@
+unmounted: /private/tmp/tboxrclone-webdav-501; local directory retained
+ Container tboxrclone-webdav-1  Stopping
+ Container tboxrclone-webdav-1  Stopped
+ Container tboxrclone-lab-dns-1  Running
+ Container tboxrclone-webdav-1  Recreate
+ Container tboxrclone-webdav-1  Recreated
+ Container tboxrclone-webdav-1  Starting
+ Container tboxrclone-webdav-1  Started
+ Container tboxrclone-lab-dns-1  Waiting
+ Container tboxrclone-webdav-1  Waiting
+ Container tboxrclone-lab-dns-1  Healthy
+ Container tboxrclone-webdav-1  Healthy
+verified WebDAV mount: /private/tmp/tboxrclone-webdav-501
+verified WebDAV mount: /private/tmp/tboxrclone-webdav-501
+fault_session_start_complete

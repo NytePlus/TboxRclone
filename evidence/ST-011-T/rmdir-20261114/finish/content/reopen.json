@@ -1,0 +1,34 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "RmdirCases/populated/keep.txt",
+      "source": {
+        "size": 40,
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5"
+      },
+      "mounted": {
+        "size": 40,
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5"
+      },
+      "raw_cloud_name": "populated/keep.txt",
+      "cloud": {
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5",
+        "size": 40
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "RmdirCases",
+      "matched": true
+    },
+    {
+      "directory": "RmdirCases/populated",
+      "matched": true
+    }
+  ]
+}

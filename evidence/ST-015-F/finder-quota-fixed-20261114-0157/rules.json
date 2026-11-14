@@ -1,0 +1,134 @@
+[
+  {
+    "id": "finder-quota-fixed-20261114-0157-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-1",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-2",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-3",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-4",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-5",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-6",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-7",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-8",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-9",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-10",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  },
+  {
+    "id": "finder-quota-fixed-20261114-0157-11",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-quota-fixed-20261114-0157/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 403,
+    "code": "QuotaLimitReached"
+  }
+]

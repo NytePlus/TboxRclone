@@ -1,0 +1,64 @@
+{
+  "scope": "mount and independent cloud fact check; UI reviewed separately",
+  "mounted_listing": [
+    "._left",
+    "._right",
+    "left",
+    "right"
+  ],
+  "cloud_listing": [
+    "._left",
+    "._right",
+    "left",
+    "right",
+    "right/._file.txt",
+    "right/._tree",
+    "right/file.txt",
+    "right/tree",
+    "right/tree/._nested",
+    "right/tree/nested",
+    "right/tree/nested/._keep.txt",
+    "right/tree/nested/keep.txt"
+  ],
+  "absent": [
+    {
+      "name": "left/file.txt",
+      "mount_absent": true,
+      "cloud_absent": true,
+      "pass": true
+    },
+    {
+      "name": "left/tree",
+      "mount_absent": true,
+      "cloud_absent": true,
+      "pass": true
+    }
+  ],
+  "present": [
+    {
+      "name": "right/file.txt",
+      "mounted": {
+        "size": 30,
+        "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673"
+      },
+      "cloud": {
+        "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673",
+        "size": 30
+      },
+      "pass": true
+    },
+    {
+      "name": "right/tree/nested/keep.txt",
+      "mounted": {
+        "size": 40,
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5"
+      },
+      "cloud": {
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5",
+        "size": 40
+      },
+      "pass": true
+    }
+  ],
+  "pass": true
+}

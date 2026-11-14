@@ -1,0 +1,12 @@
+{
+  "transport_complete": false,
+  "status": 206,
+  "declared_bytes": "3968",
+  "requested_range": "bytes=128-4095",
+  "content_range": "bytes 128-4095/9728",
+  "error": "truncated body: 0 of 3968 bytes",
+  "bytes": 0,
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elapsed_seconds": 1.2995317089371383,
+  "matches_expected": false
+}

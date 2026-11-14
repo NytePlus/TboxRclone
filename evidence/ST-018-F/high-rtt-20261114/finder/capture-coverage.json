@@ -1,0 +1,8 @@
+{
+  "requested_seconds": 120,
+  "elapsed_seconds": 91.36041283607483,
+  "ended_early": true,
+  "stop_reason": "duration_or_interruption",
+  "saved_wait_seconds": 0,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

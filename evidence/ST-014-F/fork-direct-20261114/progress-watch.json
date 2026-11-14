@@ -1,0 +1,360 @@
+{
+  "acceptance" : "REQUIRES_CONTENT_AND_ERROR_CHECKS",
+  "elapsed_seconds" : 81.367196917533875,
+  "observations" : [
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:57:55Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:57:59Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:03Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将7个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "834 字节\/2 KB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:06Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将6个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "835 字节\/2 KB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:10Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将6个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "835 字节\/2 KB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:14Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将5个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "861 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:17Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将5个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "861 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:21Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将5个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "886 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:24Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将4个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "887 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:28Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将4个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "887 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:32Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将4个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "887 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:35Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将4个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "912 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:39Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将4个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "912 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:42Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将3个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "913 字节\/2 KB - 不到1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:46Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将3个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "938 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:50Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将2个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "939 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:53Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将2个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "939 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:58:57Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将2个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "964 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:59:01Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将2个项目拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "964 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:59:04Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“opaque.txt”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "965 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:59:08Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“opaque.txt”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "965 字节\/2 KB - 大约1分钟"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:59:11Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T08:59:14Z",
+      "transfer_windows" : [
+
+      ]
+    }
+  ],
+  "progress_disappeared" : true,
+  "saw_progress" : true,
+  "started_at" : "2026-11-14T08:57:55Z"
+}

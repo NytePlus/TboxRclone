@@ -1,0 +1,27 @@
+[
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/retained-recording.mov",
+    "source": "evidence/ST-014-F/resource-control-20261113/webdav-probe/display-1.mov",
+    "offset": 0
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-extension-20261114/finder-native/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-extension-20261114/finder-native/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-extension-20261114/followup.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-extension-20261114/followup.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-optimized-20261114/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-optimized-20261114/finder/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-direct-20261114/finder/display-1.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-direct-20261114/finder/display-1.mov"
+  },
+  {
+    "file": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-direct-20261114/continuation.mov",
+    "source": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/fork-direct-20261114/continuation.mov"
+  }
+]

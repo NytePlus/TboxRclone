@@ -1,0 +1,15 @@
+{
+  "scope": "code-driven performance experiment only",
+  "all_content_checks_passed": true,
+  "source_sha256_equal": true,
+  "baseline_seconds": {
+    "length": 22.607002540957183,
+    "chunked": 24.058202584041283
+  },
+  "candidate_seconds": {
+    "length": 25.67514641699381,
+    "chunked": 24.982201332924888
+  },
+  "decision": "Revert larger copy buffer: staging unchanged near1.8seconds; reduced read calls do not establish useful end-to-end gain. Network variability prevents attributing total-time difference to the buffer.",
+  "spool_restored_to_baseline_sha256": "74b17111033900a93cb43da402b82b07b81300c8eba567c89720e3b48b81c732"
+}

@@ -1,0 +1,9 @@
+{
+  "git_head": "a46b838a33c38a81f37bc547222d717f53570b6e",
+  "files": {
+    "internal/sjtu/journal/spool.go": "74b17111033900a93cb43da402b82b07b81300c8eba567c89720e3b48b81c732",
+    "internal/sjtu/transfer/multipart.go": "a96dd9837caa3342aceddf25eca1f1fedb81b9242b631115256e9132ab2a65aa",
+    "internal/sjtu/recovery/recovery.go": "29e83d9f407d38b4ba86fcbd91016c1e789acd1782b5bb03b825560422590457",
+    "cmd/upload-benchmark/main.go": "ea365547a1532d1dc6df39e9575780c4c45506169e9982ef8a45f8b60b091478"
+  }
+}

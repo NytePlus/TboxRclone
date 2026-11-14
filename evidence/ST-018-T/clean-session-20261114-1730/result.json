@@ -1,0 +1,40 @@
+{
+  "status": "FAIL_PERFORMANCE_TARGET_NOT_MET",
+  "bytes": 268435456,
+  "drag_to_committed_observation_seconds": 30.90899395942688,
+  "progress_first_absence_observed_at": "2026-11-14T09:26:32Z",
+  "browse": {
+    "cases": [
+      {
+        "busyAtEnd": false,
+        "elapsedSeconds": 1.0354269742965698,
+        "expectedCount": 6,
+        "expectedLast": "item-05.txt",
+        "lastVisible": true,
+        "observedCount": 6,
+        "path": "/private/tmp/tboxrclone-webdav-501/browse",
+        "status": "PASS",
+        "statusTextAtEnd": "6个项目，--可用"
+      }
+    ],
+    "elapsedSeconds": 1.4446790218353271,
+    "kind": "real-finder-accessibility-browse",
+    "pass": true,
+    "startedAt": "2026-11-14T09:26:02Z",
+    "windowID": 143316
+  },
+  "performance": {
+    "blocking_dialog_detected": false,
+    "committed": true,
+    "browse_started_while_uploading": true,
+    "browse_exit_code": 0,
+    "samples": 27,
+    "metadata_p95_seconds": 0.3592235839460045,
+    "metadata_all_200": true,
+    "elapsed_seconds": 55.37538979202509,
+    "acceptance": "REQUIRES_NATIVE_REVIEW_AND_INDEPENDENT_CONTENT_CHECK"
+  },
+  "content_verified": true,
+  "api_baseline_total_seconds": 20.612327093,
+  "ui_review": "Sampled recording seconds50..59; target visible, no error dialog. Full acceptance review still required."
+}

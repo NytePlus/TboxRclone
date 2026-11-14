@@ -1,0 +1,36 @@
+[
+  {
+    "source": "valid.bin",
+    "entries": [
+      [
+        9,
+        50,
+        163
+      ],
+      [
+        2,
+        213,
+        338
+      ]
+    ],
+    "valid_marker": true,
+    "opaque_marker": false
+  },
+  {
+    "source": "opaque.dat",
+    "entries": [
+      [
+        9,
+        50,
+        163
+      ],
+      [
+        2,
+        213,
+        27
+      ]
+    ],
+    "valid_marker": false,
+    "opaque_marker": true
+  }
+]

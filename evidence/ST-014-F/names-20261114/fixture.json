@@ -1,0 +1,22 @@
+[
+  {
+    "name": "中文文件.bin",
+    "bytes": 101,
+    "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33"
+  },
+  {
+    "name": "emoji-😀.bin",
+    "bytes": 102,
+    "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13"
+  },
+  {
+    "name": "quotes-'\".bin",
+    "bytes": 103,
+    "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba"
+  },
+  {
+    "name": "percent%hash#question?plus+.bin",
+    "bytes": 104,
+    "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f"
+  }
+]

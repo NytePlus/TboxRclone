@@ -1,0 +1,40 @@
+RECORDING_STARTED
+STREAM_STOPPED domain=com.apple.ScreenCaptureKit.SCStreamErrorDomain code=-3821 description=系统已停止流播放
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: Error Domain=com.apple.ScreenCaptureKit.SCStreamErrorDomain Code=-3821 "系统已停止流播放" UserInfo={NSLocalizedDescription=系统已停止流播放}
+Stack dump:
+0.	Program arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /Users/nyte/Documents/ChatGPT/TboxRclone/scripts/finder/record-display.swift -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -no-color-diagnostics -Xcc -fno-color-diagnostics -module-cache-path /private/tmp/tboxrclone-swift-module-cache -new-driver-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-driver -empty-abi-descriptor -no-auto-bridging-header-chaining -module-name main -disable-clang-spi -target-sdk-version 26.5 -target-sdk-name macosx26.5 -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/swift/host/plugins#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/local/lib/swift/host/plugins#/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -- 1 /Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/names-20261114/finder/display-1.mov 90 /Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-014-F/names-20261114/finder/expected-error.stop
+1.	Apple Swift version 6.3.2 (swiftlang-6.3.2.1.108 clang-2100.1.1.101)
+2.	Compiling with effective version 5.10
+3.	While running user code "/Users/nyte/Documents/ChatGPT/TboxRclone/scripts/finder/record-display.swift"
+Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+0  swift-frontend             0x000000010b550a30 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) + 56
+1  swift-frontend             0x000000010b54ded0 llvm::sys::RunSignalHandlers() + 172
+2  swift-frontend             0x000000010b551020 SignalHandler(int, __siginfo*, void*) + 356
+3  libsystem_platform.dylib   0x0000000185cb7744 _sigtramp + 56
+4  libswiftCore.dylib         0x00000001994cccc8 $ss17_assertionFailure__4file4line5flagss5NeverOs12StaticStringV_SSAHSus6UInt32VtF + 172
+5  libswiftCore.dylib         0x00000001993ad258 swift_errorInMain + 632
+6  (error)                    0x000000011cad5c8c
+7  libswift_Concurrency.dylib 0x000000028a6b6e18 swift::runJobInEstablishedExecutorContext(swift::Job*) + 472
+8  libswift_Concurrency.dylib 0x000000028a6b86ec swift_job_runImpl(swift::Job*, swift::SerialExecutorRef) + 156
+9  libdispatch.dylib          0x0000000185b2a314 _dispatch_main_queue_drain.cold.6 + 612
+10 libdispatch.dylib          0x0000000185b019e4 _dispatch_main_queue_drain + 176
+11 libdispatch.dylib          0x0000000185b01924 _dispatch_main_queue_callback_4CF + 44
+12 CoreFoundation             0x0000000185da7724 __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__ + 16
+13 CoreFoundation             0x0000000185d69cb8 __CFRunLoopRun + 1944
+14 CoreFoundation             0x0000000185e3c1c4 _CFRunLoopRunSpecificWithOptions + 532
+15 CoreFoundation             0x0000000185ddfaf4 CFRunLoopRun + 64
+16 libswift_Concurrency.dylib 0x000000028a714b04 $ss14CFMainExecutorC3runyyKF + 48
+17 libswift_Concurrency.dylib 0x000000028a714d08 $ss20DispatchMainExecutorCs07RunLoopC0ssACP3runyyKFTW + 40
+18 libswift_Concurrency.dylib 0x000000028a715334 swift_task_asyncMainDrainQueueImpl + 140
+19 libswift_Concurrency.dylib 0x000000028a6c02d8 swift_task_asyncMainDrainQueue + 92
+20 (error)                    0x000000011cad4078
+21 swift-frontend             0x0000000105244c48 llvm::orc::runAsMain(int (*)(int, char**), llvm::ArrayRef<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>, std::__1::optional<llvm::StringRef>) + 908
+22 swift-frontend             0x0000000105141f94 swift::SwiftJIT::runMain(llvm::ArrayRef<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>) + 636
+23 swift-frontend             0x000000010514e23c swift::RunImmediately(swift::CompilerInstance&, std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>> const&, swift::IRGenOptions const&, swift::SILOptions const&, std::__1::unique_ptr<swift::SILModule, std::__1::default_delete<swift::SILModule>>&&) + 964
+24 swift-frontend             0x00000001050c20d0 processCommandLineAndRunImmediately(swift::CompilerInstance&, std::__1::unique_ptr<swift::SILModule, std::__1::default_delete<swift::SILModule>>&&, llvm::PointerUnion<swift::ModuleDecl*, swift::SourceFile*>, swift::FrontendObserver*, int&) + 484
+25 swift-frontend             0x00000001050bb89c performCompileStepsPostSILGen(swift::CompilerInstance&, std::__1::unique_ptr<swift::SILModule, std::__1::default_delete<swift::SILModule>>, llvm::PointerUnion<swift::ModuleDecl*, swift::SourceFile*>, swift::PrimarySpecificPaths const&, int&, swift::FrontendObserver*, llvm::ArrayRef<char const*>) + 2068
+26 swift-frontend             0x00000001050baecc swift::performCompileStepsPostSema(swift::CompilerInstance&, int&, swift::FrontendObserver*, llvm::ArrayRef<char const*>) + 4560
+27 swift-frontend             0x00000001050c03a0 performCompile(swift::CompilerInstance&, int&, swift::FrontendObserver*, llvm::ArrayRef<char const*>) + 4028
+28 swift-frontend             0x00000001050bc818 swift::performFrontend(llvm::ArrayRef<char const*>, char const*, void*, swift::FrontendObserver*) + 3308
+29 swift-frontend             0x000000010503c424 swift::mainEntry(int, char const**) + 5224
+30 dyld                       0x00000001858efe00 start + 6992

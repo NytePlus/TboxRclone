@@ -1,0 +1,83 @@
+{
+  "run_id": "finder-list-direct-20261113-2133",
+  "scenario_id": "ST-010-T",
+  "versions": {
+    "client": "finder-browse.sh with Go-to-Folder sheet discovery fix; native macOS Finder/webdavfs",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree spool interface changes; direct rclone serve webdav, no adapter",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "list_0",
+      "status": "PASS",
+      "observation": "Real Finder browsing observed 0 items; last entry check=not applicable for empty directory. Independent cloud and mounted exact name sets match with no missing or duplicated entries. Elapsed 0.154s including navigation and AX inspection; this is not a standalone network latency measurement.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-20261113-2133/browse-sheet-fix/result.json",
+        "direct-20261113-2133/exact-sets.json",
+        "direct-20261113-2133/cloud-list.json",
+        "direct-20261113-2133/setup.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "list_1",
+      "status": "PASS",
+      "observation": "Real Finder browsing observed 1 items; last entry check=True. Independent cloud and mounted exact name sets match with no missing or duplicated entries. Elapsed 3.826s including navigation and AX inspection; this is not a standalone network latency measurement.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-20261113-2133/browse-sheet-fix/result.json",
+        "direct-20261113-2133/exact-sets.json",
+        "direct-20261113-2133/cloud-list.json",
+        "direct-20261113-2133/setup.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "list_50",
+      "status": "PASS",
+      "observation": "Real Finder browsing observed 50 items; last entry check=True. Independent cloud and mounted exact name sets match with no missing or duplicated entries. Elapsed 6.484s including navigation and AX inspection; this is not a standalone network latency measurement.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-20261113-2133/browse-sheet-fix/result.json",
+        "direct-20261113-2133/exact-sets.json",
+        "direct-20261113-2133/cloud-list.json",
+        "direct-20261113-2133/setup.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "list_51",
+      "status": "PASS",
+      "observation": "Real Finder browsing observed 51 items; last entry check=True. Independent cloud and mounted exact name sets match with no missing or duplicated entries. Elapsed 4.190s including navigation and AX inspection; this is not a standalone network latency measurement.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-20261113-2133/browse-sheet-fix/result.json",
+        "direct-20261113-2133/exact-sets.json",
+        "direct-20261113-2133/cloud-list.json",
+        "direct-20261113-2133/setup.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "list_1000",
+      "status": "PASS",
+      "observation": "Real Finder browsing observed 1000 items; last entry check=True. Independent cloud and mounted exact name sets match with no missing or duplicated entries. Elapsed 32.555s including navigation and AX inspection; this is not a standalone network latency measurement.",
+      "artifacts": [
+        "retained-recording.mov",
+        "direct-20261113-2133/browse-sheet-fix/result.json",
+        "direct-20261113-2133/exact-sets.json",
+        "direct-20261113-2133/cloud-list.json",
+        "direct-20261113-2133/setup.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    }
+  ]
+}

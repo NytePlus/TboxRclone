@@ -1,0 +1,11 @@
+{
+  "git_head": "a46b838a33c38a81f37bc547222d717f53570b6e",
+  "files": {
+    "internal/sjtu/journal/spool.go": "74b17111033900a93cb43da402b82b07b81300c8eba567c89720e3b48b81c732",
+    "backend/sjtu/object.go": "c21fe0db3f31de6baa9ec251903656c7fe6173e16d1f795e041ee913cb166241",
+    "internal/sjtu/transfer/multipart.go": "a96dd9837caa3342aceddf25eca1f1fedb81b9242b631115256e9132ab2a65aa",
+    "internal/sjtu/recovery/recovery.go": "29e83d9f407d38b4ba86fcbd91016c1e789acd1782b5bb03b825560422590457",
+    "scripts/benchmark-webdav.py": "0256919b90ae78d64cbc31c4c22da508a383095f3f9fd9d8de02d61276a9dee9",
+    "docker-compose.performance.yml": "4f84e956de5f4850ac387aa4949db6cb6cdbd315a90b5e0db668cf45c3eb08ce"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "id": "32318f7cadd062bae8ed63e57a83319d",
+      "state": "Rejected",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-20261114-0242/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "upload_id_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    }
+  ]
+}

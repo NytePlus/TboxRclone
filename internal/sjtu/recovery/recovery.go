@@ -75,6 +75,16 @@ func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.
 	if n != r.Size || hex.EncodeToString(h.Sum(nil)) != r.SHA256 {
 		return errors.New("remote content differs; local copy preserved")
 	}
+	// Remote verification can take arbitrarily long. The local source may have
+	// changed since the initial check, even with its size and mtime preserved.
+	// Revalidate through the spool contract before permitting committed cleanup.
+	verified, e := s.Data(r)
+	if e != nil {
+		return e
+	}
+	if e = verified.Close(); e != nil {
+		return e
+	}
 	old := r.State
 	r.State = "Committed"
 	if e = s.Save(r); e != nil {

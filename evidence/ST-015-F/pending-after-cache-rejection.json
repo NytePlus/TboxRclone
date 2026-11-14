@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "file": "28cc1a3fd4b055df3a770042ce8aeb97.json",
+      "matched": true
+    },
+    {
+      "file": "28cc1a3fd4b055df3a770042ce8aeb97.data",
+      "matched": true
+    },
+    {
+      "file": "390322f09ae8e6cba5b8325f697d22f0.json",
+      "matched": true
+    },
+    {
+      "file": "390322f09ae8e6cba5b8325f697d22f0.data",
+      "matched": true
+    },
+    {
+      "file": "5ec828fb4136b25c9e89c3c6f485bf5b.json",
+      "matched": true
+    },
+    {
+      "file": "5ec828fb4136b25c9e89c3c6f485bf5b.data",
+      "matched": true
+    },
+    {
+      "file": "bc3e9fadee6ae1c1cd97803f357df8a2.json",
+      "matched": true
+    },
+    {
+      "file": "bc3e9fadee6ae1c1cd97803f357df8a2.data",
+      "matched": true
+    },
+    {
+      "file": "f77c392017b1a6705ae411bb206f15ed.data",
+      "matched": true
+    },
+    {
+      "file": "f77c392017b1a6705ae411bb206f15ed.json",
+      "matched": true
+    }
+  ],
+  "pass": true
+}

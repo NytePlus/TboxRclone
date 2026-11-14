@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-length-finder-20261114-0142/length-finder-20261114-0142/finder-control.txt",
+  "target": "/private/tmp/tboxrclone-webdav-501/length-finder-20261114-0142/finder-control.txt",
+  "remote_path": "/length-finder-20261114-0142/finder-control.txt",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

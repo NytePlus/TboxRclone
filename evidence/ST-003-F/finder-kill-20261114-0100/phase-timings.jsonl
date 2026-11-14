@@ -1,0 +1,9 @@
+{"phase": "setup", "started_unix_seconds": 1794589241.546408, "elapsed_seconds": 0.029781457968056202, "exit_code": 0}
+{"phase": "fault-control.py", "started_unix_seconds": 1794589241.576221, "elapsed_seconds": 0.3019376250449568, "exit_code": 0}
+{"phase": "finder-recording", "started_unix_seconds": 1794589241.879464, "elapsed_seconds": 182.88215745799243, "exit_code": 3}
+{"phase": "fault-control.py", "started_unix_seconds": 1794589424.761735, "elapsed_seconds": 0.26320287492126226, "exit_code": 0}
+{"phase": "snapshot-journal.py", "started_unix_seconds": 1794589425.025013, "elapsed_seconds": 0.033505208091810346, "exit_code": 0}
+{"phase": "mount-webdav-macos.py", "started_unix_seconds": 1794589425.0607092, "elapsed_seconds": 0.02572879195213318, "exit_code": 0}
+{"phase": "mount-webdav-macos.py", "started_unix_seconds": 1794589425.086606, "elapsed_seconds": 0.1279536250513047, "exit_code": 0}
+{"phase": "mount-webdav-macos.py", "started_unix_seconds": 1794589425.214838, "elapsed_seconds": 2.26533120800741, "exit_code": 0}
+{"phase": "finish-part-evidence.py", "started_unix_seconds": 1794589427.480394, "elapsed_seconds": 17.021819666959345, "exit_code": 0}

@@ -1,0 +1,114 @@
+{
+  "run_id": "finder-quota-fixed-20261114-0157",
+  "scenario_id": "ST-015-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "cloud_quota",
+      "status": "PASS",
+      "observation": "Synthetic QuotaLimitReached produces visible Finder no-space error, preserves original source and leaves independent cloud directory empty. Same-path Finder retry after clearing fault succeeds without journal edits; source/mount/cloud full hashes match. Rejected placeholder retained; new full upload Committed.",
+      "artifacts": [
+        "finder-quota-fixed-20261114-0157/ui-review.md",
+        "finder-quota-fixed-20261114-0157/facts.json",
+        "finder-quota-fixed-20261114-0157/cloud-before-retry.json",
+        "finder-quota-fixed-20261114-0157/journal.json",
+        "finder-quota-fixed-20261114-0157/journal-after-retry.json",
+        "retained-recording.mov",
+        "finder-quota-fixed-20261114-0157/recovery/verification/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "http_401",
+      "status": "PASS",
+      "observation": "Injected 401 triggers native password authorization prompt; cancelled without entering credentials. Source retained, cloud directory empty, placeholder Rejected. Same-path retry commits matching full source/mount/cloud bytes; follow-up recording confirms no progress/error. Recording gap and lack of exact completion timestamp documented.",
+      "artifacts": [
+        "finder-auth-20261114-0204/ui-review.md",
+        "finder-auth-20261114-0204/facts.json",
+        "finder-auth-20261114-0204/cloud-before-retry.json",
+        "finder-auth-20261114-0204/journal-after-retry.json",
+        "retained-recording.mov",
+        "finder-auth-20261114-0204/recovery/verification/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "http_403",
+      "status": "PASS",
+      "observation": "Injected403 produced visible local authorization prompt with source retained and empty independent cloud inventory. Same-path Finder retry eventually completed visibly in a separate follow-up recording; all9600 bytes match source/mount/cloud. Recording gap and interim placeholder mismatch explicitly documented.",
+      "artifacts": [
+        "finder-forbidden-clean-20261114/ui-review.md",
+        "finder-forbidden-clean-20261114/facts.json",
+        "finder-forbidden-clean-20261114/cloud-before-retry.json",
+        "finder-forbidden-clean-20261114/journal.json",
+        "finder-forbidden-clean-20261114/journal-final.json",
+        "finder-forbidden-clean-20261114/recovery/verification/reopen.json",
+        "finder-forbidden-clean-20261114/recovery/verification-final/reopen.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    },
+    {
+      "id": "http_429",
+      "status": "PASS",
+      "observation": "Post-fix rerun: injected429 shows Finder error -50, source retained, independent cloud directory empty, placeholder Rejected. Same-path Finder retry completes; follow-up recording shows target file with no progress/error throughout 0..60s. Source/mount/independent cloud all8960 bytes and SHA-256 match. Recording gaps prevent an exact completion timestamp; interim zero-byte cloud placeholder preserved as in-progress evidence.",
+      "artifacts": [
+        "finder-rate-fixed-20261114/ui-review.md",
+        "finder-rate-fixed-20261114/facts.json",
+        "finder-rate-fixed-20261114/cloud-before-retry.json",
+        "finder-rate-fixed-20261114/user-provided-error.png",
+        "finder-rate-fixed-20261114/journal.json",
+        "finder-rate-fixed-20261114/journal-followup.json",
+        "finder-rate-fixed-20261114/recovery/verification-final/reopen.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json",
+        "http429-before-fixed-rerun.json"
+      ]
+    },
+    {
+      "id": "http_5xx",
+      "status": "PASS",
+      "observation": "Injected503 yields native -36 and retains full local source. Ambiguous init remains InitSent. After423 mapping fix, same-path Finder retry reports item in use (native text and separate visible follow-up recording); no password prompt. Source8064 bytes/hash preserved, independent cloud inventory empty, journal unchanged, no outbound writes during retry. Meets explicit-failure/source-retention/bounded-retry contract; does NOT claim successful same-path automatic recovery. Recording foreground gap documented.",
+      "artifacts": [
+        "finder-503-20261114/ui-review.md",
+        "finder-503-20261114/facts.json",
+        "finder-503-20261114/journal.json",
+        "finder-503-20261114/journal-423-visible.json",
+        "finder-503-20261114/cloud-423-visible.json",
+        "finder-503-20261114/recovery-423-visible/dialog-after.json",
+        "finder-503-20261114/recovery-423-visible/facts.json",
+        "finder-503-20261114/recovery-423-visible/events.json",
+        "finder-503-20261114/recovery-423-visible/dialog-review.index.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    },
+    {
+      "id": "cache_full",
+      "status": "PASS",
+      "observation": "Native no-space error captured with early-stop watcher; source retained, independent cloud inventory and journal empty. After restoring 4G budget, one same-path Finder retry completed. Source/mounted/independent cloud full reads match all 9728 bytes and SHA-256; full payload Committed. Follow-up video shows source and target without progress/error. Initial in-progress zero-byte observation and recording gap retained explicitly.",
+      "artifacts": [
+        "finder-cache-fast-clean-20261114/ui-review.md",
+        "finder-cache-fast-clean-20261114/facts.json",
+        "finder-cache-fast-clean-20261114/cloud-before-retry.json",
+        "finder-cache-fast-clean-20261114/journal.json",
+        "finder-cache-fast-clean-20261114/journal-final.json",
+        "finder-cache-fast-clean-20261114/finder/expected-error.json",
+        "finder-cache-fast-clean-20261114/finder/capture-coverage.json",
+        "finder-cache-fast-clean-20261114/recovery/verification/reopen.json",
+        "finder-cache-fast-clean-20261114/recovery/final-content/reopen.json",
+        "finder-cache-fast-clean-20261114/recovery/final-content/review.index.json",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
+      ]
+    }
+  ]
+}

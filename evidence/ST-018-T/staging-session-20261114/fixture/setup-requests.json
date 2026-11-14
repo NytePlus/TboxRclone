@@ -1,0 +1,50 @@
+[
+  {
+    "method": "PROPFIND",
+    "path": "/browse/",
+    "status": 404,
+    "seconds": 0.08709204196929932
+  },
+  {
+    "method": "MKCOL",
+    "path": "/browse/",
+    "status": 201,
+    "seconds": 0.26832250016741455
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-00.txt",
+    "status": 201,
+    "seconds": 2.1418368748854846
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-01.txt",
+    "status": 201,
+    "seconds": 2.0126577499322593
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-02.txt",
+    "status": 201,
+    "seconds": 1.0889400839805603
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-03.txt",
+    "status": 201,
+    "seconds": 1.2196242918726057
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-04.txt",
+    "status": 201,
+    "seconds": 1.058654042193666
+  },
+  {
+    "method": "PUT",
+    "path": "/browse/item-05.txt",
+    "status": 201,
+    "seconds": 1.3862646669149399
+  }
+]

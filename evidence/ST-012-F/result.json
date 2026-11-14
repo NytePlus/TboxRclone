@@ -1,0 +1,60 @@
+{
+  "run_id": "direct-locks-20261114-0115",
+  "scenario_id": "ST-012-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "missing_token",
+      "status": "PASS",
+      "observation": "{\"id\": \"missing_token\", \"pass\": true, \"http_status\": 423, \"original_preserved\": true}",
+      "artifacts": [
+        "direct-locks-20261114-0115/protocol.json"
+      ]
+    },
+    {
+      "id": "wrong_token",
+      "status": "PASS",
+      "observation": "{\"id\": \"wrong_token\", \"pass\": true, \"http_status\": 412, \"original_preserved\": true}",
+      "artifacts": [
+        "direct-locks-20261114-0115/protocol.json"
+      ]
+    },
+    {
+      "id": "expired_token",
+      "status": "FAIL",
+      "observation": "Initial and diagnostic runs passed, but restart-locks run returned mismatched GET content after 30.034s with HTTP 200 despite rejecting stale token with 412. Response bytes were not retained in that run. Later reads were correct. Cause unresolved; do not erase failure with a passing retry.",
+      "artifacts": [
+        "direct-locks-20261114-0115/protocol.json",
+        "restart-locks-20261114-0121/protocol.json",
+        "read-diagnostic-20261114-0127/protocol.json",
+        "read-fault-20261114-0131/diagnosis.md",
+        "read-fault-20261114-0131/fault.json",
+        "read-hold-20261114-0136/result.json",
+        "read-cut-20261114-0139/result.json"
+      ]
+    },
+    {
+      "id": "parent_lock",
+      "status": "PASS",
+      "observation": "{\"id\": \"parent_lock\", \"pass\": true, \"rejected_http\": 423, \"absent_after_rejection\": true, \"valid_token_http\": 201}",
+      "artifacts": [
+        "direct-locks-20261114-0115/protocol.json"
+      ]
+    },
+    {
+      "id": "service_restart",
+      "status": "PASS",
+      "observation": "Service restarted and mount revalidated within 9.04 seconds; one-hour old token rejected with 412, content preserved, new token accepted. Subsequent real Finder save completed with full source/mount/cloud hash agreement.",
+      "artifacts": [
+        "restart-locks-20261114-0121/protocol.json",
+        "restart-locks-20261114-0121/restart.log"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "headers": {
+    "Accept-Ranges": "bytes",
+    "Content-Length": "43",
+    "Content-Type": "text/plain; charset=utf-8",
+    "Etag": "\"18e7aac8d09468002b\"",
+    "Last-Modified": "Fri, 13 Nov 2026 17:25:56 GMT",
+    "Server": "rclone/v1.76.0-DEV",
+    "Date": "Fri, 13 Nov 2026 17:30:23 GMT"
+  },
+  "bytes": 43,
+  "sha256": "8bb69efe92d4d11c7f868479963f61f3d1760cb7f912dcd15a7eda5c66571900",
+  "elapsed_seconds": 2.3587997499853373
+}

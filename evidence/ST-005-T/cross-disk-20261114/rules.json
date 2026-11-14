@@ -1,0 +1,68 @@
+[
+  {
+    "id": "part-observe-1",
+    "host": "s3pan.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "min_content_length": 1048576,
+    "nth": 1,
+    "action": "observe"
+  },
+  {
+    "id": "part-observe-2",
+    "host": "s3pan1.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "min_content_length": 1048576,
+    "nth": 1,
+    "action": "observe"
+  },
+  {
+    "id": "part-observe-3",
+    "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "min_content_length": 1048576,
+    "nth": 1,
+    "action": "observe"
+  },
+  {
+    "id": "part-observe-4",
+    "host": "s3pan3.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "min_content_length": 1048576,
+    "nth": 1,
+    "action": "observe"
+  },
+  {
+    "id": "part-observe-5",
+    "host": "s3pan4.jcloud.sjtu.edu.cn:443",
+    "method": "PUT",
+    "path_prefix": "/",
+    "part_number": 2,
+    "min_content_length": 1048576,
+    "nth": 1,
+    "action": "observe"
+  },
+  {
+    "id": "hold-cross-confirm",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/",
+    "action_key": "confirm",
+    "nth": 1,
+    "action": "hold_response",
+    "after_any": [
+      "part-observe-1",
+      "part-observe-2",
+      "part-observe-3",
+      "part-observe-4",
+      "part-observe-5"
+    ]
+  }
+]

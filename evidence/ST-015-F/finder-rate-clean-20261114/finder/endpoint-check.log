@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tbox-source-finder-rate-clean-20261114 target=finder-rate-clean-20261114 item=resource-control.txt
+finder_windows_found
+source_window=141651 target_window=141653
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(226.0, 184.0) end=(613.75, 619.5)
+visibility_check source_expected=141651 source_top=141651 source_hit=true target_expected=141653 target_top=141651 target_hit=true
+drag endpoints are obscured or not on the active desktop; no mouse events sent

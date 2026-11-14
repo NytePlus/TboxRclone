@@ -1,0 +1,3 @@
+exact mounted fixture not uniquely selected; no deletion sent
+diagnostic role=Optional(AXTextField) url=Optional(file:///.file/id=50254851.37)
+diagnostic role=Optional(AXStaticText) url=Optional(file:///.file/id=50254851.37)

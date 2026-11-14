@@ -19,19 +19,21 @@ import (
 )
 
 type caseResult struct {
-	ID           string `json:"id"`
-	Path         string `json:"path"`
-	ResponseLine string `json:"response_line,omitempty"`
-	HeadStatus   int    `json:"head_status"`
-	Published    bool   `json:"published"`
-	Pass         bool   `json:"pass"`
+	ID             string  `json:"id"`
+	Path           string  `json:"path"`
+	ResponseLine   string  `json:"response_line,omitempty"`
+	HeadStatus     int     `json:"head_status"`
+	Published      bool    `json:"published"`
+	Pass           bool    `json:"pass"`
+	ElapsedSeconds float64 `json:"elapsed_seconds"`
 }
 
 type report struct {
-	At    string       `json:"at"`
-	Base  string       `json:"base"`
-	Cases []caseResult `json:"cases"`
-	Pass  bool         `json:"pass"`
+	At              string       `json:"at"`
+	Base            string       `json:"base"`
+	ControlVerified bool         `json:"control_verified"`
+	Cases           []caseResult `json:"cases"`
+	Pass            bool         `json:"pass"`
 }
 
 func main() {
@@ -54,6 +56,9 @@ func run() error {
 	if err = verifyutil.FreshCollection(client, u, *base); err != nil {
 		return err
 	}
+	if err = verifyControl(client, u, *base); err != nil {
+		return fmt.Errorf("normal write/read control failed: %w", err)
+	}
 	cases := []struct {
 		id, name, headers, body string
 	}{
@@ -61,15 +66,17 @@ func run() error {
 		{"excess_bytes", "excess-bytes.bin", "Transfer-Encoding: chunked\r\n", "3\r\nabcd\r\n0\r\n\r\n"},
 		{"reader_failure", "reader-failure.bin", "Transfer-Encoding: chunked\r\n", "A\r\nshort"},
 	}
-	out := report{At: time.Now().UTC().Format(time.RFC3339), Base: *base, Pass: true}
+	out := report{At: time.Now().UTC().Format(time.RFC3339), Base: *base, ControlVerified: true, Pass: true}
 	for _, tc := range cases {
+		started := time.Now()
 		remote := *base + "/" + tc.name
 		line, sendErr := sendMalformed(u, remote, tc.headers, tc.body)
 		if sendErr != nil {
 			return fmt.Errorf("%s transport setup failed: %w", tc.id, sendErr)
 		}
 		status, published, checkErr := verifyutil.WaitSettled(client, u, remote)
-		item := caseResult{ID: tc.id, Path: remote, ResponseLine: line, HeadStatus: status, Published: published, Pass: checkErr == nil && !published && status == http.StatusNotFound}
+		item := caseResult{ID: tc.id, Path: remote, ResponseLine: line, HeadStatus: status, Published: published, Pass: rejectedResponse(line) && checkErr == nil && !published && status == http.StatusNotFound}
+		item.ElapsedSeconds = time.Since(started).Seconds()
 		out.Cases = append(out.Cases, item)
 		out.Pass = out.Pass && item.Pass
 	}
@@ -83,6 +90,10 @@ func run() error {
 }
 
 func sendMalformed(origin *url.URL, remote, headers, body string) (string, error) {
+	return sendMalformedWithin(origin, remote, headers, body, time.Minute)
+}
+
+func sendMalformedWithin(origin *url.URL, remote, headers, body string, timeout time.Duration) (string, error) {
 	address := origin.Host
 	if _, _, err := net.SplitHostPort(address); err != nil {
 		address = net.JoinHostPort(origin.Hostname(), "80")
@@ -92,7 +103,7 @@ func sendMalformed(origin *url.URL, remote, headers, body string) (string, error
 		return "", err
 	}
 	defer conn.Close()
-	_ = conn.SetDeadline(time.Now().Add(time.Minute))
+	_ = conn.SetDeadline(time.Now().Add(timeout))
 	requestPath := strings.TrimRight(origin.EscapedPath(), "/") + "/" + strings.TrimLeft(remote, "/")
 	wire := "PUT " + requestPath + " HTTP/1.1\r\nHost: " + origin.Host + "\r\n" + headers + "Connection: close\r\n\r\n" + body
 	if _, err = io.WriteString(conn, wire); err != nil {
@@ -102,10 +113,57 @@ func sendMalformed(origin *url.URL, remote, headers, body string) (string, error
 		_ = tcp.CloseWrite()
 	}
 	line, readErr := bufio.NewReader(conn).ReadString('\n')
-	if readErr != nil && line == "" {
+	if readErr != nil && !errors.Is(readErr, io.EOF) {
+		return "", readErr
+	}
+	if errors.Is(readErr, io.EOF) && line == "" {
 		// A server may close a malformed request without a response. Publication
 		// state, checked independently below, is the acceptance signal.
 		return "connection closed without response", nil
 	}
 	return strings.TrimSpace(line), nil
+}
+
+func rejectedResponse(line string) bool {
+	if line == "connection closed without response" {
+		return true
+	}
+	var version string
+	var code int
+	_, err := fmt.Sscanf(line, "%s %d", &version, &code)
+	return err == nil && strings.HasPrefix(version, "HTTP/") && code >= 400 && code <= 599
+}
+
+// Prove this target accepts ordinary content before testing malformed bodies.
+// Retain the control object as evidence; cleanup belongs to the deletion batch.
+func verifyControl(client *http.Client, origin *url.URL, base string) error {
+	target := *origin
+	target.Path = strings.TrimRight(origin.Path, "/") + "/" + base + "/valid-control.bin"
+	const content = "TboxRclone length-fault normal write control\n"
+	req, err := http.NewRequest(http.MethodPut, target.String(), strings.NewReader(content))
+	if err != nil {
+		return err
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	io.Copy(io.Discard, resp.Body)
+	resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("PUT returned %d", resp.StatusCode)
+	}
+	resp, err = client.Get(target.String())
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	got, err := io.ReadAll(io.LimitReader(resp.Body, int64(len(content)+1)))
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusOK || string(got) != content {
+		return errors.New("normal readback did not match")
+	}
+	return nil
 }

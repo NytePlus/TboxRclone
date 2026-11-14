@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-finder-resume-20261113-2240/baseline-recovery.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/baseline-recovery.bin",
+  "remote_path": "/baseline-recovery.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

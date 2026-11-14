@@ -1,0 +1,34 @@
+{
+  "duration_seconds" : 45.093333333333334,
+  "frames" : 46,
+  "generation_seconds" : 0.6180880069732666,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "review.0.png",
+      "first_second" : 0,
+      "last_second" : 9
+    },
+    {
+      "file" : "review.10.png",
+      "first_second" : 10,
+      "last_second" : 19
+    },
+    {
+      "file" : "review.20.png",
+      "first_second" : 20,
+      "last_second" : 29
+    },
+    {
+      "file" : "review.30.png",
+      "first_second" : 30,
+      "last_second" : 39
+    },
+    {
+      "file" : "review.40.png",
+      "first_second" : 40,
+      "last_second" : 45
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

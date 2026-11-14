@@ -1,0 +1,26 @@
+/Users/nyte/Documents/ChatGPT/TboxRclone/scripts/finder-drag.sh: line 51: 48450 Terminated: 15          /usr/bin/osascript - "$source_dir" "$target_dir"  <<'APPLESCRIPT'
+on run paths
+  tell application "Finder"
+    activate
+    set screenBounds to bounds of window of desktop
+    set halfWidth to ((item 3 of screenBounds) - (item 1 of screenBounds)) div 2
+    repeat with i from 1 to 2
+      set folderRef to (POSIX file (item i of paths)) as alias
+      set oldWindows to {}
+      repeat with candidate in Finder windows
+        try
+          if (target of candidate as alias) is folderRef then set end of oldWindows to contents of candidate
+        end try
+      end repeat
+      repeat with candidate in oldWindows
+        close candidate
+      end repeat
+      set w to make new Finder window to folderRef
+      set current view of w to list view
+      set leftEdge to (item 1 of screenBounds) + (i - 1) * halfWidth
+      set bounds of w to {leftEdge, 60, leftEdge + halfWidth, (item 4 of screenBounds) - 60}
+    end repeat
+  end tell
+end run
+APPLESCRIPT
+

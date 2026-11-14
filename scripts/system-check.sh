@@ -21,6 +21,7 @@ run_check() {
   if [ "$code" -ne 0 ]; then result=1; fi
 }
 run_check patch sh scripts/rclone-patches.sh --check
+run_check patch-replay python3 scripts/check-rclone-patch-replay.py
 run_check layout python3 scripts/quality/check_source_layout.py
 run_check rclone-backend-contract compose run --rm go-tests go test ./backend/sjtu/test -run '^TestBackendContract$' -count=1
 run_check race compose run --rm go-tests go test -race ./...

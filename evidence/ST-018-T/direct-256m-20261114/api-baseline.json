@@ -1,0 +1,21 @@
+{
+  "bytes": 268435456,
+  "bytes_per_second": 13023054.349412171,
+  "operation_id": "a37c6eb902ae95b703fc4ccd86efe1e3",
+  "pass": true,
+  "remote_path": "codex-api-lab/perf-256m-api-20261114/payload.bin",
+  "request_counts": {
+    "GET": 4,
+    "POST": 3,
+    "PUT": 64
+  },
+  "scope": "direct SMH transfer engine, no rclone/WebDAV; includes confirm and independent full readback",
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "source": "/fixture/input/large.bin",
+  "source_retained": true,
+  "staging_seconds": 0.686836376,
+  "started_at": "2026-11-14T09:07:31.231657382Z",
+  "state": "Committed",
+  "total_seconds": 20.612327093,
+  "transfer_and_verification_seconds": 19.925490717
+}

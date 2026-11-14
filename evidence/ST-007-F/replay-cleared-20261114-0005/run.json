@@ -1,0 +1,8 @@
+{
+  "source_directory": "/private/tmp/tbox-part-fault-replay-cleared-20261114-0005",
+  "filename": "cut-part-2-replay-cleared-20261114-0005.bin",
+  "part": 2,
+  "mode": "replay-part",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

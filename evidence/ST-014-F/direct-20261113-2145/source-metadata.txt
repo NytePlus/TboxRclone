@@ -1,0 +1,12 @@
+com.apple.ResourceFork:
+00000000  74 62 6F 78 2D 72 65 73 6F 75 72 63 65 2D 66 6F  |tbox-resource-fo|
+00000010  72 6B 2D 32 30 32 36 31 31 31 33                 |rk-20261113|
+0000001B
+com.apple.provenance:
+00000000  01 02 00 F7 78 81 A1 5F FC 37 31                 |....x.._.71|
+0000000B
+com.tboxrclone.acceptance:
+00000000  74 62 6F 78 2D 78 61 74 74 72 2D 72 6F 75 6E 64  |tbox-xattr-round|
+00000010  74 72 69 70 2D 32 30 32 36 31 31 31 33           |trip-20261113|
+0000001D
+d3fc5950c0824cc4d7bf7548396e375a5d39f7180ad0babe28191b534a03be0f  /private/tmp/tboxrclone-finder-direct-20261113-2049/SpecialNames/metadata.bin

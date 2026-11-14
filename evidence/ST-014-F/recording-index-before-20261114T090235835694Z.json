@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-014-F/resource-control-20261113/webdav-probe/display-1.mov",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "2472bc921e7642c0c46c11292ab1ac9d68996dc87a2a7fa7446e5105281c2898"
+}

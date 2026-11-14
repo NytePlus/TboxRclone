@@ -1,0 +1,8 @@
+{
+  "source_preserved": true,
+  "journal_unchanged": true,
+  "cloud_inventory_empty": true,
+  "retry_observed_events": 48,
+  "retry_outbound_write_events": [],
+  "scope": "Same-path native retry rejects pending ambiguous initialization; no successful upload or automatic recovery claimed."
+}

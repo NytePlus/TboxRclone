@@ -1,0 +1,25 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "targeted direct cloud full file read, bypass WebDAV; not a directory inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "lock-traced-20261114-0124.txt",
+      "source": {
+        "size": 9984,
+        "sha256": "4e6d4877145f0a2599f4a7106a4854faeec13aeaaa73f49821ec07f72e064452"
+      },
+      "mounted": {
+        "size": 9984,
+        "sha256": "4e6d4877145f0a2599f4a7106a4854faeec13aeaaa73f49821ec07f72e064452"
+      },
+      "raw_cloud_name": "lock-traced-20261114-0124.txt",
+      "cloud": {
+        "sha256": "4e6d4877145f0a2599f4a7106a4854faeec13aeaaa73f49821ec07f72e064452",
+        "size": 9984
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=input target=tboxrclone-webdav-501 item=phased.bin
+finder_windows_found
+source_window=143206 target_window=143684
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 215.0) end=(1410.75, 590.5)
+visibility_check source_expected=143206 source_top=143206 source_hit=true target_expected=143684 target_top=143684 target_hit=true
+finder_drag_endpoints_visible

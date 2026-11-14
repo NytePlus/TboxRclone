@@ -1,10 +1,10 @@
 {
-  "run_id": "finder-easy-v1-sequential-overwrite-v3",
+  "run_id": "ops-retest-20261114",
   "scenario_id": "ST-006-T",
   "versions": {
-    "client": "finder-drag 2026-09-20.3-rc2 (final 2026-09-20.3 changes version label only)",
-    "backend": "f06f2b4 worktree with rclone b93b73b; controlled overwrite and trash deletion enabled",
-    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "client": "native Finder two sequential drags and exact-name Replace confirmation; direct rclone with isolated lab_delete/lab_move/lab_overwrite enabled",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e dirty worktree",
+    "server": "rclone v1.76.0-DEV; live SJTU version unavailable",
     "macos": "26.5.2",
     "finder": "26.4"
   },
@@ -12,17 +12,17 @@
     {
       "id": "sequential_save_and_reopen",
       "status": "PASS",
-      "observation": "Real Finder copies three distinct versions sequentially to the same plain.bin. v2 required release recovery; v3 corrected script independently triggered Replace, confirmed via Computer Use. v2 and v3 independent cloud hashes and fresh-remount full reads match source. Initial v1 also independently verified.",
+      "observation": "First Finder save matched versionA. Second native drag and exact-name Replace succeeded with deletion enabled in isolated ops session; reopened mount and independent cloud match different versionB. Final Finder state reviewed with no error/progress dialog. Prior failure retained as configuration diagnosis, not erased.",
+      "final_state_reviewed": true,
+      "final_state_image": "ops-retest-20261114/v2/finish/final-task-state-preview.png",
       "artifacts": [
-        "version-1-cloud.jsonl",
-        "version-2-cloud.json",
-        "version-2-reopen.json",
-        "source-expected.json",
-        "cloud-readback.json",
-        "reopen.json",
-        "drag.log",
-        "ui-observation.json",
-        "display-1.mov"
+        "ops-retest-20261114/v1/finish/content/reopen.json",
+        "ops-retest-20261114/v2/finish/content/reopen.json",
+        "ops-retest-20261114/v2/replace-action.json",
+        "ops-retest-20261114/v2/finish/journal.json",
+        "ops-retest-20261114/v2/finish/final-task-state-preview.png",
+        "retained-recording.mov",
+        "retained-recording.mov.index.json"
       ]
     }
   ]

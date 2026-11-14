@@ -1,0 +1,60 @@
+{
+  "records": [
+    {
+      "id": "05ad671716a72e5b0b1b231d109324b8",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-20261114-0242/resource-control.txt",
+      "size": 8832,
+      "sha256": "b6e5d3ad1e5519490dfb0144ae464461eab3acc8ad165ee759f8ece52db4cb52",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 8832,
+          "sha256": "b6e5d3ad1e5519490dfb0144ae464461eab3acc8ad165ee759f8ece52db4cb52",
+          "etag": "\"abb806e561d85c1f8478510f7f1589bf\""
+        }
+      ],
+      "upload_id_sha256": "7bc48a9b7f24666b872db02633c87e9043cb5e962979a44ada1ef78e75cef28f",
+      "spool_sha256": "b6e5d3ad1e5519490dfb0144ae464461eab3acc8ad165ee759f8ece52db4cb52",
+      "spool_size": 8832
+    },
+    {
+      "id": "32318f7cadd062bae8ed63e57a83319d",
+      "state": "Rejected",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-20261114-0242/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "upload_id_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    },
+    {
+      "id": "b1ccc6b12944512a3de4d76b89e4b58a",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/finder-rate-20261114-0242/resource-control.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "etag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+        }
+      ],
+      "upload_id_sha256": "721d422b3529a7461cd4ede634830d7f9b5b741a3645de8a23af499316e8e01d",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    }
+  ]
+}

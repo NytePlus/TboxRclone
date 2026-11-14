@@ -1,0 +1,40 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-014-F/direct-20261113-2145/copy-native-open/display-1.mov",
+      "bytes": 13694183,
+      "sha256": "940676d0b3a1e2bc05bbabca0813a17e92358a33cd472e965e21a852fcc89ce8",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-014-F/direct-20261113-2145/copy-single-selection/continuation.mov",
+      "bytes": 1524438,
+      "sha256": "2e12956aaf185aa7f17e2c51d0b444a65a9b2796dce44b371f83cabbbc1a16f6",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-014-F/direct-20261113-2145/copy-single-selection/display-1.mov",
+      "bytes": 37862651,
+      "sha256": "1061975ecada96b2c2542a86d22b9cb2763af819ded6edea253bd8bacb3c9f53",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-014-F/resource-control-20261113/local.mov",
+      "bytes": 3864167,
+      "sha256": "3a9333f262b45bbf62c194075838a5fe3e8efd111f8cfb48cac272cdf3c967de",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-014-F/resource-control-20261113/webdav-probe/display-1.mov",
+      "bytes": 38812780,
+      "sha256": "2472bc921e7642c0c46c11292ab1ac9d68996dc87a2a7fa7446e5105281c2898",
+      "retained_segment": true
+    }
+  ],
+  "retained_bytes": 38812780,
+  "freed_bytes": 56945439,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

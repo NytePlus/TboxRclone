@@ -29,10 +29,16 @@ type remote struct {
 	dropPart, dropConfirm, rejectConfirm bool
 	badRenew, badPart                    bool
 	expireSignature, expireSession       bool
+	onContentRead                        func()
 	server                               *httptest.Server
 }
 
 func fixture(t *testing.T, contents ...[]byte) (*remote, *smh.Client, *journal.Store, *journal.Record, []byte) {
+	t.Helper()
+	return spoolFixture(t, false, contents...)
+}
+
+func spoolFixture(t *testing.T, source bool, contents ...[]byte) (*remote, *smh.Client, *journal.Store, *journal.Record, []byte) {
 	t.Helper()
 	m := &remote{parts: map[int][]byte{}, puts: map[int]int{}}
 	payload := make([]byte, 2*PartSize+13)
@@ -143,6 +149,9 @@ func fixture(t *testing.T, contents ...[]byte) (*remote, *smh.Client, *journal.S
 			}
 			json.NewEncoder(w).Encode(smh.Item{Type: "file", ETag: "opaque-multipart", Size: smh.Int64(len(payload))})
 		case req.Method == "GET":
+			if m.onContentRead != nil {
+				m.onContentRead()
+			}
 			w.Header().Set("ETag", `"opaque-multipart"`)
 			for n := 1; n <= 3; n++ {
 				w.Write(m.parts[n])
@@ -158,32 +167,46 @@ func fixture(t *testing.T, contents ...[]byte) (*remote, *smh.Client, *journal.S
 	if e != nil {
 		t.Fatal(e)
 	}
-	r, e := s.Prepare(context.Background(), c.Endpoint+"/l/s", "codex-api-lab/run/file", bytes.NewReader(payload), int64(len(payload)), 16<<20)
+	var r *journal.Record
+	if source {
+		path := filepath.Join(t.TempDir(), "source")
+		if err := os.WriteFile(path, payload, 0600); err != nil {
+			t.Fatal(err)
+		}
+		r, e = s.PrepareSource(context.Background(), c.Endpoint+"/l/s", "codex-api-lab/run/file", path, 16<<20)
+	} else {
+		r, e = s.Prepare(context.Background(), c.Endpoint+"/l/s", "codex-api-lab/run/file", bytes.NewReader(payload), int64(len(payload)), 16<<20)
+	}
 	if e != nil {
 		t.Fatal(e)
 	}
 	return m, c, s, r, payload
 }
 func TestMultipartRoundTrip(t *testing.T) {
-	m, c, s, r, _ := fixture(t)
-	defer s.Close()
-	if e := Start(context.Background(), s, c, r); e != nil {
-		t.Fatal(e)
-	}
-	if r.State != "Committed" || m.init != 1 || m.confirm != 1 || m.renew != 0 {
-		t.Fatalf("%s init=%d confirm=%d", r.State, m.init, m.confirm)
-	}
-	for _, p := range r.Parts {
-		if p.ETag == "" || p.SHA256 == "" {
-			t.Fatal("missing durable part identity")
-		}
-	}
-	b, e := os.ReadFile(filepath.Join(s.Dir, r.ID+".json"))
-	if e != nil {
-		t.Fatal(e)
-	}
-	if bytes.Contains(b, []byte("signed")) || bytes.Contains(b, []byte("secret")) {
-		t.Fatal("credential persisted")
+	for _, source := range []bool{false, true} {
+		t.Run(fmt.Sprintf("source=%t", source), func(t *testing.T) {
+			m, c, s, r, _ := spoolFixture(t, source)
+			defer s.Close()
+			if e := Start(context.Background(), s, c, r); e != nil {
+				t.Fatal(e)
+			}
+			if r.State != "Committed" || m.init != 1 || m.confirm != 1 || m.renew != 0 {
+				t.Fatalf("%s init=%d confirm=%d", r.State, m.init, m.confirm)
+			}
+			for _, p := range r.Parts {
+				if p.ETag == "" || p.SHA256 == "" {
+					t.Fatal("missing durable part identity")
+				}
+			}
+			b, e := os.ReadFile(filepath.Join(s.Dir, r.ID+".json"))
+			if e != nil {
+				t.Fatal(e)
+			}
+			if bytes.Contains(b, []byte("signed")) || bytes.Contains(b, []byte("secret")) {
+				t.Fatal("credential persisted")
+			}
+
+		})
 	}
 }
 
@@ -230,6 +253,62 @@ func TestMultipartDuplicateRejectionIsTerminal(t *testing.T) {
 	}
 }
 
+func TestMultipartInitRejectionBoundary(t *testing.T) {
+	for _, source := range []bool{false, true} {
+		for _, tc := range []struct {
+			name     string
+			status   int
+			body     string
+			rejected bool
+		}{
+			{"authentication", 401, `{}`, true},
+			{"permission", 403, `{}`, true},
+			{"quota", 403, `{"code":"QuotaLimitReached"}`, true},
+			{"duplicate", 409, `{}`, true},
+			{"rate_limit", 429, `{}`, true},
+			{"request_timeout", 408, `{}`, false},
+			{"server_failure", 503, `{}`, false},
+		} {
+			t.Run(fmt.Sprintf("source=%v/%s", source, tc.name), func(t *testing.T) {
+				_, c, s, r, payload := spoolFixture(t, source, []byte("retain rejected input"))
+				defer s.Close()
+				calls := 0
+				c.HTTP.Transport = retryTransport(func(req *http.Request) (*http.Response, error) {
+					calls++
+					if !req.URL.Query().Has("multipart") {
+						t.Error("unexpected request after initialization failure")
+					}
+					return &http.Response{StatusCode: tc.status, Body: io.NopCloser(strings.NewReader(tc.body)), Header: make(http.Header), Request: req}, nil
+				})
+				err := Start(context.Background(), s, c, r)
+				if !smh.IsStatus(err, tc.status) || calls != 1 {
+					t.Fatalf("err=%v calls=%d", err, calls)
+				}
+				want := "InitSent"
+				if tc.rejected {
+					want = "Rejected"
+				}
+				if r.State != want {
+					t.Fatalf("state=%s want=%s", r.State, want)
+				}
+				pending := s.Pending(r.Scope, r.Path)
+				if tc.rejected && pending != nil || !tc.rejected && !errors.Is(pending, journal.ErrPending) {
+					t.Fatalf("pending=%v rejected=%v", pending, tc.rejected)
+				}
+				data, err := s.Data(r)
+				if err != nil {
+					t.Fatal(err)
+				}
+				defer data.Close()
+				got, err := io.ReadAll(data)
+				if err != nil || !bytes.Equal(got, payload) {
+					t.Fatal("failure discarded spool data", err)
+				}
+			})
+		}
+	}
+}
+
 func TestMultipartConfirmDuplicateRejectionIsTerminal(t *testing.T) {
 	m, c, s, r, payload := fixture(t)
 	defer s.Close()
@@ -252,69 +331,93 @@ func TestMultipartConfirmDuplicateRejectionIsTerminal(t *testing.T) {
 	}
 }
 func TestMultipartLostPartAckSurvivesRestart(t *testing.T) {
-	m, c, s, r, payload := fixture(t)
-	m.dropPart = true
-	if e := Start(context.Background(), s, c, r); e == nil {
-		t.Fatal("lost acknowledgement accepted")
-	}
-	if r.State != "Uploading" || m.confirm != 0 {
-		t.Fatal("premature confirmation")
-	}
-	dir := s.Dir
-	s.Close()
-	s, e := journal.Open(dir)
-	if e != nil {
-		t.Fatal(e)
-	}
-	defer s.Close()
-	records, e := s.Records()
-	if e != nil || len(records) != 1 {
-		t.Fatal(e)
-	}
-	r = &records[0]
-	m.mu.Lock()
-	putsBefore := map[int]int{}
-	for number, puts := range m.puts {
-		putsBefore[number] = puts
-	}
-	m.mu.Unlock()
-	if e = Resume(context.Background(), s, c, r); e != nil {
-		t.Fatal(e)
-	}
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	for n, before := range putsBefore {
-		if m.puts[n] != before {
-			t.Errorf("server-listed part %d was retransmitted", n)
-		}
-	}
-	if r.State != "Committed" || m.init != 1 || m.confirm != 1 || m.puts[2] != 1 {
-		t.Fatal("incorrect session replay", m.init, m.confirm, m.puts)
-	}
-	data, e := s.Data(r)
-	if e != nil {
-		t.Fatal(e)
-	}
-	defer data.Close()
-	b, _ := io.ReadAll(data)
-	if !bytes.Equal(b, payload) {
-		t.Fatal("spool changed")
+	for _, source := range []bool{false, true} {
+		t.Run(fmt.Sprintf("source=%t", source), func(t *testing.T) {
+			m, c, s, r, payload := spoolFixture(t, source)
+			m.dropPart = true
+			if e := Start(context.Background(), s, c, r); e == nil {
+				t.Fatal("lost acknowledgement accepted")
+			}
+			if r.State != "Uploading" || m.confirm != 0 {
+				t.Fatal("premature confirmation")
+			}
+			dir := s.Dir
+			s.Close()
+			s, e := journal.Open(dir)
+			if e != nil {
+				t.Fatal(e)
+			}
+			defer s.Close()
+			records, e := s.Records()
+			if e != nil || len(records) != 1 {
+				t.Fatal(e)
+			}
+			r = &records[0]
+			m.mu.Lock()
+			putsBefore := map[int]int{}
+			for number, puts := range m.puts {
+				putsBefore[number] = puts
+			}
+			m.mu.Unlock()
+			if e = Resume(context.Background(), s, c, r); e != nil {
+				t.Fatal(e)
+			}
+			m.mu.Lock()
+			defer m.mu.Unlock()
+			for n, before := range putsBefore {
+				if m.puts[n] != before {
+					t.Errorf("server-listed part %d was retransmitted", n)
+				}
+			}
+			if r.State != "Committed" || m.init != 1 || m.confirm != 1 || m.puts[2] != 1 {
+				t.Fatal("incorrect session replay", m.init, m.confirm, m.puts)
+			}
+			data, e := s.Data(r)
+			if e != nil {
+				t.Fatal(e)
+			}
+			defer data.Close()
+			b, _ := io.ReadAll(data)
+			if !bytes.Equal(b, payload) {
+				t.Fatal("spool changed")
+			}
+
+		})
 	}
 }
+
 func TestMultipartLostConfirmReconcilesWithoutReplay(t *testing.T) {
-	m, c, s, r, _ := fixture(t)
-	defer s.Close()
-	m.dropConfirm = true
-	if e := Start(context.Background(), s, c, r); e == nil || r.State != "Unknown" {
-		t.Fatal("lost confirm accepted", e, r.State)
-	}
-	if e := Resume(context.Background(), s, c, r); e != nil {
-		t.Fatal(e)
-	}
-	if r.State != "Committed" || m.init != 1 || m.confirm != 1 {
-		t.Fatal("replayed confirmation")
+	for _, source := range []bool{false, true} {
+		t.Run(fmt.Sprintf("source=%t", source), func(t *testing.T) {
+			m, c, s, r, _ := spoolFixture(t, source)
+			defer func() { s.Close() }()
+			m.dropConfirm = true
+			if e := Start(context.Background(), s, c, r); e == nil || r.State != "Unknown" {
+				t.Fatal("lost confirm accepted", e, r.State)
+			}
+			dir := s.Dir
+			s.Close()
+			var err error
+			s, err = journal.Open(dir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			records, err := s.Records()
+			if err != nil || len(records) != 1 {
+				t.Fatal(records, err)
+			}
+			r = &records[0]
+			if e := Resume(context.Background(), s, c, r); e != nil {
+				t.Fatal(e)
+			}
+			if r.State != "Committed" || m.init != 1 || m.confirm != 1 {
+				t.Fatal("replayed confirmation")
+			}
+
+		})
 	}
 }
+
 func TestMultipartRejectsChangedRenewal(t *testing.T) {
 	m, c, s, r, _ := fixture(t)
 	defer s.Close()

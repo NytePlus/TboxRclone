@@ -1,0 +1,14 @@
+{
+  "duration_seconds" : 5.0366666666666671,
+  "frames" : 6,
+  "generation_seconds" : 0.20570898056030273,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "dialog-review.0.png",
+      "first_second" : 0,
+      "last_second" : 5
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

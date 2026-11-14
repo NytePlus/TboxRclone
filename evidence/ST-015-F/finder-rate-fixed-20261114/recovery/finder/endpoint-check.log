@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tbox-source-finder-rate-fixed-20261114 target=finder-rate-fixed-20261114 item=resource-control.txt
+finder_windows_found
+source_window=141962 target_window=141964
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 155.0) end=(1410.75, 590.5)
+visibility_check source_expected=141962 source_top=141962 source_hit=true target_expected=141964 target_top=141964 target_hit=true
+finder_drag_endpoints_visible

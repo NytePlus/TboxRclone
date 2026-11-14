@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "id": "45316bb4ae6bb402b509866830829771",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/cut-part-1-first-complete-20261113-2329.bin",
+      "size": 9437184,
+      "sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 4194304,
+          "sha256": "2b07811057df887086f06a67edc6ebf911de8b6741156e7a2eb1416a4b8b1b2e",
+          "etag": "\"631b2c76267e568ccb221193ab23e134\""
+        },
+        {
+          "number": 2,
+          "size": 4194304,
+          "sha256": "2b07811057df887086f06a67edc6ebf911de8b6741156e7a2eb1416a4b8b1b2e",
+          "etag": "\"631b2c76267e568ccb221193ab23e134\""
+        },
+        {
+          "number": 3,
+          "size": 1048576,
+          "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83",
+          "etag": "\"c35cc7d8d91728a0cb052831bc4ef372\""
+        }
+      ],
+      "upload_id_sha256": "910b6723af5d987d3d18b76f1082ccf108b0895abd20a6154392bfd80c9484ad",
+      "spool_sha256": "b8b5dabaa3454f7fa46a97c51cec9ccd118ffc0d61df6e46d845ef200a2fd1bb",
+      "spool_size": 9437184
+    },
+    {
+      "id": "af2a41197d31043a8029ba19ea37b635",
+      "state": "Committed",
+      "path": "codex-api-lab/finder-resume-20261113-2240/cut-part-1-first-complete-20261113-2329.bin",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "part_size": 4194304,
+      "parts": [
+        {
+          "number": 1,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "etag": "\"d41d8cd98f00b204e9800998ecf8427e\""
+        }
+      ],
+      "upload_id_sha256": "a51d9716ae86667a825128d7c0b1a04e221c3558742d0ac7bfacfdb44e03d2ad",
+      "spool_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "spool_size": 0
+    }
+  ]
+}

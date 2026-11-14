@@ -1,0 +1,46 @@
+{
+  "acceptance" : "REQUIRES_CONTENT_AND_ERROR_CHECKS",
+  "elapsed_seconds" : 6.7599600553512573,
+  "observations" : [
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:42:44Z",
+      "scan_seconds" : 4.7415310144424438,
+      "scan_started_at" : "2026-11-14T09:42:39Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "268.4 MB\/268.4 MB - 大约5秒钟",
+            "",
+            "停止进程",
+            "正在将“rate-limit.bin”拷贝到“tboxrclone-webdav-501”",
+            "“访达”项目"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:42:45Z",
+      "scan_seconds" : 0.0045219659805297852,
+      "scan_started_at" : "2026-11-14T09:42:45Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+      "observed_at" : "2026-11-14T09:42:46Z",
+      "scan_seconds" : 0.0040160417556762695,
+      "scan_started_at" : "2026-11-14T09:42:46Z",
+      "transfer_windows" : [
+
+      ]
+    }
+  ],
+  "progress_disappeared" : true,
+  "saw_progress" : true,
+  "started_at" : "2026-11-14T09:42:39Z"
+}

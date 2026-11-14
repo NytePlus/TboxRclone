@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-013-T/direct-tree-20261113-2130/display-1.mov",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "2dead0210f9f9615926154f9bfaa91b4c472c202d3f6d96e9559a6fca5d56d82"
+}

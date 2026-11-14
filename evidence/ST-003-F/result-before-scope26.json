@@ -1,0 +1,38 @@
+{
+  "run_id": "finder-kill-20261114-0100",
+  "scenario_id": "ST-003-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "sigkill",
+      "status": "PASS",
+      "observation": "Real Finder upload interrupted by SIGKILL; exit 137; full spool retained; separate resume preserved identity and committed; explicit remount and full source/mount/cloud hashes matched. Finder target visible after directory loaded. Explicit recovery only.",
+      "artifacts": [
+        "finder-kill-20261114-0100/ui-review.md",
+        "finder-kill-20261114-0100/finder/display-1.mov",
+        "finder-kill-20261114-0100/finder/capture-coverage.json",
+        "finder-kill-20261114-0100/signal.json",
+        "finder-kill-20261114-0100/journal-timeline.jsonl",
+        "finder-kill-20261114-0100/resume.log",
+        "finder-kill-20261114-0100/verification/cloud.json",
+        "finder-kill-20261114-0100/verification/reopen.json",
+        "finder-kill-20261114-0100/verification/result.json",
+        "finder-kill-20261114-0100/remount-check.log",
+        "finder-kill-20261114-0100/remounted-finder.png",
+        "finder-kill-20261114-0100/remounted-finder-settled.png"
+      ]
+    },
+    {
+      "id": "host_crash_or_power_loss",
+      "status": "NOT_RUN",
+      "observation": "A real host crash/power-loss experiment has not been performed; container SIGKILL is insufficient.",
+      "artifacts": []
+    }
+  ]
+}

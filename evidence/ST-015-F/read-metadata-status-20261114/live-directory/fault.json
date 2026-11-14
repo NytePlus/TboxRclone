@@ -1,0 +1,12 @@
+{
+  "transport_complete": true,
+  "status": 403,
+  "declared_bytes": "9",
+  "requested_range": null,
+  "content_range": null,
+  "etag": null,
+  "bytes": 9,
+  "sha256": "78342a0905a72ce44da083dcb5d23b8ea0c16992ba2a82eece97e033d76ba3d3",
+  "elapsed_seconds": 0.02310029207728803,
+  "matches_expected": false
+}

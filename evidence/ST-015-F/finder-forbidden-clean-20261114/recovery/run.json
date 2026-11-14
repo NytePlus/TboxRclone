@@ -1,0 +1,13 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-forbidden-clean-20261114",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-forbidden-clean-20261114",
+  "status": 403,
+  "quota": false,
+  "cache_full": false,
+  "source_before": {
+    "size": 9600,
+    "sha256": "a933b87e5908d2c8a9f88e24be2e80a1e24fd44f51bef57a231c32afff5ac6f1"
+  },
+  "mount_subtree": "finder-forbidden-clean-20261114"
+}

@@ -1,0 +1,8 @@
+{
+  "source_directory": "/private/tmp/tbox-part-fault-finder-kill-20261114-0100",
+  "filename": "cut-part-2-finder-kill-20261114-0100.bin",
+  "part": 2,
+  "mode": "service-kill",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

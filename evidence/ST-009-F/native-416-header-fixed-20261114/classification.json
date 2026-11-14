@@ -1,0 +1,6 @@
+{
+  "classification": "TEST_SETUP_FAILURE",
+  "native_action_sent": false,
+  "product_verdict": "NOT_EVALUATED",
+  "next_action": "retry after stable display and arm fault only after endpoint verification"
+}

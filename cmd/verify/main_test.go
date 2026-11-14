@@ -32,3 +32,37 @@ func TestRejectBarePass(t *testing.T) {
 		t.Fatal("PASS without evidence")
 	}
 }
+
+func TestFinalStateWithoutRecording(t *testing.T) {
+	dir := t.TempDir()
+	test := scenario{ID: "ST-001-T", Evidence: dir}
+	if err := os.WriteFile(filepath.Join(dir, "final.png"), []byte("fixture image"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	c := map[string]any{"id": "normal", "status": "PASS", "observation": "native final state and independent content reviewed", "artifacts": []string{"final.png"}, "final_state_image": "final.png", "final_state_reviewed": true}
+	r := map[string]any{"run_id": "fixture", "scenario_id": test.ID, "versions": map[string]string{"client": "v", "backend": "v", "server": "v", "macos": "v", "finder": "v"}, "cases": []any{c}}
+	write := func() {
+		b, e := json.Marshal(r)
+		if e != nil {
+			t.Fatal(e)
+		}
+		if e = os.WriteFile(filepath.Join(dir, "result.json"), b, 0600); e != nil {
+			t.Fatal(e)
+		}
+	}
+	write()
+	if err := validateEvidence(test, []string{"normal"}); err != nil {
+		t.Fatal(err)
+	}
+	c["final_state_reviewed"] = false
+	write()
+	if validateEvidence(test, []string{"normal"}) == nil {
+		t.Fatal("unreviewed image accepted")
+	}
+	c["final_state_reviewed"] = true
+	c["final_state_image"] = "missing.png"
+	write()
+	if validateEvidence(test, []string{"normal"}) == nil {
+		t.Fatal("missing image accepted")
+	}
+}

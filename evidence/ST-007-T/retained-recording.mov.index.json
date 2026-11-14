@@ -1,0 +1,10 @@
+{
+  "mode": "original movie retained byte for byte",
+  "segments": [
+    {
+      "source": "evidence/ST-007-T/direct-finder-20261113-2240/fault/display-1.mov",
+      "start_seconds": 0
+    }
+  ],
+  "sha256": "542219e2a0a11a607de17b7d55ae4a320add1b63e2c67fd5ead9cfb74144fc22"
+}

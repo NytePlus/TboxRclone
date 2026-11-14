@@ -1,0 +1,7 @@
+# HTTP403 rejection and same-path recovery
+
+PASS for http_403. The45.042s rejection recording is complete; reviewed20..29s shows the macOS local authorization prompt after the injected multipart403. The source remained intact; independent full cloud inventory was empty; the zero-byte journal was Rejected. No password was entered by the agent. The matched-cancel helper later exited2 because the SecurityAgent process/prompt was no longer present; do not claim that helper canceled it.
+
+Same-path Finder retry recorded120.102s completely. Reviewed110..119s still shows copy progress. The first independent read saw the zero-byte cloud placeholder while copying was active, so its mismatch is retained in verification/ and is not called completed-file corruption. A separate60.045s follow-up recording shows the destination file and no progress window at50..59s. There is an explicit unrecorded interval between recordings; exact completion time is not established. Final independent full content, mounted reopen and local source all match9600 bytes, SHA-256 a933b87e5908d2c8a9f88e24be2e80a1e24fd44f51bef57a231c32afff5ac6f1. Journal retains oldRejected and records newCommitted.
+
+The scenario's one retained movie contains separate indexed historical clips. Current403 clips replace older403 attempts; no continuity between separate recordings is implied. Raw preview sheets are regenerable and removed after review under the user's retention policy.

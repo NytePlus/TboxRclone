@@ -1,0 +1,178 @@
+{
+  "method": "source + verified mount reopen + independent cloud inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "SpecialNamesRetry/case-lower/case.bin",
+      "source": {
+        "size": 108,
+        "sha256": "44d21db70716bd7644cb0d819fa6791805ebc526ea32996a60e41dc753fcfafc"
+      },
+      "mounted": {
+        "size": 108,
+        "sha256": "44d21db70716bd7644cb0d819fa6791805ebc526ea32996a60e41dc753fcfafc"
+      },
+      "raw_cloud_name": "case-lower/case.bin",
+      "cloud": {
+        "sha256": "44d21db70716bd7644cb0d819fa6791805ebc526ea32996a60e41dc753fcfafc",
+        "size": 108
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/case-upper/Case.bin",
+      "source": {
+        "size": 107,
+        "sha256": "8150f7c5da910d709ff02ddf85dd293c6a2672633de8cda30f2e0aa58b14b0c4"
+      },
+      "mounted": {
+        "size": 107,
+        "sha256": "8150f7c5da910d709ff02ddf85dd293c6a2672633de8cda30f2e0aa58b14b0c4"
+      },
+      "raw_cloud_name": "case-upper/Case.bin",
+      "cloud": {
+        "sha256": "8150f7c5da910d709ff02ddf85dd293c6a2672633de8cda30f2e0aa58b14b0c4",
+        "size": 107
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/emoji-\ud83d\ude00.bin",
+      "source": {
+        "size": 102,
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13"
+      },
+      "mounted": {
+        "size": 102,
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13"
+      },
+      "raw_cloud_name": "emoji-\ud83d\ude00.bin",
+      "cloud": {
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13",
+        "size": 102
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/metadata.bin",
+      "source": {
+        "size": 42,
+        "sha256": "d3fc5950c0824cc4d7bf7548396e375a5d39f7180ad0babe28191b534a03be0f"
+      },
+      "mounted": {
+        "size": 42,
+        "sha256": "d3fc5950c0824cc4d7bf7548396e375a5d39f7180ad0babe28191b534a03be0f"
+      },
+      "raw_cloud_name": "metadata.bin",
+      "cloud": {
+        "sha256": "d3fc5950c0824cc4d7bf7548396e375a5d39f7180ad0babe28191b534a03be0f",
+        "size": 42
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/nfc/\u00e9.bin",
+      "source": {
+        "size": 105,
+        "sha256": "98545371a3d9981abe5ab4a32a1d7b2fadd9801d89da52a94a4f78a42740d21c"
+      },
+      "mounted": {
+        "size": 105,
+        "sha256": "98545371a3d9981abe5ab4a32a1d7b2fadd9801d89da52a94a4f78a42740d21c"
+      },
+      "raw_cloud_name": "nfc/\u00e9.bin",
+      "cloud": null,
+      "matched": false
+    },
+    {
+      "file": "SpecialNamesRetry/nfd/e\u0301.bin",
+      "source": {
+        "size": 106,
+        "sha256": "6323dce2f8b3a04dcea8d205602348c40403cb200c677eb1a1c0fe37edb6eb2f"
+      },
+      "mounted": {
+        "size": 106,
+        "sha256": "6323dce2f8b3a04dcea8d205602348c40403cb200c677eb1a1c0fe37edb6eb2f"
+      },
+      "raw_cloud_name": "nfd/e\u0301.bin",
+      "cloud": {
+        "sha256": "6323dce2f8b3a04dcea8d205602348c40403cb200c677eb1a1c0fe37edb6eb2f",
+        "size": 106
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/percent%hash#question?plus+.bin",
+      "source": {
+        "size": 104,
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f"
+      },
+      "mounted": {
+        "size": 104,
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f"
+      },
+      "raw_cloud_name": "percent%hash#question\uff1fplus+.bin",
+      "cloud": {
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f",
+        "size": 104
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/quotes-'\".bin",
+      "source": {
+        "size": 103,
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba"
+      },
+      "mounted": {
+        "size": 103,
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba"
+      },
+      "raw_cloud_name": "quotes-'\uff02.bin",
+      "cloud": {
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba",
+        "size": 103
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesRetry/\u4e2d\u6587\u6587\u4ef6.bin",
+      "source": {
+        "size": 101,
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33"
+      },
+      "mounted": {
+        "size": 101,
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33"
+      },
+      "raw_cloud_name": "\u4e2d\u6587\u6587\u4ef6.bin",
+      "cloud": {
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33",
+        "size": 101
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "SpecialNamesRetry",
+      "matched": true
+    },
+    {
+      "directory": "SpecialNamesRetry/case-lower",
+      "matched": true
+    },
+    {
+      "directory": "SpecialNamesRetry/case-upper",
+      "matched": true
+    },
+    {
+      "directory": "SpecialNamesRetry/nfd",
+      "matched": true
+    },
+    {
+      "directory": "SpecialNamesRetry/nfc",
+      "matched": true
+    }
+  ]
+}

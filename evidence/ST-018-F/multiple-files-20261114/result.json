@@ -1,0 +1,25 @@
+{
+  "subcase": "multiple_files",
+  "status": "PASS",
+  "files": 2,
+  "bytes": 134217728,
+  "content": "source + mount reopen + independent full cloud reads match for both files and directory",
+  "native_browse_seconds": 1.5415,
+  "metadata_p95_seconds": 0.965794792,
+  "main_files_committed": true,
+  "recording": "90-second complete recording; 10-second contact sheet and final target-directory screenshot reviewed; two files visible, no error or progress dialog",
+  "artifacts": [
+    "finish/content/reopen.json",
+    "finish/native-state.json",
+    "finish/review.0.png",
+    "finish/final-task-state-preview.png",
+    "observer/summary.json",
+    "../retained-recording.mov",
+    "../retained-recording.mov.index.json"
+  ],
+  "sampled_service_peak_memory_MiB": 79.3,
+  "sampled_service_peak_CPU_percent": 33.11,
+  "observed_uploading_to_committed_seconds": 7.666247,
+  "observed_MiB_per_second": 16.696566129424216,
+  "measurement_limitations": "Sampled journal interval, not full Finder copy duration; resource peaks sampled, not continuous maxima."
+}

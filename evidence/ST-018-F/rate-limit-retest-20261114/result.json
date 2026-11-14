@@ -1,0 +1,27 @@
+{
+  "subcase": "rate_limit",
+  "status": "PASS",
+  "bytes": 268435456,
+  "data_parts": 64,
+  "bytes_per_second_per_stream": 2097152,
+  "native_browse_seconds": 0.9007359743,
+  "metadata_p95_seconds": 1.242328916,
+  "content_sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "recording": "Complete90.05s capture;10-second contact sheet and final task screenshot reviewed. Target file visible at268.4MB, no errors or progress dialog.",
+  "artifacts": [
+    "finish/events.json",
+    "finish/content/reopen.json",
+    "finish/native-state.json",
+    "finish/review.0.png",
+    "finish/final-task-state-preview.png",
+    "observer/samples.json",
+    "observer/summary.json",
+    "../retained-recording.mov",
+    "../retained-recording.mov.index.json"
+  ],
+  "sampled_service_peak_memory_MiB": 85.85,
+  "sampled_service_peak_CPU_percent": 33.07,
+  "observed_uploading_to_committed_seconds": 64.148483,
+  "observed_MiB_per_second": 3.9907412931339312,
+  "measurement_limitations": "Sampled journal interval, not full Finder copy duration; resource peaks sampled, not continuous maxima."
+}

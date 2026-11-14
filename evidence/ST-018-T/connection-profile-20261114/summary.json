@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "total_seconds": 22.665332635,
+  "new_connections": 6,
+  "reused_connections": 65,
+  "put_new_connections": 6,
+  "put_reused_connections": 58,
+  "requests": {
+    "GET": 4,
+    "POST": 3,
+    "PUT": 64
+  }
+}

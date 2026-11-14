@@ -1,0 +1,122 @@
+[
+  {
+    "id": "finder-rate-clean-20261114-0",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-1",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-2",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-3",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-4",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-5",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-6",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-7",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-8",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-9",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-10",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  },
+  {
+    "id": "finder-rate-clean-20261114-11",
+    "host": "pan.sjtu.edu.cn:443",
+    "method": "POST",
+    "path_prefix": "/api/v1/file/smh2ax67srucy60s/space1e0onc9utrzuh/codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114/resource-control.txt",
+    "action_key": "multipart",
+    "nth": 1,
+    "action": "respond_status",
+    "status": 429
+  }
+]

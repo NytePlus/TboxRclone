@@ -1,0 +1,516 @@
+{
+  "acceptance" : "REQUIRES_CONTENT_AND_ERROR_CHECKS",
+  "elapsed_seconds" : 112.08245396614075,
+  "observations" : [
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:10:53Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:10:57Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:01Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:05Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:08Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:12Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:15Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:19Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:23Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:26Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:30Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:33Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:37Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:40Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:44Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:47Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:51Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:55Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:11:58Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:02Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:06Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:09Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:13Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:16Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:20Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:24Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:28Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:31Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:35Z",
+      "transfer_windows" : [
+        {
+          "progress_indicators" : 1,
+          "texts" : [
+            "拷贝",
+            "“访达”项目",
+            "正在将“large.bin”拷贝到“tboxrclone-webdav-501”",
+            "",
+            "停止进程",
+            "67.1 MB\/268.4 MB - 正在估算剩余时间…"
+          ]
+        }
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:39Z",
+      "transfer_windows" : [
+
+      ]
+    },
+    {
+      "note" : "No progress window alone does not prove successful copying; verify contents and errors separately.",
+      "observed_at" : "2026-11-14T09:12:42Z",
+      "transfer_windows" : [
+
+      ]
+    }
+  ],
+  "progress_disappeared" : true,
+  "saw_progress" : true,
+  "started_at" : "2026-11-14T09:10:53Z"
+}

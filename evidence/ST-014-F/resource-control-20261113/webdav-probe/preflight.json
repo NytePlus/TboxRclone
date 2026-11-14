@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-fork-probe-source/ForkProbe",
+  "target": "/private/tmp/tboxrclone-webdav-501/ForkProbe",
+  "remote_path": "/ForkProbe",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

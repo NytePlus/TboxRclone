@@ -1,0 +1,81 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "SpecialNamesChecked/emoji-\ud83d\ude00.bin",
+      "source": {
+        "size": 102,
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13"
+      },
+      "mounted": {
+        "size": 102,
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13"
+      },
+      "raw_cloud_name": "emoji-\ud83d\ude00.bin",
+      "cloud": {
+        "sha256": "ddadeb660fe8902c9fb2db9b6cf237c9ce5b31753398085c4367eb5910b9cc13",
+        "size": 102
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesChecked/percent%hash#question?plus+.bin",
+      "source": {
+        "size": 104,
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f"
+      },
+      "mounted": {
+        "size": 104,
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f"
+      },
+      "raw_cloud_name": "percent%hash#question\uff1fplus+.bin",
+      "cloud": {
+        "sha256": "ae8e3d799b1353a39815f90eceebefa265cc448fe39faf2008cb20784cb2df9f",
+        "size": 104
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesChecked/quotes-'\".bin",
+      "source": {
+        "size": 103,
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba"
+      },
+      "mounted": {
+        "size": 103,
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba"
+      },
+      "raw_cloud_name": "quotes-'\uff02.bin",
+      "cloud": {
+        "sha256": "c15a8928131f6687dd10f3c115ddf8d7c8f2df7e18d12c08c4fd16f666ce60ba",
+        "size": 103
+      },
+      "matched": true
+    },
+    {
+      "file": "SpecialNamesChecked/\u4e2d\u6587\u6587\u4ef6.bin",
+      "source": {
+        "size": 101,
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33"
+      },
+      "mounted": {
+        "size": 101,
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33"
+      },
+      "raw_cloud_name": "\u4e2d\u6587\u6587\u4ef6.bin",
+      "cloud": {
+        "sha256": "4565d7b898ccea3139ad260f9273115f806b30079d7683218c4e3ecd43af3b33",
+        "size": 101
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "SpecialNamesChecked",
+      "matched": true
+    }
+  ]
+}

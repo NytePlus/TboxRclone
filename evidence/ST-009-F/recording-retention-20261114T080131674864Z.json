@@ -1,0 +1,19 @@
+{
+  "movie": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/retained-recording.mov",
+  "segments": 6,
+  "removed": [
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/finder/display-1.mov",
+      "bytes": 2762844
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/recovery/display-1.mov",
+      "bytes": 1873954
+    },
+    {
+      "path": "/Users/nyte/Documents/ChatGPT/TboxRclone/evidence/ST-009-F/native-416-armed-20261114/completion.mov",
+      "bytes": 402513
+    }
+  ],
+  "mode": "separate recordings with gaps; not continuous coverage"
+}

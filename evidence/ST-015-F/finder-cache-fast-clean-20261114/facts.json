@@ -1,0 +1,10 @@
+{
+  "source_preserved": true,
+  "cache_full": true,
+  "live_spool_limit": "1",
+  "retained_spool_bytes_before": 142331178,
+  "injected_responses": [],
+  "elapsed_seconds": 31.15437754197046,
+  "recording_exit": 3,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

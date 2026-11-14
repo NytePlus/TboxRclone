@@ -1,0 +1,11 @@
+{
+  "status": "AWAITING_ACTION_TIME_USER_CONFIRMATION",
+  "delete_sent": false,
+  "native_command_delete_sent": true,
+  "confirmation_clicked": false,
+  "reason": "Automatic approval rejected clicking irreversible Finder deletion warning; user question pending. Backend code uses permanent=0 but no successful deletion/recycle receipt exists yet.",
+  "final_state_image": "pending-confirm-preview.png",
+  "final_state_reviewed": true,
+  "recording": "Recording ended before deletion action; not acceptance evidence, skip review.",
+  "retained_reference": "reference/delete-me.txt"
+}

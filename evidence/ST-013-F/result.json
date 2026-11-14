@@ -1,0 +1,78 @@
+{
+  "run_id": "protocol-20261114",
+  "scenario_id": "ST-013-F",
+  "versions": {
+    "client": "Explicit WebDAV COPY/MOVE Overwrite matrix; native Finder Replace evidence reused from ST-006-T",
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e dirty worktree",
+    "server": "rclone v1.76.0-DEV; live SJTU version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "overwrite_default",
+      "status": "PASS",
+      "observation": "Live COPY/MOVE matrix: [{\"id\": \"overwrite_default\", \"method\": \"COPY\", \"status\": 204, \"expected_status\": 204, \"target_matches\": true, \"source_matches\": true, \"passed\": true}, {\"id\": \"overwrite_default\", \"method\": \"MOVE\", \"status\": 204, \"expected_status\": 204, \"target_matches\": true, \"source_matches\": true, \"passed\": true}]. Independent source/mount/cloud content comparison passed; final Finder window reviewed, no dialog/progress. This does not claim interrupted Finder Replace atomicity.",
+      "final_state_reviewed": true,
+      "final_state_image": "protocol-20261114/finish/final-task-state-preview.png",
+      "artifacts": [
+        "protocol-20261114/protocol-results.json",
+        "protocol-20261114/requests.json",
+        "protocol-20261114/finish/content/reopen.json",
+        "protocol-20261114/finish/content/cloud.json",
+        "protocol-20261114/move-absence.json",
+        "protocol-20261114/finish/journal.json",
+        "protocol-20261114/finish/final-task-state-preview.png"
+      ]
+    },
+    {
+      "id": "overwrite_T",
+      "status": "PASS",
+      "observation": "Live COPY/MOVE matrix: [{\"id\": \"overwrite_T\", \"method\": \"COPY\", \"status\": 204, \"expected_status\": 204, \"target_matches\": true, \"source_matches\": true, \"passed\": true}, {\"id\": \"overwrite_T\", \"method\": \"MOVE\", \"status\": 204, \"expected_status\": 204, \"target_matches\": true, \"source_matches\": true, \"passed\": true}]. Independent source/mount/cloud content comparison passed; final Finder window reviewed, no dialog/progress. This does not claim interrupted Finder Replace atomicity.",
+      "final_state_reviewed": true,
+      "final_state_image": "protocol-20261114/finish/final-task-state-preview.png",
+      "artifacts": [
+        "protocol-20261114/protocol-results.json",
+        "protocol-20261114/requests.json",
+        "protocol-20261114/finish/content/reopen.json",
+        "protocol-20261114/finish/content/cloud.json",
+        "protocol-20261114/move-absence.json",
+        "protocol-20261114/finish/journal.json",
+        "protocol-20261114/finish/final-task-state-preview.png"
+      ]
+    },
+    {
+      "id": "overwrite_F",
+      "status": "PASS",
+      "observation": "Live COPY/MOVE matrix: [{\"id\": \"overwrite_F\", \"method\": \"COPY\", \"status\": 412, \"expected_status\": 412, \"target_matches\": true, \"source_matches\": true, \"passed\": true}, {\"id\": \"overwrite_F\", \"method\": \"MOVE\", \"status\": 412, \"expected_status\": 412, \"target_matches\": true, \"source_matches\": true, \"passed\": true}]. Independent source/mount/cloud content comparison passed; final Finder window reviewed, no dialog/progress. This does not claim interrupted Finder Replace atomicity.",
+      "final_state_reviewed": true,
+      "final_state_image": "protocol-20261114/finish/final-task-state-preview.png",
+      "artifacts": [
+        "protocol-20261114/protocol-results.json",
+        "protocol-20261114/requests.json",
+        "protocol-20261114/finish/content/reopen.json",
+        "protocol-20261114/finish/content/cloud.json",
+        "protocol-20261114/move-absence.json",
+        "protocol-20261114/finish/journal.json",
+        "protocol-20261114/finish/final-task-state-preview.png"
+      ]
+    },
+    {
+      "id": "file_directory_conflict",
+      "status": "PASS",
+      "observation": "Live COPY/MOVE matrix: [{\"id\": \"file_directory_conflict\", \"method\": \"COPY\", \"direction\": \"file-to-directory\", \"status\": 403, \"sentinels_intact\": true, \"passed\": true}, {\"id\": \"file_directory_conflict\", \"method\": \"COPY\", \"direction\": \"directory-to-file\", \"status\": 403, \"sentinels_intact\": true, \"passed\": true}, {\"id\": \"file_directory_conflict\", \"method\": \"MOVE\", \"direction\": \"file-to-directory\", \"status\": 403, \"sentinels_intact\": true, \"passed\": true}, {\"id\": \"file_directory_conflict\", \"method\": \"MOVE\", \"direction\": \"directory-to-file\", \"status\": 403, \"sentinels_intact\": true, \"passed\": true}]. Independent source/mount/cloud content comparison passed; final Finder window reviewed, no dialog/progress. This does not claim interrupted Finder Replace atomicity.",
+      "final_state_reviewed": true,
+      "final_state_image": "protocol-20261114/finish/final-task-state-preview.png",
+      "artifacts": [
+        "protocol-20261114/protocol-results.json",
+        "protocol-20261114/requests.json",
+        "protocol-20261114/finish/content/reopen.json",
+        "protocol-20261114/finish/content/cloud.json",
+        "protocol-20261114/move-absence.json",
+        "protocol-20261114/finish/journal.json",
+        "protocol-20261114/finish/final-task-state-preview.png"
+      ]
+    }
+  ],
+  "related_finder_evidence": "../ST-006-T/result.json"
+}

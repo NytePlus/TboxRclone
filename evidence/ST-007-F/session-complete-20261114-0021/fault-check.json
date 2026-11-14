@@ -1,0 +1,28 @@
+{
+  "matching_transport_errors": [
+    {
+      "sequence": 1474,
+      "request": 490,
+      "at": "2026-11-13T16:23:27.062280754Z",
+      "phase": "synthetic_status",
+      "rule": "cut-part-2-ea67097391b24efca75e9d52d43b66b0-1",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "PUT",
+      "status": 403,
+      "bytes": 25
+    },
+    {
+      "sequence": 1481,
+      "request": 492,
+      "at": "2026-11-13T16:23:29.333914297Z",
+      "phase": "synthetic_status",
+      "rule": "expired-session-ea67097391b24efca75e9d52d43b66b0",
+      "host": "pan.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 404,
+      "bytes": 25
+    }
+  ],
+  "expected_phase": "synthetic_status",
+  "fault_observed": true
+}

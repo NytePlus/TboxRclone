@@ -1,0 +1,44 @@
+{
+  "run_id": "finder-length-positive-20260926",
+  "scenario_id": "ST-008-T",
+  "versions": {
+    "client": "finder-drag 2026-09-26.1; Computer Use; curl protocol supplement",
+    "backend": "TboxRclone working-tree WebDAV guard; isolated live service",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "zero_bytes",
+      "status": "PASS",
+      "observation": "A real Finder drag completed and displayed empty.bin as one 0-byte item. Mounted and independent cloud reads both reported size 0 and the standard empty-content SHA-256; no matching guard receipt remained. The original failed run, where only ._empty.bin was published, is retained separately.",
+      "artifacts": [
+        "verification.json",
+        "empty-finder-fixed/preflight.json",
+        "empty-finder-fixed/drag.log",
+        "empty-finder-fixed/timeline.jsonl",
+        "empty-finder-fixed/display-1.mov",
+        "empty-finder/display-1.mov"
+      ]
+    },
+    {
+      "id": "known_length",
+      "status": "PASS",
+      "observation": "A protocol-level supplement sent Content-Length: 12, received HTTP 201, and both the mounted path and independent cloud read contained exactly 12 bytes with the expected complete SHA-256.",
+      "artifacts": [
+        "protocol-positive.json",
+        "verification.json"
+      ]
+    },
+    {
+      "id": "unknown_length",
+      "status": "PASS",
+      "observation": "A protocol-level supplement sent Transfer-Encoding: chunked, received HTTP 201, and both the mounted path and independent cloud read contained exactly 14 bytes with the expected complete SHA-256.",
+      "artifacts": [
+        "protocol-positive.json",
+        "verification.json"
+      ]
+    }
+  ]
+}

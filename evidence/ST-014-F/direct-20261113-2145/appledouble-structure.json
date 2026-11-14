@@ -1,0 +1,18 @@
+{
+  "size": 4096,
+  "entries": [
+    {
+      "id": 9,
+      "offset": 50,
+      "length": 3760,
+      "within_file": true
+    },
+    {
+      "id": 2,
+      "offset": 3810,
+      "length": 286,
+      "within_file": true
+    }
+  ],
+  "resource_marker_present": false
+}

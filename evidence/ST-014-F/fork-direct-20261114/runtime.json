@@ -1,0 +1,25 @@
+{
+  "command": [
+    "sh",
+    "/src/scripts/run-go-service.sh",
+    "tboxrclone",
+    "serve",
+    "webdav",
+    "sjtu:codex-api-lab/finder-resume-20261113-2240",
+    "--config",
+    "/secrets/rclone-finder.conf",
+    "--addr",
+    ":8686",
+    "--baseurl",
+    "",
+    "--vfs-cache-mode",
+    "off",
+    "--dir-cache-time",
+    "5s",
+    "--no-recursive-delete",
+    "--cache-dir",
+    "/state/vfs"
+  ],
+  "proxy_variables_present": [],
+  "state_dir": "/state/finder-fault-finder-resume-20261113-2240"
+}

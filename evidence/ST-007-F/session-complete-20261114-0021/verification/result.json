@@ -1,0 +1,7 @@
+{
+  "elapsed_seconds": 4.164839792065322,
+  "errors": [
+    "review-generation failed: exit -5"
+  ],
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

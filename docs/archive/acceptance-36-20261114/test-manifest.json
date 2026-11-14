@@ -1,0 +1,1265 @@
+{
+  "schema_version": 1,
+  "status": "implementation_in_progress_not_accepted",
+  "frameworks": {
+    "unit": "Go testing + httptest (implemented; race tests executed)",
+    "backend": "rclone fstests v1.75.1 (complete live lifecycle passed: 87 PASS, 33 SKIP; optional skips are not acceptance passes)",
+    "protocol": "HTTP/WebDAV harness + HTTPS fault proxy (partial; live response-loss experiment executed)",
+    "system": "Real macOS Finder plus protocol supplements: 12 of 36 branches have evidence-backed PASS status; remaining branches and historical evidence boundaries are detailed per test."
+  },
+  "tests": [
+    {
+      "id": "ST-001-T",
+      "title": "完整保存文件：正常上传",
+      "user_role": "isolated normal user",
+      "user_goal": "完整保存文件",
+      "condition_ids": [
+        "C-001"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 拖入固定内容文件",
+      "branch": "正常上传",
+      "expected": "保存期间允许零字节占位；Finder 报告完成并重开后大小与 SHA-256 一致；故障后保留可恢复数据且错误可见",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-001-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-001-T",
+      "related_unit_tests": [
+        "U04",
+        "U07"
+      ],
+      "known_gap": "Direct-rclone Finder baseline rerun passed on 2026-11-13; fault branches remain separate.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-001-F",
+      "title": "完整保存文件：上传第一个/中间/最后一个分片时断网",
+      "user_role": "isolated normal user",
+      "user_goal": "完整保存文件",
+      "condition_ids": [
+        "C-001"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 拖入固定内容文件",
+      "branch": "上传第一个/中间/最后一个分片时断网",
+      "expected": "保存期间允许零字节占位；成功恢复后大小与 SHA-256 一致；不能恢复时保留已接受数据并向用户显示失败",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-001-F/retained-recording.mov",
+      "evidence_directory": "evidence/ST-001-F",
+      "related_unit_tests": [
+        "U04",
+        "U07"
+      ],
+      "known_gap": "",
+      "status": "pass"
+    },
+    {
+      "id": "ST-002-T",
+      "title": "取消不损坏旧文件：confirm 之前取消",
+      "user_role": "isolated normal user",
+      "user_goal": "取消不损坏旧文件",
+      "condition_ids": [
+        "C-002"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "在 Finder 覆盖同名文件时取消",
+      "branch": "confirm 之前取消",
+      "expected": "提交前旧版不变；提交后允许新版但必须对账，禁止误删",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-002-T/copy/display-1.mov",
+      "evidence_directory": "evidence/ST-002-T",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "The before-confirm cancellation branch passed. The post-confirm response-loss cancellation branch remains separately required in ST-002-F.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-002-F",
+      "title": "取消不损坏旧文件：confirm 已执行后丢响应再取消",
+      "user_role": "isolated normal user",
+      "user_goal": "取消不损坏旧文件",
+      "condition_ids": [
+        "C-002"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "在 Finder 覆盖同名文件时取消",
+      "branch": "confirm 已执行后丢响应再取消",
+      "expected": "提交前旧版不变；提交后允许新版但必须对账，禁止误删",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-002-F",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "api.md#5-幂等性与结果未知",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-003-T",
+      "title": "恢复未同步数据：SIGTERM",
+      "user_role": "isolated normal user",
+      "user_goal": "恢复未同步数据",
+      "condition_ids": [
+        "C-003"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 保存后重启服务",
+      "branch": "SIGTERM",
+      "expected": "达到所声明持久边界的数据恢复；待传数据仍存在，不静默清空",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-003-T/finder-term-20261114-0048/finder/display-1.mov",
+      "evidence_directory": "evidence/ST-003-T",
+      "related_unit_tests": [
+        "U07"
+      ],
+      "known_gap": "Finder SIGTERM durable recovery passed with explicit tbox-state resume and remount; not transparent continuation. Host crash/power loss remains separate in ST-003-F.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-003-F",
+      "title": "恢复未同步数据：SIGKILL；另做宿主机崩溃/掉电实验",
+      "user_role": "isolated normal user",
+      "user_goal": "恢复未同步数据",
+      "condition_ids": [
+        "C-003"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 保存后重启服务",
+      "branch": "SIGKILL；另做宿主机崩溃/掉电实验",
+      "expected": "达到所声明持久边界的数据恢复；待传数据仍存在，不静默清空",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-003-F/finder-kill-20261114-0100/finder/display-1.mov",
+      "evidence_directory": "evidence/ST-003-F",
+      "related_unit_tests": [
+        "U07"
+      ],
+      "known_gap": "Finder SIGKILL durable recovery passed with explicit resume/remount and independent full hashes. Host crash/power-loss experiment remains NOT_RUN; container SIGKILL does not substitute for it.",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-004-T",
+      "title": "移动不丢数据：MOVE 响应送达",
+      "user_role": "isolated normal user",
+      "user_goal": "移动不丢数据",
+      "condition_ids": [
+        "C-004"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 mv 两个挂载内目录之间的文件/目录",
+      "branch": "MOVE 响应送达",
+      "expected": "源目标身份可核对；不重复复制/不误删新对象；目录树完整",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-004-T",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "api.md#5-幂等性与结果未知",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-004-F",
+      "title": "移动不丢数据：MOVE 已执行但响应丢失，Ctrl+C 后重试",
+      "user_role": "isolated normal user",
+      "user_goal": "移动不丢数据",
+      "condition_ids": [
+        "C-004"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 mv 两个挂载内目录之间的文件/目录",
+      "branch": "MOVE 已执行但响应丢失，Ctrl+C 后重试",
+      "expected": "源目标身份可核对；不重复复制/不误删新对象；目录树完整",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-004-F",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "api.md#5-幂等性与结果未知",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-005-T",
+      "title": "跨盘移动安全：目标已确认",
+      "user_role": "isolated normal user",
+      "user_goal": "跨盘移动安全",
+      "condition_ids": [
+        "C-005"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 mv 本地文件到挂载盘，观察源和同步状态",
+      "branch": "目标已确认",
+      "expected": "必须如实显示未同步；严格云端先于删源需求若不满足则阻断发布或提供同步完成流程",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-005-T",
+      "related_unit_tests": [
+        "U07"
+      ],
+      "known_gap": "rclone-webdav.md#5-rclone-不自动提供的保证",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-005-F",
+      "title": "跨盘移动安全：目标仅进入本地 VFS 缓存时断网/杀服务",
+      "user_role": "isolated normal user",
+      "user_goal": "跨盘移动安全",
+      "condition_ids": [
+        "C-005"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 mv 本地文件到挂载盘，观察源和同步状态",
+      "branch": "目标仅进入本地 VFS 缓存时断网/杀服务",
+      "expected": "必须如实显示未同步；严格云端先于删源需求若不满足则阻断发布或提供同步完成流程",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-005-F",
+      "related_unit_tests": [
+        "U07"
+      ],
+      "known_gap": "rclone-webdav.md#5-rclone-不自动提供的保证",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-006-T",
+      "title": "单客户端保存不互相破坏：顺序保存",
+      "user_role": "isolated normal user",
+      "user_goal": "单个 Finder 客户端的保存请求不互相破坏",
+      "condition_ids": [
+        "C-006"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder/编辑器顺序保存同一文件，关闭后重新打开",
+      "branch": "Finder 操作按顺序完成",
+      "expected": "顺序操作成功，关闭后重开为用户最后确认的完整版本",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-006-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-006-T",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "Confirmed Finder Replace issues DELETE of the old main file before new PUT; lab_delete=false rejects it. Preserve old content; rerun in final deletion batch and verify pre-publication data safety. See evidence/ST-006-T/request-trace-20261113/diagnosis.json.",
+      "status": "fail"
+    },
+    {
+      "id": "ST-006-F",
+      "title": "单客户端保存不互相破坏：请求重叠、取消或失败",
+      "user_role": "isolated normal user",
+      "user_goal": "单个 Finder 客户端的保存请求不互相破坏",
+      "condition_ids": [
+        "C-006"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "通过同一 Finder 挂载制造请求重叠，并在一次保存中取消或注入失败",
+      "branch": "同一 Finder 会话内请求重叠、取消或失败",
+      "expected": "完成后内容为用户最后确认的完整版本；失败可见且不损坏已接受数据；不要求固定状态码",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-006-F",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "Real second service startup rejected for same state, different state, and overlapping root; primary PID/health and all journal/spool/ownership hashes unchanged. Finder overlapping read/write and pending-path restart acceptance remain NOT_RUN; historical guard evidence is not reused.",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-007-T",
+      "title": "分片恢复不重复整传：K 和签名有效",
+      "user_role": "isolated normal user",
+      "user_goal": "分片恢复不重复整传",
+      "condition_ids": [
+        "C-007"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 大文件上传暂停网络后恢复",
+      "branch": "K 和签名有效",
+      "expected": "已验分片复用；过期正确续期/重建；不重用错误字节",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-007-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-007-T",
+      "related_unit_tests": [
+        "U03",
+        "U04"
+      ],
+      "known_gap": "Valid-session Finder recovery verified after a held and dropped part response; process restart and expiry are separate branches.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-007-F",
+      "title": "分片恢复不重复整传：签名到期、K 过期、重复发送同一分片",
+      "user_role": "isolated normal user",
+      "user_goal": "分片恢复不重复整传",
+      "condition_ids": [
+        "C-007"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 大文件上传暂停网络后恢复",
+      "branch": "签名到期、K 过期、重复发送同一分片",
+      "expected": "已验分片复用；过期正确续期/重建；不重用错误字节",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-007-F/retained-recording.mov",
+      "evidence_directory": "evidence/ST-007-F",
+      "related_unit_tests": [
+        "U03",
+        "U04"
+      ],
+      "known_gap": "Finder recovery verified for controlled signature 403, session 404 rebuild, and identical part replay; complete recordings and independent content hashes in evidence/ST-007-F/result.json. These faults model server rejection, not elapsed expiry timing.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-008-T",
+      "title": "输入长度正确：零字节、完整长度、未知长度",
+      "user_role": "isolated normal user",
+      "user_goal": "输入长度正确",
+      "condition_ids": [
+        "C-008"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "挂载写文件；协议层补充构造短流",
+      "branch": "零字节、完整长度、未知长度",
+      "expected": "空文件可用；长度错误不发布残缺文件，不无限等待",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-008-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-008-T",
+      "related_unit_tests": [
+        "U04"
+      ],
+      "known_gap": "Direct-rclone Finder empty file and known/chunked protocol supplements passed on 2026-11-13.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-008-F",
+      "title": "输入长度正确：提前 EOF、多余字节、流读取失败",
+      "user_role": "isolated normal user",
+      "user_goal": "输入长度正确",
+      "condition_ids": [
+        "C-008"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "挂载写文件；协议层补充构造短流",
+      "branch": "提前 EOF、多余字节、流读取失败",
+      "expected": "空文件可用；长度错误不发布残缺文件，不无限等待",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-008-F/finder-length-20261114-0142/finder/display-1.mov",
+      "evidence_directory": "evidence/ST-008-F",
+      "related_unit_tests": [
+        "U04"
+      ],
+      "known_gap": "Malformed streams tested by explicit protocol supplement; native Finder same-directory save/reopen and independent full cloud inventory verified. excess_bytes uses invalid chunk framing; Finder does not construct malformed HTTP.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-009-T",
+      "title": "随机读取内容正确：固定版本 Range",
+      "user_role": "isolated normal user",
+      "user_goal": "随机读取内容正确",
+      "condition_ids": [
+        "C-009"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 快速查看/应用 seek 大文件",
+      "branch": "固定版本 Range",
+      "expected": "不混合不同版本；错误 Range 可检测；必要时重新打开",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-009-T/upload-recorded-after-unlock/display-1.mov",
+      "evidence_directory": "evidence/ST-009-T",
+      "related_unit_tests": [
+        "U06"
+      ],
+      "known_gap": "Positive fixed-version Finder Quick Look and Range branch passes; ignored Range, 416, and replacement during read remain in ST-009-F.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-009-F",
+      "title": "随机读取内容正确：Range 被忽略、416、读取中网页端替换",
+      "user_role": "isolated normal user",
+      "user_goal": "随机读取内容正确",
+      "condition_ids": [
+        "C-009"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 快速查看/应用 seek 大文件",
+      "branch": "Range 被忽略、416、读取中网页端替换",
+      "expected": "不混合不同版本；错误 Range 可检测；必要时重新打开",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-009-F/retained-recording.mov",
+      "evidence_directory": "evidence/ST-009-F",
+      "related_unit_tests": [
+        "U06"
+      ],
+      "known_gap": "Native416 rejection and recovery now PASS after lazy-read success-header fix; exact9MiB content and final Finder state verified without restart/remount. Ignored-range and replace-during-read native subcases remain pending. Historical failure retained.",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-010-T",
+      "title": "完整浏览目录：0/1/50/51/1000 条稳定列表",
+      "user_role": "isolated normal user",
+      "user_goal": "完整浏览目录",
+      "condition_ids": [
+        "C-010"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 打开超过一页的目录",
+      "branch": "0/1/50/51/1000 条稳定列表",
+      "expected": "稳定目录无丢项/重复；变化时策略明确且不死循环",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-010-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-010-T",
+      "related_unit_tests": [
+        "U08"
+      ],
+      "known_gap": "All five stable sizes passed through real Finder and independent exact-set validation on 2026-11-13. Initial navigation-script timeout retained; changing-directory cases remain separate.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-010-F",
+      "title": "完整浏览目录：分页期间新增/删除/重命名、重复游标",
+      "user_role": "isolated normal user",
+      "user_goal": "完整浏览目录",
+      "condition_ids": [
+        "C-010"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 打开超过一页的目录",
+      "branch": "分页期间新增/删除/重命名、重复游标",
+      "expected": "稳定目录无丢项/重复；变化时策略明确且不死循环",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-010-F",
+      "related_unit_tests": [
+        "U08"
+      ],
+      "known_gap": "rclone-webdav.md#2-后端必要接口映射",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-011-T",
+      "title": "非空目录不会被误删：空目录",
+      "user_role": "isolated normal user",
+      "user_goal": "非空目录不会被误删",
+      "condition_ids": [
+        "C-011"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 rmdir 挂载目录",
+      "branch": "空目录",
+      "expected": "空目录删除；非空/竞态不递归删除用户内容",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-011-T",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "api.md#4-新发现的高价值能力",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-011-F",
+      "title": "非空目录不会被误删：非空目录与受控子项创建竞态",
+      "user_role": "isolated normal user",
+      "user_goal": "非空目录不会被误删",
+      "condition_ids": [
+        "C-011"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "终端 rmdir 挂载目录",
+      "branch": "非空目录；同一受控实例在空检查后尝试新建子项",
+      "expected": "非空目录拒绝删除；检查至删除期间阻止受控子项创建，不丢已有内容",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-011-F",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "concurrency-contract.md",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-012-T",
+      "title": "Finder 锁流程兼容：正确 token/有效时间",
+      "user_role": "isolated normal user",
+      "user_goal": "Finder 的标准 WebDAV 锁流程可以完成保存",
+      "condition_ids": [
+        "C-012"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "编辑器打开并保存，第二客户端修改；协议层补充 token 条件",
+      "branch": "正确 token/有效时间",
+      "expected": "当前服务进程内正确 token 可完成保存；不虚报持久云端锁",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-012-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-012-T",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "Direct Finder lock/save/read flow and valid-token supplement passed. Method trace does not capture raw If headers. Negative conditions tracked separately in ST-012-F.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-012-F",
+      "title": "Finder 锁流程兼容：缺 token、错误 token、过期、父目录锁、重启后重新挂载",
+      "user_role": "isolated normal user",
+      "user_goal": "Finder 的标准 WebDAV 锁流程可以完成保存",
+      "condition_ids": [
+        "C-012"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 打开并保存；协议层补充 token 条件；服务重启后重新挂载",
+      "branch": "缺 token、错误 token、过期、父目录锁；重启后旧 token 失效",
+      "expected": "当前进程内无权写操作被拒绝；重启不虚报旧锁仍有效；重新挂载后可继续",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-012-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-012-F",
+      "related_unit_tests": [
+        "U09"
+      ],
+      "known_gap": "Old token after service restart rejected and remounted Finder save passed. One expired-token check had a 30-second HTTP 200 GET with mismatched bytes; later diagnostic passed but root cause is unresolved. Retain FAIL.",
+      "status": "fail"
+    },
+    {
+      "id": "ST-013-T",
+      "title": "Finder 覆盖与目录复制正确：目标不存在",
+      "user_role": "isolated normal user",
+      "user_goal": "Finder 覆盖与目录复制正确",
+      "condition_ids": [
+        "C-013"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 替换文件、复制目录；协议层设置 Overwrite",
+      "branch": "目标不存在",
+      "expected": "完整复制；F 拒绝覆盖；安全保存不先删旧版导致丢失",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-013-T/retained-recording.mov",
+      "evidence_directory": "evidence/ST-013-T",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "File and directory absent-target copies rerun through direct rclone on 2026-11-13; complete content and empty directories verified.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-013-F",
+      "title": "Finder 覆盖与目录复制正确：目标已存在，Overwrite 缺省/T/F；文件目录冲突",
+      "user_role": "isolated normal user",
+      "user_goal": "Finder 覆盖与目录复制正确",
+      "condition_ids": [
+        "C-013"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 替换文件、复制目录；协议层设置 Overwrite",
+      "branch": "目标已存在，Overwrite 缺省/T/F；文件目录冲突",
+      "expected": "完整复制；F 拒绝覆盖；安全保存不先删旧版导致丢失",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-013-F",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "rclone-webdav.md#4-finder-所需-webdav-需求子集",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-014-T",
+      "title": "特殊名字与元数据可重开：普通名称",
+      "user_role": "isolated normal user",
+      "user_goal": "特殊名字与元数据可重开",
+      "condition_ids": [
+        "C-014"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 新建重命名；应用保存并重新打开",
+      "branch": "普通名称",
+      "expected": "路径可往返；冲突可见；不静默吞掉所需属性",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-014-T/display-1.mov",
+      "evidence_directory": "evidence/ST-014-T",
+      "related_unit_tests": [
+        "U01",
+        "U02"
+      ],
+      "known_gap": "Ordinary name and known xattr survived fresh remount; special names and conflicts remain outside this branch.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-014-F",
+      "title": "特殊名字与元数据可重开：中文、emoji、引号、%#?+、NFC/NFD、大小写、AppleDouble",
+      "user_role": "isolated normal user",
+      "user_goal": "特殊名字与元数据可重开",
+      "condition_ids": [
+        "C-014"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 新建重命名；应用保存并重新打开",
+      "branch": "中文、emoji、引号、%#?+、NFC/NFD、大小写、AppleDouble",
+      "expected": "路径可往返；冲突可见；不静默吞掉所需属性",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-014-F",
+      "related_unit_tests": [
+        "U01",
+        "U02"
+      ],
+      "known_gap": "Opaque resource fork lost in Finder/WebDAV copy; local Finder and direct native-packed AppleDouble PUT preserve it. Valid resource fork survives fresh remount. Cause narrowed to copy path, unresolved. Case collision and rename/save still unverified. See evidence/ST-014-F/resource-control-20261113/README.md.",
+      "status": "fail"
+    },
+    {
+      "id": "ST-015-T",
+      "title": "资源不足明确失败：正常权限、token、磁盘空间",
+      "user_role": "isolated normal user",
+      "user_goal": "资源不足明确失败",
+      "condition_ids": [
+        "C-015"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 保存/浏览后重开",
+      "branch": "正常权限、token、磁盘空间",
+      "expected": "保留可恢复副本；不把权限失败当空目录；退避有界",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-015-T/recording/display-1.mov",
+      "evidence_directory": "evidence/ST-015-T",
+      "related_unit_tests": [
+        "U02",
+        "U03",
+        "U07"
+      ],
+      "known_gap": "Normal resources only; failure branches not covered.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-015-F",
+      "title": "资源不足明确失败：401/403/429/5xx、云端配额、本地缓存满",
+      "user_role": "isolated normal user",
+      "user_goal": "资源不足明确失败",
+      "condition_ids": [
+        "C-015"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 保存/浏览后重开",
+      "branch": "401/403/429/5xx、云端配额、本地缓存满",
+      "expected": "保留可恢复副本；不把权限失败当空目录；退避有界",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": "evidence/ST-015-F/retained-recording.mov",
+      "evidence_directory": "evidence/ST-015-F",
+      "related_unit_tests": [
+        "U02",
+        "U03",
+        "U07"
+      ],
+      "known_gap": "All six resource-failure subcases verified.503 ambiguous init remains pending: same-path retry visibly rejects423 with retained source and no outbound writes; successful automatic recovery is not claimed. Recording gaps documented.",
+      "status": "pass"
+    },
+    {
+      "id": "ST-016-T",
+      "title": "异步操作完成才报成功：task 完成且全成功",
+      "user_role": "isolated normal user",
+      "user_goal": "异步操作完成才报成功",
+      "condition_ids": [
+        "C-016"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 复制大目录并立即重开",
+      "branch": "task 完成且全成功",
+      "expected": "未完成不显示云端成功；部分失败逐项可追踪",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-016-T",
+      "related_unit_tests": [
+        "U02",
+        "U05"
+      ],
+      "known_gap": "api.md#4-新发现的高价值能力",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-016-F",
+      "title": "异步操作完成才报成功：仅受理、部分失败、task 查询超时",
+      "user_role": "isolated normal user",
+      "user_goal": "异步操作完成才报成功",
+      "condition_ids": [
+        "C-016"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 复制大目录并立即重开",
+      "branch": "仅受理、部分失败、task 查询超时",
+      "expected": "未完成不显示云端成功；部分失败逐项可追踪",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-016-F",
+      "related_unit_tests": [
+        "U02",
+        "U05"
+      ],
+      "known_gap": "api.md#4-新发现的高价值能力",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-017-T",
+      "title": "删除重试不误删新对象：删除成功且无重建",
+      "user_role": "isolated normal user",
+      "user_goal": "删除重试不误删新对象",
+      "condition_ids": [
+        "C-017"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 删除后断网，网页端同路径创建新文件",
+      "branch": "删除结果已明确且没有重建",
+      "expected": "删除完成并核对后释放路径占用；回收站项可追踪",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-017-T",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "concurrency-contract.md",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-017-F",
+      "title": "删除恢复不误删新对象：结果未知时拒绝重建",
+      "user_role": "isolated normal user",
+      "user_goal": "删除重试不误删新对象",
+      "condition_ids": [
+        "C-017"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 删除后断网，经同一挂载尝试同路径重建；重启后重复尝试，完成对账后再新建",
+      "branch": "删除响应丢失后受控重建；重启恢复期间受控重建",
+      "expected": "未决删除阻止同路径重建；对账后才释放占用；新对象不得被旧操作后续重试删除",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-017-F",
+      "related_unit_tests": [
+        "U05",
+        "U09"
+      ],
+      "known_gap": "concurrency-contract.md",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-018-T",
+      "title": "传输高效且交互响应：单文件、稳定低延迟网络",
+      "user_role": "isolated normal user",
+      "user_goal": "传输高效且交互响应",
+      "condition_ids": [
+        "C-018"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 复制文件同时浏览目录",
+      "branch": "单文件、稳定低延迟网络",
+      "expected": "内容始终一致；请求/内存有界；记录吞吐和 p95，不以提速牺牲正确性",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-018-T",
+      "related_unit_tests": [
+        "U04",
+        "U06"
+      ],
+      "known_gap": "Small-file protocol baseline recorded HEAD p95 1.735s, sequential GET p95 2.421s and four-reader GET p95 4.962s; all13 GET hashes match. One HEAD incorrectly returned404 on upstream403, fixed separately with regression/live injection. Baseline is not a performance PASS: larger fixtures, distinct files, API comparison, resource bounds and Finder interaction remain required.",
+      "status": "not_run"
+    },
+    {
+      "id": "ST-018-F",
+      "title": "传输高效且交互响应：多文件/高 RTT/限速/丢包/恢复并发",
+      "user_role": "isolated normal user",
+      "user_goal": "传输高效且交互响应",
+      "condition_ids": [
+        "C-018"
+      ],
+      "routes": [
+        "macOS mounted drive",
+        "rclone VFS",
+        "sjtu backend",
+        "SMH API"
+      ],
+      "preconditions": "verification.md section 2; isolated fixture root; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe; single-controlled-client-v1: one managed service and no external writers except explicit defensive read-change probe",
+      "user_action": "Finder 复制文件同时浏览目录",
+      "branch": "多文件/高 RTT/限速/丢包/恢复并发",
+      "expected": "内容始终一致；请求/内存有界；记录吞吐和 p95，不以提速牺牲正确性",
+      "api_support_roles": [
+        "setup",
+        "external-event",
+        "fact-check"
+      ],
+      "mock_boundaries": [
+        "controlled network and process faults; real backend required for V evidence"
+      ],
+      "recording_path": null,
+      "evidence_directory": "evidence/ST-018-F",
+      "related_unit_tests": [
+        "U04",
+        "U06"
+      ],
+      "known_gap": "rclone-webdav.md#6-效率指标与发布门槛",
+      "status": "not_run"
+    }
+  ],
+  "product_contract": {
+    "revision": "single-controlled-client-v1",
+    "document": "docs/concurrency-contract.md",
+    "basis": "2026-09-17 user explicitly excludes concurrent access to the same file; client must reject conflicts",
+    "external_writers": "unsupported within managed root while mounted or recovery is pending",
+    "independent_file_and_part_parallelism": "required"
+  }
+}

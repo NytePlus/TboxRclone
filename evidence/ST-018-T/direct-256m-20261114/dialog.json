@@ -1,0 +1,15 @@
+{
+  "dialogs" : [
+    {
+      "app" : "com.apple.finder",
+      "buttons" : [
+        "好"
+      ],
+      "texts" : [
+        "“访达”不能完成该操作，因为不能读取或写入“large.bin”中的某些数据。\n（错误代码-36）"
+      ]
+    }
+  ],
+  "marker" : "large.bin",
+  "observed_at" : "2026-11-14T09:12:48Z"
+}

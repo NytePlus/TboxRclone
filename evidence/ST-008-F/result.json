@@ -1,0 +1,64 @@
+{
+  "run_id": "finder-length-20261114-0142",
+  "scenario_id": "ST-008-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "short_eof",
+      "status": "PASS",
+      "observation": "Protocol supplement rejected malformed stream with HTTP/1.1 405 Method Not Allowed; HEAD 404; elapsed 0.001653s. Native Finder same-directory save subsequently completed; accepted files have matching full hashes and rejected target is absent in mounted and independent cloud inventories.",
+      "artifacts": [
+        "finder-length-20261114-0142/protocol.json",
+        "finder-length-20261114-0142/ui-review.md",
+        "finder-length-20261114-0142/finder/display-1.mov",
+        "finder-length-20261114-0142/finder/capture-coverage.json",
+        "finder-length-20261114-0142/finder/drag.log",
+        "finder-length-20261114-0142/source-staging.json",
+        "finder-length-20261114-0142/requests.log",
+        "finder-length-20261114-0142/verification/reopen.json",
+        "finder-length-20261114-0142/cloud-inventory.json",
+        "finder-length-20261114-0142/absence.json"
+      ]
+    },
+    {
+      "id": "excess_bytes",
+      "status": "PASS",
+      "observation": "Protocol supplement rejected malformed stream with HTTP/1.1 405 Method Not Allowed; HEAD 404; elapsed 0.000820s. Native Finder same-directory save subsequently completed; accepted files have matching full hashes and rejected target is absent in mounted and independent cloud inventories.",
+      "artifacts": [
+        "finder-length-20261114-0142/protocol.json",
+        "finder-length-20261114-0142/ui-review.md",
+        "finder-length-20261114-0142/finder/display-1.mov",
+        "finder-length-20261114-0142/finder/capture-coverage.json",
+        "finder-length-20261114-0142/finder/drag.log",
+        "finder-length-20261114-0142/source-staging.json",
+        "finder-length-20261114-0142/requests.log",
+        "finder-length-20261114-0142/verification/reopen.json",
+        "finder-length-20261114-0142/cloud-inventory.json",
+        "finder-length-20261114-0142/absence.json"
+      ]
+    },
+    {
+      "id": "reader_failure",
+      "status": "PASS",
+      "observation": "Protocol supplement rejected malformed stream with HTTP/1.1 405 Method Not Allowed; HEAD 404; elapsed 0.000535s. Native Finder same-directory save subsequently completed; accepted files have matching full hashes and rejected target is absent in mounted and independent cloud inventories.",
+      "artifacts": [
+        "finder-length-20261114-0142/protocol.json",
+        "finder-length-20261114-0142/ui-review.md",
+        "finder-length-20261114-0142/finder/display-1.mov",
+        "finder-length-20261114-0142/finder/capture-coverage.json",
+        "finder-length-20261114-0142/finder/drag.log",
+        "finder-length-20261114-0142/source-staging.json",
+        "finder-length-20261114-0142/requests.log",
+        "finder-length-20261114-0142/verification/reopen.json",
+        "finder-length-20261114-0142/cloud-inventory.json",
+        "finder-length-20261114-0142/absence.json"
+      ]
+    }
+  ]
+}

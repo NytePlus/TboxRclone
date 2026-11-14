@@ -1,0 +1,1 @@
+{"directories":[],"files":{"rate-limit-retest.bin":{"sha256":"486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0","size":268435456}},"max_depth":-1,"method":"targeted direct cloud full file read, bypass WebDAV; not a directory inventory","root":"codex-api-lab/perf-clean-20261114-1730","selected_file":"rate-limit-retest.bin"}

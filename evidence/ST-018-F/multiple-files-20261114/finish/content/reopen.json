@@ -1,0 +1,47 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "BatchPerformance/alpha.bin",
+      "source": {
+        "size": 67108864,
+        "sha256": "dbfaca2662cb70b69dfefd5ac95d1f54a73663092d46cefdc9609dc695a12c98"
+      },
+      "mounted": {
+        "size": 67108864,
+        "sha256": "dbfaca2662cb70b69dfefd5ac95d1f54a73663092d46cefdc9609dc695a12c98"
+      },
+      "raw_cloud_name": "alpha.bin",
+      "cloud": {
+        "sha256": "dbfaca2662cb70b69dfefd5ac95d1f54a73663092d46cefdc9609dc695a12c98",
+        "size": 67108864
+      },
+      "matched": true
+    },
+    {
+      "file": "BatchPerformance/beta.bin",
+      "source": {
+        "size": 67108864,
+        "sha256": "07a1e6f3b84e57fbffcbc20ed126f43ceeaec19b8a1cdc0e63b3a75421e6dc54"
+      },
+      "mounted": {
+        "size": 67108864,
+        "sha256": "07a1e6f3b84e57fbffcbc20ed126f43ceeaec19b8a1cdc0e63b3a75421e6dc54"
+      },
+      "raw_cloud_name": "beta.bin",
+      "cloud": {
+        "sha256": "07a1e6f3b84e57fbffcbc20ed126f43ceeaec19b8a1cdc0e63b3a75421e6dc54",
+        "size": 67108864
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "BatchPerformance",
+      "matched": true
+    }
+  ]
+}

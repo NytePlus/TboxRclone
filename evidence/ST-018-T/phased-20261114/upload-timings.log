@@ -1,0 +1,6 @@
+2026/11/14 10:11:38 INFO  : phased.bin: upload timing: bytes=0 staging=19.371375ms preflight=36.515542ms transfer_verify=968.425459ms final_info=585.335875ms total=1.609649376s
+2026/11/14 10:11:39 INFO  : ._phased.bin: upload timing: bytes=0 staging=15.151125ms preflight=44.001083ms transfer_verify=840.978917ms final_info=589.276626ms total=1.489408584s
+2026/11/14 10:11:40 INFO  : ._phased.bin: upload timing: bytes=4096 staging=17.193083ms preflight=64.130083ms transfer_verify=203.339542ms final_info=586.1385ms total=870.80225ms
+2026/11/14 10:11:45 INFO  : ._phased.bin: upload timing: bytes=4096 staging=9.404875ms preflight=732.224042ms transfer_verify=206.113792ms final_info=618.660084ms total=1.566406584s
+2026/11/14 10:11:47 INFO  : ._phased.bin: upload timing: bytes=4096 staging=16.576917ms preflight=632.366667ms transfer_verify=846.987834ms final_info=586.318625ms total=2.082251168s
+2026/11/14 10:12:08 INFO  : phased.bin: upload timing: bytes=-1 staging=6.830447128s preflight=57.794583ms transfer_verify=20.452529593s final_info=13.718667ms total=27.354490846s

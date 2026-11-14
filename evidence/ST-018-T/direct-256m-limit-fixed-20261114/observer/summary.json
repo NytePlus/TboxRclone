@@ -1,0 +1,11 @@
+{
+  "blocking_dialog_detected": false,
+  "committed": true,
+  "browse_started_while_uploading": true,
+  "browse_exit_code": 1,
+  "samples": 30,
+  "metadata_p95_seconds": 1.076628915965557,
+  "metadata_all_200": true,
+  "elapsed_seconds": 64.62874345784076,
+  "acceptance": "REQUIRES_NATIVE_REVIEW_AND_INDEPENDENT_CONTENT_CHECK"
+}

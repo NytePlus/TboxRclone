@@ -1,0 +1,39 @@
+{
+  "scope": "code-driven performance experiment; not Finder acceptance",
+  "source": "/private/tmp/tbox-perf-20261114/input/phased.bin",
+  "size": 268435456,
+  "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "remote_root": "codex-api-lab/perf-code-larger-read-20261114",
+  "cases": [
+    {
+      "mode": "length",
+      "repetition": 1,
+      "filename": "length-1.bin",
+      "status": 201,
+      "send_seconds": 1.8491472501773387,
+      "total_seconds": 25.67514641699381,
+      "bytes_per_second": 10455070.11490024,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    },
+    {
+      "mode": "chunked",
+      "repetition": 1,
+      "filename": "chunked-1.bin",
+      "status": 201,
+      "send_seconds": 1.839655957883224,
+      "total_seconds": 24.982201332924888,
+      "bytes_per_second": 10745068.15563206,
+      "passed": true,
+      "cloud_matches": true,
+      "committed": true
+    }
+  ],
+  "passed": true,
+  "source_unchanged": true,
+  "median_seconds": {
+    "length": 25.67514641699381,
+    "chunked": 24.982201332924888
+  }
+}

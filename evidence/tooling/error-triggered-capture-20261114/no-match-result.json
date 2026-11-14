@@ -1,0 +1,6 @@
+{
+  "scope": "native accessibility watcher with nonexistent test marker",
+  "exit_code": 3,
+  "created_stop_signal": false,
+  "pass": true
+}

@@ -1,0 +1,22 @@
+{
+  "user_policy": "At most one recording per scenario; remove old recordings",
+  "recording": "retained-recording.mov",
+  "index": "retained-recording.mov.index.json",
+  "originals": [
+    {
+      "path": "evidence/ST-007-T/direct-finder-20261113-2240/baseline/display-1.mov",
+      "bytes": 56218519,
+      "sha256": "b7c1816b3d1a68a4bea1ba812d0daa45eb5de5c1ae63948d4dfcd372f32ea638",
+      "retained_segment": false
+    },
+    {
+      "path": "evidence/ST-007-T/direct-finder-20261113-2240/fault/display-1.mov",
+      "bytes": 153323078,
+      "sha256": "542219e2a0a11a607de17b7d55ae4a320add1b63e2c67fd5ead9cfb74144fc22",
+      "retained_segment": true
+    }
+  ],
+  "retained_bytes": 153323078,
+  "freed_bytes": 56218519,
+  "note": "Historical review text and timestamps refer to original segments. Use the index to locate them; concatenation does not imply continuity between runs."
+}

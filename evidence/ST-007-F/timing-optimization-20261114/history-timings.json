@@ -1,0 +1,127 @@
+[
+  {
+    "run": "signature-finder-20261113-2256",
+    "open_windows_s": 1.0560619831085205,
+    "capture_initialization_s": 4.0496580600738525,
+    "drag_s": 4.064042091369629,
+    "capture_wall_s": 90.44298911094666,
+    "finder_completion_video_s": 50,
+    "review_sheets": 9,
+    "review_first_ms": 1794582181970,
+    "review_last_ms": 1794582448843,
+    "review_span_s": 266.873,
+    "cloud_files": 8,
+    "cloud_bytes": 28329988,
+    "commands": [
+      {
+        "id": "exec-afd323de-ca16-4bb2-83ae-1628665a2d6a",
+        "command": "/bin/zsh -lc docker compose -f docker-compose.yml -f docker-compose.doh.yml run --rm -v \"$PWD/.secrets:/secrets:ro\" go-tests go run ./cmd/finder-inspect --max-depth 0 codex-api-lab/finder-resume-20261113-2240 > evidence/ST-007-F/signature-finder-20261113-2256/cloud.json",
+        "started_ms": 1794582041745,
+        "completed_ms": 1794582053484,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-7f6b225e-2b2e-46ba-9f60-b5c03bbf6b26",
+        "command": "/bin/zsh -lc swift -module-cache-path /private/tmp/tboxrclone-swift-module-cache scripts/finder/review-recording.swift evidence/ST-007-F/signature-finder-20261113-2256/finder/display-1.mov evidence/ST-007-F/signature-finder-20261113-2256/finder/review",
+        "started_ms": 1794582107688,
+        "completed_ms": 1794582125638,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-24dedb08-5371-4319-a780-233772b46dd6",
+        "command": "/bin/zsh -lc python3 scripts/finder/verify-copy.py /private/tmp/tbox-finder-signature-20261113-2256 /private/tmp/tboxrclone-webdav-501 evidence/ST-007-F/signature-finder-20261113-2256/cloud.json evidence/ST-007-F/signature-finder-20261113-2256/reopen.json signature-expired.bin",
+        "started_ms": 1794582149114,
+        "completed_ms": 1794582149114,
+        "duration_ms": null
+      }
+    ]
+  },
+  {
+    "run": "replay-cleared-20261114-0005",
+    "open_windows_s": 0.9930031299591064,
+    "capture_initialization_s": 4.048768043518066,
+    "drag_s": 3.906697988510132,
+    "capture_wall_s": 180.36921405792236,
+    "finder_completion_video_s": 67,
+    "review_sheets": 18,
+    "review_first_ms": 1794586193550,
+    "review_last_ms": 1794586283914,
+    "review_span_s": 90.364,
+    "cloud_files": 25,
+    "cloud_bytes": 103860228,
+    "commands": [
+      {
+        "id": "exec-3a98f80a-9352-426e-9b02-f3305bb04097",
+        "command": "/bin/zsh -lc docker compose -f docker-compose.yml -f docker-compose.doh.yml run --rm -v \"$PWD/.secrets:/secrets:ro\" go-tests go run ./cmd/finder-inspect --max-depth 0 codex-api-lab/finder-resume-20261113-2240 > evidence/ST-007-F/replay-cleared-20261114-0005/cloud.json",
+        "started_ms": 1794586055917,
+        "completed_ms": 1794586082522,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-bebb9733-849c-4a57-910e-b24f60d7e00b",
+        "command": "/bin/zsh -lc python3 scripts/finder/verify-copy.py /private/tmp/tbox-part-fault-replay-cleared-20261114-0005 /private/tmp/tboxrclone-webdav-501 evidence/ST-007-F/replay-cleared-20261114-0005/cloud.json evidence/ST-007-F/replay-cleared-20261114-0005/reopen.json cut-part-2-replay-cleared-20261114-0005.bin",
+        "started_ms": 1794586115969,
+        "completed_ms": 1794586124884,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-8463d6b1-1214-40ce-a340-3b9c5ee6be83",
+        "command": "/bin/zsh -lc python3 scripts/finder/part-fault.py evidence/ST-007-T/direct-finder-20261113-2240 evidence/ST-007-F/replay-cleared-20261114-0005 /private/tmp/tbox-part-fault-replay-finder-20261113-2357/cut-part-2-replay-finder-20261113-2357.bin --part 2 --mode replay-part --seconds 180",
+        "started_ms": 1794585927432,
+        "completed_ms": 1794586137904,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-33278ed1-b9f1-405e-9f4f-e1757ef8befe",
+        "command": "/bin/zsh -lc python3 - <<'PY'\nfrom pathlib import Path\nimport subprocess\np=Path('evidence/ST-007-F/replay-cleared-20261114-0005/finder')\nfor f in p.glob('review.*.png'):\n subprocess.run(['sips','-Z','2250',str(f),'--out',str(p/f.name.replace('review.','compact.'))],check=True,stdout=subprocess.DEVNULL)\nPY",
+        "started_ms": 1794586154348,
+        "completed_ms": 1794586160306,
+        "duration_ms": null
+      }
+    ]
+  },
+  {
+    "run": "session-complete-20261114-0021",
+    "open_windows_s": 1.574402093887329,
+    "capture_initialization_s": 4.056103229522705,
+    "drag_s": 3.9650769233703613,
+    "capture_wall_s": 180.68793606758118,
+    "finder_completion_video_s": 155,
+    "review_sheets": 18,
+    "review_first_ms": 1794587185791,
+    "review_last_ms": 1794587413852,
+    "review_span_s": 228.061,
+    "cloud_files": 29,
+    "cloud_bytes": 122742788,
+    "commands": [
+      {
+        "id": "exec-cdfc33c4-1c9d-40d2-b270-db51ea9f1164",
+        "command": "/bin/zsh -lc python3 scripts/finder/part-fault.py evidence/ST-007-T/direct-finder-20261113-2240 evidence/ST-007-F/session-complete-20261114-0021 /private/tmp/tbox-part-fault-replay-finder-20261113-2357/cut-part-2-replay-finder-20261113-2357.bin --part 2 --mode session-expired --seconds 180",
+        "started_ms": 1794586886108,
+        "completed_ms": 1794587101320,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-0f1df2cb-0907-4e18-8649-ce26fa88bc68",
+        "command": "/bin/zsh -lc python3 - <<'PY'\nfrom pathlib import Path\nimport subprocess,json\np=Path('evidence/ST-007-F/session-complete-20261114-0021/finder')\nfor f in p.glob('review.*.png'):\n subprocess.run(['sips','-Z','2250',str(f),'--out',str(p/f.name.replace('review.','compact.'))],check=True,stdout=subprocess.DEVNULL)\nr=json.load(open(p.parent/'fault-check.json'))\nprint(r)\nPY",
+        "started_ms": 1794587154357,
+        "completed_ms": 1794587160218,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-9027eeb1-1c6a-4aa9-a865-cb6f3893cf3b",
+        "command": "/bin/zsh -lc docker compose -f docker-compose.yml -f docker-compose.doh.yml run --rm -v \"$PWD/.secrets:/secrets:ro\" go-tests go run ./cmd/finder-inspect --max-depth 0 codex-api-lab/finder-resume-20261113-2240 > evidence/ST-007-F/session-complete-20261114-0021/cloud.json",
+        "started_ms": 1794587119912,
+        "completed_ms": 1794587198118,
+        "duration_ms": null
+      },
+      {
+        "id": "exec-43a0bc41-47f8-4ccf-80c1-26a690e0ded0",
+        "command": "/bin/zsh -lc python3 scripts/finder/verify-copy.py /private/tmp/tbox-part-fault-session-complete-20261114-0021 /private/tmp/tboxrclone-webdav-501 evidence/ST-007-F/session-complete-20261114-0021/cloud.json evidence/ST-007-F/session-complete-20261114-0021/reopen.json cut-part-2-session-complete-20261114-0021.bin",
+        "started_ms": 1794587470712,
+        "completed_ms": 1794587483989,
+        "duration_ms": null
+      }
+    ]
+  }
+]

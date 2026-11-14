@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tboxrclone-finder-direct-20261113-2049/CopyTree",
+  "target": "/private/tmp/tboxrclone-webdav-501/CopyTree",
+  "remote_path": "/CopyTree",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

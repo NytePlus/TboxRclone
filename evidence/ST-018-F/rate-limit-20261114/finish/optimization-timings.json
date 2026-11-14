@@ -1,0 +1,14 @@
+{
+  "one_command_elapsed_seconds": 17.076574667124078,
+  "sum_measured_phase_seconds": 25.427549208980054,
+  "content_seconds": 16.730990584008396,
+  "separate_native_commands_seconds": 6.591541915899143,
+  "combined_native_scan_seconds": 2.011559009552002,
+  "review_policy": "every10seconds plus final task screenshot",
+  "final_task_image_reviewed": true,
+  "notes": [
+    "Full pipeline timing precedes the later merged native scanner; scanner tested separately.",
+    "Serial sum is a same-run estimate, not a separately measured old end-to-end baseline.",
+    "No claim that variable cloud or filesystem cache speedups came from these edits."
+  ]
+}

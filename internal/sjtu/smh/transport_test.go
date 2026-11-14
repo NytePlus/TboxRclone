@@ -71,7 +71,11 @@ func TestClassifiedMutationFailureStillRequiresReconcile(t *testing.T) {
 			transport := &failingTransport{}
 			c := &Client{Endpoint: "https://example.invalid", Library: "lib", Space: "space", Token: func(context.Context) (string, error) { return "SECRET", nil }, HTTP: &http.Client{Transport: transport}}
 			err := c.JSON(context.Background(), method, "file", "test", nil, nil, nil)
-			if transport.calls != 1 || !errors.Is(err, ErrTransport) || errors.Is(err, ErrUnknown) != (method != "GET") || !strings.Contains(err.Error(), "transport dns") || strings.Contains(err.Error(), "SECRET") {
+			wantCalls := 1
+			if method == "GET" {
+				wantCalls = 3
+			}
+			if transport.calls != wantCalls || !errors.Is(err, ErrTransport) || errors.Is(err, ErrUnknown) != (method != "GET") || !strings.Contains(err.Error(), "transport dns") || strings.Contains(err.Error(), "SECRET") {
 				t.Fatalf("calls=%d err=%v", transport.calls, err)
 			}
 		})

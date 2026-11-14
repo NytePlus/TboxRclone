@@ -1,0 +1,38 @@
+ Container tboxrclone-lab-dns-1  Running
+2026/11/13 20:23:25 ERROR : /: Dir.Stat error: permission denied
+2026/11/13 20:23:25 ERROR : /: Dir.Stat error: metadata temporarily unavailable
+2026/11/13 20:23:25 ERROR : /: Dir.Stat error: permission denied
+2026/11/13 20:23:25 ERROR : /: Dir.Stat error: metadata temporarily unavailable
+--- FAIL: TestReadMetadataErrorStatus (0.01s)
+    --- FAIL: TestReadMetadataErrorStatus/GET/permission (0.01s)
+        read_error_test.go:49: 
+            	Error Trace:	/src/third_party/rclone/cmd/serve/webdav/read_error_test.go:49
+            	Error:      	Not equal: 
+            	            	expected: 403
+            	            	actual  : 404
+            	Test:       	TestReadMetadataErrorStatus/GET/permission
+    --- FAIL: TestReadMetadataErrorStatus/GET/unavailable (0.00s)
+        read_error_test.go:49: 
+            	Error Trace:	/src/third_party/rclone/cmd/serve/webdav/read_error_test.go:49
+            	Error:      	Not equal: 
+            	            	expected: 500
+            	            	actual  : 404
+            	Test:       	TestReadMetadataErrorStatus/GET/unavailable
+    --- FAIL: TestReadMetadataErrorStatus/HEAD/permission (0.00s)
+        read_error_test.go:49: 
+            	Error Trace:	/src/third_party/rclone/cmd/serve/webdav/read_error_test.go:49
+            	Error:      	Not equal: 
+            	            	expected: 403
+            	            	actual  : 404
+            	Test:       	TestReadMetadataErrorStatus/HEAD/permission
+    --- FAIL: TestReadMetadataErrorStatus/HEAD/unavailable (0.00s)
+        read_error_test.go:49: 
+            	Error Trace:	/src/third_party/rclone/cmd/serve/webdav/read_error_test.go:49
+            	Error:      	Not equal: 
+            	            	expected: 500
+            	            	actual  : 404
+            	Test:       	TestReadMetadataErrorStatus/HEAD/unavailable
+FAIL
+FAIL	github.com/rclone/rclone/cmd/serve/webdav	0.018s
+FAIL
+

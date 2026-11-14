@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-sequential-20261113-2226/v2/sequential-2226.txt",
+  "target": "/private/tmp/tboxrclone-webdav-501/sequential-2226.txt",
+  "remote_path": "/sequential-2226.txt",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": false,
+  "sequential_overwrite_test": true,
+  "ui_success": "NOT_TESTED"
+}

@@ -1,0 +1,5 @@
+{"at": "2026-11-14T10:03:05.015193+00:00", "records": []}
+{"at": "2026-11-14T10:03:56.488355+00:00", "records": [{"id": "09850c7451b4f8a485c795500a047e9c", "path": "codex-api-lab/perf-clean-20261114-1730/rate-limit-retest.bin", "state": "Uploading", "size": 268435456, "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0"}]}
+{"at": "2026-11-14T10:03:56.488355+00:00", "event": "browse_launched_after_upload_detected", "preparation_seconds": 1.5669788748491555}
+{"at": "2026-11-14T10:04:47.585964+00:00", "records": [{"id": "09850c7451b4f8a485c795500a047e9c", "path": "codex-api-lab/perf-clean-20261114-1730/rate-limit-retest.bin", "state": "CommitSent", "size": 268435456, "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0"}]}
+{"at": "2026-11-14T10:05:00.636838+00:00", "records": [{"id": "09850c7451b4f8a485c795500a047e9c", "path": "codex-api-lab/perf-clean-20261114-1730/rate-limit-retest.bin", "state": "Committed", "size": 268435456, "sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0"}]}

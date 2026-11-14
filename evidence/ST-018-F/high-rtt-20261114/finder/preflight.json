@@ -1,0 +1,12 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "direction": "upload",
+  "source": "/private/tmp/tbox-perf-20261114/input/high-rtt.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/high-rtt.bin",
+  "remote_path": "/high-rtt.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

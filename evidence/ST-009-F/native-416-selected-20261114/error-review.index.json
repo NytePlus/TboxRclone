@@ -1,0 +1,14 @@
+{
+  "duration_seconds" : 5.083333333333333,
+  "frames" : 6,
+  "generation_seconds" : 0.36250495910644531,
+  "sample_interval_seconds" : 1,
+  "sheets" : [
+    {
+      "file" : "error-review.0.png",
+      "first_second" : 0,
+      "last_second" : 5
+    }
+  ],
+  "ui_verdict" : "REQUIRES_SEPARATE_REVIEW"
+}

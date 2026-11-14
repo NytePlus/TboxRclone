@@ -1,0 +1,96 @@
+ Container tboxrclone-lab-dns-1  Running
+2026/11/13 19:11:24 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:24 ERROR : dir/: Can only open directories read only
+2026/11/13 19:11:24 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:24 ERROR : dir/not found: Dir.Rename error: file does not exist
+2026/11/13 19:11:25 NOTICE: Mock file system at root: --vfs-cache-mode writes or full is recommended for this remote as it can't stream
+2026/11/13 19:11:26 ERROR : dir/file1: ReadFileHandle.Read error: Bad file descriptor
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000781400): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000781dc0): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000ed05c0): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000ed0ac0): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000efa640): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000efab80): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000efb080): Couldn't read size of file
+2026/11/13 19:11:27 ERROR : open-test-file(0xc000efb600): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e26380): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e26840): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e26fc0): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc0005075c0): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e93280): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e93840): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000e93d40): Couldn't read size of file
+2026/11/13 19:11:28 ERROR : open-test-file(0xc000fb03c0): Couldn't read size of file
+2026/11/13 19:11:30 ERROR : /: Dir.Stat error: duplicate filename "fileb" detected with case/unicode normalization settings
+2026/11/13 19:11:30 ERROR : /: Dir.Stat error: duplicate filename "FILEB" detected with case/unicode normalization settings
+2026/11/13 19:11:30 ERROR : file2: WriteFileHandle.New Rcat failed: open /tmp/rclone4255431578/file2: permission denied
+2026/11/13 19:11:30 ERROR : file1: WriteFileHandle: Read: Can't read and write to file without --vfs-cache-mode >= minimal
+2026/11/13 19:11:30 ERROR : file1: WriteFileHandle: ReadAt: Can't read and write to file without --vfs-cache-mode >= minimal
+2026/11/13 19:11:30 ERROR : file1: WriteFileHandle: Truncate: Can't change size without --vfs-cache-mode >= writes
+2026/11/13 19:11:30 ERROR : file1: WriteFileHandle: Can't open for write without O_TRUNC on existing file without --vfs-cache-mode >= writes
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : dir/file1: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone4255431578/dir/file1: no such file or directory
+2026/11/13 19:11:31 ERROR : file1: WriteFileHandle.Write: can't seek in file without --vfs-cache-mode >= writes
+2026/11/13 19:11:31 ERROR : file1: WriteFileHandle.Write: error: Bad file descriptor
+2026/11/13 19:11:31 ERROR : file1: WriteFileHandle.New Rcat failed: failed to read upload input: upload interrupted
+2026/11/13 19:11:31 ERROR : file1: WriteFileHandle.New Rcat failed: failed to read upload input: write aborted: unexpected EOF
+2026/11/13 19:11:31 ERROR : stalled: WriteFileHandle.Write error: io: read/write on closed pipe
+2026/11/13 19:11:31 ERROR : stalled: WriteFileHandle.New Rcat failed: context canceled
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=off
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 NOTICE: Finished test run with CacheMode=off (ok=true)
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Local file system at /tmp/rclone3728368948: Symlinks support enabled
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=off,Links=true
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 NOTICE: Links: true, useVFS: true, suffix: .rclonelink
+2026/11/13 19:11:36 ERROR : dir1/: Can only open directories read only
+2026/11/13 19:11:36 NOTICE: Finished test run with CacheMode=off,Links=true (ok=true)
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=minimal
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 NOTICE: Finished test run with CacheMode=minimal (ok=true)
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=writes
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 NOTICE: Finished test run with CacheMode=writes (ok=true)
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=full
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:36 NOTICE: Finished test run with CacheMode=full (ok=true)
+2026/11/13 19:11:36 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:36 NOTICE: Starting test run with CacheMode=full,WriteBack=100ms
+2026/11/13 19:11:37 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:37 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:40 NOTICE: Finished test run with CacheMode=full,WriteBack=100ms (ok=true)
+2026/11/13 19:11:40 NOTICE: Config file "/nonexistent" not found - using defaults
+2026/11/13 19:11:40 NOTICE: Local file system at /tmp/rclone3424459845: Symlinks support enabled
+2026/11/13 19:11:40 NOTICE: Starting test run with CacheMode=full,WriteBack=100ms,Links=true
+2026/11/13 19:11:41 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:41 ERROR : dir/: Dir.Remove not empty
+2026/11/13 19:11:41 ERROR : dir/file3: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone63415916/dir/file3: no such file or directory
+2026/11/13 19:11:41 ERROR : dir/file3: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone63415916/dir/file3: no such file or directory
+2026/11/13 19:11:41 ERROR : dir/file3: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone2238733674/dir/file3: no such file or directory
+2026/11/13 19:11:41 ERROR : dir/file3: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone2238733674/dir/file3: no such file or directory
+2026/11/13 19:11:42 ERROR : dir/file3: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone3408412689/dir/file3: no such file or directory
+2026/11/13 19:11:42 ERROR : dir/file3: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone3408412689/dir/file3: no such file or directory
+2026/11/13 19:11:43 NOTICE: Links: true, useVFS: true, suffix: .rclonelink
+2026/11/13 19:11:45 ERROR : dir1/: Can only open directories read only
+2026/11/13 19:11:46 NOTICE: Finished test run with CacheMode=full,WriteBack=100ms,Links=true (ok=true)
+PASS
+2026/11/13 19:11:46 ERROR : dir/file3: vfs cache: item close failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone3424459845/dir/file3: no such file or directory
+2026/11/13 19:11:46 ERROR : dir/file3: vfs cache: close after grace period failed: vfs cache item: failed to write metadata: open /tmp/vfs-home/.cache/rclone/vfsMeta/local/tmp/rclone3424459845/dir/file3: no such file or directory

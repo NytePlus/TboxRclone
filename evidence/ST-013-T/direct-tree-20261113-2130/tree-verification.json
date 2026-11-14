@@ -1,0 +1,52 @@
+{
+  "method": "source + verified mount reopen + independent cloud inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "CopyTree/first.bin",
+      "source": {
+        "size": 33,
+        "sha256": "5d8fcfefa9aeeb711fb8ed1e4b7d5c8a9bafa46e8e76e68aa18adce5a10df6ab"
+      },
+      "mounted": {
+        "size": 33,
+        "sha256": "5d8fcfefa9aeeb711fb8ed1e4b7d5c8a9bafa46e8e76e68aa18adce5a10df6ab"
+      },
+      "cloud": {
+        "sha256": "5d8fcfefa9aeeb711fb8ed1e4b7d5c8a9bafa46e8e76e68aa18adce5a10df6ab",
+        "size": 33
+      },
+      "matched": true
+    },
+    {
+      "file": "CopyTree/nested/second.bin",
+      "source": {
+        "size": 704,
+        "sha256": "4fa46efdbd9336fb50ad545d188387045c49456270f459cb0da3a36c226c8883"
+      },
+      "mounted": {
+        "size": 704,
+        "sha256": "4fa46efdbd9336fb50ad545d188387045c49456270f459cb0da3a36c226c8883"
+      },
+      "cloud": {
+        "sha256": "4fa46efdbd9336fb50ad545d188387045c49456270f459cb0da3a36c226c8883",
+        "size": 704
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "CopyTree",
+      "matched": true
+    },
+    {
+      "directory": "CopyTree/empty-directory",
+      "matched": true
+    },
+    {
+      "directory": "CopyTree/nested",
+      "matched": true
+    }
+  ]
+}

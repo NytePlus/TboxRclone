@@ -1,0 +1,106 @@
+package recovery
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
+	"io"
+	"sync"
+)
+
+const readbackChunk int64 = 8 << 20
+const readbackWorkers = 4
+
+// verifyContent reads every byte under one captured remote validator. Large
+// files use bounded batches: at most four requests and 32 MiB of payload per
+// operation. Hashing remains in byte order regardless of completion order.
+// The opener must enforce the ETag, Range and exact response length (smh.Open).
+func verifyContent(ctx context.Context, size int64, expected string, open func(context.Context, int64, int64) (io.ReadCloser, error)) error {
+	h := sha256.New()
+	if size < readbackChunk*readbackWorkers {
+		r, err := open(ctx, 0, -1)
+		if err != nil {
+			return err
+		}
+		n, err := io.Copy(h, r)
+		closed := r.Close()
+		if err != nil {
+			return err
+		}
+		if closed != nil {
+			return closed
+		}
+		if n != size {
+			return errors.New("remote length differs; local copy preserved")
+		}
+	} else {
+		for base := int64(0); base < size; base += readbackChunk * readbackWorkers {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			batchCtx, cancel := context.WithCancel(ctx)
+			count := int(min(int64(readbackWorkers), (size-base+readbackChunk-1)/readbackChunk))
+			buffers := make([][]byte, count)
+			errs := make([]error, count)
+			var wg sync.WaitGroup
+			for i := range count {
+				wg.Go(func() {
+					offset := base + int64(i)*readbackChunk
+					length := min(readbackChunk, size-offset)
+					r, err := open(batchCtx, offset, length)
+					if err != nil {
+						errs[i] = err
+						cancel()
+						return
+					}
+					buf := make([]byte, int(length))
+					_, err = io.ReadFull(r, buf)
+					if err == nil {
+						// Force the reader to validate EOF, including excess bytes.
+						var extra [1]byte
+						var n int
+						n, err = io.ReadFull(r, extra[:])
+						if n == 0 && err == io.EOF {
+							err = nil
+						} else if err == nil {
+							err = errors.New("excess remote bytes")
+						}
+					}
+					closed := r.Close()
+					if err == nil {
+						err = closed
+					}
+					if err != nil {
+						errs[i] = err
+						cancel()
+						return
+					}
+					buffers[i] = buf
+				})
+			}
+			wg.Wait()
+			cancel()
+			// Preserve the substantive failure over a canceled sibling.
+			var first error
+			for _, err := range errs {
+				if err != nil && (first == nil || errors.Is(first, context.Canceled)) {
+					first = err
+				}
+			}
+			if first != nil {
+				return first
+			}
+			for _, buf := range buffers {
+				_, _ = h.Write(buf)
+			}
+		}
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if hex.EncodeToString(h.Sum(nil)) != expected {
+		return errors.New("remote content differs; local copy preserved")
+	}
+	return nil
+}

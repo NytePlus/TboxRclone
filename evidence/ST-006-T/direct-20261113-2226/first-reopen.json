@@ -1,0 +1,24 @@
+{
+  "method": "source + verified mount reopen + independent cloud inventory",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "sequential-2226.txt",
+      "source": {
+        "size": 608,
+        "sha256": "cfa62a0c4103e51e0a45ccc93796195c673dcb79b4043c4b9a791b87245766c7"
+      },
+      "mounted": {
+        "size": 608,
+        "sha256": "cfa62a0c4103e51e0a45ccc93796195c673dcb79b4043c4b9a791b87245766c7"
+      },
+      "raw_cloud_name": "sequential-2226.txt",
+      "cloud": {
+        "sha256": "cfa62a0c4103e51e0a45ccc93796195c673dcb79b4043c4b9a791b87245766c7",
+        "size": 608
+      },
+      "matched": true
+    }
+  ],
+  "directories": []
+}

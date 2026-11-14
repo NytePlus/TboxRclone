@@ -1,0 +1,9 @@
+{
+  "scope": "protocol only; not Finder acceptance",
+  "injection_observed": true,
+  "failure_detectable": true,
+  "complete_retry_matches": false,
+  "recovery_matches": true,
+  "metadata_status_correct": true,
+  "pass": true
+}

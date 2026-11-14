@@ -1,0 +1,771 @@
+{
+  "busy" : false,
+  "elements" : [
+    {
+      "AXIdentifier" : "FinderWindow",
+      "AXRole" : "AXWindow",
+      "AXTitle" : "ForkDirect"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "ForkDirect"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXToolbar"
+    },
+    {
+      "AXDescription" : "操作",
+      "AXRole" : "AXMenuButton"
+    },
+    {
+      "AXDescription" : "编辑标签",
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXDescription" : "共享",
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXDescription" : "群组",
+      "AXRole" : "AXMenuButton"
+    },
+    {
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXRole" : "AXRadioGroup"
+    },
+    {
+      "AXDescription" : "画廊视图",
+      "AXRole" : "AXRadioButton"
+    },
+    {
+      "AXDescription" : "分栏视图",
+      "AXRole" : "AXRadioButton"
+    },
+    {
+      "AXDescription" : "列表视图",
+      "AXRole" : "AXRadioButton"
+    },
+    {
+      "AXDescription" : "图标视图",
+      "AXRole" : "AXRadioButton"
+    },
+    {
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXDescription" : "返回\/前进",
+      "AXIdentifier" : "_NS:51",
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXDescription" : "前进",
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXDescription" : "返回",
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXSplitGroup"
+    },
+    {
+      "AXRole" : "AXSplitGroup"
+    },
+    {
+      "AXDescription" : "路径",
+      "AXRole" : "AXList"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "ForkDirect"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "tboxrclone-webdav-501"
+    },
+    {
+      "AXIdentifier" : "statusBar",
+      "AXRole" : "AXUnknown"
+    },
+    {
+      "AXIdentifier" : "statusBarText",
+      "AXRole" : "AXStaticText",
+      "AXValue" : "6个项目，--可用"
+    },
+    {
+      "AXIdentifier" : "_NS:188",
+      "AXRole" : "AXScrollArea"
+    },
+    {
+      "AXDescription" : "列表视图",
+      "AXIdentifier" : "ListView",
+      "AXRole" : "AXOutline"
+    },
+    {
+      "AXIdentifier" : "_NS:13",
+      "AXRole" : "AXGroup"
+    },
+    {
+      "AXRole" : "AXButton",
+      "AXTitle" : "种类"
+    },
+    {
+      "AXRole" : "AXButton",
+      "AXTitle" : "大小"
+    },
+    {
+      "AXRole" : "AXButton",
+      "AXTitle" : "修改日期"
+    },
+    {
+      "AXRole" : "AXButton",
+      "AXTitle" : "名称"
+    },
+    {
+      "AXIdentifier" : "kind",
+      "AXRole" : "AXColumn"
+    },
+    {
+      "AXIdentifier" : "size",
+      "AXRole" : "AXColumn"
+    },
+    {
+      "AXIdentifier" : "dateModified",
+      "AXRole" : "AXColumn"
+    },
+    {
+      "AXIdentifier" : "name",
+      "AXRole" : "AXColumn"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "纯文本文稿"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "25 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "opaque.txt"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "文稿"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "25 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "opaque.dat"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "MacBinary归档"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "25 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "opaque.bin"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "文稿"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "363 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "valid.dat"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "MacBinary归档"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "363 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "valid.bin"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "JSON Document"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "834 字节"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "今天 16:58"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXTextField",
+      "AXValue" : "fixture.json"
+    },
+    {
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "种类"
+    },
+    {
+      "AXDescription" : "向下移动",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "大小"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "修改日期"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "名称"
+    },
+    {
+      "AXRole" : "AXSplitter"
+    },
+    {
+      "AXIdentifier" : "_NS:61",
+      "AXRole" : "AXScrollArea"
+    },
+    {
+      "AXIdentifier" : "_NS:70",
+      "AXRole" : "AXScrollBar"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXButton"
+    },
+    {
+      "AXRole" : "AXValueIndicator"
+    },
+    {
+      "AXDescription" : "边栏",
+      "AXIdentifier" : "_NS:8",
+      "AXRole" : "AXOutline"
+    },
+    {
+      "AXIdentifier" : "AutomaticTableColumnIdentifier.0",
+      "AXRole" : "AXColumn"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "所有标签…"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "灰色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "紫色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "蓝色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "绿色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "黄色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "橙色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "红色"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXIdentifier" : "xSidebarHeader",
+      "AXRole" : "AXStaticText",
+      "AXValue" : "标签"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "删除",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "废纸篓"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "网络"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "推出",
+      "AXRole" : "AXButton",
+      "AXTitle" : "推出"
+    },
+    {
+      "AXDescription" : "Mac",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "127.0.0.1"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "隔空投送"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "主页",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "nyte"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "iCloud",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "iCloud云盘"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXIdentifier" : "xSidebarHeader",
+      "AXRole" : "AXStaticText",
+      "AXValue" : "位置"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "桌面"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "文稿",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "nyte"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "移动",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "projects"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "文稿",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "文稿"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "箭头向下圆圈",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "下载"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "应用程序"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXIdentifier" : "xSidebarHeader",
+      "AXRole" : "AXStaticText",
+      "AXValue" : "个人收藏"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "共享文件夹",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "共享"
+    },
+    {
+      "AXRole" : "AXRow"
+    },
+    {
+      "AXRole" : "AXCell"
+    },
+    {
+      "AXDescription" : "时钟",
+      "AXRole" : "AXImage"
+    },
+    {
+      "AXRole" : "AXStaticText",
+      "AXValue" : "最近使用"
+    }
+  ],
+  "observed_at" : "2026-11-14T09:23:19Z",
+  "title" : "ForkDirect"
+}

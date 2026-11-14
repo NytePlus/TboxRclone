@@ -1,0 +1,64 @@
+{
+  "method": "source + verified mount reopen + independent cloud full reads",
+  "cloud_method": "direct cloud list and full file reads, bypass WebDAV",
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "files": [
+    {
+      "file": "MoveCases/right/file.txt",
+      "source": {
+        "size": 30,
+        "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673"
+      },
+      "mounted": {
+        "size": 30,
+        "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673"
+      },
+      "raw_cloud_name": "right/file.txt",
+      "cloud": {
+        "sha256": "20fe03ad066f9a89460a24bd698f87e64fa2f6a7e019baaa34c06fddeaef0673",
+        "size": 30
+      },
+      "matched": true
+    },
+    {
+      "file": "MoveCases/right/tree/nested/keep.txt",
+      "source": {
+        "size": 40,
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5"
+      },
+      "mounted": {
+        "size": 40,
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5"
+      },
+      "raw_cloud_name": "right/tree/nested/keep.txt",
+      "cloud": {
+        "sha256": "571c4ed3aecbdb0fbba09433566fd35cddda753786bc4381a2ca9ce5ebee07a5",
+        "size": 40
+      },
+      "matched": true
+    }
+  ],
+  "directories": [
+    {
+      "directory": "MoveCases",
+      "matched": true
+    },
+    {
+      "directory": "MoveCases/right",
+      "matched": true
+    },
+    {
+      "directory": "MoveCases/left",
+      "matched": true
+    },
+    {
+      "directory": "MoveCases/right/tree",
+      "matched": true
+    },
+    {
+      "directory": "MoveCases/right/tree/nested",
+      "matched": true
+    }
+  ]
+}
+Content verified. Review the ten-second samples and the mandatory final task state; record the UI verdict separately.

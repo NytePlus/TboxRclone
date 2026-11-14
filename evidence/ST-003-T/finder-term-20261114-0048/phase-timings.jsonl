@@ -1,0 +1,6 @@
+{"phase": "setup", "started_unix_seconds": 1794588670.724616, "elapsed_seconds": 0.029186875093728304, "exit_code": 0}
+{"phase": "fault-control.py", "started_unix_seconds": 1794588670.7538319, "elapsed_seconds": 0.2566292081028223, "exit_code": 0}
+{"phase": "finder-recording", "started_unix_seconds": 1794588671.011609, "elapsed_seconds": 157.00220966688357, "exit_code": 3}
+{"phase": "fault-control.py", "started_unix_seconds": 1794588828.017382, "elapsed_seconds": 0.2571635420899838, "exit_code": 0}
+{"phase": "snapshot-journal.py", "started_unix_seconds": 1794588828.274656, "elapsed_seconds": 0.03445708309300244, "exit_code": 0}
+{"phase": "finish-part-evidence.py", "started_unix_seconds": 1794588828.310847, "elapsed_seconds": 5.841413791989908, "exit_code": 1}

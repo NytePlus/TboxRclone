@@ -1,0 +1,9 @@
+{
+  "note" : "Observation spans scan_started_at..observed_at; no progress alone does not prove successful copying.",
+  "observed_at" : "2026-11-14T09:49:59Z",
+  "scan_seconds" : 2.0409280061721802,
+  "scan_started_at" : "2026-11-14T09:49:57Z",
+  "transfer_windows" : [
+
+  ]
+}

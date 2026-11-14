@@ -1,0 +1,12 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-rate-clean-20261114",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-rate-clean-20261114",
+  "status": 429,
+  "quota": false,
+  "cache_full": false,
+  "source_before": {
+    "size": 8960,
+    "sha256": "a496bb13299434fc00509196d12d48d1ffc389f55127f1ed62c3b86e154df88d"
+  }
+}

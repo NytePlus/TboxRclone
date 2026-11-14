@@ -79,6 +79,7 @@ docker compose exec fault-proxy curl --fail --silent \
 | hold_response | 收到完整响应后暂扣 | 独立核对完成，再显式 forward/drop |
 | cut_upload | 上游请求体最多读 bytes 字节后报错 | 不声称上游一定收到了这些字节；必须核对实际状态 |
 | cut_download | 交付客户端的响应体最多 bytes 字节后报错 | 客户端必须检测短响应/连接断开 |
+| ignore_range | 仅对带 Range 的 GET 移除 Range/If-Match 后请求真实上游 | 模拟上游忽略范围；无 Range 的请求不消耗规则，客户端必须拒绝整文件冒充分片 |
 
 每条规则仅作用于第 `nth` 次匹配，之后不再触发。用 method、path_prefix 和可选 action_key 区分 confirm、upload、renew 等请求。数据面规则使用签名 URL 的 origin/path，但规则和证据不得包含签名查询值。规则配置有 held 响应时返回 409，防止重置规则遗失待核对请求。
 
@@ -87,7 +88,7 @@ docker compose exec fault-proxy curl --fail --silent \
 - 最多 64 条活动隧道，100 条规则；头部最大 64 KiB，held/drop-response 缓冲上限 1 MiB。响应超限或未收完整会记为 `response_not_complete_or_over_limit`，不是完成证据。
 - 事件保存最近 4096 条，序号缺口表示有事件过期；实验应在每个场景及时导出，不能用缺记录的快照声称完整覆盖。
 - 事件不保存 URL、路径、query 值、请求/响应正文、cookie、token 或签名。规则 ID 由实验者命名，应使用非敏感标签。
-- 每个 TLS 隧道只执行一次 HTTP/1.1 交换，降低连接复用对故障相位的歧义；该代理不适合作为直连吞吐基线。带宽/RTT/丢包曲线等性能注入尚未实现。
+- 每个客户端 TLS 隧道只执行一次 HTTP/1.1 交换；只读 GET/HEAD 复用上游连接，变更请求使用后关闭上游连接且不提供可重放请求体。该代理不适合作为直连吞吐基线。带宽/RTT/丢包曲线等性能注入尚未实现。
 - 没有自动执行 Finder 点击、系统重启或云端读写。实际实验仍遵守 verification.md 的隔离空间、独立读取、截图和录屏要求。
 - 默认不会自动把代理事件写入磁盘；每次运行应导出到对应 evidence_directory，连同独立事实核对的原始证据一起保存。
 
@@ -98,6 +99,7 @@ docker compose exec fault-proxy curl --fail --silent \
 | C-001/C-007 | TestSignedDataPlaneUsesSameFaultProxy、TestCutUploadAndDownload | TLS 控制/数据双通道确实进入代理，截断可被客户端发现 |
 | C-002/C-004/C-017 | TestHoldConfirmUntilIndependentFactCheck | 实际上游处理完成、独立读核对、丢响应、无自动写重放 |
 | C-003 | TestControlReleaseAndShutdown | 代理退出时关闭已接管的 TLS 连接，不等同宿主机崩溃验收 |
+| C-009 | TestIgnoreRangeOnlyConsumesRangedRead | 普通读不消耗忽略 Range 规则；仅一次范围请求受到影响，后续范围读取恢复 |
 | C-015 | TestBeforeAndAfterOriginAreDifferent、TestNthRuleAndAuthorityIsolation | 故障相位与次数明确，上游 authority 不可被 Host 绕过 |
 | 凭据保护 | TestHoldConfirmUntilIndependentFactCheck、TestSignedDataPlaneUsesSameFaultProxy | 日志中不出现测试 token、confirmKey 或签名值 |
 
@@ -128,3 +130,79 @@ docker compose run --rm \
 生成的fixtures、备份及日志保留，不自动删除。测试完成并确认无未决操作后，用原来的TBOX_LAB_REMOTE和实验开关恢复服务，再运行挂载入口。上述均为真实后端实验，不能代替Finder、目录移动或整机掉电验收。
 
 目录移动复用上述两项测试入口，额外设置 `TBOX_MOVE_FAULT_DIRECTORY=1`。丢响应测试只执行目标不存在的正常/取消两种分支；SIGKILL测试选择directory子场景，不与TBOX_MOVE_DEATH_OVERWRITE混用。独立核对比较完整树而非仅根目录存在，备份核对包含空目录和零字节文件。
+
+## Finder 分片故障的长度过滤
+
+Finder 保存可能先上传零字节占位及小型 AppleDouble 文件，它们也使用
+`partNumber=1`。给规则设置 `min_content_length` 可跳过这些请求，且不会消耗
+`nth` 次数。未知长度请求也不匹配正数阈值。针对 9 MiB、三个分片的 fixture，
+阈值 1048576 可以覆盖最后一个 1 MiB 分片，同时避开占位和 4 KiB 元数据。
+必须从事件中确认实际发生 `origin_transport_error`；仅有规则匹配或录屏不能
+证明截断已经发生。
+
+已有故障会话可复用统一编排入口：
+
+```sh
+python3 scripts/finder/part-fault.py EXISTING_SESSION NEW_EVIDENCE FIXTURE_9_MIB --part 1
+```
+
+对 part 2、3 分别使用新证据目录。脚本复用 Finder 拖动/录屏、规则控制、journal
+快照和录屏采样工具；不执行删除，也不自动判定 PASS。随后仍须完整云端下载、
+挂载重开校验和界面审查。首次实验若被占位文件消耗故障，应保留记录并重跑，
+不能当作大文件故障成功。
+
+修改代理实现后可用 `finder-fault-session.py restart EXISTING_SESSION` 重建并
+重启代理和 rclone 客户端、重新挂载。代理临时 CA 随重启改变，所以必须同时
+重启客户端。存在未决记录时默认拒绝；检查记录后可显式传入 `--preserve-pending`，
+记录和 spool 均保留，此选项本身不做对账或清理。
+
+## 分片故障的前置条件和重复发送
+
+`after_any` 可列出当前规则集中的前置规则 ID；至少一条已匹配触发后才开始
+累计当前规则的 nth。用于“数据分片失败后，恢复查询返回 404”，避免 Finder
+零字节占位的提交核对先消耗会话过期故障。未知或自身前置 ID 会被拒绝。
+
+`replay_part` 仅允许带明确 part_number 的 PUT，并要求请求有 uploadId、已知
+长度且不超过 8 MiB。代理缓存该分片，在首次完整成功响应后发送相同请求及
+相同字节一次；两次成功且 ETag 相同才交付首次响应。事件记录
+`replay_sent`、`replay_same_etag` 或失败原因，不记录正文、签名或 uploadId。
+这是外部重复请求实验，不是允许客户端重放 confirm 的策略。
+
+`part-fault.py --mode signature-expired|session-expired|replay-part --part 2`
+复用同一 Finder 入口；默认仍是 cut-upload。各轮规则 ID 唯一，避免累计事件
+误算为本轮命中。journal-timeline.jsonl 保留状态变化及上传 ID 摘要，可检查
+会话连续或重建；这些记录仍须结合录像、最终 spool 和独立云端哈希核对。
+
+## 单文件分片用例的快速收尾
+
+`part-fault.py` 在故障证据校验后自动调用 `finder/finish-part-evidence.py`，
+并行生成每10秒采样审阅图及单独末帧与目标文件的独立云端完整下载，再执行挂载读回比较。
+新证据在 `verification/`，各阶段耗时记录在 `*.timing.json`；完整图片索引为
+`review.index.json`。必须查看每10秒采样图和任务最终状态截图，并另写 UI 结论，脚本不自动判 PASS。
+默认拒绝覆盖已有收尾目录；复测可用 `--output NEW_DIRECTORY` 保存独立结果。
+
+`finder-inspect --file RELATIVE_FILE ROOT` 仅适用于目标文件内容核验，不是完整
+目录清单，不能替代目录、额外文件或树结构验收。没有此参数时仍使用原完整清单。
+耗时回顾见 `evidence/ST-007-F/timing-optimization-20261114/report.md`。
+
+## Finder 保存期间终止服务
+
+`part-fault.py --mode service-term|service-kill --part 2 --seconds 180`
+复用同一拖放和录屏入口；`signal-upload.py` 等待本轮数据分片响应被持有，
+核对唯一9MiB Uploading记录、源文件与完整spool后才向隔离服务发信号。
+独立 `tbox-state --resume` 进程使用同一state/ownership目录，核对上传身份与
+confirm key摘要连续、Committed和spool完整，随后启动原服务。所有记录保留。
+控制器仅操作配置吻合且delete/move关闭的测试服务。失败保留证据，不自动PASS。
+
+录屏审阅后必须按 `docs/verification.md` 重新挂载，并核验挂载读回及云端完整内容。
+服务信号只覆盖进程级边界，不能替代宿主机崩溃/掉电实验。
+
+普通 Finder 功能/性能验收可复用同一隔离会话切换为直连：`python3 scripts/finder-fault-session.py restart SESSION --preserve-pending --transport direct`。故障注入前使用 `--transport faults` 切回。两种模式均保留 journal/spool；切换前必须确认原生复制已结束。
+
+## 可重复的慢网络实验
+
+`network-profile.py SESSION NEW_RULES --mode high-rtt --delay-ms 250` 为允许的云端主机生成每请求增加250ms的规则；`--mode rate-limit --bytes-per-second 1048576` 为数据分片 PUT 设置每流1MiB/s上限。使用已有 `fault-control.py rules NEW_RULES` 启用，结束后提交空数组清除。它们属于后端出站故障注入，Finder仍直接连接rclone，没有adapter。
+
+`delay_request`只延后发送，不重复请求；`throttle_upload`以最多32KiB块节流，不缓存整文件，不改变内容或回执。`repeat:true`从第Nth个匹配请求开始持续生效，仅允许这两类慢网络规则；原有丢响应等故障仍保持单次语义。延迟范围1..10000ms；速率范围1KiB/s..1GiB/s，按请求分别计时。四路分片的总速率可能达到单流上限的四倍，不能把它称为共享链路限速。额外请求延迟不是完整的内核TCP链路仿真，必须如实记录注入方式。
+
+事件包含delay_started/delay_finished/upload_throttled，仍不记录签名URL或凭据。必须核对这些事件确实覆盖目标传输，不能仅凭配置文件宣称完成慢网络测试。

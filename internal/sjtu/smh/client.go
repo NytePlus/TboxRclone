@@ -192,8 +192,26 @@ func safeTransportError(ctx context.Context, err error) error {
 	return classifyTransportError(err)
 }
 
-// JSON issues one control-plane request. Mutations are never automatically retried.
+// JSON bounds retries of failed read-only transport requests. Mutations and
+// explicit HTTP/protocol errors are never automatically retried.
 func (c *Client) JSON(ctx context.Context, method, kind, p string, q url.Values, in, out any) error {
+	for attempt := 0; ; attempt++ {
+		err := c.jsonOnce(ctx, method, kind, p, q, in, out)
+		if (method != http.MethodGet && method != http.MethodHead) ||
+			!errors.Is(err, ErrTransport) || attempt >= 2 || ctx.Err() != nil {
+			return err
+		}
+		timer := time.NewTimer(time.Duration(attempt+1) * 200 * time.Millisecond)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
+			return ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
+func (c *Client) jsonOnce(ctx context.Context, method, kind, p string, q url.Values, in, out any) error {
 	address, err := c.address(ctx, kind, p, q)
 	if err != nil {
 		return err

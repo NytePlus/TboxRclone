@@ -1,0 +1,25 @@
+{
+  "run_id": "finder-easy-v1-plain",
+  "scenario_id": "ST-001-T",
+  "versions": {
+    "client": "finder-drag 2026-09-20.2; macOS webdavfs",
+    "backend": "f06f2b4 deployed service; lab_overwrite=true",
+    "server": "rclone v1.75.1-DEV / live SJTU SMH",
+    "macos": "26.5.2",
+    "finder": "26.4"
+  },
+  "cases": [
+    {
+      "id": "normal_upload",
+      "status": "PASS",
+      "observation": "Real Finder drag. Direct cloud sampling: 75 absent, 2 complete, 0 invalid, 0 read errors. Both complete samples and mounted reopen match 65536 bytes SHA256 7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2. Finite observations do not prove universal atomicity. Extended-attribute fixture remains a separate failing case.",
+      "artifacts": [
+        "plain-cloud-observations.jsonl",
+        "plain-upload/drag.log",
+        "plain-upload/timeline.jsonl",
+        "plain-upload/display-1.mov",
+        "plain-requests.log"
+      ]
+    }
+  ]
+}

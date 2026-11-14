@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tbox-fork-extension-20261114 target=tboxrclone-webdav-501 item=ForkExtension
+finder_windows_found
+source_window=143004 target_window=142733
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(592.0, 265.0) end=(1410.75, 590.5)
+visibility_check source_expected=143004 source_top=143004 source_hit=true target_expected=142733 target_top=142733 target_hit=true
+finder_drag_endpoints_visible

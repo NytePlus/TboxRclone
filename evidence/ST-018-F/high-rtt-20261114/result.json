@@ -1,0 +1,22 @@
+{
+  "subcase": "high_rtt",
+  "status": "PASS",
+  "condition": "250ms extra latency before every matched outbound cloud request; not full TCP-link emulation",
+  "injected_requests": 179,
+  "min_delay_seconds": 0.250019,
+  "max_delay_seconds": 0.25537,
+  "bytes": 268435456,
+  "data_parts": 64,
+  "main_file_committed": true,
+  "content_sha256": "486cc817b95d853d3c357ff283b204c0144bd255e73fe2deb1389493b257e3c0",
+  "native_browse_seconds": 0.844019,
+  "metadata_p95_seconds": 0.935575417,
+  "sampled_service_peak_memory_MiB": 105.1,
+  "sampled_service_peak_CPU_percent": 36.92,
+  "recording": "89.778s decoded; reviewed all90 indexed one-second frames. Drag at4..9s, progress10..44s, browse45s onward, target complete by82s and stable through89s. AX independently confirms progress absent by09:36:15Z. macOS stopped capture after completion; requested120s not achieved.",
+  "limitations": [
+    "Memory/CPU are samples, not continuous maxima.",
+    "Fault proxy adds its own overhead; this is not direct baseline throughput.",
+    "Performance observer inspects browse after Uploading; event timestamps plus browse start09:35:34Z overlap Uploading09:35:33..09:35:56Z."
+  ]
+}

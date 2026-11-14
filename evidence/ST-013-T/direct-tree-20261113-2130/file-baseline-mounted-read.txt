@@ -1,0 +1,2 @@
+verified WebDAV mount: /private/tmp/tboxrclone-webdav-501
+7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2  /private/tmp/tboxrclone-webdav-501/baseline.bin

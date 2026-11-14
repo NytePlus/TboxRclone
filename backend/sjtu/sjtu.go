@@ -46,7 +46,7 @@ func init() {
 			{Name: "lab_move", Default: false, Help: "Experimental journaled file and directory moves under the single-controlled-client contract; requires lab_writes."},
 			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
 			{Name: "max_spool", Default: fs.SizeSuffix(4 << 30), Help: "Aggregate logical spool budget including completed, pending and orphan data. Unknown-length inputs reserve max_upload. Does not reserve physical disk blocks."},
-			{Name: "max_upload", Default: fs.SizeSuffix(64 << 20), Help: "Maximum durable spool size, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
+			{Name: "max_upload", Default: fs.SizeSuffix(2 << 30), Help: "Maximum size of a single upload spool, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
 		}})
 }
 
@@ -86,7 +86,7 @@ type Object struct {
 
 // NewFs creates a backend. Destructive capabilities remain disabled until validated.
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
-	opt := Options{Enc: DefaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 64 << 20, MaxSpool: 4 << 30, Organization: "1"}
+	opt := Options{Enc: DefaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 2 << 30, MaxSpool: 4 << 30, Organization: "1"}
 	if err := configstruct.Set(m, &opt); err != nil {
 		return nil, err
 	}
@@ -266,6 +266,34 @@ func (f *Fs) mkdirCloudPath(ctx context.Context, p string) error {
 		return nil
 	}
 	parts := strings.Split(p, "/")
+	// A live lookup of the full directory proves its ancestors already exist.
+	// Keep local reservations for every ancestor, but avoid a network round trip
+	// per level on every small Finder/AppleDouble write. Missing paths still use
+	// the component-by-component creation and conflict handling below.
+	claims := make([]AccessRequest, len(parts))
+	for n := range parts {
+		claims[n] = AccessRequest{Path: strings.Join(parts[:n+1], "/")}
+	}
+	if release, err := f.AcquirePaths(claims...); err == nil {
+		scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
+		for _, claim := range claims {
+			if err = journal.CheckPending(f.Opt.StateDir, scope, claim.Path); err != nil {
+				release()
+				return fserrors.NoRetryError(err)
+			}
+		}
+		item, err := f.Client.Info(ctx, p)
+		release()
+		if err == nil {
+			if item.Type != "dir" {
+				return fs.ErrorIsFile
+			}
+			return nil
+		}
+		if !smh.IsStatus(err, 404) {
+			return mapped(err, fs.ErrorDirNotFound)
+		}
+	}
 	for n := 1; n <= len(parts); n++ {
 		if err := f.mkdirComponent(ctx, strings.Join(parts[:n], "/")); err != nil {
 			return err

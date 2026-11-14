@@ -1,0 +1,7 @@
+{
+  "nonempty_rejected": true,
+  "sentinel_intact": true,
+  "empty_removed": true,
+  "remote_root": "codex-api-lab/ops-correctness-20261114",
+  "acceptance": "REQUIRES_INDEPENDENT_CLOUD_AND_FINAL_STATE_REVIEW"
+}

@@ -31,6 +31,8 @@ struct CaseResult: Codable {
     let lastVisible: Bool?
     let elapsedSeconds: Double
     let status: String
+    var busyAtEnd: Bool? = nil
+    var statusTextAtEnd: String? = nil
 }
 
 struct RunResult: Codable {
@@ -183,7 +185,7 @@ func postKey(_ key: CGKeyCode, flags: CGEventFlags = []) {
     guard let down = CGEvent(keyboardEventSource: nil, virtualKey: key, keyDown: true),
           let up = CGEvent(keyboardEventSource: nil, virtualKey: key, keyDown: false) else { fail("cannot create key event") }
     down.flags = flags
-    up.flags = flags
+    up.flags = []
     down.post(tap: .cgSessionEventTap)
     up.post(tap: .cgSessionEventTap)
 }
@@ -199,17 +201,20 @@ func raise(_ found: (pid: pid_t, title: String, element: AXUIElement)) {
 func navigate(windowID: Int, path: String, deadline: Date) -> Bool {
     guard let current = finderWindow(id: windowID) else { return false }
     raise(current)
-    postKey(5, flags: [.maskCommand, .maskShift]) // G
     var field: AXUIElement?
-    let appeared = waitUntil(deadline: deadline) {
+    func locateField() -> Bool {
         for window in axWindows(pid: current.pid) {
-            if identifier(window) == "GoToWindow", let candidate = findIdentifier(window, "PathTextField") {
+            if let candidate = findIdentifier(window, "PathTextField") {
                 field = candidate
                 return true
             }
         }
         return false
     }
+    // macOS can expose Go to Folder as a sheet beneath the Finder window,
+    // rather than a top-level window with the historical GoToWindow ID.
+    if !locateField() { postKey(5, flags: [.maskCommand, .maskShift]) }
+    let appeared = waitUntil(deadline: deadline, locateField)
     guard appeared, let field else { return false }
     guard AXUIElementSetAttributeValue(field, kAXValueAttribute as CFString, path as CFString) == .success else { return false }
     postKey(36) // Return accepts completion.
@@ -222,6 +227,22 @@ func navigate(windowID: Int, path: String, deadline: Date) -> Bool {
 let args = CommandLine.arguments
 guard args.count >= 2 else { fail("usage: browse.swift prepare SPEC INFO | run SPEC WINDOW_ID OUTPUT") }
 let mode = args[1]
+if mode == "inspect" {
+    guard args.count == 3, let windowID = Int(args[2]), let found = finderWindow(id: windowID) else {
+        fail("usage: browse.swift inspect WINDOW_ID (must identify a live Finder window)")
+    }
+    let rows: [[String: String]] = descendants(found.element).map { element in
+        var row: [String: String] = [:]
+        for key in ["AXRole", "AXIdentifier", "AXTitle", "AXValue", "AXDescription"] {
+            if let value = stringAttribute(element, key as CFString) { row[key] = value }
+        }
+        return row
+    }
+    let result: [String: Any] = ["title": found.title, "busy": hasBusyIndicator(found.element),
+        "elements": rows, "observed_at": ISO8601DateFormatter().string(from: Date())]
+    FileHandle.standardOutput.write(try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys]))
+    exit(0)
+}
 if mode == "prepare" {
     guard args.count == 4 else { fail("usage: browse.swift prepare SPEC INFO") }
     let spec = loadSpec(args[2])
@@ -281,6 +302,12 @@ for (index, item) in spec.cases.enumerated() {
     results.append(CaseResult(path: item.path, expectedCount: item.expectedCount, observedCount: count,
                               expectedLast: item.expectedLast, lastVisible: lastVisible,
                               elapsedSeconds: Date().timeIntervalSince(caseStart), status: passed ? "PASS" : "FAIL"))
+    if let current = finderWindow(id: windowID) {
+        results[results.count - 1].busyAtEnd = hasBusyIndicator(current.element)
+        if let status = findIdentifier(current.element, "statusBarText") {
+            results[results.count - 1].statusTextAtEnd = stringAttribute(status, kAXValueAttribute as CFString)
+        }
+    }
     if !passed || Date() >= absoluteDeadline { break }
 }
 let pass = results.count == spec.cases.count && results.allSatisfy { $0.status == "PASS" }

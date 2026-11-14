@@ -1,0 +1,13 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tbox-fork-control-source target=tbox-fork-control-target item=metadata.bin
+finder_windows_found
+source_window=139726 target_window=139739
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 155.0) end=(1410.75, 590.5)
+visibility_check source_expected=139726 source_top=139726 source_hit=true target_expected=139739 target_top=139739 target_hit=true
+finder_drag_endpoints_visible
+finder_drag_events_begin
+finder_single_selection_verified item=metadata.bin
+finder_mouse_released
+drag_delivered

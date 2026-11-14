@@ -1,0 +1,19 @@
+{
+  "source_preserved": true,
+  "injected_responses": [
+    {
+      "sequence": 65,
+      "request": 22,
+      "at": "2026-11-13T17:57:13.564856261Z",
+      "phase": "synthetic_status",
+      "rule": "finder-quota-fixed-20261114-0157-0",
+      "host": "pan.sjtu.edu.cn:443",
+      "method": "POST",
+      "status": 403,
+      "bytes": 28
+    }
+  ],
+  "elapsed_seconds": 49.395698874956,
+  "recording_exit": 3,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

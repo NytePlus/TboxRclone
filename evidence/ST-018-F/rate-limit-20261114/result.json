@@ -1,0 +1,16 @@
+{
+  "subcase": "rate_limit",
+  "status": "INCOMPLETE_NATIVE_RECORDING",
+  "content_verified": true,
+  "throttled_requests": 64,
+  "per_stream_bytes_per_second": 2097152,
+  "browse_pass": true,
+  "native_browse_seconds": 0.6928379535675049,
+  "metadata_p95_seconds": 0.5420604581013322,
+  "recording_seconds": 15.683333333333334,
+  "recording_failure": "macOS ScreenCaptureKit -3821 stopped recording before upload finished",
+  "final_task_screenshot": "final-task-state.png",
+  "final_task_screenshot_review": "Viewed: rate-limit.bin present in source and mounted target, both268.4MB; no error/progress dialog in displayed Finder windows.",
+  "review_policy": "10-second sampling plus mandatory final task screenshot",
+  "acceptance": "Not a full subcase PASS: intermediate upload/browse video coverage missing."
+}

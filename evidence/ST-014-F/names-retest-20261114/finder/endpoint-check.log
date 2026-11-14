@@ -1,0 +1,9 @@
+finder_drag_wrapper_version=2026-11-12.1
+finder_drag_start source=tbox-names-20261114 target=tboxrclone-webdav-501 item=SpecialNamesRetest
+finder_windows_found
+source_window=143808 target_window=143810
+finder_lists_ready_no_busy_indicator
+finder_source_row_found
+drag_coordinates start=(197.0, 175.0) end=(1410.75, 590.5)
+visibility_check source_expected=143808 source_top=143808 source_hit=true target_expected=143810 target_top=143810 target_hit=true
+finder_drag_endpoints_visible

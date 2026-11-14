@@ -1,0 +1,27 @@
+{
+  "source": "/private/tmp/tbox-fork-control-source/metadata.bin",
+  "mounted": "/private/tmp/tbox-fork-control-target/metadata.bin",
+  "attributes": [
+    {
+      "attribute": "com.tboxrclone.acceptance",
+      "source_hex": "74626f782d78617474722d726f756e64747269702d3230323631313133",
+      "mounted_hex": "74626f782d78617474722d726f756e64747269702d3230323631313133",
+      "errors": [
+        null,
+        null
+      ],
+      "pass": true
+    },
+    {
+      "attribute": "com.apple.ResourceFork",
+      "source_hex": "74626f782d7265736f757263652d666f726b2d3230323631313133",
+      "mounted_hex": "74626f782d7265736f757263652d666f726b2d3230323631313133",
+      "errors": [
+        null,
+        null
+      ],
+      "pass": true
+    }
+  ],
+  "pass": true
+}

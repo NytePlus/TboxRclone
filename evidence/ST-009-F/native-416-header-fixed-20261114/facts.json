@@ -1,0 +1,139 @@
+{
+  "recording_exit": 1,
+  "fault_hits": [
+    {
+      "sequence": 135,
+      "request": 46,
+      "at": "2026-11-14T07:49:00.512465882Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-0",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 152,
+      "request": 51,
+      "at": "2026-11-14T07:49:03.216566425Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-1",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 167,
+      "request": 56,
+      "at": "2026-11-14T07:49:05.242099051Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-2",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 176,
+      "request": 59,
+      "at": "2026-11-14T07:49:05.912667384Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-3",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 186,
+      "request": 63,
+      "at": "2026-11-14T07:49:07.543008552Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-4",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 197,
+      "request": 66,
+      "at": "2026-11-14T07:49:09.085530927Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-5",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 207,
+      "request": 70,
+      "at": "2026-11-14T07:49:11.055875303Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan2-0",
+      "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 224,
+      "request": 75,
+      "at": "2026-11-14T07:49:13.573665555Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-6",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 231,
+      "request": 78,
+      "at": "2026-11-14T07:49:14.196981805Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan2-1",
+      "host": "s3pan2.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 245,
+      "request": 82,
+      "at": "2026-11-14T07:49:16.060535916Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-7",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 257,
+      "request": 86,
+      "at": "2026-11-14T07:49:17.973321292Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-8",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    },
+    {
+      "sequence": 266,
+      "request": 89,
+      "at": "2026-11-14T07:49:19.277759168Z",
+      "phase": "synthetic_status",
+      "rule": "b77b3e2201ea4e59ac2e569c706d7034-s3pan-9",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    }
+  ],
+  "download_exists": false,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW"
+}

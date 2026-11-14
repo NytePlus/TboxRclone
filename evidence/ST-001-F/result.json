@@ -1,0 +1,73 @@
+{
+  "run_id": "finder-part-cuts-20261113",
+  "scenario_id": "ST-001-F",
+  "versions": {
+    "backend": "a46b838a33c38a81f37bc547222d717f53570b6e plus working-tree changes; direct rclone WebDAV",
+    "server": "rclone/v1.76.0-DEV; SJTU SMH server version unavailable",
+    "macos": "26.5.2",
+    "finder": "26.4",
+    "client": "native Finder/webdavfs; scripted Finder drag"
+  },
+  "cases": [
+    {
+      "id": "disconnect_first_part",
+      "status": "PASS",
+      "observation": "Selected data-part request interrupted; Finder recovered, progress gone at t=85s. All one-second samples 0..179 reviewed; source/mount/independent cloud hashes match.",
+      "artifacts": [
+        "first-complete-20261113-2329/review.md",
+        "retained-recording.mov",
+        "first-complete-20261113-2329/finder/timeline.jsonl",
+        "first-complete-20261113-2329/finder/capture-coverage.json",
+        "first-complete-20261113-2329/finder/drag.log",
+        "first-complete-20261113-2329/rules.json",
+        "first-complete-20261113-2329/events.json",
+        "first-complete-20261113-2329/fault-check.json",
+        "first-complete-20261113-2329/journal.json",
+        "first-complete-20261113-2329/cloud.json",
+        "first-complete-20261113-2329/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "disconnect_middle_part",
+      "status": "PASS",
+      "observation": "Selected part 2 request interrupted after at most 64 KiB upstream body reading. Finder copy recovered and progress disappeared at video t=63s; one-second samples reviewed through t=126s. Source/mount/independent cloud hashes match.",
+      "artifacts": [
+        "middle-20261113-2322/review.md",
+        "retained-recording.mov",
+        "middle-20261113-2322/finder/timeline.jsonl",
+        "middle-20261113-2322/finder/capture-coverage.json",
+        "middle-20261113-2322/finder/drag.log",
+        "middle-20261113-2322/rules.json",
+        "middle-20261113-2322/events.json",
+        "middle-20261113-2322/fault-check.json",
+        "middle-20261113-2322/journal.json",
+        "middle-20261113-2322/cloud.json",
+        "middle-20261113-2322/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    },
+    {
+      "id": "disconnect_last_part",
+      "status": "PASS",
+      "observation": "Selected data-part request interrupted; Finder recovered, progress gone at t=93s. All one-second samples 0..179 reviewed; source/mount/independent cloud hashes match.",
+      "artifacts": [
+        "last-20261113-2325/review.md",
+        "retained-recording.mov",
+        "last-20261113-2325/finder/timeline.jsonl",
+        "last-20261113-2325/finder/capture-coverage.json",
+        "last-20261113-2325/finder/drag.log",
+        "last-20261113-2325/rules.json",
+        "last-20261113-2325/events.json",
+        "last-20261113-2325/fault-check.json",
+        "last-20261113-2325/journal.json",
+        "last-20261113-2325/cloud.json",
+        "last-20261113-2325/reopen.json",
+        "retained-recording.mov.index.json",
+        "recording-retention.json"
+      ]
+    }
+  ]
+}

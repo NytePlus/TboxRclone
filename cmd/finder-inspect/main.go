@@ -11,6 +11,7 @@ import (
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"io"
 	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -24,7 +25,15 @@ func main() {
 func run() error {
 	spaceFile := flag.String("space-file", "/secrets/space.json", "SMH library and space JSON")
 	tokenFile := flag.String("token-file", "/secrets/user-token", "SMH user token file")
+	maxDepth := flag.Int("max-depth", -1, "maximum directory recursion depth; -1 is unlimited")
+	file := flag.String("file", "", "read only this relative file in full; not a directory inventory")
 	flag.Parse()
+	if *file != "" && (path.IsAbs(*file) || path.Clean(*file) != *file || *file == "." || *file == ".." || strings.HasPrefix(*file, "../") || strings.Contains(*file, "\\")) {
+		return fmt.Errorf("file must be a clean relative path inside root")
+	}
+	if *maxDepth < -1 {
+		return fmt.Errorf("max-depth must be -1 or nonnegative")
+	}
 	if flag.NArg() != 1 || !strings.HasPrefix(flag.Arg(0), "codex-api-lab/") {
 		return fmt.Errorf("isolated cloud directory required")
 	}
@@ -51,8 +60,29 @@ func run() error {
 	defer cancel()
 	files := map[string]any{}
 	dirs := []string{}
-	var walk func(string) error
-	walk = func(rel string) error {
+	readFile := func(n string) error {
+		info, e := c.Info(ctx, root+"/"+n)
+		if e != nil {
+			return e
+		}
+		r, e := c.Open(ctx, root+"/"+n, info, 0, -1)
+		if e != nil {
+			return e
+		}
+		h := sha256.New()
+		size, e := io.Copy(h, r)
+		ce := r.Close()
+		if e != nil {
+			return e
+		}
+		if ce != nil {
+			return ce
+		}
+		files[n] = map[string]any{"size": size, "sha256": hex.EncodeToString(h.Sum(nil))}
+		return nil
+	}
+	var walk func(string, int) error
+	walk = func(rel string, depth int) error {
 		p := root
 		if rel != "" {
 			p += "/" + rel
@@ -68,34 +98,29 @@ func run() error {
 			}
 			if item.Type == "dir" {
 				dirs = append(dirs, n)
-				if e = walk(n); e != nil {
+				if *maxDepth >= 0 && depth >= *maxDepth {
+					continue
+				}
+				if e = walk(n, depth+1); e != nil {
 					return e
 				}
 				continue
 			}
-			info, e := c.Info(ctx, root+"/"+n)
-			if e != nil {
+			if e := readFile(n); e != nil {
 				return e
 			}
-			r, e := c.Open(ctx, root+"/"+n, info, 0, -1)
-			if e != nil {
-				return e
-			}
-			h := sha256.New()
-			size, e := io.Copy(h, r)
-			ce := r.Close()
-			if e != nil {
-				return e
-			}
-			if ce != nil {
-				return ce
-			}
-			files[n] = map[string]any{"size": size, "sha256": hex.EncodeToString(h.Sum(nil))}
 		}
 		return nil
 	}
-	if e = walk(""); e != nil {
+	method := "direct cloud list and full file reads, bypass WebDAV"
+	if *file != "" {
+		method = "targeted direct cloud full file read, bypass WebDAV; not a directory inventory"
+		e = readFile(*file)
+	} else {
+		e = walk("", 0)
+	}
+	if e != nil {
 		return e
 	}
-	return json.NewEncoder(os.Stdout).Encode(map[string]any{"root": root, "directories": dirs, "files": files, "method": "direct cloud full reads, bypass WebDAV"})
+	return json.NewEncoder(os.Stdout).Encode(map[string]any{"root": root, "directories": dirs, "files": files, "method": method, "selected_file": *file, "max_depth": *maxDepth})
 }

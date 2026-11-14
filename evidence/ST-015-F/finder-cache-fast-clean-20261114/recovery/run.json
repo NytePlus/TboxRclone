@@ -1,0 +1,13 @@
+{
+  "source_directory": "/private/tmp/tbox-source-finder-cache-fast-clean-20261114",
+  "filename": "resource-control.txt",
+  "remote_root": "codex-api-lab/finder-resume-20261113-2240/finder-cache-fast-clean-20261114",
+  "status": null,
+  "quota": false,
+  "cache_full": true,
+  "source_before": {
+    "size": 9728,
+    "sha256": "41e55110fd37194c92c48c07dbcdcf8c8949cdf9cff016aeac260b79e974145c"
+  },
+  "mount_subtree": "finder-cache-fast-clean-20261114"
+}

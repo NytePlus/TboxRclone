@@ -1,0 +1,11 @@
+{
+  "status": "READY_FOR_RECORDED_UI_TEST",
+  "source": "/private/tmp/tbox-finder-signature-20261113-2256/signature-expired.bin",
+  "target": "/private/tmp/tboxrclone-webdav-501/signature-expired.bin",
+  "remote_path": "/signature-expired.bin",
+  "errors": [],
+  "warnings": [],
+  "fresh_acceptance_eligible": true,
+  "sequential_overwrite_test": false,
+  "ui_success": "NOT_TESTED"
+}

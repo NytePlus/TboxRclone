@@ -1,0 +1,22 @@
+{
+  "recording_exit": 3,
+  "fault_hits": [
+    {
+      "sequence": 964,
+      "request": 322,
+      "at": "2026-11-14T07:53:30.817915423Z",
+      "phase": "synthetic_status",
+      "rule": "a95622a3dbe34446b6208125b9c25408-s3pan-0",
+      "host": "s3pan.jcloud.sjtu.edu.cn:443",
+      "method": "GET",
+      "status": 416,
+      "bytes": 25
+    }
+  ],
+  "download_exists": true,
+  "ui_verdict": "REQUIRES_SEPARATE_REVIEW",
+  "download": {
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

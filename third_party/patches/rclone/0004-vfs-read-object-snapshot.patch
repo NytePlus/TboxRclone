@@ -1,0 +1,149 @@
+diff --git a/vfs/read.go b/vfs/read.go
+index eb07b72..51fc2c2 100644
+--- a/vfs/read.go
++++ b/vfs/read.go
+@@ -27,6 +27,7 @@ type ReadFileHandle struct {
+ 	offset      int64 // offset of read of o
+ 	roffset     int64 // offset of Read() calls
+ 	file        *File
++	object      fs.Object // object captured when this handle was opened
+ 	hash        *hash.MultiHasher
+ 	remote      string
+ 	closed      bool // set if handle has been closed
+@@ -60,6 +61,7 @@ func newReadFileHandle(f *File) (*ReadFileHandle, error) {
+ 		remote:      o.Remote(),
+ 		noSeek:      f.VFS().Opt.NoSeek,
+ 		file:        f,
++		object:      o,
+ 		hash:        mhash,
+ 		size:        nonNegative(o.Size()),
+ 		sizeUnknown: o.Size() < 0,
+@@ -74,7 +76,7 @@ func (fh *ReadFileHandle) openPending() (err error) {
+ 	if fh.opened {
+ 		return nil
+ 	}
+-	o := fh.file.getObject()
++	o := fh.object
+ 	opt := &fh.file.VFS().Opt
+ 	r, err := chunkedreader.New(fh.file.ctx, o, int64(opt.ChunkSize), int64(opt.ChunkSizeLimit), opt.ChunkStreams).Open()
+ 	if err != nil {
+@@ -148,7 +150,7 @@ func (fh *ReadFileHandle) seek(offset int64, reopen bool) (err error) {
+ 			fs.Debugf(fh.remote, "ReadFileHandle.Read seek close old failed: %v", err)
+ 		}
+ 		// re-open with a seek
+-		o := fh.file.getObject()
++		o := fh.object
+ 		opt := &fh.file.VFS().Opt
+ 		r = chunkedreader.New(fh.file.ctx, o, int64(opt.ChunkSize), int64(opt.ChunkSizeLimit), opt.ChunkStreams)
+ 		_, err := r.Seek(offset, 0)
+@@ -350,7 +352,7 @@ func (fh *ReadFileHandle) checkHash() error {
+ 		return nil
+ 	}
+ 
+-	o := fh.file.getObject()
++	o := fh.object
+ 	for hashType, dstSum := range fh.hash.Sums() {
+ 		srcSum, err := o.Hash(fh.file.ctx, hashType)
+ 		if err != nil {
+diff --git a/vfs/read_snapshot_test.go b/vfs/read_snapshot_test.go
+new file mode 100644
+--- /dev/null
++++ b/vfs/read_snapshot_test.go
+@@ -0,0 +1,97 @@
++package vfs
++
++import (
++	"context"
++	"io"
++	"strings"
++	"testing"
++
++	"github.com/rclone/rclone/fs"
++	"github.com/rclone/rclone/fs/hash"
++	"github.com/stretchr/testify/require"
++)
++
++// immutableReadObject models a backend object bound to one content version.
++type immutableReadObject struct {
++	fs.Object
++	content string
++}
++
++func (o *immutableReadObject) Open(_ context.Context, options ...fs.OpenOption) (io.ReadCloser, error) {
++	start, length := int64(0), int64(-1)
++	for _, option := range options {
++		switch option := option.(type) {
++		case *fs.RangeOption:
++			start, length = option.Decode(int64(len(o.content)))
++		case *fs.SeekOption:
++			start = option.Offset
++		}
++	}
++	end := int64(len(o.content))
++	if length >= 0 {
++		end = min(end, start+length)
++	}
++	return io.NopCloser(strings.NewReader(o.content[start:end])), nil
++}
++
++func (o *immutableReadObject) Hash(_ context.Context, kind hash.Type) (string, error) {
++	sums, err := hash.StreamTypes(strings.NewReader(o.content), hash.NewHashSet(kind))
++	return sums[kind], err
++}
++
++func TestReadHandleChecksCapturedHash(t *testing.T) {
++	_, _, initial := readHandleCreate(t)
++	require.NoError(t, initial.Close())
++	file := initial.file
++	base := file.getObject()
++	file.setObjectNoUpdate(&immutableReadObject{Object: base, content: "0123456789abcdef"})
++	old, err := newReadFileHandle(file)
++	require.NoError(t, err)
++	require.Equal(t, "0123456789abcdef", readString(t, old, 16))
++	file.setObjectNoUpdate(&immutableReadObject{Object: base, content: "ABCDEFGHIJKLMNOP"})
++	require.NoError(t, old.Close(), "hash must belong to the object actually read")
++}
++
++func TestReadHandleKeepsCapturedObject(t *testing.T) {
++	for _, retry := range []bool{false, true} {
++		name := "pending-open"
++		if retry {
++			name = "retry-open"
++		}
++		t.Run(name, func(t *testing.T) {
++			_, vfs, initial := readHandleCreate(t)
++			require.NoError(t, initial.Close())
++			vfs.Opt.NoChecksum = true
++			file := initial.file
++			base := file.getObject()
++			file.setObjectNoUpdate(&immutableReadObject{Object: base, content: "0123456789abcdef"})
++			old, err := newReadFileHandle(file)
++			require.NoError(t, err)
++			defer old.Close()
++			if retry {
++				require.Equal(t, "0123", readString(t, old, 4))
++			}
++			file.setObjectNoUpdate(&immutableReadObject{Object: base, content: "ABCDEFGHIJKLMNOP"})
++			if retry {
++				old.mu.Lock()
++				err = old.seek(8, true)
++				old.mu.Unlock()
++				require.NoError(t, err)
++			}
++			buf := make([]byte, 4)
++			offset := int64(0)
++			want := "0123"
++			if retry {
++				offset, want = 8, "89ab"
++			}
++			n, err := old.ReadAt(buf, offset)
++			require.NoError(t, err)
++			require.Equal(t, 4, n)
++			require.Equal(t, want, string(buf), "existing handle switched content versions")
++			fresh, err := newReadFileHandle(file)
++			require.NoError(t, err)
++			defer fresh.Close()
++			require.Equal(t, "ABCD", readString(t, fresh, 4))
++		})
++	}
++}
