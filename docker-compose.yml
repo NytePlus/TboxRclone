@@ -31,7 +31,7 @@ services:
       RCLONE_SJTU_LAB_DELETE: '${TBOX_LAB_DELETE:-false}'
       RCLONE_SJTU_LAB_MOVE: '${TBOX_LAB_MOVE:-false}'
     ports:
-      - 127.0.0.1:8686:8686
+      - 127.0.0.1:${TBOX_WEBDAV_PORT:-8686}:8686
     command: [sh, /src/scripts/run-go-service.sh, tboxrclone, serve, webdav, '${TBOX_LAB_REMOTE:-sjtu:}', --config, '${TBOX_RCLONE_CONFIG:-/secrets/rclone.conf}', --addr, ':8686', --baseurl, '${TBOX_WEBDAV_BASE_URL:-}', --vfs-cache-mode, 'off', --dir-cache-time, '${TBOX_DIR_CACHE_TIME:-5s}', --no-recursive-delete, --cache-dir, /state/vfs]
     healthcheck:
       test: [CMD, curl, --fail, --silent, --request, OPTIONS, 'http://127.0.0.1:8686${TBOX_WEBDAV_BASE_URL:-}/']

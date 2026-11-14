@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/url"
 	"strconv"
+
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"strings"
 )
 
@@ -16,7 +18,7 @@ func (c *Client) Multipart(ctx context.Context, path string, size int64, last in
 // MultipartStrategy only permits explicit create or exclusive-writer overwrite.
 func (c *Client) MultipartStrategy(ctx context.Context, path string, size int64, last int, strategy string) (Upload, error) {
 	var u Upload
-	if size < 0 || last < 1 || last > 50 || (strategy != "ask" && strategy != "overwrite") {
+	if size < 0 || last < 1 || last > defaults.MaxMultipartBatchSize || (strategy != "ask" && strategy != "overwrite") {
 		return u, ErrProtocol
 	}
 	err := c.JSON(ctx, "POST", "file", path, url.Values{"multipart": {"1"}, "filesize": {strconv.FormatInt(size, 10)}, "conflict_resolution_strategy": {strategy}}, map[string]any{"partNumberRange": partNumbers(1, last)}, &u)
@@ -26,7 +28,7 @@ func (c *Client) MultipartStrategy(ctx context.Context, path string, size int64,
 // Renew requests ephemeral signatures for an existing session; it never creates one.
 func (c *Client) Renew(ctx context.Context, key string, first, last int) (Upload, error) {
 	var u Upload
-	if first < 1 || last < first || last > 10000 || last-first >= 50 {
+	if first < 1 || last < first || last > defaults.MaxMultipartParts || last-first >= defaults.MaxMultipartBatchSize {
 		return u, ErrProtocol
 	}
 	err := c.JSON(ctx, "POST", "file", key, url.Values{"renew": {"1"}}, map[string]any{"partNumberRange": partNumbers(first, last)}, &u)

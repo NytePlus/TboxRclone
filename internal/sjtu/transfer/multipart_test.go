@@ -167,6 +167,7 @@ func spoolFixture(t *testing.T, source bool, contents ...[]byte) (*remote, *smh.
 	if e != nil {
 		t.Fatal(e)
 	}
+	s.WriteRoot = "codex-api-lab/run"
 	var r *journal.Record
 	if source {
 		path := filepath.Join(t.TempDir(), "source")

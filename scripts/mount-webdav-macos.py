@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
-"""Mount the loopback service outside Docker bind mounts; verify before use."""
+"""Mount the native loopback WebDAV service outside the project directory."""
 import os
 from pathlib import Path
 import subprocess
 import sys
+from urllib.parse import urlsplit
 
 repo = Path(__file__).resolve().parent.parent
 mountpoint = Path(os.environ.get('TBOX_WEBDAV_MOUNT', f'/private/tmp/tboxrclone-webdav-{os.getuid()}')).resolve()
-url = 'http://127.0.0.1:8686/'
+url = os.environ.get('TBOX_WEBDAV_URL', 'http://127.0.0.1:8686/')
+parsed_url = urlsplit(url)
+if parsed_url.scheme != 'http' or parsed_url.hostname not in ('127.0.0.1', '::1') or parsed_url.username or parsed_url.password or parsed_url.query or parsed_url.fragment:
+    sys.exit('TBOX_WEBDAV_URL must be a plain loopback HTTP URL')
+if not url.endswith('/'):
+    url += '/'
 action = sys.argv[1] if len(sys.argv) == 2 else ''
 if action not in ('mount', 'check', 'unmount'):
     sys.exit('usage: python3 scripts/mount-webdav-macos.py mount|check|unmount')
-# /src and /state bind mounts must never contain a client mount of the service.
+# Keep the client mount outside the source and durable state trees.
 if mountpoint == repo or repo in mountpoint.parents or mountpoint in repo.parents:
-    sys.exit('refusing mountpoint overlapping the Docker-shared project directory')
+    sys.exit('refusing mountpoint overlapping the project directory')
 if sys.platform != 'darwin':
     sys.exit('this helper requires macOS')
 

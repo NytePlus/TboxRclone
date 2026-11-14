@@ -15,8 +15,8 @@ import (
 
 func reconcileMove(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
 	for _, p := range []string{r.Path, r.SourcePath} {
-		if !strings.HasPrefix(p, "codex-api-lab/") || smh.ValidatePath(p) != nil {
-			return errors.New("move recovery requires isolated source and destination")
+		if !smh.PathWithinRoot(r.WriteRoot, p) {
+			return errors.New("move recovery path is outside its configured remote root")
 		}
 	}
 	if r.Path == r.SourcePath {

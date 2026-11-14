@@ -9,11 +9,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 )
 
 func main() {
@@ -36,7 +38,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	c, err := smh.New("https://pan.sjtu.edu.cn", ids.Library, ids.Space, "")
+	c, err := smh.New(defaults.Endpoint, ids.Library, ids.Space, "")
 	if err != nil {
 		panic(err)
 	}

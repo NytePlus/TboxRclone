@@ -54,9 +54,9 @@ func TestNilObjectString(t *testing.T) {
 	}
 }
 
-// Account-root construction is allowed; every mutation outside the lab is rejected
-// before using a client or journal, even with every experimental switch enabled.
-func TestAccountRootRefusesNonLabMutations(t *testing.T) {
+// Account-root construction is allowed for reads, but cannot establish a write
+// boundary even with every experimental switch enabled.
+func TestAccountRootRefusesMutations(t *testing.T) {
 	f := &Fs{Opt: Options{Enc: DefaultEncoding, LabWrites: true, LabMove: true, LabDelete: true, LabOverwrite: true}}
 	ctx := context.Background()
 	if err := f.Mkdir(ctx, "personal/new"); err == nil {
@@ -82,13 +82,9 @@ func TestAccountRootRefusesNonLabMutations(t *testing.T) {
 }
 
 func TestWriteScopeUsesResolvedPath(t *testing.T) {
-	for _, root := range []string{"", "codex-api-lab/run"} {
+	for _, root := range []string{"mac_cloud", "team/managed"} {
 		f := &Fs{BackendRoot: root, Opt: Options{Enc: DefaultEncoding, LabWrites: true}}
-		remote := "file"
-		if root == "" {
-			remote = "codex-api-lab/run/file"
-		}
-		if err := f.WriteAllowed(remote); err != nil {
+		if err := f.WriteAllowed("file"); err != nil {
 			t.Fatal(err)
 		}
 	}

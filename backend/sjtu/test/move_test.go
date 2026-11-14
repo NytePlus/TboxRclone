@@ -223,6 +223,7 @@ func TestPreparedMoveReconcileDoesNotTouchCloud(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer s.Close()
+	s.WriteRoot = f.BackendRoot
 	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
 	r, err := s.PrepareMove(context.Background(), scope, f.BackendRoot+"/source", f.BackendRoot+"/target", strings.NewReader("backup"), 6, 10, false)
 	if err != nil {

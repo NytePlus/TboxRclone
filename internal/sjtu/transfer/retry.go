@@ -5,13 +5,15 @@ import (
 	"errors"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 )
 
-// StartWithRecovery initializes once, then makes at most three recovery attempts
-// for transient failures. Submitted confirmations are only reconciled by reads;
-// an ambiguous initialization requires explicit investigation and is never retried.
+// StartWithRecovery initializes once, then uses the configured number of
+// recovery attempts for transient failures. Submitted confirmations are only
+// reconciled by reads; an ambiguous initialization requires explicit
+// investigation and is never retried.
 func StartWithRecovery(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
 	return startWithRecovery(ctx, s, c, r, func(ctx context.Context, delay time.Duration) error {
 		timer := time.NewTimer(delay)
@@ -27,7 +29,11 @@ func StartWithRecovery(ctx context.Context, s *journal.Store, c *smh.Client, r *
 
 func startWithRecovery(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record, wait func(context.Context, time.Duration) error) error {
 	err := Start(ctx, s, c, r)
-	for attempt := 0; err != nil && attempt < 3; attempt++ {
+	retries, baseDelay := c.TransferRetries, c.TransferRetryDelay
+	if retries == 0 && baseDelay == 0 {
+		retries, baseDelay = defaults.TransferRetries, defaults.TransferRetryDelay
+	}
+	for attempt := 0; err != nil && attempt < retries; attempt++ {
 		if ctx.Err() != nil {
 			return errors.Join(ctx.Err(), err)
 		}
@@ -37,7 +43,7 @@ func startWithRecovery(ctx context.Context, s *journal.Store, c *smh.Client, r *
 		if !transient(err) {
 			return err
 		}
-		if e := wait(ctx, time.Second<<attempt); e != nil {
+		if e := wait(ctx, baseDelay<<attempt); e != nil {
 			return errors.Join(e, err)
 		}
 		if errors.Is(err, errSessionExpired) {

@@ -20,6 +20,9 @@ func Reconcile(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.
 	if r.Scope != c.Endpoint+"/"+c.Library+"/"+c.Space {
 		return errors.New("account or space does not match journal")
 	}
+	if !smh.PathWithinRoot(r.WriteRoot, r.Path) || (r.SourcePath != "" && !smh.PathWithinRoot(r.WriteRoot, r.SourcePath)) {
+		return errors.New("journal path is outside its configured remote root")
+	}
 	if r.Kind == "move" || r.Kind == "dirmove" {
 		return reconcileMove(ctx, s, c, r)
 	}

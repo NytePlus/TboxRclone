@@ -13,15 +13,34 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/recovery"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 )
 
-// PartSize is the 4 MiB part layout observed on the SJTU deployment.
-const PartSize int64 = 4 << 20
-const workers = 4
-const batchSize = 50
+// PartSize is retained as the documented default for callers and tests.
+// New production records use the configured client policy and persist it.
+const PartSize int64 = defaults.MultipartPartSize
+
+func configuredPartSize(c *smh.Client) int64 {
+	if c.MultipartPartSize > 0 {
+		return c.MultipartPartSize
+	}
+	return defaults.MultipartPartSize
+}
+func configuredWorkers(c *smh.Client) int {
+	if c.MultipartWorkers > 0 {
+		return c.MultipartWorkers
+	}
+	return defaults.MultipartWorkers
+}
+func configuredBatchSize(c *smh.Client) int {
+	if c.MultipartBatchSize > 0 {
+		return c.MultipartBatchSize
+	}
+	return defaults.MultipartBatchSize
+}
 
 var errSessionExpired = errors.New("multipart session expired")
 
@@ -32,8 +51,8 @@ func bound(c *smh.Client, r *journal.Record) error {
 	if r.Scope != c.Endpoint+"/"+c.Library+"/"+c.Space {
 		return errors.New("account or space does not match journal")
 	}
-	if !strings.HasPrefix(r.Path, "codex-api-lab/") || smh.ValidatePath(r.Path) != nil {
-		return errors.New("multipart writes require an isolated lab path")
+	if !smh.PathWithinRoot(r.WriteRoot, r.Path) {
+		return errors.New("multipart path is outside its configured remote root")
 	}
 	if r.Overwrite && (r.OldETag == "" || r.OldSize < 0) {
 		return errors.New("overwrite requires recorded previous content identity")
@@ -64,16 +83,17 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 		return err
 	}
 	defer data.Close()
-	count := max(int64(1), (r.Size+PartSize-1)/PartSize)
-	if count > 10000 {
+	partSize := configuredPartSize(c)
+	count := max(int64(1), (r.Size+partSize-1)/partSize)
+	if count > defaults.MaxMultipartParts {
 		return errors.New("multipart part count exceeds supported limit")
 	}
-	r.PartSize = PartSize
+	r.PartSize = partSize
 	r.Parts = nil
 	for n := 1; n <= int(count); n++ {
-		size := min(PartSize, r.Size-int64(n-1)*PartSize)
+		size := min(partSize, r.Size-int64(n-1)*partSize)
 		h := sha256.New()
-		if _, err = io.Copy(h, io.NewSectionReader(data, int64(n-1)*PartSize, size)); err != nil {
+		if _, err = io.Copy(h, io.NewSectionReader(data, int64(n-1)*partSize, size)); err != nil {
 			return err
 		}
 		r.Parts = append(r.Parts, journal.Part{Number: n, Size: size, SHA256: hex.EncodeToString(h.Sum(nil))})
@@ -85,7 +105,7 @@ func Start(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Reco
 	if err = s.Save(r); err != nil {
 		return err
 	}
-	u, err := c.MultipartStrategy(ctx, r.Path, r.Size, min(int(count), batchSize), strategy(r))
+	u, err := c.MultipartStrategy(ctx, r.Path, r.Size, min(int(count), configuredBatchSize(c)), strategy(r))
 	if err != nil {
 		// Explicit authentication, permission/quota, duplicate and rate-limit
 		// rejections issue no upload identity. Retain the input for retry while
@@ -121,7 +141,7 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 	if r.State == "CommitSent" || r.State == "Unknown" {
 		return recovery.Reconcile(ctx, s, c, r)
 	}
-	if r.State != "Uploading" || r.UploadID == "" || r.ConfirmKey == "" || r.UploadPath == "" || r.PartSize != PartSize || r.Size < 0 {
+	if r.State != "Uploading" || r.UploadID == "" || r.ConfirmKey == "" || r.UploadPath == "" || r.PartSize < defaults.MinMultipartPartSize || r.PartSize > defaults.MaxMultipartPartSize || r.Size < 0 {
 		return errors.New("operation is not a resumable multipart upload")
 	}
 	data, err := s.Data(r)
@@ -129,14 +149,15 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 		return err
 	}
 	defer data.Close()
-	count := max(int64(1), (r.Size+PartSize-1)/PartSize)
-	if count > 10000 || len(r.Parts) != int(count) {
+	partSize := r.PartSize
+	count := max(int64(1), (r.Size+partSize-1)/partSize)
+	if count > defaults.MaxMultipartParts || len(r.Parts) != int(count) {
 		return smh.ErrProtocol
 	}
 	for i, p := range r.Parts {
-		size := min(PartSize, r.Size-int64(i)*PartSize)
+		size := min(partSize, r.Size-int64(i)*partSize)
 		h := sha256.New()
-		if _, err = io.Copy(h, io.NewSectionReader(data, int64(i)*PartSize, size)); err != nil {
+		if _, err = io.Copy(h, io.NewSectionReader(data, int64(i)*partSize, size)); err != nil {
 			return err
 		}
 		if p.Number != i+1 || p.Size != size || p.SHA256 != hex.EncodeToString(h.Sum(nil)) {
@@ -187,6 +208,7 @@ func Resume(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Rec
 
 func uploadAndCommit(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record, data io.ReaderAt, initial *smh.Upload) error {
 	var err error
+	batchSize := configuredBatchSize(c)
 	for first := 1; first <= len(r.Parts); first += batchSize {
 		last := min(first+batchSize-1, len(r.Parts))
 		pending := []int{}
@@ -224,14 +246,14 @@ func uploadAndCommit(ctx context.Context, s *journal.Store, c *smh.Client, r *jo
 		var mu sync.Mutex
 		var firstErr error
 		jobs := make(chan int)
-		for w := 0; w < min(workers, len(pending)); w++ {
+		for w := 0; w < min(configuredWorkers(c), len(pending)); w++ {
 			wg.Go(func() {
 				for n := range jobs {
 					if groupCtx.Err() != nil {
 						continue
 					}
 					part := r.Parts[n-1]
-					tag, e := c.PutPart(groupCtx, u, n, io.NewSectionReader(data, int64(n-1)*PartSize, part.Size), part.Size)
+					tag, e := c.PutPart(groupCtx, u, n, io.NewSectionReader(data, int64(n-1)*r.PartSize, part.Size), part.Size)
 					mu.Lock()
 					if e == nil {
 						r.Parts[n-1].ETag = tag

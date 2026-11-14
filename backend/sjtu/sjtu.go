@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/ownership"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
@@ -33,45 +34,64 @@ func init() {
 			DataIntegrity:    "Experimental; conditional overwrite not established",
 		}, Options: []fs.Option{
 			{Name: "encoding", Default: DefaultEncoding, Advanced: true, Help: "Reversible cloud filename encoding. Keep fixed for an existing managed root."},
-			{Name: "endpoint", Default: "https://pan.sjtu.edu.cn", Help: "SMH HTTPS origin."},
+			{Name: "endpoint", Default: defaults.Endpoint, Help: "SMH HTTPS origin."},
 			{Name: "library_id", Required: true, Help: "Library ID from personal space credentials."},
 			{Name: "space_id", Required: true, Help: "Space ID from personal space credentials."},
 			{Name: "token_file", Help: "Absolute path to a private access token file; reread on each request."},
 			{Name: "user_token_file", Help: "Private UserToken file for automatic personal-space token refresh; takes precedence over token_file."},
-			{Name: "organization_id", Default: "1", Help: "Organization ID for personal-space token refresh."},
+			{Name: "organization_id", Default: defaults.OrganizationID, Help: "Organization ID for personal-space token refresh."},
 			{Name: "state_dir", Required: true, Help: "Absolute path to a private durable upload journal directory."},
 			{Name: "ownership_dir", Help: "Shared private cloud-space ownership registry; defaults to the user configuration directory. All service and recovery processes must share it."},
-			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes under codex-api-lab; not a release safety guarantee."},
+			{Name: "lab_writes", Default: false, Help: "Enable experimental create-only writes below the explicitly configured remote root; not a release safety guarantee."},
 			{Name: "lab_overwrite", Default: false, Help: "Experimental sequential overwrite under the single-controlled-client contract; requires lab_writes. No external writers allowed."},
 			{Name: "lab_move", Default: false, Help: "Experimental journaled file and directory moves under the single-controlled-client contract; requires lab_writes."},
 			{Name: "lab_delete", Default: false, Help: "Experimental trash deletion under the single-controlled-client contract; requires lab_writes."},
-			{Name: "max_spool", Default: fs.SizeSuffix(4 << 30), Help: "Aggregate logical spool budget including completed, pending and orphan data. Unknown-length inputs reserve max_upload. Does not reserve physical disk blocks."},
-			{Name: "max_upload", Default: fs.SizeSuffix(2 << 30), Help: "Maximum size of a single upload spool, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
+			{Name: "max_spool", Default: fs.SizeSuffix(defaults.MaxSpoolBytes), Help: "Aggregate logical spool budget including completed, pending and orphan data. Unknown-length inputs reserve max_upload. Does not reserve physical disk blocks."},
+			{Name: "max_upload", Default: fs.SizeSuffix(defaults.MaxUploadBytes), Help: "Maximum size of a single upload spool, including complete directory-move tar backups. All uploaded files use resumable multipart, including empty files."},
+			{Name: "request_timeout", Default: fs.Duration(defaults.RequestTimeout), Advanced: true, Help: "Timeout for one SMH HTTP request."},
+			{Name: "read_retries", Default: defaults.ReadRetries, Advanced: true, Help: "Retries for transport failures on read-only SMH requests."},
+			{Name: "read_retry_delay", Default: fs.Duration(defaults.ReadRetryDelay), Advanced: true, Help: "Base linear delay between read-only transport retries."},
+			{Name: "transfer_retries", Default: defaults.TransferRetries, Advanced: true, Help: "Recovery attempts after transient multipart failures; confirmations are never replayed."},
+			{Name: "transfer_retry_delay", Default: fs.Duration(defaults.TransferRetryDelay), Advanced: true, Help: "Base exponential delay between multipart recovery attempts."},
+			{Name: "multipart_part_size", Default: fs.SizeSuffix(defaults.MultipartPartSize), Advanced: true, Help: "Part size for newly prepared multipart uploads; existing journals retain their recorded size."},
+			{Name: "multipart_concurrency", Default: defaults.MultipartWorkers, Advanced: true, Help: "Concurrent part uploads within one file."},
+			{Name: "multipart_batch_size", Default: defaults.MultipartBatchSize, Advanced: true, Help: "Signed parts requested per SMH batch (maximum 50)."},
+			{Name: "max_active_mutations", Default: defaults.MaxActiveMutations, Advanced: true, Help: "Concurrent file mutations for one cloud space in this process."},
 		}})
 }
 
 // Options configures one account and the persistent journal.
 type Options struct {
-	Enc           encoder.MultiEncoder `config:"encoding"`
-	Endpoint      string               `config:"endpoint"`
-	Library       string               `config:"library_id"`
-	Space         string               `config:"space_id"`
-	TokenFile     string               `config:"token_file"`
-	UserTokenFile string               `config:"user_token_file"`
-	Organization  string               `config:"organization_id"`
-	StateDir      string               `config:"state_dir"`
-	OwnershipDir  string               `config:"ownership_dir"`
-	LabWrites     bool                 `config:"lab_writes"`
-	LabOverwrite  bool                 `config:"lab_overwrite"`
-	LabDelete     bool                 `config:"lab_delete"`
-	LabMove       bool                 `config:"lab_move"`
-	MaxSpool      fs.SizeSuffix        `config:"max_spool"`
-	MaxUpload     fs.SizeSuffix        `config:"max_upload"`
+	Enc                  encoder.MultiEncoder `config:"encoding"`
+	Endpoint             string               `config:"endpoint"`
+	Library              string               `config:"library_id"`
+	Space                string               `config:"space_id"`
+	TokenFile            string               `config:"token_file"`
+	UserTokenFile        string               `config:"user_token_file"`
+	Organization         string               `config:"organization_id"`
+	StateDir             string               `config:"state_dir"`
+	OwnershipDir         string               `config:"ownership_dir"`
+	LabWrites            bool                 `config:"lab_writes"`
+	LabOverwrite         bool                 `config:"lab_overwrite"`
+	LabDelete            bool                 `config:"lab_delete"`
+	LabMove              bool                 `config:"lab_move"`
+	MaxSpool             fs.SizeSuffix        `config:"max_spool"`
+	MaxUpload            fs.SizeSuffix        `config:"max_upload"`
+	RequestTimeout       fs.Duration          `config:"request_timeout"`
+	ReadRetries          int                  `config:"read_retries"`
+	ReadRetryDelay       fs.Duration          `config:"read_retry_delay"`
+	TransferRetries      int                  `config:"transfer_retries"`
+	TransferRetryDelay   fs.Duration          `config:"transfer_retry_delay"`
+	MultipartPartSize    fs.SizeSuffix        `config:"multipart_part_size"`
+	MultipartConcurrency int                  `config:"multipart_concurrency"`
+	MultipartBatchSize   int                  `config:"multipart_batch_size"`
+	MaxActiveMutations   int                  `config:"max_active_mutations"`
 }
 
 // Fs represents one SJTU directory.
 type Fs struct {
 	BackendName, BackendRoot string
+	WriteBoundary            string
 	Opt                      Options
 	Client                   *smh.Client
 	FeatureSet               *fs.Features
@@ -86,7 +106,10 @@ type Object struct {
 
 // NewFs creates a backend. Destructive capabilities remain disabled until validated.
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
-	opt := Options{Enc: DefaultEncoding, Endpoint: "https://pan.sjtu.edu.cn", MaxUpload: 2 << 30, MaxSpool: 4 << 30, Organization: "1"}
+	opt := Options{Enc: DefaultEncoding, Endpoint: defaults.Endpoint, MaxUpload: fs.SizeSuffix(defaults.MaxUploadBytes), MaxSpool: fs.SizeSuffix(defaults.MaxSpoolBytes), Organization: defaults.OrganizationID,
+		RequestTimeout: fs.Duration(defaults.RequestTimeout), ReadRetries: defaults.ReadRetries, ReadRetryDelay: fs.Duration(defaults.ReadRetryDelay),
+		TransferRetries: defaults.TransferRetries, TransferRetryDelay: fs.Duration(defaults.TransferRetryDelay), MultipartPartSize: fs.SizeSuffix(defaults.MultipartPartSize),
+		MultipartConcurrency: defaults.MultipartWorkers, MultipartBatchSize: defaults.MultipartBatchSize, MaxActiveMutations: defaults.MaxActiveMutations}
 	if err := configstruct.Set(m, &opt); err != nil {
 		return nil, err
 	}
@@ -94,16 +117,29 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 	if err := validateStandardPath(root, opt.Enc); err != nil {
 		return nil, err
 	}
-	if opt.MaxUpload <= 0 || opt.MaxUpload > 1<<40 {
+	if opt.MaxUpload <= 0 || int64(opt.MaxUpload) > defaults.MaxConfiguredUploadBytes {
 		return nil, errors.New("max_upload must be between 1 byte and 1 TiB")
 	}
-	if opt.MaxSpool <= 0 || opt.MaxSpool > 1<<50 {
+	if opt.MaxSpool <= 0 || int64(opt.MaxSpool) > defaults.MaxConfiguredSpoolBytes {
 		return nil, errors.New("max_spool must be between 1 byte and 1 PiB")
+	}
+	if opt.RequestTimeout <= 0 || opt.ReadRetries < 0 || opt.ReadRetries > defaults.MaxConfiguredRetries || opt.ReadRetryDelay <= 0 || opt.TransferRetries < 0 || opt.TransferRetries > defaults.MaxConfiguredRetries || opt.TransferRetryDelay <= 0 {
+		return nil, errors.New("invalid request timeout or retry configuration")
+	}
+	if int64(opt.MultipartPartSize) < defaults.MinMultipartPartSize || int64(opt.MultipartPartSize) > defaults.MaxMultipartPartSize || opt.MultipartConcurrency < 1 || opt.MultipartConcurrency > defaults.MaxMultipartWorkers || opt.MultipartBatchSize < 1 || opt.MultipartBatchSize > defaults.MaxMultipartBatchSize {
+		return nil, errors.New("invalid multipart configuration")
+	}
+	if opt.MaxActiveMutations < 1 || opt.MaxActiveMutations > defaults.MaxConfiguredMutations {
+		return nil, errors.New("max_active_mutations must be between 1 and 64")
 	}
 	c, err := smh.New(opt.Endpoint, opt.Library, opt.Space, opt.TokenFile)
 	if err != nil {
 		return nil, err
 	}
+	c.HTTP.Timeout = time.Duration(opt.RequestTimeout)
+	c.ReadRetries, c.ReadRetryDelay = opt.ReadRetries, time.Duration(opt.ReadRetryDelay)
+	c.TransferRetries, c.TransferRetryDelay = opt.TransferRetries, time.Duration(opt.TransferRetryDelay)
+	c.MultipartPartSize, c.MultipartWorkers, c.MultipartBatchSize = int64(opt.MultipartPartSize), opt.MultipartConcurrency, opt.MultipartBatchSize
 	if opt.UserTokenFile != "" {
 		if err = c.UseUserToken(opt.UserTokenFile, opt.Organization); err != nil {
 			return nil, err
@@ -117,6 +153,12 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		return nil, err
 	}
 	f := &Fs{BackendName: name, BackendRoot: root, Opt: opt, Client: c}
+	if opt.LabWrites {
+		f.WriteBoundary, err = claimWriteRoot(opt.StateDir, opt.Enc.FromStandardPath(root))
+		if err != nil {
+			return nil, err
+		}
+	}
 	// SMH resolves names case-insensitively. Advertising the opposite lets the
 	// VFS cache hold both Case.bin and case.bin even though the second upload
 	// replaces the first cloud object. That hides the collision from clients
@@ -238,14 +280,44 @@ func (f *Fs) WriteAllowed(remote string) error {
 	if !f.Opt.LabWrites {
 		return fs.ErrorPermissionDenied
 	}
-	FullPath, err := f.FullPath(remote)
+	writeRoot, err := f.writeRoot()
 	if err != nil {
 		return err
 	}
-	if !strings.HasPrefix(FullPath, "codex-api-lab/") || FullPath == "codex-api-lab/" {
-		return errors.New("write root is outside the isolated lab")
+	fullPath, err := f.FullPath(remote)
+	if err != nil {
+		return err
+	}
+	if !smh.PathWithinRoot(writeRoot, fullPath) {
+		return errors.New("write path is outside the configured remote root")
 	}
 	return nil
+}
+
+func (f *Fs) writeRoot() (string, error) {
+	if f.WriteBoundary != "" {
+		return f.WriteBoundary, nil
+	}
+	root, err := f.FullPath("")
+	if err != nil {
+		return "", err
+	}
+	if root == "" {
+		return "", errors.New("writes require an explicit non-root remote path")
+	}
+	return root, nil
+}
+
+func (f *Fs) bindWriteRoot(s *journal.Store, r *journal.Record) error {
+	root, err := f.writeRoot()
+	if err != nil {
+		return err
+	}
+	if !smh.PathWithinRoot(root, r.Path) || (r.SourcePath != "" && !smh.PathWithinRoot(root, r.SourcePath)) {
+		return errors.New("journal path is outside the configured remote root")
+	}
+	r.WriteRoot = root
+	return s.Save(r)
 }
 
 // Mkdir creates missing ancestors without overwriting existing files.

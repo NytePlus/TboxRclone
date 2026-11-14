@@ -1,76 +1,105 @@
 # TboxRclone
 
-TboxRclone 是交大云盘的实验性 rclone backend。下面只说明如何构建并在 macOS 挂载；详细资料统一收录在 [`docs/`](docs/README.md)。
+TboxRclone 是交大云盘的实验性 rclone backend。macOS 用户可以直接运行原生 WebDAV 服务并使用系统文件管理器挂载，日常使用可独立于 Docker。
 
-## 构建
+## 构建 macOS 版本
 
-先取得固定版本的 rclone 子模块并应用仓库补丁：
+取得固定版本的 rclone 子模块并应用仓库补丁：
 
 ```sh
 git submodule update --init --recursive
 sh scripts/rclone-patches.sh --apply
 ```
 
-推荐通过 Docker Compose 构建：
+构建原生 WebDAV 版本：
 
 ```sh
-docker compose run --rm go-tests go build -o bin/tboxrclone-linux-arm64 ./cmd/tboxrclone
-docker compose run --rm go-tests env GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 \
-  go build -o bin/tboxrclone-darwin-arm64 ./cmd/tboxrclone
+sh scripts/build-macos-webdav.sh
 ```
 
-Linux 产物的架构取决于 Docker 主机架构；Intel Mac 请将 `GOARCH` 改为 `amd64`。纯 Go 的 macOS 交叉编译产物可提供 WebDAV 服务，但不含 FUSE mount 命令。
+Apple Silicon Mac 会在没有 Go 时自动下载并校验固定的 Go 1.26.0，缓存只保存在项目的 `.state/native-build`。构建结果是：
 
-如需原生 FUSE mount，可在 macOS 上构建 CGO 版本：
-
-```sh
-sh scripts/build-macos-mount.sh
-bin/tboxrclone-macos-mount mount --help
+```text
+bin/tboxrclone-darwin-arm64
+bin/tbox-state-darwin-arm64
 ```
 
-该脚本需要 Xcode 或 Command Line Tools SDK。它不会安装 macFUSE 驱动，也不会修改系统安全设置。
+脚本最后会输出程序版本和 SHA-256。Intel Mac 需要预先安装 Go 1.26.0，或通过 `TBOX_GO=/absolute/path/to/go` 指定工具链；产物名为 `bin/tboxrclone-darwin-amd64`。
 
-## 在 macOS 挂载
+## 配置
 
-将空间 access token 写入 `.secrets/access-token`，文件内容为单行原文，并限制权限：
+先创建私有配置目录，再将空间 access token 以单行原文写入 `.secrets/access-token`：
 
 ```sh
+mkdir -p .secrets
+chmod 0700 .secrets
+# 写入 access-token 后执行：
 chmod 0600 .secrets/access-token
 ```
 
-创建 `.secrets/rclone.conf`：
+创建 `.secrets/rclone-macos.conf`：
 
 ```ini
 [sjtu]
 type = sjtu
 library_id = <libraryId>
 space_id = <spaceId>
-token_file = /secrets/access-token
-state_dir = /state/sjtu
+token_file = /absolute/path/to/TboxRclone/.secrets/access-token
 lab_writes = false
+lab_overwrite = false
+lab_move = false
+lab_delete = false
 max_upload = 2G
+max_spool = 4G
+request_timeout = 2m
+read_retries = 2
+read_retry_delay = 200ms
+transfer_retries = 3
+transfer_retry_delay = 1s
+multipart_part_size = 4M
+multipart_concurrency = 4
+multipart_batch_size = 50
+max_active_mutations = 4
 ```
 
-`library_id` 和 `space_id` 必须属于同一空间。默认配置为只读；只有在隔离实验目录中需要写入时，才将 `lab_writes` 设置为 `true`。
+`token_file` 必须是本机绝对路径；`library_id` 和 `space_id` 必须属于同一空间。默认配置只读。
 
-启动本机 WebDAV 服务：
+**实验性内容：`lab_writes`、`lab_overwrite`、`lab_move` 和 `lab_delete` 控制尚未作为稳定产品能力发布的云端写入、覆盖、移动和删除功能。这四项默认必须全部保持为 `false`；了解风险并阅读[产品功能边界](docs/product-boundaries.md)后，可在专用目录中按需启用。启动命令中的 `sjtu:<remote-path>` 同时是唯一的写权限边界；首次启用写入时请选择 `sjtu:mac_cloud/` 这类非空远端根。**
+
+## 启动并挂载
+
+在一个终端中启动原生 WebDAV 服务：
 
 ```sh
-TBOX_LAB_REMOTE='sjtu:<remote-path>' \
-  docker compose --profile live up -d --wait webdav
+scripts/run-macos-webdav.sh 'sjtu:<remote-path>'
 ```
 
-使用 macOS 自带的 WebDAV 文件系统挂载并核对：
+服务以前台方式监听 `127.0.0.1:8686`，运行状态、所有权记录和 VFS 临时目录保存在项目的 `.state/`。保持该终端运行；需要停止服务时按 `Ctrl-C`。需要更换本机端口时，同时设置启动端的 `TBOX_WEBDAV_ADDR` 和挂载端的 `TBOX_WEBDAV_URL`，两者都只允许回环地址，例如：
+
+```sh
+TBOX_WEBDAV_ADDR=127.0.0.1:9686 scripts/run-macos-webdav.sh 'sjtu:<remote-path>'
+TBOX_WEBDAV_URL=http://127.0.0.1:9686/ python3 scripts/mount-webdav-macos.py mount
+```
+
+在另一个终端中使用 macOS 自带的 WebDAV 文件系统挂载：
 
 ```sh
 python3 scripts/mount-webdav-macos.py mount
 python3 scripts/mount-webdav-macos.py check
 ```
 
-默认挂载点为 `/private/tmp/tboxrclone-webdav-<uid>`。不要把挂载点放在项目目录或 Docker bind mount 内。使用结束后卸载：
+默认挂载点为：
+
+```text
+/private/tmp/tboxrclone-webdav-<uid>
+```
+
+也可以在挂载前用 `TBOX_WEBDAV_MOUNT=/absolute/path` 指定其他项目外目录。挂载点应位于项目和 `.state` 之外。
+
+使用结束后先卸载，再停止 WebDAV 服务：
 
 ```sh
 python3 scripts/mount-webdav-macos.py unmount
 ```
 
-更完整的配置、运行恢复与限制见[文档索引](docs/README.md)。
+配置续期、未决操作恢复和使用限制见[文档索引](docs/README.md)。

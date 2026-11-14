@@ -11,40 +11,10 @@ xcrun --find clang >/dev/null
 xcrun --show-sdk-path >/dev/null
 build_cache=${TBOX_BUILD_CACHE:-"$project_dir/.state/native-build"}
 mkdir -p "$build_cache"
-if [ -n "${TBOX_GO:-}" ]; then
-  go_binary=$TBOX_GO
-elif command -v go >/dev/null 2>&1; then
-  go_binary=$(command -v go)
-else
-  if [ "$(uname -m)" != arm64 ]; then
-    echo 'Provide TBOX_GO pointing to Go 1.26.0 for this architecture' >&2
-    exit 1
-  fi
-  archive="$build_cache/go1.26.0.darwin-arm64.tar.gz"
-  expected=b1640525dfe68f066d56f200bef7bf4dce955a1a893bd061de6754c211431023
-  go_binary="$build_cache/toolchain/go/bin/go"
-  if [ ! -x "$go_binary" ]; then
-    if [ ! -f "$archive" ]; then
-      curl --fail --location --retry 2 --connect-timeout 20 \
-        https://go.dev/dl/go1.26.0.darwin-arm64.tar.gz -o "$archive.partial"
-      mv "$archive.partial" "$archive"
-    fi
-    actual=$(shasum -a 256 "$archive" | cut -d ' ' -f 1)
-    if [ "$actual" != "$expected" ]; then
-      echo 'Go archive checksum mismatch; archive retained for inspection' >&2
-      exit 1
-    fi
-    mkdir -p "$build_cache/toolchain"
-    tar -xzf "$archive" -C "$build_cache/toolchain"
-  fi
-fi
+go_binary=$(sh "$project_dir/scripts/select-macos-go.sh" "$build_cache")
 export GOTOOLCHAIN=local
 export GOPATH="$build_cache/gopath"
 export GOCACHE="$build_cache/gocache"
-if [ "$("$go_binary" version | cut -d ' ' -f 3)" != go1.26.0 ]; then
-  echo 'Go 1.26.0 is required; select it with TBOX_GO' >&2
-  exit 1
-fi
 # The cgofuse binding resolves the runtime library dynamically, but needs
 # macFUSE headers at compile time. Keep these separate from driver installation.
 fuse_commit=7a6cdd2b6e11071a706f4295aa931c65223ba953

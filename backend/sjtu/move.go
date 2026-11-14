@@ -38,6 +38,14 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	if scope != old.Backend.Client.Endpoint+"/"+old.Backend.Client.Library+"/"+old.Backend.Client.Space || f.Opt.StateDir != old.Backend.Opt.StateDir {
 		return nil, fs.ErrorCantMove
 	}
+	writeRoot, err := f.writeRoot()
+	if err != nil {
+		return nil, err
+	}
+	sourceRoot, err := old.Backend.writeRoot()
+	if err != nil || sourceRoot != writeRoot {
+		return nil, fs.ErrorCantMove
+	}
 	source, err := old.Backend.FullPath(old.RemotePath)
 	if err != nil {
 		return nil, err
@@ -101,7 +109,7 @@ func (f *Fs) move(ctx context.Context, src fs.Object, remote string) (fs.Object,
 	r.SourcePath = source
 	r.OldETag = current.ETag
 	r.OldSize = int64(current.Size)
-	if err = s.Save(r); err != nil {
+	if err = f.bindWriteRoot(s, r); err != nil {
 		return nil, err
 	}
 	parent := path.Dir(remote)

@@ -93,6 +93,7 @@ func setupAbort(t *testing.T) (*abortFixture, *smh.Client, *journal.Store, *jour
 	if e != nil {
 		t.Fatal(e)
 	}
+	s.WriteRoot = "codex-api-lab/run"
 	t.Cleanup(func() { s.Close() })
 	r, e := s.Prepare(context.Background(), c.Endpoint+"/l/s", "codex-api-lab/run/file", strings.NewReader("safe"), 4, 4)
 	if e != nil {

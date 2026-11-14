@@ -28,6 +28,13 @@ func (f *Fs) BeginMutation(ctx context.Context) (*MutationSession, error) {
 		return nil, err
 	}
 	store.MaxSpoolBytes = int64(f.Opt.MaxSpool)
+	writeRoot, err := f.writeRoot()
+	if err != nil {
+		store.Close()
+		release()
+		return nil, err
+	}
+	store.WriteRoot = writeRoot
 	return &MutationSession{Store: store, Scope: f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space, release: release}, nil
 }
 

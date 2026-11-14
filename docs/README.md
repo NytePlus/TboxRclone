@@ -6,6 +6,7 @@
 ## 使用与边界
 
 - [配置、启动与恢复](operations.md)
+- [运行常量与配置项](runtime-configuration.md)
 - [产品功能边界](product-boundaries.md)
 
 ## 产品与接口

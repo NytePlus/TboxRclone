@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/ownership"
 	"github.com/nyte/TboxRclone/internal/sjtu/recovery"
@@ -20,7 +21,7 @@ import (
 func run() error {
 	dir := flag.String("state-dir", "", "private durable state directory")
 	ownershipDir := flag.String("ownership-dir", os.Getenv("RCLONE_SJTU_OWNERSHIP_DIR"), "shared cloud-space ownership registry (same as service; defaults to RCLONE_SJTU_OWNERSHIP_DIR)")
-	endpoint := flag.String("endpoint", "https://pan.sjtu.edu.cn", "SMH origin")
+	endpoint := flag.String("endpoint", defaults.Endpoint, "SMH origin")
 	library := flag.String("library-id", "", "library ID")
 	space := flag.String("space-id", "", "space ID")
 	token := flag.String("token-file", "", "access token file")

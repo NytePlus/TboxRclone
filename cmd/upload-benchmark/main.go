@@ -18,6 +18,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"github.com/nyte/TboxRclone/internal/sjtu/transfer"
@@ -134,7 +135,7 @@ func run() error {
 	if err = json.Unmarshal(b, &ids); err != nil {
 		return err
 	}
-	c, err := smh.New("https://pan.sjtu.edu.cn", ids.Library, ids.Space, "")
+	c, err := smh.New(defaults.Endpoint, ids.Library, ids.Space, "")
 	if err != nil {
 		return err
 	}
@@ -156,6 +157,7 @@ func run() error {
 		return err
 	}
 	defer store.Close()
+	store.WriteRoot = *root
 	scope := c.Endpoint + "/" + c.Library + "/" + c.Space
 	started := time.Now()
 	record, err := store.Prepare(ctx, scope, *root+"/payload.bin", input, st.Size(), 2<<30)

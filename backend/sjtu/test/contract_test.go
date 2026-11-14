@@ -412,6 +412,12 @@ func TestBackendContract(t *testing.T) {
 	if err := os.WriteFile(token, []byte("local-test-token\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
+	if err := os.MkdirAll(root+"/state", 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(root+"/state/write-root", []byte("codex-api-lab/local-contract\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	const name = "TboxLocalContract"
 	values := map[string]string{
 		"type": "sjtu", "endpoint": sim.server.URL, "library_id": "local-library", "space_id": "local-space",

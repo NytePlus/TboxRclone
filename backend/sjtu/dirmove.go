@@ -45,6 +45,14 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	if scope != old.Client.Endpoint+"/"+old.Client.Library+"/"+old.Client.Space || f.Opt.StateDir != old.Opt.StateDir {
 		return errors.New("directory move requires the same space and state directory")
 	}
+	writeRoot, err := f.writeRoot()
+	if err != nil {
+		return err
+	}
+	sourceRoot, err := old.writeRoot()
+	if err != nil || sourceRoot != writeRoot {
+		return errors.New("directory move requires the same configured remote root")
+	}
 	source, err := old.FullPath(srcRemote)
 	if err != nil {
 		return err
@@ -104,6 +112,9 @@ func (f *Fs) dirMove(ctx context.Context, src fs.Fs, srcRemote, dstRemote string
 	}
 	if backupErr != nil {
 		return backupErr
+	}
+	if err = f.bindWriteRoot(s, r); err != nil {
+		return err
 	}
 	// Ensure only cloud ancestors: dstRemote may be empty when moving to the
 	// Fs root, which is already exclusively reserved by this operation.

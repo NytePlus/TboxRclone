@@ -6,7 +6,8 @@
 
 - `rclone-patches.sh`、`check-rclone-patch-replay.py`：应用并核对固定 rclone 补丁。
 - `with-rclone-patches.sh`、`run-go-service.sh`、`doh-dns.py`：Docker Compose 内部入口。
-- `build-macos-mount.sh`：构建 macOS 原生 mount 版本。
+- `build-macos-webdav.sh`、`run-macos-webdav.sh`：构建并运行不依赖 Docker 的 macOS WebDAV 服务。
+- `build-macos-mount.sh`：可选的 macFUSE 原生 mount 构建，不是推荐挂载路径。
 - `mount-webdav-macos.py`：挂载、核对和卸载 macOS WebDAV。
 - `live-webdav-state.py`：故障会话切换前后保存和恢复现行服务状态。
 

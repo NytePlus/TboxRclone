@@ -162,7 +162,7 @@ func newSimulator(t *testing.T, drop bool) (*Fs, *simulator) {
 	}))
 	t.Cleanup(sim.api.Close)
 	c := &smh.Client{Endpoint: sim.api.URL, Library: "l", Space: "s", Token: func(context.Context) (string, error) { return "secret", nil }, HTTP: sim.api.Client()}
-	f := &Fs{BackendName: "test", BackendRoot: "codex-api-lab/run", Opt: Options{Enc: DefaultEncoding, Endpoint: sim.api.URL, Library: "l", Space: "s", StateDir: filepath.Join(t.TempDir(), "state"), LabWrites: true, MaxUpload: 64 << 20}, Client: c}
+	f := &Fs{BackendName: "test", BackendRoot: "codex-api-lab/run", WriteBoundary: "codex-api-lab/run", Opt: Options{Enc: DefaultEncoding, Endpoint: sim.api.URL, Library: "l", Space: "s", StateDir: filepath.Join(t.TempDir(), "state"), LabWrites: true, MaxUpload: 64 << 20}, Client: c}
 	f.FeatureSet = (&fs.Features{CaseInsensitive: true, NoDirMoveFallback: true}).Fill(context.Background(), f)
 	return f, sim
 }

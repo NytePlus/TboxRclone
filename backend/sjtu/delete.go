@@ -58,6 +58,9 @@ func (o *Object) remove(ctx context.Context) error {
 	}
 	r.Kind = "delete"
 	r.OldETag, r.OldSize = current.ETag, int64(current.Size)
+	if err = f.bindWriteRoot(s, r); err != nil {
+		return err
+	}
 	return f.deleteOnce(ctx, s, r, "file")
 }
 
@@ -138,6 +141,9 @@ func (f *Fs) rmdir(ctx context.Context, dir string) error {
 		return err
 	}
 	r.Kind = "rmdir"
+	if err = f.bindWriteRoot(s, r); err != nil {
+		return err
+	}
 	return f.deleteOnce(ctx, s, r, "directory")
 }
 

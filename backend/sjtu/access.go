@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/nyte/TboxRclone/internal/pathclaims"
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 )
 
 // ErrPathBusy is a conflict, not an invitation to queue a later overwrite.
@@ -71,14 +72,18 @@ func (r *ownedReader) Close() error {
 }
 
 // Bound complete mutation lifetimes (spool/backup through reconciliation), not
-// individual parts. Four uploads each use at most four data-plane workers.
-const MaxActiveMutations = 4
+// individual parts. The configured limit is shared by one cloud space.
+const MaxActiveMutations = defaults.MaxActiveMutations
 
 var mutationSlots sync.Map
 
 func (f *Fs) AcquireMutation(ctx context.Context) (func(), error) {
 	scope := f.Client.Endpoint + "/" + f.Client.Library + "/" + f.Client.Space
-	value, _ := mutationSlots.LoadOrStore(scope, make(chan struct{}, MaxActiveMutations))
+	limit := f.Opt.MaxActiveMutations
+	if limit <= 0 {
+		limit = defaults.MaxActiveMutations
+	}
+	value, _ := mutationSlots.LoadOrStore(scope, make(chan struct{}, limit))
 	slots := value.(chan struct{})
 	if err := ctx.Err(); err != nil {
 		return nil, err

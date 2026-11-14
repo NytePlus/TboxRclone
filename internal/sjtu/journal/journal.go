@@ -28,6 +28,7 @@ type Record struct {
 	SourcePath    string          `json:"source_path,omitempty"`
 	RecycledID    string          `json:"recycled_item_id,omitempty"`
 	Scope         string          `json:"scope"`
+	WriteRoot     string          `json:"write_root,omitempty"`
 	Path          string          `json:"path"`
 	Size          int64           `json:"size"`
 	SHA256        string          `json:"sha256"`
@@ -57,6 +58,9 @@ type Store struct {
 	// MaxSpoolBytes limits all .data files including completed and orphan data.
 	// Zero is unlimited for standalone callers. Set before preparing operations.
 	MaxSpoolBytes int64
+	// WriteRoot is copied into every new record so recovery retains the same
+	// remote boundary after the creating Fs no longer exists.
+	WriteRoot     string
 	Dir           string
 	lock          *os.File
 	exclusive     bool
@@ -280,7 +284,7 @@ func (s *Store) prepareWith(ctx context.Context, scope, p string, in io.Reader, 
 	if _, e := rand.Read(id[:]); e != nil {
 		return nil, e
 	}
-	r := &Record{ID: hex.EncodeToString(id[:]), Scope: scope, Path: p, State: "Prepared", Kind: kind, SourcePath: source, Overwrite: overwrite}
+	r := &Record{ID: hex.EncodeToString(id[:]), Scope: scope, WriteRoot: s.WriteRoot, Path: p, State: "Prepared", Kind: kind, SourcePath: source, Overwrite: overwrite}
 	if err := spool.Prepare(ctx, s, r, in, size, max); err != nil {
 		return nil, err
 	}

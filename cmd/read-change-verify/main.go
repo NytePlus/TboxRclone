@@ -18,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 )
 
@@ -73,7 +74,7 @@ func run() error {
 	if err = json.Unmarshal(b, &ids); err != nil {
 		return errors.New("invalid private identity")
 	}
-	c, err := smh.New("https://pan.sjtu.edu.cn", ids.Library, ids.Space, "")
+	c, err := smh.New(defaults.Endpoint, ids.Library, ids.Space, "")
 	if err != nil {
 		return err
 	}

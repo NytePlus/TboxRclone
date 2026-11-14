@@ -121,6 +121,9 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		}
 		return fserrors.NoRetryError(e)
 	}
+	if e = f.bindWriteRoot(s, r); e != nil {
+		return fserrors.NoRetryError(e)
+	}
 	fail := func(err error) error {
 		return fserrors.NoRetryError(fmt.Errorf("operation %s (%s), local data retained: %w", r.ID, r.State, err))
 	}

@@ -8,12 +8,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 	"io"
 	"os"
 	"path"
 	"strings"
 	"time"
+
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
+	"github.com/nyte/TboxRclone/internal/sjtu/smh"
 )
 
 func main() {
@@ -49,7 +51,7 @@ func run() error {
 	if e = json.Unmarshal(b, &ids); e != nil {
 		return e
 	}
-	c, e := smh.New("https://pan.sjtu.edu.cn", ids.Library, ids.Space, "")
+	c, e := smh.New(defaults.Endpoint, ids.Library, ids.Space, "")
 	if e != nil {
 		return e
 	}

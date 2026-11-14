@@ -13,7 +13,7 @@
 
 ## 写入与恢复
 
-- 写入默认关闭。仅在明确配置 `lab_writes=true` 的隔离远端启用实验写入。
+- 写入默认关闭。仅在明确配置 `lab_writes=true` 的隔离远端启用实验写入。启动命令中的远端根（例如 `sjtu:mac_cloud/`）同时是写权限边界；写入、覆盖、移动、删除及其 journal 恢复都只能作用于该目录及其后代。`sjtu:` 空根始终禁止写入。
 - 输入先进入受 journal 管理的 spool，再初始化分片会话、上传、confirm，并独立读取云端完整内容核对 SHA-256。
 - `DurableFileSpool` 保存输入副本；`SourceFileSpool` 只保存源路径和身份信息，每次打开或恢复都会重新核对设备号、inode、大小、mtime 和 SHA-256。源文件缺失、被替换或内容变化时拒绝继续。
 - `SourceFileSpool` 的源文件归调用方所有。TboxRclone 不会在云端 confirm 和独立内容核对完成前删除源文件，也不会替调用方自动删除源文件。
@@ -30,7 +30,7 @@
 
 ## macOS 与运行环境
 
-- 推荐入口是 Docker Compose 中的 rclone WebDAV 服务，再使用 macOS 自带 WebDAV 文件系统挂载。
+- 推荐入口是原生 macOS `tboxrclone serve webdav`，再使用 macOS 自带 WebDAV 文件系统挂载；日常使用不依赖 Docker。
 - 原生 FUSE mount 需要本机可用的 FUSE 运行库；构建脚本不会安装驱动或修改系统安全设置。
 - 挂载点必须位于项目目录和 Docker bind mount 之外。
 - access token、user token 和配置文件必须按私有凭据保护，不得写入日志、证据或版本库。

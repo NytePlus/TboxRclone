@@ -3,7 +3,6 @@ package recovery
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/nyte/TboxRclone/internal/sjtu/journal"
 	"github.com/nyte/TboxRclone/internal/sjtu/smh"
@@ -14,8 +13,8 @@ import (
 // A lost response may leave the recycle ID unknown; absence alone does not prove
 // recycle retention, and callers must not report that retention as verified.
 func reconcileDelete(ctx context.Context, s *journal.Store, c *smh.Client, r *journal.Record) error {
-	if !strings.HasPrefix(r.Path, "codex-api-lab/") || smh.ValidatePath(r.Path) != nil {
-		return errors.New("delete recovery requires an isolated lab path")
+	if !smh.PathWithinRoot(r.WriteRoot, r.Path) {
+		return errors.New("delete recovery path is outside its configured remote root")
 	}
 	if r.State == "Committed" {
 		return nil

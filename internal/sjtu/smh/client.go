@@ -15,6 +15,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/nyte/TboxRclone/internal/sjtu/defaults"
 )
 
 // ErrUnknown means a mutation may have executed and must not be replayed.
@@ -118,6 +120,13 @@ type Client struct {
 	Endpoint, Library, Space string
 	Token                    func(context.Context) (string, error)
 	HTTP                     *http.Client
+	ReadRetries              int
+	ReadRetryDelay           time.Duration
+	MultipartPartSize        int64
+	MultipartWorkers         int
+	MultipartBatchSize       int
+	TransferRetries          int
+	TransferRetryDelay       time.Duration
 	invalidateToken          func(string)
 }
 
@@ -131,7 +140,10 @@ func New(endpoint, library, space, tokenFile string) (*Client, error) {
 		return nil, errors.New("library_id and space_id are required identifiers")
 	}
 	return &Client{Endpoint: strings.TrimRight(endpoint, "/"), Library: library, Space: space,
-		HTTP: &http.Client{Timeout: 2 * time.Minute, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }},
+		HTTP:        &http.Client{Timeout: defaults.RequestTimeout, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }},
+		ReadRetries: defaults.ReadRetries, ReadRetryDelay: defaults.ReadRetryDelay,
+		MultipartPartSize: defaults.MultipartPartSize, MultipartWorkers: defaults.MultipartWorkers, MultipartBatchSize: defaults.MultipartBatchSize,
+		TransferRetries: defaults.TransferRetries, TransferRetryDelay: defaults.TransferRetryDelay,
 		Token: func(ctx context.Context) (string, error) {
 			if err := ctx.Err(); err != nil {
 				return "", err
@@ -162,6 +174,16 @@ func ValidatePath(p string) error {
 		}
 	}
 	return nil
+}
+
+// PathWithinRoot reports whether a validated cloud path is the configured
+// remote root or one of its descendants. An empty root never authorizes a
+// write: callers must select an explicit remote directory.
+func PathWithinRoot(root, p string) bool {
+	if root == "" || ValidatePath(root) != nil || ValidatePath(p) != nil {
+		return false
+	}
+	return p == root || strings.HasPrefix(p, root+"/")
 }
 func escape(p string) string {
 	a := strings.Split(p, "/")
@@ -195,13 +217,17 @@ func safeTransportError(ctx context.Context, err error) error {
 // JSON bounds retries of failed read-only transport requests. Mutations and
 // explicit HTTP/protocol errors are never automatically retried.
 func (c *Client) JSON(ctx context.Context, method, kind, p string, q url.Values, in, out any) error {
+	retries, delay := c.ReadRetries, c.ReadRetryDelay
+	if retries == 0 && delay == 0 {
+		retries, delay = defaults.ReadRetries, defaults.ReadRetryDelay
+	}
 	for attempt := 0; ; attempt++ {
 		err := c.jsonOnce(ctx, method, kind, p, q, in, out)
 		if (method != http.MethodGet && method != http.MethodHead) ||
-			!errors.Is(err, ErrTransport) || attempt >= 2 || ctx.Err() != nil {
+			!errors.Is(err, ErrTransport) || attempt >= retries || ctx.Err() != nil {
 			return err
 		}
-		timer := time.NewTimer(time.Duration(attempt+1) * 200 * time.Millisecond)
+		timer := time.NewTimer(time.Duration(attempt+1) * delay)
 		select {
 		case <-ctx.Done():
 			timer.Stop()
@@ -252,7 +278,7 @@ func (c *Client) jsonOnce(ctx context.Context, method, kind, p string, q url.Val
 	if resp.StatusCode == 202 {
 		return errors.Join(ErrUnknown, errors.New("asynchronous task requires reconciliation"))
 	}
-	b, err := io.ReadAll(io.LimitReader(resp.Body, 4<<20+1))
+	b, err := io.ReadAll(io.LimitReader(resp.Body, defaults.MaxJSONResponseBytes+1))
 	if err != nil {
 		e := safeTransportError(ctx, err)
 		if mutation {
@@ -260,7 +286,7 @@ func (c *Client) jsonOnce(ctx context.Context, method, kind, p string, q url.Val
 		}
 		return e
 	}
-	if len(b) > 4<<20 {
+	if int64(len(b)) > defaults.MaxJSONResponseBytes {
 		return unknownProtocol(mutation)
 	}
 	if len(b) == 0 {
@@ -364,7 +390,7 @@ func (c *Client) List(ctx context.Context, p string) ([]Item, error) {
 	seen := map[string]bool{}
 	markers := map[string]bool{}
 	marker := ""
-	for page := 0; page < 100000; page++ {
+	for page := 0; page < defaults.MaxListPages; page++ {
 		var data struct {
 			Contents []Item     `json:"contents"`
 			Next     pageMarker `json:"nextMarker"`
